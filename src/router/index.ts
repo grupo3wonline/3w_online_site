@@ -10,6 +10,7 @@ import Terms from '../views/Terms.vue'
 import Regulamento from '../views/Regulamento.vue'
 import Institucional from '../views/Institucional.vue'
 import LandingAds from '../views/LandingAds.vue'
+import LandingPRD from '../views/LandingPRD.vue'
 
 // Landing Pages
 import SocialMediaManagement from '../views/services/SocialMediaManagement.vue'
@@ -80,6 +81,11 @@ const routes = [
     path: '/anuncios',
     name: 'LandingAds',
     component: LandingAds
+  },
+  {
+    path: '/landing-prd',
+    name: 'LandingPRD',
+    component: LandingPRD
   },
   // Landing Pages
   {
