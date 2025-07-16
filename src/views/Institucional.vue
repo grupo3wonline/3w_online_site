@@ -20,16 +20,18 @@
       <div class="container">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 class="section-title">Quem Somos</h2>
+            <h2 class="section-title">Mais do que uma Agência de Marketing e Software</h2>
             <p class="text-lg text-gray-600 mb-6">
-              A 3W Online é uma empresa especializada em soluções digitais e marketing, 
-              fundada em 2019 com o objetivo de ajudar empresas de todos os portes a 
-              alcançarem seus objetivos através da tecnologia e estratégias digitais inovadoras.
+              No GRUPO 3W ONLINE, acreditamos que a inovação nasce da coragem de desafiar o convencional e explorar o novo. Nossa missão é impulsionar a mudança e oferecer ferramentas para gerar impacto duradouro. Somos uma força criativa, especializada em soluções digitais, com o compromisso de levar os negócios de nossos clientes a um novo patamar.
             </p>
             <p class="text-lg text-gray-600 mb-8">
-              Com sede em Curitiba, Paraná, atendemos clientes em todo o Brasil, 
-              oferecendo um portfólio completo de serviços que abrange desde a criação 
-              de sites e aplicativos até a gestão completa de campanhas de marketing digital.
+              O Grupo 3W Online iniciou as atividades em 2020 com a missão de impulsionar o crescimento de empresas locais no ambiente digital. Desde então, temos conquistado resultados excepcionais para nossos clientes, construindo uma trajetória de sucesso marcada pela inovação e compromisso.
+            </p>
+            <p class="text-lg text-gray-600 mb-8">
+              Nosso foco é oferecer soluções digitais eficientes, criando não apenas marcas, mas parcerias duradouras que geram resultados consistentes. Se você busca uma agência de marketing e software que vai além do convencional, a 3W Online é a escolha ideal para levar seu negócio ao próximo nível.
+            </p>
+            <p class="text-lg text-gray-600 mb-8">
+              Explore nosso site para conhecer nossos serviços e descobrir como podemos ajudá-lo a alcançar seus objetivos. Seja bem-vindo à nossa jornada de transformação digital!
             </p>
             
             <!-- Company Stats -->
@@ -51,6 +53,103 @@
               alt="Equipe 3W Online"
               class="w-full h-auto rounded-lg shadow-lg"
             />
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- What Makes Us Exceptional Section -->
+    <section class="section-padding bg-gray-50">
+      <div class="container">
+        <div class="text-center mb-16">
+          <h2 class="section-title">Descubra o que nos torna excepcionais</h2>
+          <p class="section-subtitle">Os diferenciais que fazem da 3W Online sua melhor escolha</p>
+        </div>
+        
+        <div class="space-y-12">
+          <!-- Compromisso com Resultados -->
+          <div class="flex items-start space-x-6">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                <ChartBarIcon class="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                ✅ Compromisso com Resultados Tangíveis
+              </h3>
+              <p class="text-lg text-gray-600">
+                Não nos contentamos com o "bom o suficiente". Aqui na 3W Online, nossa missão é impulsionar o sucesso de nossos clientes através de estratégias e campanhas que geram resultados reais e mensuráveis. Não apenas criamos anúncios bonitos, mas sim soluções que convertem e impulsionam o crescimento do seu negócio.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Equipe Especializada -->
+          <div class="flex items-start space-x-6">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                <UserGroupIcon class="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                👥 Equipe de Especialistas Apaixonados
+              </h3>
+              <p class="text-lg text-gray-600">
+                Por trás de cada projeto de sucesso, há uma equipe dedicada e apaixonada. Na 3W Online, reunimos os melhores talentos da indústria, cada um trazendo uma perspectiva única e habilidades excepcionais para a mesa. Nossa paixão pelo que fazemos transparece em cada pixel de design, em cada linha de código e em cada estratégia de marketing concebida para nossos clientes.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Inovação -->
+          <div class="flex items-start space-x-6">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                <LightBulbIcon class="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                🚀 Inovação Constante
+              </h3>
+              <p class="text-lg text-gray-600">
+                O mundo digital está em constante evolução, e nós estamos na vanguarda dessa mudança. Na 3W Online, abraçamos a inovação como parte do nosso DNA. Estamos sempre explorando novas tecnologias, tendências e estratégias para garantir que nossos clientes estejam um passo à frente da concorrência.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Personalização -->
+          <div class="flex items-start space-x-6">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
+                <CogIcon class="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                🎯 Personalização Sob Medida
+              </h3>
+              <p class="text-lg text-gray-600">
+                Entendemos que cada negócio é único, e não existe uma solução universal. É por isso que nos dedicamos a entender profundamente as necessidades e os objetivos de cada cliente. Na 3W Online, não oferecemos soluções genéricas, mas sim estratégias personalizadas que se alinham perfeitamente com as expectativas e metas específicas de cada cliente.
+              </p>
+            </div>
+          </div>
+          
+          <!-- Transparência -->
+          <div class="flex items-start space-x-6">
+            <div class="flex-shrink-0">
+              <div class="w-16 h-16 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center">
+                <ShieldCheckIcon class="w-8 h-8 text-white" />
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">
+                🛡️ Transparência e Integridade
+              </h3>
+              <p class="text-lg text-gray-600">
+                Acreditamos que a confiança é a base de qualquer relacionamento bem-sucedido. Na 3W Online, valorizamos a transparência e a integridade em tudo o que fazemos. Nossos clientes podem confiar em nós para fornecer soluções honestas, éticas e eficazes que impulsionam o crescimento de seus negócios.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -507,14 +606,15 @@
       <div class="container">
         <div class="text-center">
           <h2 class="text-3xl font-bold text-white mb-6">
-            Vamos trabalhar juntos?
+            Pronto para começar sua jornada conosco?
           </h2>
           <p class="text-xl text-blue-100 mb-8">
-            Entre em contato conosco e descubra como podemos ajudar seu negócio a crescer
+            Se você busca marketing, publicidade e propaganda que vai além do convencional, somos a escolha certa.
+            Pronto para levar o seu negócio para o próximo nível? Entre em contato hoje mesmo! Estamos ansiosos para colaborar com você e ajudá-lo a alcançar o sucesso que você merece.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <router-link to="/contato" class="btn-secondary bg-white text-primary-600 hover:bg-gray-100">
-              Falar com Nossa Equipe
+              Fale Conosco
             </router-link>
             <a
               href="https://wa.me/5541996924829?text=Olá! Gostaria de conhecer melhor a 3W Online."
@@ -554,6 +654,9 @@ import {
   CodeBracketIcon,
   PresentationChartLineIcon,
   AcademicCapIcon,
-  HandRaisedIcon
+  HandRaisedIcon,
+  ChartBarIcon,
+  LightBulbIcon,
+  CogIcon
 } from '@heroicons/vue/24/outline'
 </script>
