@@ -157,6 +157,11 @@ const routes = [
     path: '/lp-sites-sistemas',
     name: 'LandingSitesSistemas',
     component: () => import('../views/LandingSitesSistemas.vue')
+  },
+  {
+    path: '/ferramentas',
+    name: 'Tools',
+    component: () => import('../views/Tools.vue')
   }
 ]
 
