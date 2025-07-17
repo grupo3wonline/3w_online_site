@@ -152,6 +152,11 @@ const routes = [
     path: '/lp-mkt',
     name: 'LandingMarketing',
     component: () => import('../views/LandingMarketing.vue')
+  },
+  {
+    path: '/lp-sites-sistemas',
+    name: 'LandingSitesSistemas',
+    component: () => import('../views/LandingSitesSistemas.vue')
   }
 ]
 
