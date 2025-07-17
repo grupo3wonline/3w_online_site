@@ -39,9 +39,9 @@
                   </div>
                   <h2 class="blog-title">{{ post.title }}</h2>
                   <p class="blog-excerpt">{{ post.excerpt }}</p>
-                  <a href="#" class="text-primary-600 hover:text-primary-700 font-medium">
+                  <router-link :to="`/blog/${post.slug}`" class="text-primary-600 hover:text-primary-700 font-medium">
                     Ler mais →
-                  </a>
+                  </router-link>
                 </div>
               </article>
             </div>
@@ -73,7 +73,7 @@
                     class="w-16 h-16 object-cover rounded"
                   />
                   <div class="flex-1">
-                    <h4 class="text-sm font-medium text-gray-900 mb-1">{{ recent.title }}</h4>
+                    <router-link :to="`/blog/${recent.slug}`" class="text-sm font-medium text-gray-900 mb-1 hover:text-primary-600 transition-colors">{{ recent.title }}</router-link>
                     <p class="text-xs text-gray-500">{{ recent.date }}</p>
                   </div>
                 </div>
@@ -108,6 +108,7 @@ import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 const posts = [
   {
     id: 1,
+    slug: 'estrategias-marketing-digital-2024',
     title: '10 Estratégias de Marketing Digital para 2024',
     excerpt: 'Descubra as principais tendências e estratégias que vão dominar o marketing digital este ano.',
     image: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -116,6 +117,7 @@ const posts = [
   },
   {
     id: 2,
+    slug: 'seo-guia-completo',
     title: 'Como Otimizar seu Site para SEO',
     excerpt: 'Guia completo com técnicas práticas para melhorar o ranqueamento do seu site no Google.',
     image: 'https://images.pexels.com/photos/270348/pexels-photo-270348.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -124,6 +126,7 @@ const posts = [
   },
   {
     id: 3,
+    slug: 'redes-sociais-empresas',
     title: 'Redes Sociais: Tendências para Empresas',
     excerpt: 'As principais mudanças nas redes sociais e como sua empresa pode se adaptar.',
     image: 'https://images.pexels.com/photos/267389/pexels-photo-267389.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -132,6 +135,7 @@ const posts = [
   },
   {
     id: 4,
+    slug: 'ecommerce-vendas',
     title: 'E-commerce: Como Aumentar suas Vendas',
     excerpt: 'Estratégias comprovadas para otimizar sua loja virtual e aumentar as conversões.',
     image: 'https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -152,18 +156,21 @@ const categories = [
 const recentPosts = [
   {
     id: 1,
+    slug: 'google-analytics-4-guia',
     title: 'Google Analytics 4: Guia Completo',
     image: 'https://images.pexels.com/photos/265087/pexels-photo-265087.jpeg?auto=compress&cs=tinysrgb&w=200',
     date: '18 Jan 2024'
   },
   {
     id: 2,
+    slug: 'instagram-shopping-configurar',
     title: 'Instagram Shopping: Como Configurar',
     image: 'https://images.pexels.com/photos/267389/pexels-photo-267389.jpeg?auto=compress&cs=tinysrgb&w=200',
     date: '16 Jan 2024'
   },
   {
     id: 3,
+    slug: 'copywriting-conversao',
     title: 'Copywriting para Conversão',
     image: 'https://images.pexels.com/photos/270348/pexels-photo-270348.jpeg?auto=compress&cs=tinysrgb&w=200',
     date: '14 Jan 2024'

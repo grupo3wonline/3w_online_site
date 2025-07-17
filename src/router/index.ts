@@ -162,6 +162,11 @@ const routes = [
     path: '/ferramentas',
     name: 'Tools',
     component: () => import('../views/Tools.vue')
+  },
+  {
+    path: '/blog/:slug',
+    name: 'BlogPost',
+    component: () => import('../views/BlogPost.vue')
   }
 ]
 

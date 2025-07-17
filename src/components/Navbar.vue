@@ -32,6 +32,32 @@
             </div>
           </div>
           
+          <!-- Tools Dropdown -->
+          <div class="relative" @mouseenter="showToolsMenu = true" @mouseleave="showToolsMenu = false">
+            <button class="navbar-link flex items-center">
+              Ferramentas
+              <ChevronDownIcon class="w-4 h-4 ml-1" />
+            </button>
+            
+            <div v-show="showToolsMenu" class="absolute top-full left-0 mt-1 w-64 bg-white rounded-lg shadow-lg py-2 z-50">
+              <router-link
+                to="/ferramentas"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600 transition-colors"
+              >
+                Todas as Ferramentas
+              </router-link>
+              <div class="border-t border-gray-100 my-2"></div>
+              <router-link
+                v-for="tool in featuredTools"
+                :key="tool.path"
+                :to="tool.path"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600 transition-colors"
+              >
+                {{ tool.name }}
+              </router-link>
+            </div>
+          </div>
+          
           <router-link to="/portfolio" class="navbar-link">Portfólio</router-link>
           <router-link to="/blog" class="navbar-link">Blog</router-link>
           <router-link to="/contato" class="navbar-link">Contato</router-link>
@@ -85,6 +111,37 @@
           </div>
         </div>
         
+        <!-- Mobile Tools Menu -->
+        <div>
+          <button
+            @click="showMobileTools = !showMobileTools"
+            class="mobile-menu-link w-full text-left flex items-center justify-between"
+          >
+            Ferramentas
+            <ChevronDownIcon class="w-4 h-4" :class="{ 'rotate-180': showMobileTools }" />
+          </button>
+          
+          <div v-show="showMobileTools" class="bg-gray-50">
+            <router-link
+              to="/ferramentas"
+              class="block py-2 px-8 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600 transition-colors"
+              @click="closeMobileMenu"
+            >
+              Todas as Ferramentas
+            </router-link>
+            <div class="border-t border-gray-100 my-1 mx-8"></div>
+            <router-link
+              v-for="tool in featuredTools"
+              :key="tool.path"
+              :to="tool.path"
+              class="block py-2 px-8 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary-600 transition-colors"
+              @click="closeMobileMenu"
+            >
+              {{ tool.name }}
+            </router-link>
+          </div>
+        </div>
+        
         <router-link to="/portfolio" class="mobile-menu-link" @click="closeMobileMenu">Portfólio</router-link>
         <router-link to="/blog" class="mobile-menu-link" @click="closeMobileMenu">Blog</router-link>
         <router-link to="/contato" class="mobile-menu-link" @click="closeMobileMenu">Contato</router-link>
@@ -99,7 +156,9 @@ import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline
 
 const mobileMenuOpen = ref(false)
 const showServicesMenu = ref(false)
+const showToolsMenu = ref(false)
 const showMobileServices = ref(false)
+const showMobileTools = ref(false)
 
 const services = [
   { name: 'Marketing Digital Para seu Negócio', path: '/servicos/marketing-digital' },
@@ -116,6 +175,13 @@ const services = [
   { name: 'Relações Públicas', path: '/servicos/relacoes-publicas' }
 ]
 
+const featuredTools = [
+  { name: 'Calculadora Freelancer', path: '/ferramentas#freelance-calc' },
+  { name: 'Calculadora de Preços', path: '/ferramentas#price-calc' },
+  { name: 'Gerador de Contratos', path: '/ferramentas#contract-generator' },
+  { name: 'Editor de Imagens', path: '/ferramentas#image-editor' }
+]
+
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value
 }
@@ -123,6 +189,7 @@ const toggleMobileMenu = () => {
 const closeMobileMenu = () => {
   mobileMenuOpen.value = false
   showMobileServices.value = false
+  showMobileTools.value = false
 }
 </script>
 
