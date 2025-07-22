@@ -167,6 +167,11 @@ const routes = [
     path: '/blog/:slug',
     name: 'BlogPost',
     component: () => import('../views/BlogPost.vue')
+  },
+  {
+    path: '/william-portfolio',
+    name: 'WilliamPortfolio',
+    component: () => import('../views/WilliamPortfolio.vue')
   }
 ]
 
