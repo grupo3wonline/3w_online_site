@@ -1,115 +1,90 @@
 <template>
   <div>
-    <!-- Hero Section -->
+    <!-- Hero — Dark Navy -->
     <section class="page-hero">
       <div class="container">
-        <div class="breadcrumb">
-          <router-link to="/">Home</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <span>Serviços</span>
+        <AppBreadcrumb :items="[{ label: 'Home', path: '/' }, { label: 'Serviços' }]" />
+        <h1 class="page-hero-title">Soluções Digitais Completas</h1>
+        <p class="page-hero-subtitle">Encontre o serviço que seu negócio precisa. Nossas soluções em marketing digital, desenvolvimento e criação geram resultados reais.</p>
+        <div class="flex flex-wrap gap-3 mt-6">
+          <RouterLink to="/contato" class="btn-primary !bg-primary-500 hover:!bg-primary-600 text-sm">Orçamento</RouterLink>
+          <a href="https://wa.me/5541996924829" target="_blank" class="btn-secondary text-sm"><Icon icon="mdi:whatsapp" class="w-4 h-4 mr-1" /> Contato</a>
         </div>
-        <h1 class="page-hero-title">Nossos Serviços</h1>
-        <p class="page-hero-subtitle">
-          Soluções completas em marketing digital e desenvolvimento para impulsionar seu negócio
-        </p>
       </div>
     </section>
-    
+
+    <!-- Alert Badge -->
+    <div class="bg-primary-50 border-b border-primary-100 py-3">
+      <div class="container flex items-center justify-center gap-2 text-xs text-primary-700">
+        <Icon icon="mdi:shield-check" class="w-4 h-4 text-green-600" />
+        <span>Mais de <strong>150 projetos entregues</strong> com 98% de aprovação</span>
+        <span class="hidden sm:inline">| Fale com um especialista pelo WhatsApp</span>
+      </div>
+    </div>
+
     <!-- Services Grid -->
     <section class="section-padding">
       <div class="container">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div
-            v-for="service in services"
-            :key="service.id"
-            class="service-card"
-          >
-            <div class="feature-icon mb-6">
-              <component :is="service.icon" />
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div v-for="service in services" :key="service.id" class="service-card">
+            <div class="w-11 h-11 rounded-full flex items-center justify-center mb-3" :class="service.iconBg">
+              <Icon :icon="service.icon" class="w-5 h-5 text-white" />
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ service.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ service.description }}</p>
-            <div class="flex items-center justify-between mb-4">
-              <span class="text-sm text-gray-500">A partir de</span>
-              <span class="text-lg font-bold text-primary-600">{{ service.price }}</span>
+            <h3 class="text-sm font-bold text-gray-900 mb-1">{{ service.title }}</h3>
+            <p class="text-xs text-gray-500 mb-3 leading-relaxed">{{ service.description }}</p>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[11px] text-gray-400">A partir de</span>
+              <span class="text-sm font-bold text-primary-600">{{ service.price }}</span>
             </div>
-            <router-link
-              :to="service.link"
-              class="btn-primary w-full text-center"
-            >
+            <RouterLink :to="service.link" class="block w-full text-center bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold py-2.5 rounded-lg transition-colors">
               Saiba Mais
-            </router-link>
+            </RouterLink>
           </div>
         </div>
       </div>
     </section>
-    
-    <!-- Why Choose Us Section -->
+
+    <!-- Why Choose -->
     <section class="section-padding bg-gray-50">
       <div class="container">
-        <div class="text-center mb-16">
+        <div class="text-center mb-10">
           <h2 class="section-title">Por que escolher nossos serviços?</h2>
-          <p class="section-subtitle">Diferenciais que fazem a diferença no seu resultado</p>
+          <p class="section-subtitle">Entregamos mais do que promessas — entregamos resultados.</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ClockIcon class="w-8 h-8 text-primary-600" />
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div v-for="d in diffs" :key="d.title" class="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+            <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-2">
+              <Icon :icon="d.icon" class="w-5 h-5 text-primary-600" />
             </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Agilidade</h3>
-            <p class="text-gray-600">Entregamos projetos no prazo acordado com qualidade garantida</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CogIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Personalização</h3>
-            <p class="text-gray-600">Soluções sob medida para cada necessidade e orçamento</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ChartBarIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Resultados</h3>
-            <p class="text-gray-600">Focamos em métricas que realmente impactam seu negócio</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <UserGroupIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Suporte</h3>
-            <p class="text-gray-600">Atendimento especializado e suporte contínuo</p>
+            <h4 class="font-semibold text-gray-900 text-xs mb-1">{{ d.title }}</h4>
+            <p class="text-[11px] text-gray-500">{{ d.desc }}</p>
           </div>
         </div>
       </div>
     </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section">
+
+    <!-- Calculator Teaser -->
+    <section class="section-padding">
       <div class="container">
-        <div class="text-center">
-          <h2 class="text-3xl font-bold text-white mb-6">
-            Não encontrou o que procura?
-          </h2>
-          <p class="text-xl text-blue-100 mb-8">
-            Entre em contato conosco e vamos criar uma solução personalizada para você
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <router-link to="/contato" class="btn-secondary bg-white text-primary-600 hover:bg-gray-100">
-              Falar com Especialista
-            </router-link>
-            <a
-              href="https://wa.me/5541996924829?text=Olá! Preciso de uma solução personalizada."
-              target="_blank"
-              class="btn-outline border-white text-white hover:bg-white hover:text-primary-600"
-            >
-              WhatsApp
-            </a>
-          </div>
+        <div class="text-center mb-8">
+          <span class="section-label">Simulador</span>
+          <h2 class="section-title">Quanto vai custar o seu projeto?</h2>
+          <p class="section-subtitle">Use nosso calculador para uma estimativa em menos de 60 segundos.</p>
+        </div>
+        <div class="max-w-4xl mx-auto">
+          <PriceSimulator service-type="website" />
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">Não encontrou o que procura?</h2>
+        <p class="text-sm text-blue-200 mb-6">Criamos soluções personalizadas. Entre em contato e conte o que precisa.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <RouterLink to="/contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-sm">Falar com Especialista</RouterLink>
+          <a href="https://wa.me/5541996924829" target="_blank" class="btn-secondary text-sm"><Icon icon="mdi:whatsapp" class="w-4 h-4 mr-2" /> WhatsApp</a>
         </div>
       </div>
     </section>
@@ -117,122 +92,30 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  ChevronRightIcon,
-  ChatBubbleBottomCenterTextIcon,
-  PresentationChartLineIcon,
-  ComputerDesktopIcon,
-  DevicePhoneMobileIcon,
-  LightBulbIcon,
-  DocumentTextIcon,
-  PaintBrushIcon,
-  MegaphoneIcon,
-  BriefcaseIcon,
-  SpeakerWaveIcon,
-  ClockIcon,
-  CogIcon,
-  ChartBarIcon,
-  UserGroupIcon,
-  CubeIcon,
-  StarIcon
-} from '@heroicons/vue/24/outline'
+import { Icon } from '@iconify/vue'
+import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import PriceSimulator from '@/components/PriceSimulator.vue'
 
 const services = [
-  {
-    id: 0,
-    title: 'Marketing Digital Para seu Negócio',
-    description: 'Pacote completo de gestão de anúncios e redes sociais por 30 dias.',
-    price: 'R$ 500',
-    icon: StarIcon,
-    link: '/servicos/marketing-digital'
-  },
-  {
-    id: 1,
-    title: 'Gestão de Redes Sociais',
-    description: 'Criação de conteúdo, planejamento estratégico e gestão completa das suas redes sociais.',
-    price: 'R$ 800/mês',
-    icon: ChatBubbleBottomCenterTextIcon,
-    link: '/servicos/gestao-redes-sociais'
-  },
-  {
-    id: 2,
-    title: 'Gestão de Anúncios',
-    description: 'Campanhas eficientes no Google Ads e Meta Ads para maximizar seu ROI.',
-    price: 'R$ 1.200/mês',
-    icon: PresentationChartLineIcon,
-    link: '/servicos/gestao-anuncios'
-  },
-  {
-    id: 3,
-    title: 'Criação de Sites',
-    description: 'Sites profissionais, responsivos e otimizados para conversão e SEO.',
-    price: 'R$ 2.500',
-    icon: ComputerDesktopIcon,
-    link: '/servicos/criacao-sites'
-  },
-  {
-    id: 4,
-    title: 'Criação de Sistemas',
-    description: 'Sistemas web personalizados para automatizar e otimizar seus processos.',
-    price: 'R$ 15.000',
-    icon: CubeIcon,
-    link: '/servicos/criacao-sistemas'
-  },
-  {
-    id: 5,
-    title: 'Desenvolvimento de Apps',
-    description: 'Aplicativos mobile nativos e híbridos para iOS e Android.',
-    price: 'R$ 12.000',
-    icon: DevicePhoneMobileIcon,
-    link: '/servicos/desenvolvimento-apps'
-  },
-  {
-    id: 6,
-    title: 'Consultoria em Marketing',
-    description: 'Estratégias personalizadas para otimizar seus resultados em marketing digital.',
-    price: 'R$ 2.500/mês',
-    icon: LightBulbIcon,
-    link: '/servicos/consultoria-marketing'
-  },
-  {
-    id: 7,
-    title: 'Planejamento de Campanhas',
-    description: 'Desenvolvimento de campanhas publicitárias integradas e eficientes.',
-    price: 'R$ 4.500',
-    icon: DocumentTextIcon,
-    link: '/servicos/planejamento-campanhas'
-  },
-  {
-    id: 8,
-    title: 'Design Gráfico',
-    description: 'Identidade visual, materiais gráficos e peças publicitárias criativas.',
-    price: 'R$ 1.800',
-    icon: PaintBrushIcon,
-    link: '/servicos/design-grafico'
-  },
-  {
-    id: 9,
-    title: 'Publicidade e Propaganda',
-    description: 'Campanhas publicitárias integradas para online e offline.',
-    price: 'R$ 6.000',
-    icon: MegaphoneIcon,
-    link: '/servicos/publicidade'
-  },
-  {
-    id: 10,
-    title: 'Organização Comercial',
-    description: 'Estruturação de processos comerciais e otimização de vendas.',
-    price: 'R$ 3.500',
-    icon: BriefcaseIcon,
-    link: '/servicos/organizacao-comercial'
-  },
-  {
-    id: 11,
-    title: 'Relações Públicas',
-    description: 'Assessoria de imprensa e gestão da comunicação corporativa.',
-    price: 'R$ 2.800/mês',
-    icon: SpeakerWaveIcon,
-    link: '/servicos/relacoes-publicas'
-  }
+  { id: 0, title: 'Marketing Digital', description: 'Pacote completo de gestão de anúncios e redes sociais.', price: 'R$ 500/mês', icon: 'mdi:star', iconBg: 'bg-yellow-500', link: '/servicos/marketing-digital' },
+  { id: 1, title: 'Gestão de Redes Sociais', description: 'Estratégia, conteúdo e gestão completa das redes.', price: 'R$ 800/mês', icon: 'mdi:instagram', iconBg: 'bg-pink-500', link: '/servicos/gestao-redes-sociais' },
+  { id: 2, title: 'Gestão de Anúncios', description: 'Google Ads e Meta Ads com foco em ROI.', price: 'R$ 1.200/mês', icon: 'mdi:bullseye-arrow', iconBg: 'bg-green-500', link: '/servicos/gestao-anuncios' },
+  { id: 3, title: 'Criação de Sites', description: 'Sites responsivos e otimizados para conversão.', price: 'R$ 2.500', icon: 'mdi:web', iconBg: 'bg-blue-500', link: '/servicos/criacao-sites' },
+  { id: 4, title: 'Criação de Sistemas', description: 'Sistemas personalizados para automatizar processos.', price: 'R$ 15.000', icon: 'mdi:cog', iconBg: 'bg-indigo-500', link: '/servicos/criacao-sistemas' },
+  { id: 5, title: 'Desenvolvimento de Apps', description: 'Apps mobile modernos para iOS e Android.', price: 'R$ 12.000', icon: 'mdi:cellphone', iconBg: 'bg-purple-500', link: '/servicos/desenvolvimento-apps' },
+  { id: 6, title: 'Consultoria em Marketing', description: 'Estratégias personalizadas para otimizar resultados.', price: 'R$ 2.500/mês', icon: 'mdi:lightbulb', iconBg: 'bg-amber-500', link: '/servicos/consultoria-marketing' },
+  { id: 7, title: 'Planejamento de Campanhas', description: 'Campanhas publicitárias integradas e eficientes.', price: 'R$ 4.500', icon: 'mdi:file-document', iconBg: 'bg-teal-500', link: '/servicos/planejamento-campanhas' },
+  { id: 8, title: 'Design Gráfico', description: 'Identidade visual e peças criativas.', price: 'R$ 1.800', icon: 'mdi:palette', iconBg: 'bg-orange-500', link: '/servicos/design-grafico' },
+  { id: 9, title: 'Publicidade e Propaganda', description: 'Campanhas integradas para online e offline.', price: 'R$ 6.000', icon: 'mdi:bullhorn', iconBg: 'bg-red-500', link: '/servicos/publicidade' },
+  { id: 10, title: 'Organização Comercial', description: 'Processos comerciais e otimização de vendas.', price: 'R$ 3.500', icon: 'mdi:briefcase', iconBg: 'bg-slate-500', link: '/servicos/organizacao-comercial' },
+  { id: 11, title: 'Relações Públicas', description: 'Assessoria de imprensa e comunicação corporativa.', price: 'R$ 2.800/mês', icon: 'mdi:account-group', iconBg: 'bg-cyan-500', link: '/servicos/relacoes-publicas' },
+  { id: 12, title: 'Automação e IA', description: 'Chatbots, automação de processos e inteligência artificial.', price: 'R$ 2.500', icon: 'mdi:robot', iconBg: 'bg-violet-500', link: '/servicos/automacao-ia' },
+]
+
+const diffs = [
+  { title: 'Agilidade', icon: 'mdi:clock-fast', desc: 'Entrega no prazo' },
+  { title: 'Personalização', icon: 'mdi:tune', desc: 'Soluções sob medida' },
+  { title: 'Resultados', icon: 'mdi:chart-line', desc: 'Métricas reais' },
+  { title: 'Suporte', icon: 'mdi:headset', desc: 'Atendimento contínuo' },
 ]
 </script>

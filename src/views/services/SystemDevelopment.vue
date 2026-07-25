@@ -1,325 +1,98 @@
 <template>
   <div>
-    <!-- Hero Section -->
     <section class="page-hero">
       <div class="container">
-        <div class="breadcrumb">
-          <router-link to="/">Home</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <router-link to="/servicos">Serviços</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <span>Criação de Sistemas</span>
-        </div>
+        <AppBreadcrumb :items="[{ label: 'Home', path: '/' }, { label: 'Serviços', path: '/servicos' }, { label: 'Criação de Sistemas' }]" />
         <h1 class="page-hero-title">Criação de Sistemas</h1>
-        <p class="page-hero-subtitle">
-          Sistemas web personalizados para automatizar e otimizar seus processos
-        </p>
+        <p class="page-hero-subtitle">Sistemas sob medida de tecnologias para automatizar e otimizar seus processos</p>
       </div>
     </section>
-    
-    <!-- Content Section -->
+
     <section class="section-padding">
       <div class="container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <!-- Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div>
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">
-              Sistemas sob medida para seu negócio
-            </h2>
-            <p class="text-lg text-gray-600 mb-8">
-              Desenvolvemos sistemas web personalizados que automatizam processos, aumentam a produtividade e proporcionam controle total sobre suas operações. Nossa equipe especializada cria soluções escaláveis e seguras para empresas de todos os portes.
+            <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-3">Sistemas sob medida para seu negócio</h2>
+            <p class="text-sm text-gray-600 leading-relaxed mb-5">
+              Desenvolvemos sistemas web personalizados que automatizam processos,
+              eliminam erros e aumentam a produtividade da sua equipe.
             </p>
-            
-            <!-- Benefits -->
-            <div class="space-y-4 mb-8">
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Sistemas 100% personalizados</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Automação de processos</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Interface intuitiva e responsiva</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Integração com APIs e serviços</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Segurança e backup automático</span>
-              </div>
-            </div>
-            
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4">
-              <button
-                @click="scrollToSimulator"
-                class="btn-primary"
-              >
-                Simular Preço
-              </button>
-              <a
-                href="https://wa.me/5541996924829?text=Olá! Tenho interesse no serviço de Criação de Sistemas."
-                target="_blank"
-                class="btn-secondary"
-              >
-                Falar no WhatsApp
-              </a>
+            <ul class="space-y-2.5 mb-6">
+              <li v-for="b in benefits" :key="b" class="flex items-center gap-2 text-sm text-gray-700">
+                <Icon icon="mdi:check-circle" class="w-5 h-5 text-green-500 flex-shrink-0" /> {{ b }}
+              </li>
+            </ul>
+            <div class="flex flex-wrap gap-3">
+              <button @click="scrollTo" class="btn-primary text-sm"><Icon icon="mdi:calculator" class="w-4 h-4 mr-2" /> Simular Preço</button>
+              <a href="https://wa.me/5541996924829?text=Olá! Preciso de um sistema personalizado." target="_blank" class="btn-secondary text-sm"><Icon icon="mdi:whatsapp" class="w-4 h-4 mr-2" /> Falar no WhatsApp</a>
             </div>
           </div>
-          
-          <!-- Service Image -->
-          <div>
-            <img
-              src="https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Criação de Sistemas"
-              class="w-full h-auto rounded-lg shadow-lg"
-            />
-          </div>
+          <img src="https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Criação de Sistemas" class="w-full rounded-xl shadow-lg" loading="lazy" width="800" height="533" />
         </div>
       </div>
     </section>
-    
-    <!-- Types Section -->
+
+    <!-- Types -->
     <section class="section-padding bg-gray-50">
       <div class="container">
-        <div class="text-center mb-16">
+        <div class="text-center mb-10">
           <h2 class="section-title">Tipos de sistemas que desenvolvemos</h2>
-          <p class="section-subtitle">Soluções personalizadas para diferentes necessidades</p>
+          <p class="section-subtitle">Soluções para todos os tipos de necessidades</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="card p-6">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-              <ClipboardDocumentListIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Sistema de Gestão (ERP)</h3>
-            <p class="text-gray-600 mb-4">Controle completo de vendas, estoque, financeiro e clientes</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 25.000</p>
-          </div>
-          
-          <div class="card p-6">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-              <UserGroupIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">CRM Personalizado</h3>
-            <p class="text-gray-600 mb-4">Gestão de relacionamento com clientes e pipeline de vendas</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 15.000</p>
-          </div>
-          
-          <div class="card p-6">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-              <CalendarDaysIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Sistema de Agendamento</h3>
-            <p class="text-gray-600 mb-4">Agendamento online com calendário e notificações</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 8.000</p>
-          </div>
-          
-          <div class="card p-6">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-              <CubeIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Controle de Estoque</h3>
-            <p class="text-gray-600 mb-4">Gestão inteligente de produtos e movimentações</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 12.000</p>
-          </div>
-          
-          <div class="card p-6">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-              <BanknotesIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Sistema Financeiro</h3>
-            <p class="text-gray-600 mb-4">Controle de contas a pagar, receber e fluxo de caixa</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 18.000</p>
-          </div>
-          
-          <div class="card p-6">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-              <AcademicCapIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Sistema Educacional</h3>
-            <p class="text-gray-600 mb-4">Plataforma de ensino com cursos e avaliações</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 20.000</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div v-for="t in types" :key="t.title" class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-gray-900 mb-1">{{ t.title }}</h3>
+            <p class="text-xs text-gray-500 mb-2">{{ t.desc }}</p>
+            <p class="text-sm font-bold text-primary-600">{{ t.price }}</p>
           </div>
         </div>
       </div>
     </section>
-    
-    <!-- Features Section -->
+
+    <!-- Features included -->
     <section class="section-padding">
       <div class="container">
-        <div class="text-center mb-16">
+        <div class="text-center mb-10">
           <h2 class="section-title">Recursos incluídos em todos os sistemas</h2>
-          <p class="section-subtitle">Funcionalidades essenciais para garantir eficiência</p>
+          <p class="section-subtitle">Tecnologia robusta e profissional em cada projeto</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ShieldCheckIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Segurança Avançada</h3>
-            <p class="text-gray-600">Criptografia, autenticação e controle de acesso</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CloudIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Backup Automático</h3>
-            <p class="text-gray-600">Seus dados sempre seguros na nuvem</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <DevicePhoneMobileIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Design Responsivo</h3>
-            <p class="text-gray-600">Acesso perfeito em qualquer dispositivo</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ChartBarIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Relatórios Avançados</h3>
-            <p class="text-gray-600">Dashboards e relatórios personalizados</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div v-for="f in features" :key="f.title" class="text-center p-4">
+            <Icon :icon="f.icon" class="w-8 h-8 text-primary-600 mx-auto mb-2" />
+            <h4 class="text-xs font-semibold text-gray-900">{{ f.title }}</h4>
+            <p class="text-[10px] text-gray-500 mt-1">{{ f.desc }}</p>
           </div>
         </div>
       </div>
     </section>
-    
-    <!-- Process Section -->
+
+    <!-- Process -->
     <section class="section-padding bg-gray-50">
       <div class="container">
-        <div class="text-center mb-16">
+        <div class="text-center mb-10">
           <h2 class="section-title">Nosso processo de desenvolvimento</h2>
-          <p class="section-subtitle">Metodologia ágil para entregas de qualidade</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-          <div class="text-center">
-            <div class="step-number mx-auto mb-4">1</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Análise</h3>
-            <p class="text-gray-600">Levantamento detalhado dos requisitos</p>
-          </div>
-          <div class="text-center">
-            <div class="step-number mx-auto mb-4">2</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Prototipagem</h3>
-            <p class="text-gray-600">Criação de wireframes e protótipos</p>
-          </div>
-          <div class="text-center">
-            <div class="step-number mx-auto mb-4">3</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Desenvolvimento</h3>
-            <p class="text-gray-600">Codificação com metodologia ágil</p>
-          </div>
-          <div class="text-center">
-            <div class="step-number mx-auto mb-4">4</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Testes</h3>
-            <p class="text-gray-600">Validação e correção de bugs</p>
-          </div>
-          <div class="text-center">
-            <div class="step-number mx-auto mb-4">5</div>
-            <h3 class="font-semibold text-gray-900 mb-2">Entrega</h3>
-            <p class="text-gray-600">Deploy e treinamento da equipe</p>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div v-for="(s, i) in process" :key="i" class="text-center">
+            <div class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center mx-auto mb-2 text-sm font-bold">{{ i + 1 }}</div>
+            <h4 class="text-xs font-semibold text-gray-900">{{ s.title }}</h4>
+            <p class="text-[10px] text-gray-500 mt-1">{{ s.desc }}</p>
           </div>
         </div>
       </div>
     </section>
-    
-    <!-- Price Simulator Section -->
-    <section ref="simulatorSection" class="section-padding">
-      <div class="container">
-        <div class="max-w-4xl mx-auto">
-          <PriceSimulator service-type="system" />
-        </div>
+
+    <section ref="simRef" class="section-padding">
+      <div class="container max-w-4xl mx-auto">
+        <PriceSimulator service-type="system" />
       </div>
     </section>
-    
-    <!-- Technologies Section -->
-    <section class="section-padding bg-gray-50">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Tecnologias que utilizamos</h2>
-          <p class="section-subtitle">Stack moderno para sistemas robustos e escaláveis</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="card p-8">
-            <h3 class="text-2xl font-bold text-gray-900 mb-6">Frontend</h3>
-            <ul class="space-y-3 text-gray-600">
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                Vue.js / React.js
-              </li>
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                TypeScript
-              </li>
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                Tailwind CSS
-              </li>
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                Progressive Web App (PWA)
-              </li>
-            </ul>
-          </div>
-          
-          <div class="card p-8">
-            <h3 class="text-2xl font-bold text-gray-900 mb-6">Backend</h3>
-            <ul class="space-y-3 text-gray-600">
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                Node.js / PHP / Python
-              </li>
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                MySQL / PostgreSQL
-              </li>
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                APIs RESTful
-              </li>
-              <li class="flex items-center">
-                <CheckCircleIcon class="w-5 h-5 text-green-500 mr-3" />
-                Cloud Computing (AWS/Google Cloud)
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- CTA Section -->
+
     <section class="cta-section">
-      <div class="container">
-        <div class="text-center">
-          <h2 class="text-3xl font-bold text-white mb-6">
-            Pronto para automatizar seus processos?
-          </h2>
-          <p class="text-xl text-blue-100 mb-8">
-            Vamos criar um sistema personalizado que transforme sua operação
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <router-link to="/contato" class="btn-secondary bg-white text-primary-600 hover:bg-gray-100">
-              Solicitar Orçamento
-            </router-link>
-            <a
-              href="https://wa.me/5541996924829?text=Olá! Quero saber mais sobre Criação de Sistemas."
-              target="_blank"
-              class="btn-outline border-white text-white hover:bg-white hover:text-primary-600"
-            >
-              WhatsApp
-            </a>
-          </div>
-        </div>
+      <div class="container text-center">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Pronto para automatizar seus processos?</h2>
+        <p class="text-sm text-blue-200 mb-6">Transforme seu negócio com um sistema sob medida para suas necessidades</p>
+        <RouterLink to="/contato" class="btn-secondary text-sm"><Icon icon="mdi:file-document-edit" class="w-4 h-4 mr-2" /> Solicitar Orçamento</RouterLink>
       </div>
     </section>
   </div>
@@ -327,25 +100,36 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { 
-  ChevronRightIcon, 
-  CheckCircleIcon,
-  ClipboardDocumentListIcon,
-  UserGroupIcon,
-  CalendarDaysIcon,
-  CubeIcon,
-  BanknotesIcon,
-  AcademicCapIcon,
-  ShieldCheckIcon,
-  CloudIcon,
-  DevicePhoneMobileIcon,
-  ChartBarIcon
-} from '@heroicons/vue/24/outline'
-import PriceSimulator from '../../components/PriceSimulator.vue'
+import { Icon } from '@iconify/vue'
+import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import PriceSimulator from '@/components/PriceSimulator.vue'
 
-const simulatorSection = ref<HTMLElement>()
+const simRef = ref<HTMLElement>()
+const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
 
-const scrollToSimulator = () => {
-  simulatorSection.value?.scrollIntoView({ behavior: 'smooth' })
-}
+const benefits = ['Automação de processos', 'Painel administrativo completo', 'Relatórios e dashboards', 'Integração com APIs externas', 'Escalável e seguro']
+
+const types = [
+  { title: 'Controle de Gestão (CRM)', desc: 'Gerencie clientes e vendas', price: 'A partir de R$ 15.000' },
+  { title: 'ERP/Financeiro', desc: 'Controle financeiro completo', price: 'A partir de R$ 18.000' },
+  { title: 'Sistema de Agendamento', desc: 'Agendamentos automatizados', price: 'A partir de R$ 8.000' },
+  { title: 'Controle de Estoque', desc: 'Gestão de produtos e estoque', price: 'A partir de R$ 12.000' },
+  { title: 'Sistema Educacional', desc: 'Plataforma de ensino EAD', price: 'A partir de R$ 20.000' },
+  { title: 'Sistema Personalizado', desc: 'Sob demanda para seu negócio', price: 'A partir de R$ 22.000' },
+]
+
+const features = [
+  { title: 'Painel Intuitivo', icon: 'mdi:view-dashboard', desc: 'Dashboard completo' },
+  { title: 'Acesso Multinível', icon: 'mdi:account-lock', desc: 'Controle de permissões' },
+  { title: 'Integração APIs', icon: 'mdi:api', desc: 'Conecte com outros sistemas' },
+  { title: 'Mobile Friendly', icon: 'mdi:cellphone-check', desc: 'Acesso de qualquer lugar' },
+]
+
+const process = [
+  { title: 'Análise', desc: 'Mapeamento de processos' },
+  { title: 'Prototipagem', desc: 'Wireframes e validação' },
+  { title: 'Desenvolvimento', desc: 'Codificação e testes' },
+  { title: 'Testes', desc: 'QA e homologação' },
+  { title: 'Entrega', desc: 'Deploy e treinamento' },
+]
 </script>

@@ -1,23 +1,30 @@
 <template>
   <div class="price-simulator">
-    <h3 class="text-xl font-bold text-gray-900 mb-4">Simulador de Preços</h3>
-    <p class="text-gray-600 mb-6">Configure suas necessidades e receba uma estimativa personalizada</p>
-    
+    <div class="flex items-center gap-2 mb-2">
+      <Icon icon="mdi:calculator" class="w-6 h-6 text-primary-600" />
+      <h3 class="text-lg font-bold text-gray-900">Simulador de Preços</h3>
+    </div>
+    <p class="text-sm text-gray-600 mb-6">
+      <Icon icon="mdi:information-outline" class="w-4 h-4 inline mr-1" />
+      Configure suas necessidades e receba uma estimativa personalizada.
+    </p>
+
     <div class="space-y-4">
-      <!-- Service Type -->
+      <!-- Service-specific fields -->
       <div v-if="serviceType === 'social-media'">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Número de Redes Sociais</label>
-        <select v-model="socialMediaCount" class="form-select">
+        <label class="form-label">Número de Redes Sociais</label>
+        <select v-model="socialMediaCount" class="form-select" autocomplete="off">
           <option value="1">1 Rede Social</option>
           <option value="2">2 Redes Sociais</option>
           <option value="3">3 Redes Sociais</option>
           <option value="4">4+ Redes Sociais</option>
         </select>
+        <p class="form-hint">Selecione quantas redes você deseja gerenciar</p>
       </div>
-      
+
       <div v-if="serviceType === 'ads'">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Orçamento Mensal para Anúncios</label>
-        <select v-model="adsbudget" class="form-select">
+        <label class="form-label">Orçamento Mensal para Anúncios</label>
+        <select v-model="adsBudget" class="form-select" autocomplete="off">
           <option value="500">Até R$ 500</option>
           <option value="1000">R$ 500 - R$ 1.000</option>
           <option value="2000">R$ 1.000 - R$ 2.000</option>
@@ -25,29 +32,29 @@
           <option value="10000">Acima de R$ 5.000</option>
         </select>
       </div>
-      
+
       <div v-if="serviceType === 'website'">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Site</label>
-        <select v-model="websiteType" class="form-select">
+        <label class="form-label">Tipo de Site</label>
+        <select v-model="websiteType" class="form-select" autocomplete="off">
           <option value="institucional">Site Institucional</option>
           <option value="ecommerce">E-commerce</option>
           <option value="blog">Blog/Portal</option>
           <option value="sistema">Sistema Web</option>
         </select>
       </div>
-      
+
       <div v-if="serviceType === 'app'">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Plataforma</label>
-        <select v-model="appPlatform" class="form-select">
+        <label class="form-label">Plataforma</label>
+        <select v-model="appPlatform" class="form-select" autocomplete="off">
           <option value="android">Android</option>
           <option value="ios">iOS</option>
           <option value="both">Android + iOS</option>
         </select>
       </div>
-      
+
       <div v-if="serviceType === 'system'">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Sistema</label>
-        <select v-model="systemType" class="form-select">
+        <label class="form-label">Tipo de Sistema</label>
+        <select v-model="systemType" class="form-select" autocomplete="off">
           <option value="crm">CRM Personalizado</option>
           <option value="erp">Sistema de Gestão (ERP)</option>
           <option value="agendamento">Sistema de Agendamento</option>
@@ -57,57 +64,54 @@
           <option value="personalizado">Sistema Personalizado</option>
         </select>
       </div>
-      
+
       <!-- Common fields -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Complexidade do Projeto</label>
-        <select v-model="complexity" class="form-select">
+        <label class="form-label">Complexidade do Projeto</label>
+        <select v-model="complexity" class="form-select" autocomplete="off">
           <option value="basic">Básico</option>
           <option value="intermediate">Intermediário</option>
           <option value="advanced">Avançado</option>
         </select>
+        <p class="form-hint">Quanto mais complexo, maior o investimento e prazo</p>
       </div>
-      
+
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Prazo Desejado</label>
-        <select v-model="deadline" class="form-select">
+        <label class="form-label">Prazo Desejado</label>
+        <select v-model="deadline" class="form-select" autocomplete="off">
           <option value="normal">Normal (30-60 dias)</option>
           <option value="urgent">Urgente (15-30 dias)</option>
           <option value="express">Express (até 15 dias)</option>
         </select>
+        <p class="form-hint">Prazos menores podem ter acréscimo no valor</p>
       </div>
     </div>
-    
+
     <!-- Result -->
     <div class="mt-6 p-4 bg-primary-50 rounded-lg border border-primary-200">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <h4 class="font-semibold text-primary-900">Estimativa de Investimento</h4>
-          <p class="text-sm text-primary-700">Valores aproximados para este projeto</p>
+          <h4 class="font-semibold text-primary-900 text-sm">Estimativa de Investimento</h4>
+          <p class="text-xs text-primary-700">Valores aproximados para este projeto</p>
         </div>
         <div class="text-right">
           <div class="text-2xl font-bold text-primary-600">
             R$ {{ calculatedPrice.toLocaleString('pt-BR') }}
           </div>
-          <div class="text-sm text-primary-600">
-            <span v-if="isRecurring">/ mês</span>
-            <span v-else>valor único</span>
+          <div class="text-xs text-primary-600">
+            {{ isRecurring ? '/ mês' : 'valor único' }}
           </div>
         </div>
       </div>
     </div>
-    
-    <div class="mt-4 flex gap-3">
-      <button
-        @click="requestQuote"
-        class="btn-primary flex-1"
-      >
-        Solicitar Orçamento Detalhado
+
+    <div class="mt-4 flex flex-col sm:flex-row gap-3">
+      <button @click="requestQuote" class="btn-primary flex-1 text-sm">
+        <Icon icon="mdi:file-document-edit" class="w-4 h-4 mr-2" />
+        Solicitar Orçamento
       </button>
-      <button
-        @click="contactWhatsApp"
-        class="btn-secondary flex-1"
-      >
+      <button @click="contactWhatsApp" class="btn-outline flex-1 text-sm !border-green-500 !text-green-600 hover:!bg-green-500 hover:!text-white">
+        <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-2" />
         Falar no WhatsApp
       </button>
     </div>
@@ -116,6 +120,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { Icon } from '@iconify/vue'
 
 interface Props {
   serviceType: string
@@ -124,7 +129,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const socialMediaCount = ref('2')
-const adsbudget = ref('1000')
+const adsBudget = ref('1000')
 const websiteType = ref('institucional')
 const appPlatform = ref('android')
 const systemType = ref('crm')
@@ -137,127 +142,45 @@ const isRecurring = computed(() => {
 
 const calculatedPrice = computed(() => {
   let basePrice = 0
-  
+
   switch (props.serviceType) {
     case 'social-media':
-      basePrice = 800
-      basePrice += parseInt(socialMediaCount.value) * 400
+      basePrice = 800 + parseInt(socialMediaCount.value) * 400
       break
     case 'ads':
-      basePrice = 1200
-      basePrice += parseInt(adsbudget.value) * 0.15
+      basePrice = 1200 + parseInt(adsBudget.value) * 0.15
       break
     case 'website':
-      switch (websiteType.value) {
-        case 'institucional':
-          basePrice = 3500
-          break
-        case 'ecommerce':
-          basePrice = 8000
-          break
-        case 'blog':
-          basePrice = 2500
-          break
-        case 'sistema':
-          basePrice = 15000
-          break
-      }
+      basePrice = { institucional: 3500, ecommerce: 8000, blog: 2500, sistema: 15000 }[websiteType.value] ?? 3500
       break
     case 'app':
-      basePrice = 12000
-      if (appPlatform.value === 'both') {
-        basePrice *= 1.8
-      }
+      basePrice = appPlatform.value === 'both' ? 21600 : 12000
       break
     case 'system':
-      switch (systemType.value) {
-        case 'crm':
-          basePrice = 15000
-          break
-        case 'erp':
-          basePrice = 25000
-          break
-        case 'agendamento':
-          basePrice = 8000
-          break
-        case 'estoque':
-          basePrice = 12000
-          break
-        case 'financeiro':
-          basePrice = 18000
-          break
-        case 'educacional':
-          basePrice = 20000
-          break
-        case 'personalizado':
-          basePrice = 22000
-          break
-      }
+      basePrice = { crm: 15000, erp: 25000, agendamento: 8000, estoque: 12000, financeiro: 18000, educacional: 20000, personalizado: 22000 }[systemType.value] ?? 15000
       break
-    case 'consulting':
-      basePrice = 2500
-      break
-    case 'campaign':
-      basePrice = 4500
-      break
-    case 'design':
-      basePrice = 1800
-      break
-    case 'advertising':
-      basePrice = 6000
-      break
-    case 'business':
-      basePrice = 3500
-      break
-    case 'pr':
-      basePrice = 2800
-      break
-    default:
-      basePrice = 1500
+    case 'consulting': basePrice = 2500; break
+    case 'campaign': basePrice = 4500; break
+    case 'design': basePrice = 1800; break
+    case 'advertising': basePrice = 6000; break
+    case 'business': basePrice = 3500; break
+    case 'pr': basePrice = 2800; break
+    default: basePrice = 1500
   }
-  
-  // Apply complexity multiplier
-  switch (complexity.value) {
-    case 'basic':
-      basePrice *= 0.8
-      break
-    case 'advanced':
-      basePrice *= 1.4
-      break
-  }
-  
-  // Apply deadline multiplier
-  switch (deadline.value) {
-    case 'urgent':
-      basePrice *= 1.3
-      break
-    case 'express':
-      basePrice *= 1.6
-      break
-  }
-  
-  return Math.round(basePrice)
+
+  const complexityMultiplier = { basic: 0.8, intermediate: 1, advanced: 1.4 }[complexity.value] ?? 1
+  const deadlineMultiplier = { normal: 1, urgent: 1.3, express: 1.6 }[deadline.value] ?? 1
+
+  return Math.round(basePrice * complexityMultiplier * deadlineMultiplier)
 })
 
-const requestQuote = () => {
-  let serviceDetails = ''
-  
-  if (props.serviceType === 'system') {
-    serviceDetails = `Tipo: ${systemType.value}, `
-  } else if (props.serviceType === 'website') {
-    serviceDetails = `Tipo: ${websiteType.value}, `
-  } else if (props.serviceType === 'app') {
-    serviceDetails = `Plataforma: ${appPlatform.value}, `
-  }
-  
-  const message = `Olá! Gostaria de solicitar um orçamento detalhado para ${props.serviceType}. ${serviceDetails}Complexidade: ${complexity.value}, Prazo: ${deadline.value}. Estimativa inicial: R$ ${calculatedPrice.value.toLocaleString('pt-BR')}.`
-  
+function requestQuote(): void {
+  const message = `Olá! Gostaria de um orçamento detalhado. Serviço: ${props.serviceType}, Complexidade: ${complexity.value}, Prazo: ${deadline.value}. Estimativa: R$ ${calculatedPrice.value.toLocaleString('pt-BR')}.`
   window.open(`https://wa.me/5541996924829?text=${encodeURIComponent(message)}`, '_blank')
 }
 
-const contactWhatsApp = () => {
+function contactWhatsApp(): void {
   const message = `Olá! Tenho interesse no serviço de ${props.serviceType} e gostaria de conversar sobre meu projeto.`
-  
   window.open(`https://wa.me/5541996924829?text=${encodeURIComponent(message)}`, '_blank')
 }
 </script>

@@ -1,279 +1,235 @@
 <template>
   <div>
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section class="page-hero">
       <div class="container">
-        <div class="breadcrumb">
-          <router-link to="/">Home</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <span>Contato</span>
-        </div>
-        <h1 class="page-hero-title">Entre em Contato</h1>
+        <AppBreadcrumb :items="[{ label: 'Home', path: '/' }, { label: 'Contato' }]" />
+        <h1 class="page-hero-title">Transforme Seu Negócio Hoje Mesmo</h1>
         <p class="page-hero-subtitle">
-          Estamos prontos para ajudar você a transformar suas ideias em realidade
+          Mais de 150 empresas já confiam na 3W Online. Veja o que oferecemos e descubra como impulsionar seu negócio.
         </p>
+        <div class="flex flex-wrap gap-3 mt-6">
+          <RouterLink to="/servicos" class="btn-primary !bg-primary-500 hover:!bg-primary-600 text-sm">Orçamento Gratuito</RouterLink>
+          <a href="https://wa.me/5541996924829?text=Olá! Gostaria de falar com um especialista." target="_blank" class="btn-secondary text-sm">
+            <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-1" /> Fale Conosco
+          </a>
+        </div>
       </div>
     </section>
-    
-    <!-- Contact Section -->
+
+    <!-- Vagas Limitadas Badge -->
+    <div class="bg-green-50 border-b border-green-100 py-3">
+      <div class="container flex items-center justify-center gap-2 text-xs text-green-800">
+        <Icon icon="mdi:check-circle" class="w-4 h-4 text-green-600" />
+        <strong>Vagas Limitadas</strong> — Agende uma consultoria gratuita enquanto ainda há vagas disponíveis
+      </div>
+    </div>
+
+    <!-- Contact Section: Form + Info -->
     <section class="section-padding">
       <div class="container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <!-- Contact Form -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <!-- Left: Form -->
           <div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Solicite seu orçamento</h2>
-            <form @submit.prevent="submitForm" class="space-y-6">
+            <div class="flex items-center gap-2 mb-4">
+              <Icon icon="mdi:email-check" class="w-5 h-5 text-primary-600" />
+              <h2 class="text-lg font-bold text-gray-900">Receba uma Análise Gratuita do Seu Negócio</h2>
+            </div>
+
+            <form @submit.prevent="handleSubmit" autocomplete="off" novalidate class="space-y-4">
+              <!-- Áreas de interesse (checkboxes) -->
               <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                  Nome completo *
-                </label>
-                <input
-                  id="name"
-                  v-model="form.name"
-                  type="text"
-                  required
-                  class="form-input"
-                  placeholder="Seu nome completo"
-                />
+                <label class="form-label">Áreas de interesse</label>
+                <div class="grid grid-cols-2 gap-2">
+                  <label v-for="area in areas" :key="area.value" class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                    <input type="checkbox" v-model="form.areas" :value="area.value" class="h-4 w-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500" />
+                    {{ area.label }}
+                  </label>
+                </div>
               </div>
-              
+
               <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                  E-mail *
-                </label>
-                <input
-                  id="email"
-                  v-model="form.email"
-                  type="email"
-                  required
-                  class="form-input"
-                  placeholder="seu@email.com"
-                />
+                <label for="name" class="form-label">Nome completo <span class="text-red-500">*</span></label>
+                <input id="name" v-model="form.name" type="text" autocomplete="off" class="form-input" :class="{ '!border-red-500': errors.name }" placeholder="Seu nome completo" />
+                <p v-if="errors.name" class="form-error">{{ errors.name }}</p>
               </div>
-              
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="email" class="form-label">E-mail <span class="text-red-500">*</span></label>
+                  <input id="email" v-model="form.email" type="email" autocomplete="off" class="form-input" :class="{ '!border-red-500': errors.email }" placeholder="seu@email.com" />
+                  <p v-if="errors.email" class="form-error">{{ errors.email }}</p>
+                </div>
+                <div>
+                  <label for="phone" class="form-label">Telefone <span class="text-red-500">*</span></label>
+                  <input id="phone" v-model="form.phone" v-maska data-maska="(##) #####-####" type="tel" autocomplete="off" class="form-input" :class="{ '!border-red-500': errors.phone }" placeholder="(XX) XXXXX-XXXX" />
+                  <p v-if="errors.phone" class="form-error">{{ errors.phone }}</p>
+                </div>
+              </div>
+
               <div>
-                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
-                  Telefone *
-                </label>
-                <input
-                  id="phone"
-                  v-model="form.phone"
-                  type="tel"
-                  required
-                  class="form-input"
-                  placeholder="(XX) XXXXX-XXXX"
-                />
+                <label for="company" class="form-label">Empresa / Site</label>
+                <input id="company" v-model="form.company" type="text" autocomplete="off" class="form-input" placeholder="Nome da empresa ou URL do site" />
               </div>
-              
+
               <div>
-                <label for="company" class="block text-sm font-medium text-gray-700 mb-2">
-                  Empresa
-                </label>
-                <input
-                  id="company"
-                  v-model="form.company"
-                  type="text"
-                  class="form-input"
-                  placeholder="Nome da sua empresa"
-                />
+                <label for="message" class="form-label">Mensagem <span class="text-red-500">*</span></label>
+                <textarea id="message" v-model="form.message" rows="3" autocomplete="off" class="form-textarea" :class="{ '!border-red-500': errors.message }" placeholder="Conte-nos sobre seu projeto ou necessidade..."></textarea>
+                <p v-if="errors.message" class="form-error">{{ errors.message }}</p>
               </div>
-              
-              <div>
-                <label for="service" class="block text-sm font-medium text-gray-700 mb-2">
-                  Serviço de interesse *
-                </label>
-                <select
-                  id="service"
-                  v-model="form.service"
-                  required
-                  class="form-select"
-                >
-                  <option value="">Selecione um serviço</option>
-                  <option value="gestao-redes-sociais">Gestão de Redes Sociais</option>
-                  <option value="gestao-anuncios">Gestão de Anúncios</option>
-                  <option value="criacao-sites">Criação de Sites</option>
-                  <option value="desenvolvimento-apps">Desenvolvimento de Apps</option>
-                  <option value="consultoria-marketing">Consultoria em Marketing</option>
-                  <option value="planejamento-campanhas">Planejamento de Campanhas</option>
-                  <option value="design-grafico">Design Gráfico</option>
-                  <option value="publicidade">Publicidade e Propaganda</option>
-                  <option value="organizacao-comercial">Organização Comercial</option>
-                  <option value="relacoes-publicas">Relações Públicas</option>
-                  <option value="outros">Outros</option>
-                </select>
-              </div>
-              
-              <div>
-                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
-                  Mensagem *
-                </label>
-                <textarea
-                  id="message"
-                  v-model="form.message"
-                  rows="4"
-                  required
-                  class="form-textarea"
-                  placeholder="Conte-nos mais sobre seu projeto..."
-                ></textarea>
-              </div>
-              
-              <div class="flex items-start">
-                <input
-                  id="privacy"
-                  v-model="form.privacy"
-                  type="checkbox"
-                  required
-                  class="form-checkbox mt-1"
-                />
-                <label for="privacy" class="ml-2 text-sm text-gray-600">
-                  Li e concordo com a 
-                  <router-link to="/privacidade" class="text-primary-600 hover:text-primary-700">
-                    Política de Privacidade
-                  </router-link>
-                  e autorizo o contato da 3W Online *
+
+              <div class="flex items-start gap-2">
+                <input id="privacy" v-model="form.privacy" type="checkbox" class="mt-1 h-4 w-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500" />
+                <label for="privacy" class="text-[11px] text-gray-600 leading-relaxed">
+                  Concordo com a <RouterLink to="/privacidade" class="text-primary-600 underline">Política de Privacidade</RouterLink> e autorizo o contato conforme a LGPD. <span class="text-red-500">*</span>
                 </label>
               </div>
-              
-              <button
-                type="submit"
-                :disabled="isSubmitting"
-                class="btn-primary w-full"
-              >
-                <span v-if="isSubmitting">Enviando...</span>
-                <span v-else>Enviar Mensagem</span>
+              <p v-if="errors.privacy" class="form-error -mt-2">{{ errors.privacy }}</p>
+
+              <button type="submit" :disabled="isSubmitting" class="btn-primary w-full">
+                <Icon v-if="isSubmitting" icon="mdi:loading" class="w-5 h-5 mr-2 animate-spin" />
+                <Icon v-else icon="mdi:send" class="w-5 h-5 mr-2" />
+                {{ isSubmitting ? 'Enviando...' : 'Enviar Solicitação' }}
               </button>
             </form>
+
+            <!-- Social Links -->
+            <div class="mt-6 flex items-center gap-3">
+              <span class="text-xs text-gray-500">Siga-nos:</span>
+              <a v-for="s in socials" :key="s.label" :href="s.url" target="_blank" rel="noopener noreferrer" class="w-8 h-8 bg-gray-100 hover:bg-primary-100 rounded-full flex items-center justify-center transition-colors" :aria-label="s.label">
+                <Icon :icon="s.icon" class="w-4 h-4 text-gray-600" />
+              </a>
+            </div>
           </div>
-          
-          <!-- Contact Information -->
-          <div class="space-y-8">
+
+          <!-- Right: Contact Info -->
+          <div class="space-y-6">
             <div>
-              <h2 class="text-2xl font-bold text-gray-900 mb-6">Informações de Contato</h2>
-              <div class="space-y-6">
-                <div class="flex items-start">
-                  <PhoneIcon class="contact-icon" />
-                  <div class="contact-details">
-                    <p class="contact-label">Telefone</p>
-                    <p class="contact-value">(41) 99692-4829</p>
-                  </div>
-                </div>
-                
-                <div class="flex items-start">
-                  <EnvelopeIcon class="contact-icon" />
-                  <div class="contact-details">
-                    <p class="contact-label">E-mail</p>
-                    <p class="contact-value">contato@3wonline.com.br</p>
-                  </div>
-                </div>
-                
-                <div class="flex items-start">
-                  <MapPinIcon class="contact-icon" />
-                  <div class="contact-details">
-                    <p class="contact-label">Localização</p>
-                    <p class="contact-value">Curitiba, Paraná</p>
-                  </div>
-                </div>
-                
-                <div class="flex items-start">
-                  <ClockIcon class="contact-icon" />
-                  <div class="contact-details">
-                    <p class="contact-label">Horário de Atendimento</p>
-                    <p class="contact-value">Segunda à Sexta: 8h às 18h</p>
-                  </div>
-                </div>
+              <div class="flex items-center gap-2 mb-4">
+                <Icon icon="mdi:headset" class="w-5 h-5 text-primary-600" />
+                <h2 class="text-lg font-bold text-gray-900">Centro de Atendimento</h2>
               </div>
-            </div>
-            
-            <!-- Quick Contact Options -->
-            <div class="contact-info">
-              <h3 class="text-xl font-semibold text-gray-900 mb-4">Contato Rápido</h3>
+
               <div class="space-y-4">
-                <a
-                  href="https://wa.me/5541996924829?text=Olá! Gostaria de saber mais sobre os serviços da 3W Online."
-                  target="_blank"
-                  class="flex items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
-                >
-                  <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
-                    </svg>
+                <div v-for="info in contactInfo" :key="info.label" class="flex items-start gap-3">
+                  <div class="w-9 h-9 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Icon :icon="info.icon" class="w-4 h-4 text-primary-600" />
                   </div>
                   <div>
-                    <p class="font-medium text-gray-900">WhatsApp</p>
-                    <p class="text-sm text-gray-600">Resposta imediata</p>
+                    <p class="text-[11px] text-gray-500 uppercase tracking-wide">{{ info.label }}</p>
+                    <p class="text-sm text-gray-900 font-medium">{{ info.value }}</p>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hours -->
+            <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
+              <h3 class="font-semibold text-gray-900 text-sm mb-3">
+                <Icon icon="mdi:clock-outline" class="w-4 h-4 inline mr-1 text-primary-600" />
+                Formas de contato
+              </h3>
+              <div class="space-y-3">
+                <a href="https://wa.me/5541996924829?text=Olá! Gostaria de uma análise gratuita do meu negócio." target="_blank" rel="noopener noreferrer" class="flex items-center p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors group">
+                  <div class="w-9 h-9 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                    <Icon icon="mdi:whatsapp" class="w-5 h-5 text-white" />
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-medium text-gray-900 text-sm">WhatsApp</p>
+                    <p class="text-[11px] text-gray-500">Resposta imediata</p>
+                  </div>
+                  <Icon icon="mdi:chevron-right" class="w-4 h-4 text-gray-400 group-hover:text-green-600" />
                 </a>
-                
-                <a
-                  href="mailto:contato@3wonline.com.br"
-                  class="flex items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-                >
-                  <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
-                    <EnvelopeIcon class="w-6 h-6 text-white" />
+
+                <a href="mailto:contato@3wonline.com.br" class="flex items-center p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group">
+                  <div class="w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                    <Icon icon="mdi:email" class="w-5 h-5 text-white" />
                   </div>
-                  <div>
-                    <p class="font-medium text-gray-900">E-mail</p>
-                    <p class="text-sm text-gray-600">contato@3wonline.com.br</p>
+                  <div class="flex-1">
+                    <p class="font-medium text-gray-900 text-sm">E-mail</p>
+                    <p class="text-[11px] text-gray-500">contato@3wonline.com.br</p>
                   </div>
+                  <Icon icon="mdi:chevron-right" class="w-4 h-4 text-gray-400 group-hover:text-blue-600" />
                 </a>
-                
-                <a
-                  href="tel:+5541996924829"
-                  class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                >
-                  <div class="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center mr-4">
-                    <PhoneIcon class="w-6 h-6 text-white" />
+
+                <a href="tel:+5541996924829" class="flex items-center p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors group">
+                  <div class="w-9 h-9 bg-gray-600 rounded-full flex items-center justify-center mr-3">
+                    <Icon icon="mdi:phone" class="w-5 h-5 text-white" />
                   </div>
-                  <div>
-                    <p class="font-medium text-gray-900">Telefone</p>
-                    <p class="text-sm text-gray-600">(41) 99692-4829</p>
+                  <div class="flex-1">
+                    <p class="font-medium text-gray-900 text-sm">Telefone</p>
+                    <p class="text-[11px] text-gray-500">(41) 99692-4829</p>
                   </div>
+                  <Icon icon="mdi:chevron-right" class="w-4 h-4 text-gray-400 group-hover:text-gray-700" />
                 </a>
+              </div>
+
+              <div class="mt-4 pt-4 border-t border-gray-200">
+                <p class="text-xs text-gray-600"><Icon icon="mdi:clock" class="w-3.5 h-3.5 inline mr-1" /> <strong>Horário:</strong> Seg–Sex: 8h–18h</p>
+                <p class="text-xs text-gray-600 mt-1"><Icon icon="mdi:map-marker" class="w-3.5 h-3.5 inline mr-1" /> <strong>Local:</strong> Curitiba, Paraná — Brasil</p>
               </div>
             </div>
           </div>
-          
-          <!-- Social Media Links -->
-          <div class="mt-8">
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Siga-nos nas Redes Sociais</h3>
-            <div class="flex space-x-4">
-              <a
-                href="https://www.facebook.com/grupo3wonline"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-300"
-                aria-label="Seguir no Facebook"
-              >
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-              
-              <a
-                href="https://www.instagram.com/grupo3wonline"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full hover:from-purple-600 hover:to-pink-600 transition-all duration-300"
-                aria-label="Seguir no Instagram"
-              >
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.004 5.367 18.637.001 12.017.001zM8.449 16.988c-2.458 0-4.467-2.01-4.467-4.468s2.009-4.467 4.467-4.467c2.458 0 4.467 2.009 4.467 4.467s-2.009 4.468-4.467 4.468zm7.519 0c-2.458 0-4.467-2.01-4.467-4.468s2.009-4.467 4.467-4.467c2.458 0 4.467 2.009 4.467 4.467s-2.009 4.468-4.467 4.468z"/>
-                </svg>
-              </a>
-              
-              <a
-                href="https://wa.me/5541996924829?text=Olá! Gostaria de saber mais sobre os serviços da 3W Online."
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center w-12 h-12 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors duration-300"
-                aria-label="Entrar em contato via WhatsApp"
-              >
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
-                </svg>
-              </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Calculator -->
+    <section class="testimonial-section section-padding">
+      <div class="container">
+        <div class="text-center mb-8">
+          <span class="text-xs font-semibold text-blue-300 uppercase tracking-wider block mb-2">Calculadora de Projetos</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Estime Custos e Prazos</h2>
+          <p class="text-sm text-blue-200">Entenderemos seu negócio e mostraremos o necessário para decolar na internet.</p>
+        </div>
+        <div class="max-w-4xl mx-auto">
+          <PriceSimulator service-type="website" />
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-padding">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas antes de entrar em contato</p>
+        </div>
+        <FaqAccordion :items="faqs" />
+        <div class="text-center mt-6">
+          <a href="https://wa.me/5541996924829?text=Olá! Tenho uma dúvida sobre os serviços." target="_blank" class="btn-primary text-sm">
+            <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-2" /> Tirar Outra Dúvida
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Dark -->
+    <section class="testimonial-section section-padding">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="text-xs font-semibold text-blue-300 uppercase tracking-wider block mb-2">🗣️ O que Nossos Clientes Dizem</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Resultados que falam por si</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div v-for="t in testimonials" :key="t.name" class="testimonial-card">
+            <p class="text-sm text-gray-300 italic mb-4 leading-relaxed">"{{ t.text }}"</p>
+            <div class="flex items-center">
+              <div class="w-8 h-8 bg-primary-500/20 rounded-full flex items-center justify-center mr-2">
+                <span class="text-primary-300 font-semibold text-[10px]">{{ t.avatar }}</span>
+              </div>
+              <div>
+                <p class="text-white text-xs font-semibold">{{ t.name }}</p>
+                <p class="text-blue-300 text-[10px]">{{ t.company }}</p>
+              </div>
             </div>
           </div>
+        </div>
+        <div class="text-center mt-8">
+          <RouterLink to="/portfolio" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-sm">
+            <Icon icon="mdi:briefcase-check" class="w-4 h-4 mr-2" /> Ver Portfólio Completo
+          </RouterLink>
         </div>
       </div>
     </section>
@@ -282,64 +238,81 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { 
-  ChevronRightIcon, 
-  PhoneIcon, 
-  EnvelopeIcon, 
-  MapPinIcon, 
-  ClockIcon 
-} from '@heroicons/vue/24/outline'
+import { Icon } from '@iconify/vue'
+import Swal from 'sweetalert2'
+import { vMaska } from 'maska/vue'
+import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import { FAQ_ITEMS } from '@/constants/content'
 
 const isSubmitting = ref(false)
+const errors = reactive<Record<string, string>>({})
 
 const form = reactive({
   name: '',
   email: '',
   phone: '',
   company: '',
-  service: '',
   message: '',
-  privacy: false
+  privacy: false,
+  areas: [] as string[],
 })
 
-const submitForm = async () => {
-  isSubmitting.value = true
-  
-  try {
-    // Simulating form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Create WhatsApp message
-    const message = `
-Novo contato do site 3W Online:
+const areas = [
+  { value: 'marketing', label: 'Marketing Digital' },
+  { value: 'sites', label: 'Criação de Sites' },
+  { value: 'sistemas', label: 'Sistemas Web' },
+  { value: 'redes', label: 'Redes Sociais' },
+  { value: 'anuncios', label: 'Gestão de Anúncios' },
+  { value: 'automacao', label: 'Automação e IA' },
+]
 
-Nome: ${form.name}
-Email: ${form.email}
-Telefone: ${form.phone}
-Empresa: ${form.company || 'Não informado'}
-Serviço: ${form.service}
-Mensagem: ${form.message}
-    `.trim()
-    
-    // Open WhatsApp with the message
-    const whatsappUrl = `https://wa.me/5541996924829?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
-    
-    // Reset form
-    Object.assign(form, {
-      name: '',
-      email: '',
-      phone: '',
-      company: '',
-      service: '',
-      message: '',
-      privacy: false
-    })
-    
-    alert('Mensagem enviada com sucesso! Você será redirecionado para o WhatsApp.')
-    
-  } catch (error) {
-    alert('Erro ao enviar mensagem. Tente novamente.')
+const contactInfo = [
+  { label: 'Telefone / WhatsApp', value: '(41) 99692-4829', icon: 'mdi:phone' },
+  { label: 'E-mail', value: 'contato@3wonline.com.br', icon: 'mdi:email' },
+  { label: 'Localização', value: 'Curitiba, Paraná — Brasil', icon: 'mdi:map-marker' },
+]
+
+const socials = [
+  { label: 'Facebook', url: 'https://www.facebook.com/grupo3wonline', icon: 'mdi:facebook' },
+  { label: 'Instagram', url: 'https://www.instagram.com/grupo3wonline', icon: 'mdi:instagram' },
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/grupo3wonline', icon: 'mdi:linkedin' },
+]
+
+const testimonials = [
+  { name: 'João Silva', company: 'Silva & Associados', avatar: 'JS', text: 'Aumentamos as vendas em 300% em 6 meses com a 3W Online!' },
+  { name: 'Maria Santos', company: 'Boutique Elegance', avatar: 'MS', text: 'Site incrível e redes sociais gerando clientes todo dia!' },
+  { name: 'Carlos Oliveira', company: 'Tech Solutions', avatar: 'CO', text: 'Parceria que só traz resultados. Recomendo!' },
+]
+
+const faqs = FAQ_ITEMS.slice(0, 5)
+
+function validate(): boolean {
+  Object.keys(errors).forEach((k) => delete errors[k])
+  if (!form.name.trim() || form.name.trim().length < 3) errors.name = 'Informe seu nome completo'
+  if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errors.email = 'E-mail inválido'
+  if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 10) errors.phone = 'Telefone inválido'
+  if (!form.message.trim() || form.message.trim().length < 10) errors.message = 'Mínimo 10 caracteres'
+  if (!form.privacy) errors.privacy = 'Aceite a Política de Privacidade'
+  return Object.keys(errors).length === 0
+}
+
+async function handleSubmit() {
+  if (!validate()) {
+    await Swal.fire({ icon: 'warning', title: 'Campos obrigatórios', text: 'Preencha todos os campos corretamente.', confirmButtonColor: '#2563eb' })
+    return
+  }
+  isSubmitting.value = true
+  try {
+    await new Promise((r) => setTimeout(r, 1500))
+    const areasText = form.areas.length ? form.areas.join(', ') : 'Não especificado'
+    const msg = `Análise Gratuita - Site 3W Online\n\nNome: ${form.name}\nEmail: ${form.email}\nTel: ${form.phone}\nEmpresa: ${form.company || 'N/A'}\nÁreas: ${areasText}\nMensagem: ${form.message}`
+    await Swal.fire({ icon: 'success', title: 'Solicitação enviada!', text: 'Você será redirecionado para o WhatsApp.', confirmButtonColor: '#2563eb' })
+    window.open(`https://wa.me/5541996924829?text=${encodeURIComponent(msg)}`, '_blank')
+    Object.assign(form, { name: '', email: '', phone: '', company: '', message: '', privacy: false, areas: [] })
+  } catch {
+    await Swal.fire({ icon: 'error', title: 'Erro', text: 'Tente novamente ou contate pelo WhatsApp.', confirmButtonColor: '#2563eb' })
   } finally {
     isSubmitting.value = false
   }

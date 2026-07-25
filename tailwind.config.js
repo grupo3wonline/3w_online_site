@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -42,7 +39,7 @@ export default {
           700: '#c2410c',
           800: '#9a3412',
           900: '#7c2d12',
-        }
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -51,6 +48,7 @@ export default {
         'fade-in': 'fadeIn 0.6s ease-in-out',
         'slide-up': 'slideUp 0.6s ease-out',
         'bounce-gentle': 'bounceGentle 2s infinite',
+        'spin-slow': 'spin 3s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -65,11 +63,9 @@ export default {
           '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
           '40%': { transform: 'translateY(-10px)' },
           '60%': { transform: 'translateY(-5px)' },
-        }
-      }
+        },
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 }

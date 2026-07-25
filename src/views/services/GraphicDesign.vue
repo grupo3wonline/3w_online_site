@@ -1,182 +1,60 @@
 <template>
   <div>
-    <!-- Hero Section -->
     <section class="page-hero">
       <div class="container">
-        <div class="breadcrumb">
-          <router-link to="/">Home</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <router-link to="/servicos">Serviços</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <span>Design Gráfico</span>
-        </div>
+        <AppBreadcrumb :items="[{ label: 'Home', path: '/' }, { label: 'Serviços', path: '/servicos' }, { label: 'Design Gráfico' }]" />
         <h1 class="page-hero-title">Design Gráfico</h1>
-        <p class="page-hero-subtitle">
-          Identidade visual, materiais gráficos e peças publicitárias criativas
-        </p>
+        <p class="page-hero-subtitle">Identidade visual, materiais gráficos e peças publicitárias criativas</p>
       </div>
     </section>
-    
-    <!-- Content Section -->
     <section class="section-padding">
-      <div class="container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <!-- Main Content -->
-          <div>
-            <h2 class="text-3xl font-bold text-gray-900 mb-6">
-              Design que comunica e converte
-            </h2>
-            <p class="text-lg text-gray-600 mb-8">
-              Criamos identidades visuais marcantes e materiais gráficos que fortalecem sua marca. Nossa equipe de designers desenvolve peças criativas que comunicam sua mensagem de forma clara e impactante.
-            </p>
-            
-            <!-- Benefits -->
-            <div class="space-y-4 mb-8">
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Identidade visual completa</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Materiais para redes sociais</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Peças publicitárias criativas</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Manual de marca</span>
-              </div>
-              <div class="benefit-item">
-                <CheckCircleIcon class="benefit-icon" />
-                <span class="benefit-text">Materiais impressos e digitais</span>
-              </div>
-            </div>
-            
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4">
-              <button
-                @click="scrollToSimulator"
-                class="btn-primary"
-              >
-                Simular Preço
-              </button>
-              <a
-                href="https://wa.me/5541996924829?text=Olá! Tenho interesse no serviço de Design Gráfico."
-                target="_blank"
-                class="btn-secondary"
-              >
-                Falar no WhatsApp
-              </a>
-            </div>
-          </div>
-          
-          <!-- Service Image -->
-          <div>
-            <img
-              src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Design Gráfico"
-              class="w-full h-auto rounded-lg shadow-lg"
-            />
+      <div class="container"><div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-3">Design que comunica e converte</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-5">Criamos identidades visuais marcantes e materiais gráficos que fortalecem sua marca. Nossa equipe de designers combina criatividade com estratégia para entregar peças que realmente se conectam com seu público.</p>
+          <ul class="space-y-2.5 mb-6">
+            <li v-for="b in benefits" :key="b" class="flex items-center gap-2 text-sm text-gray-700"><Icon icon="mdi:check-circle" class="w-5 h-5 text-green-500 flex-shrink-0" /> {{ b }}</li>
+          </ul>
+          <div class="flex flex-wrap gap-3">
+            <button @click="scrollTo" class="btn-primary text-sm"><Icon icon="mdi:calculator" class="w-4 h-4 mr-2" /> Simular Preço</button>
+            <a href="https://wa.me/5541996924829?text=Olá! Tenho interesse em Design Gráfico." target="_blank" class="btn-secondary text-sm"><Icon icon="mdi:whatsapp" class="w-4 h-4 mr-2" /> Falar no WhatsApp</a>
           </div>
         </div>
-      </div>
+        <img src="https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Design Gráfico" class="w-full rounded-xl shadow-lg" loading="lazy" width="800" height="533" />
+      </div></div>
     </section>
-    
-    <!-- Services Section -->
     <section class="section-padding bg-gray-50">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Nossos serviços de design</h2>
-          <p class="section-subtitle">Soluções completas para todas as suas necessidades visuais</p>
+      <div class="container"><div class="text-center mb-10"><h2 class="section-title">Nossos serviços de design</h2><p class="section-subtitle">Soluções completas para todas as necessidades visuais</p></div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto">
+        <div v-for="s in designServices" :key="s.title" class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+          <h3 class="text-sm font-bold text-gray-900 mb-1">{{ s.title }}</h3>
+          <p class="text-xs text-gray-500 mb-2">{{ s.desc }}</p>
+          <p class="text-sm font-bold text-primary-600">{{ s.price }}</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="card p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Identidade Visual</h3>
-            <p class="text-gray-600 mb-4">Logo, cores, tipografia e elementos visuais da marca</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 1.800</p>
-          </div>
-          
-          <div class="card p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Social Media</h3>
-            <p class="text-gray-600 mb-4">Posts, stories, banners e templates para redes sociais</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 800</p>
-          </div>
-          
-          <div class="card p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Material Impresso</h3>
-            <p class="text-gray-600 mb-4">Cartões, folders, catálogos e materiais promocionais</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 600</p>
-          </div>
-          
-          <div class="card p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Embalagens</h3>
-            <p class="text-gray-600 mb-4">Design de embalagens e rótulos para produtos</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 1.200</p>
-          </div>
-          
-          <div class="card p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Apresentações</h3>
-            <p class="text-gray-600 mb-4">Slides profissionais para vendas e apresentações</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 500</p>
-          </div>
-          
-          <div class="card p-6">
-            <h3 class="text-xl font-semibold text-gray-900 mb-3">Sinalização</h3>
-            <p class="text-gray-600 mb-4">Placas, banners e materiais de ponto de venda</p>
-            <p class="text-lg font-bold text-primary-600">A partir de R$ 400</p>
-          </div>
-        </div>
-      </div>
+      </div></div>
     </section>
-    
-    <!-- Price Simulator Section -->
-    <section ref="simulatorSection" class="section-padding">
-      <div class="container">
-        <div class="max-w-4xl mx-auto">
-          <PriceSimulator service-type="design" />
-        </div>
-      </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section">
-      <div class="container">
-        <div class="text-center">
-          <h2 class="text-3xl font-bold text-white mb-6">
-            Pronto para fortalecer sua identidade visual?
-          </h2>
-          <p class="text-xl text-blue-100 mb-8">
-            Vamos criar um design que representa verdadeiramente sua marca
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <router-link to="/contato" class="btn-secondary bg-white text-primary-600 hover:bg-gray-100">
-              Solicitar Orçamento
-            </router-link>
-            <a
-              href="https://wa.me/5541996924829?text=Olá! Quero saber mais sobre Design Gráfico."
-              target="_blank"
-              class="btn-outline border-white text-white hover:bg-white hover:text-primary-600"
-            >
-              WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <section ref="simRef" class="section-padding"><div class="container max-w-4xl mx-auto"><PriceSimulator service-type="design" /></div></section>
+    <section class="cta-section"><div class="container text-center">
+      <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Pronto para fortalecer sua identidade visual?</h2>
+      <p class="text-sm text-blue-200 mb-6">Vamos criar um design que represente verdadeiramente sua marca</p>
+      <RouterLink to="/contato" class="btn-secondary text-sm"><Icon icon="mdi:file-document-edit" class="w-4 h-4 mr-2" /> Solicitar Orçamento</RouterLink>
+    </div></section>
   </div>
 </template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ChevronRightIcon, CheckCircleIcon } from '@heroicons/vue/24/outline'
-import PriceSimulator from '../../components/PriceSimulator.vue'
-
-const simulatorSection = ref<HTMLElement>()
-
-const scrollToSimulator = () => {
-  simulatorSection.value?.scrollIntoView({ behavior: 'smooth' })
-}
+import { Icon } from '@iconify/vue'
+import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import PriceSimulator from '@/components/PriceSimulator.vue'
+const simRef = ref<HTMLElement>()
+const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
+const benefits = ['Identidade visual completa', 'Materiais para redes sociais', 'Peças publicitárias criativas', 'Manual de marca', 'Materiais para web e digital']
+const designServices = [
+  { title: 'Identidade Visual', desc: 'Logo, cores, tipografia e elementos gráficos', price: 'A partir de R$ 1.500' },
+  { title: 'Social Media', desc: 'Posts, stories e templates para redes sociais', price: 'A partir de R$ 600' },
+  { title: 'Material Impresso', desc: 'Cartões, folders, catálogos e materiais gráficos', price: 'A partir de R$ 500' },
+  { title: 'Embalagens', desc: 'Design de embalagens atrativas para produtos', price: 'A partir de R$ 1.200' },
+  { title: 'Apresentações', desc: 'Slides profissionais para suas reuniões', price: 'A partir de R$ 600' },
+  { title: 'Sinalização', desc: 'Placas, banners e materiais de sinalização', price: 'A partir de R$ 400' },
+]
 </script>
