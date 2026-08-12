@@ -56,15 +56,7 @@
               </RouterLink>
             </li>
           </ul>
-          <!-- 3W Academy -->
-          <div class="mt-4 p-3 bg-gray-800 rounded-lg">
-            <span class="text-[10px] uppercase tracking-wider text-gray-500 block mb-1">Plataforma de Cursos</span>
-            <a href="https://ava.3wonline.com/" target="_blank" rel="noopener noreferrer" class="text-primary-400 hover:text-primary-300 font-semibold text-sm flex items-center gap-1">
-              <Icon icon="mdi:school" class="w-4 h-4" />
-              3W Academy
-            </a>
-            <p class="text-[11px] text-gray-500 mt-1">Cursos e treinamentos online</p>
-          </div>
+
         </div>
 
         <!-- Contact -->
@@ -136,6 +128,7 @@ const navLinks = [
   { path: '/institucional', label: 'Institucional' },
   { path: '/servicos', label: 'Serviços' },
   { path: '/contato', label: 'Contato' },
+  { path: '/servicos/consultoria-marketing', label: 'Consultoria' },
 ]
 
 const serviceLinks = [

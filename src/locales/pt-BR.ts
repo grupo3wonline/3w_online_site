@@ -7,8 +7,6 @@ export default {
     home: 'Início',
     about: 'Sobre',
     services: 'Serviços',
-    portfolio: 'Portfólio',
-    blog: 'Blog',
     contact: 'Contato',
     tools: 'Ferramentas',
     institutional: 'Institucional',

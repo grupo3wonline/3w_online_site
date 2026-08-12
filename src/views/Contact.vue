@@ -227,8 +227,8 @@
           </div>
         </div>
         <div class="text-center mt-8">
-          <RouterLink to="/portfolio" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-sm">
-            <Icon icon="mdi:briefcase-check" class="w-4 h-4 mr-2" /> Ver Portfólio Completo
+          <RouterLink to="/servicos" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-sm">
+            <Icon icon="mdi:briefcase-check" class="w-4 h-4 mr-2" /> Ver Nossos Serviços
           </RouterLink>
         </div>
       </div>

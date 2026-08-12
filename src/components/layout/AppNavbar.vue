@@ -30,8 +30,7 @@
             </Transition>
           </div>
 
-          <a href="https://app.3wonline.com/ferramentas/" target="_blank" rel="noopener noreferrer" class="nav-link">Ferramentas</a>
-          <a href="https://ava.3wonline.com/" target="_blank" rel="noopener noreferrer" class="nav-link">Academy</a>
+          <a href="" target="_blank" rel="noopener noreferrer" class="nav-link">Ferramentas</a>
         </div>
 
         <!-- Right -->
@@ -73,16 +72,13 @@ const servicesOpen = ref(false)
 
 const navLinks = [
   { path: '/', label: 'Home' },
-  { path: '/sobre', label: 'Sobre' },
-  { path: '/portfolio', label: 'Portfólio' },
-  { path: '/servicos/consultoria-marketing', label: 'Consultoria' },
-  { path: '/contato', label: 'Contato' },
 ]
 
 const mobileExtra = [
   { path: '/servicos', label: 'Serviços' },
-  { path: '/servicos/consultoria-marketing', label: 'Consultoria' },
   { path: '/institucional', label: 'Institucional' },
+  { path: '/sobre', label: 'Sobre' },
+  { path: '/contato', label: 'Contato' },
 ]
 
 const serviceDropdown = [
@@ -95,6 +91,7 @@ const serviceDropdown = [
   { path: '/servicos/design-grafico', label: 'Design Gráfico' },
   { path: '/servicos/marketing-digital', label: 'Marketing Digital' },
   { path: '/servicos/automacao-ia', label: 'Automação e IA' },
+  { path: '/servicos/consultoria-marketing', label: 'Consultoria' },
 ]
 </script>
 

@@ -19,18 +19,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/Services.vue'),
     meta: { title: 'Serviços | 3W Online' },
   },
-  {
-    path: '/portfolio',
-    name: 'Portfolio',
-    component: () => import('@/views/Portfolio.vue'),
-    meta: { title: 'Portfólio | 3W Online' },
-  },
-  {
-    path: '/blog',
-    name: 'Blog',
-    component: () => import('@/views/Blog.vue'),
-    meta: { title: 'Blog | 3W Online' },
-  },
+
   {
     path: '/contato',
     name: 'Contact',
@@ -109,12 +98,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/lp/Sistemas.vue'),
     meta: { title: 'Sistemas Sob Medida | 3W Online' },
   },
-  {
-    path: '/blog/:slug',
-    name: 'BlogPost',
-    component: () => import('@/views/BlogPost.vue'),
-    meta: { title: 'Blog | 3W Online' },
-  },
+
   {
     path: '/william-portfolio',
     name: 'WilliamPortfolio',
