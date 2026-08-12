@@ -43,6 +43,7 @@
     <section class="section-padding bg-gray-50">
       <div class="container">
         <div class="text-center mb-10">
+          <span class="section-label">Metodologia</span>
           <h2 class="section-title">Processo de consultoria</h2>
           <p class="section-subtitle">Metodologia orientada para resultados consistentes</p>
         </div>
@@ -56,10 +57,39 @@
       </div>
     </section>
 
+    <!-- What You Get -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="section-label">Entregáveis</span>
+          <h2 class="section-title">O que você recebe na consultoria</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          <div v-for="d in deliverables" :key="d.title" class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
+            <Icon :icon="d.icon" class="w-7 h-7 text-primary-600 mb-3" />
+            <h4 class="text-sm font-semibold text-gray-900 mb-1">{{ d.title }}</h4>
+            <p class="text-xs text-gray-500 leading-relaxed">{{ d.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Simulator -->
     <section ref="simRef" class="section-padding">
       <div class="container max-w-4xl mx-auto">
         <PriceSimulator service-type="consulting" />
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-padding bg-gray-50">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre consultoria em marketing</p>
+        </div>
+        <FaqAccordion :items="faqs" />
       </div>
     </section>
 
@@ -81,6 +111,7 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 
 const simRef = ref<HTMLElement>()
 const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
@@ -93,10 +124,27 @@ const benefits = [
   'Acompanhamento mensal de avanço',
 ]
 
+const faqs = [
+  { question: 'O que é a consultoria em marketing?', answer: 'É um serviço de análise e orientação estratégica onde identificamos pontos de melhoria, oportunidades e criamos um plano de ação personalizado para seu negócio.' },
+  { question: 'Quanto tempo dura uma consultoria?', answer: 'A primeira análise e plano estratégico são entregues em até 15 dias. O acompanhamento pode ser mensal conforme a necessidade do projeto.' },
+  { question: 'Vocês executam as ações ou apenas orientam?', answer: 'Oferecemos ambas as opções. Podemos entregar apenas o plano estratégico para sua equipe executar, ou executar as ações junto com a consultoria.' },
+  { question: 'A consultoria serve para qualquer tamanho de empresa?', answer: 'Sim! Adaptamos nossa metodologia para empresas de todos os portes, desde startups até corporações, sempre focando no retorno sobre o investimento.' },
+  { question: 'Como é feita a análise de concorrência?', answer: 'Analisamos o posicionamento digital dos seus principais concorrentes, incluindo redes sociais, SEO, anúncios e presença online, identificando gaps e oportunidades.' },
+]
+
 const steps = [
   { title: 'Diagnóstico', desc: 'Análise completa da situação atual do marketing' },
   { title: 'Estratégia', desc: 'Desenvolvimento do plano de ação personalizado' },
   { title: 'Implementação', desc: 'Execução e suporte nas ações definidas' },
   { title: 'Monitoramento', desc: 'Acompanhamento de resultados e otimização' },
+]
+
+const deliverables = [
+  { title: 'Relatório de Diagnóstico', icon: 'mdi:file-document-check', desc: 'Documento completo com análise do cenário atual, pontos fortes e oportunidades de melhoria.' },
+  { title: 'Plano Estratégico', icon: 'mdi:map', desc: 'Documento com objetivos, metas, ações prioritárias e cronograma de execução.' },
+  { title: 'Análise de Concorrência', icon: 'mdi:account-search', desc: 'Mapeamento de concorrentes, posicionamento e benchmarks do mercado.' },
+  { title: 'Definição de KPIs', icon: 'mdi:chart-bar', desc: 'Indicadores-chave de performance para acompanhar resultados.' },
+  { title: 'Reuniões de Alinhamento', icon: 'mdi:video-account', desc: 'Encontros periódicos para alinhar progresso e ajustar estratégias.' },
+  { title: 'Relatório de Resultados', icon: 'mdi:trending-up', desc: 'Acompanhamento mensal com métricas, insights e próximos passos.' },
 ]
 </script>

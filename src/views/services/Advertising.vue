@@ -18,6 +18,19 @@
       <img src="https://images.pexels.com/photos/3184460/pexels-photo-3184460.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Publicidade" class="w-full rounded-xl shadow-lg" loading="lazy" width="800" height="533" />
     </div></div></section>
     <section ref="simRef" class="section-padding bg-gray-50"><div class="container max-w-4xl mx-auto"><PriceSimulator service-type="advertising" /></div></section>
+
+    <!-- FAQ -->
+    <section class="section-padding">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre publicidade e propaganda</p>
+        </div>
+        <FaqAccordion :items="faqs" />
+      </div>
+    </section>
+
     <section class="cta-section"><div class="container text-center"><h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Pronto para aumentar suas vendas?</h2><p class="text-sm text-blue-200 mb-6">Comece hoje com nossas campanhas otimizadas</p><RouterLink to="/contato" class="btn-secondary text-sm"><Icon icon="mdi:file-document-edit" class="w-4 h-4 mr-2" /> Solicitar Orçamento</RouterLink></div></section>
   </div>
 </template>
@@ -26,7 +39,15 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 const simRef = ref<HTMLElement>()
 const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
 const benefits = ['Planejamento estratégico de mídia', 'Criação de campanhas online e offline', 'Produção de material publicitário', 'Gestão de veiculação', 'Análise de resultados e ROI']
+const faqs = [
+  { question: 'Vocês trabalham com publicidade online e offline?', answer: 'Sim! Criamos campanhas integradas que combinam canais digitais (Google, redes sociais, programática) com mídias tradicionais (TV, rádio, outdoor, revista).' },
+  { question: 'Qual o investimento mínimo para uma campanha?', answer: 'Depende dos canais escolhidos e abrangência geográfica. Campanhas digitais podem começar com investimentos menores, enquanto offline geralmente demanda orçamentos maiores.' },
+  { question: 'Vocês produzem os materiais publicitários?', answer: 'Sim! Nossa equipe cuida de toda a produção, desde a criação de peças gráficas e vídeos até a adaptação para diferentes formatos e canais.' },
+  { question: 'Como medem o resultado das campanhas?', answer: 'Utilizamos ferramentas de analytics, códigos de rastreamento, pesquisas de recall e métricas de conversão para mensurar o impacto real de cada campanha.' },
+  { question: 'Posso contratar apenas a criação sem a veiculação?', answer: 'Sim! Oferecemos serviços modulares — você pode contratar apenas a criação, apenas a gestão de mídia ou o pacote completo conforme sua necessidade.' },
+]
 </script>

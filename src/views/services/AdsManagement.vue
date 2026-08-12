@@ -36,6 +36,7 @@
     <section class="section-padding bg-gray-50">
       <div class="container">
         <div class="text-center mb-10">
+          <span class="section-label">Plataformas</span>
           <h2 class="section-title">Plataformas que dominamos</h2>
           <p class="section-subtitle">Expertise em todas as principais plataformas de anúncios</p>
         </div>
@@ -64,9 +65,56 @@
       </div>
     </section>
 
+    <!-- Process -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="section-label">Metodologia</span>
+          <h2 class="section-title">Como gerenciamos suas campanhas</h2>
+          <p class="section-subtitle">Processo otimizado para máximo retorno</p>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+          <div v-for="(step, i) in processSteps" :key="i" class="text-center">
+            <div class="w-12 h-12 rounded-full bg-primary-600 text-white flex items-center justify-center mx-auto mb-3 font-bold">{{ i + 1 }}</div>
+            <h4 class="text-sm font-semibold text-gray-900 mb-1">{{ step.title }}</h4>
+            <p class="text-[11px] text-gray-500">{{ step.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results / Differentials -->
+    <section class="section-padding bg-gray-50">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="section-label">Resultados</span>
+          <h2 class="section-title">Por que nossa gestão é diferente</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+          <div v-for="d in differentials" :key="d.title" class="text-center p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+            <Icon :icon="d.icon" class="w-8 h-8 text-primary-600 mx-auto mb-2" />
+            <h4 class="text-xs font-semibold text-gray-900">{{ d.title }}</h4>
+            <p class="text-[10px] text-gray-500 mt-1">{{ d.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section ref="simRef" class="section-padding">
       <div class="container max-w-4xl mx-auto">
         <PriceSimulator service-type="ads" />
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-padding bg-gray-50">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre gestão de anúncios</p>
+        </div>
+        <FaqAccordion :items="faqs" />
       </div>
     </section>
 
@@ -85,9 +133,32 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 
 const simRef = ref<HTMLElement>()
 const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
 
 const benefits = ['Campanhas em múltiplas plataformas', 'Segmentação avançada de público', 'Monitoramento e otimização diária', 'Relatórios detalhados de performance', 'Método de aquisição inteligente']
+
+const processSteps = [
+  { title: 'Pesquisa', desc: 'Análise de mercado, concorrência e público-alvo' },
+  { title: 'Configuração', desc: 'Setup de campanhas, pixels e conversões' },
+  { title: 'Otimização', desc: 'Testes A/B, ajustes de lance e segmentação' },
+  { title: 'Escalada', desc: 'Aumento de investimento nas campanhas que funcionam' },
+]
+
+const differentials = [
+  { title: 'Otimização Diária', icon: 'mdi:chart-timeline-variant', desc: 'Monitoramos e ajustamos todos os dias' },
+  { title: 'Sem Desperdício', icon: 'mdi:cash-lock', desc: 'Cada real investido com propósito' },
+  { title: 'Relatórios Claros', icon: 'mdi:file-chart', desc: 'Dados que você entende' },
+  { title: 'ROI Focado', icon: 'mdi:target', desc: 'Foco em conversões reais' },
+]
+
+const faqs = [
+  { question: 'Qual o investimento mínimo em anúncios?', answer: 'Recomendamos um investimento mínimo de R$ 1.000/mês em mídia para resultados consistentes. O valor da gestão é separado do valor investido nas plataformas.' },
+  { question: 'Quanto tempo para ver resultados nos anúncios?', answer: 'Os primeiros resultados aparecem nas primeiras 48-72 horas. A otimização completa das campanhas leva de 2-4 semanas para atingir a performance ideal.' },
+  { question: 'Vocês gerenciam Google Ads e Meta Ads ao mesmo tempo?', answer: 'Sim! Gerenciamos campanhas em ambas as plataformas simultaneamente, distribuindo o investimento de forma estratégica conforme o perfil do seu negócio.' },
+  { question: 'Como funciona o relatório de performance?', answer: 'Enviamos relatórios semanais com métricas de desempenho (cliques, conversões, custo por lead) e relatórios mensais completos com análises e recomendações.' },
+  { question: 'Existe fidelidade no contrato de gestão de anúncios?', answer: 'Não exigimos fidelidade. Recomendamos no mínimo 3 meses para otimização completa, mas você pode cancelar quando desejar.' },
+]
 </script>

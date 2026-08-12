@@ -106,13 +106,36 @@
     <section class="section-padding">
       <div class="container">
         <div class="text-center mb-10">
-          <h2 class="section-title">Tecnologias que utilizamos</h2>
-          <p class="section-subtitle">Trabalhamos com as plataformas e ferramentas mais modernas do mercado</p>
+          <span class="section-label">Stack Tecnológica</span>
+          <h2 class="section-title">Tecnologias e Ferramentas que Utilizamos</h2>
+          <p class="section-subtitle">Trabalhamos com as plataformas mais modernas do mercado de IA e automação</p>
         </div>
-        <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
-          <span v-for="tech in technologies" :key="tech" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full text-xs font-medium">
+        <div class="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+          <span v-for="tech in technologies" :key="tech" class="bg-gray-100 hover:bg-primary-50 hover:border-primary-200 border border-gray-200 text-gray-700 px-4 py-2.5 rounded-lg text-xs font-medium transition-colors">
             {{ tech }}
           </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Solutions Detail -->
+    <section class="section-padding bg-gray-50">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="section-label">Soluções Próprias</span>
+          <h2 class="section-title">Nossas Soluções com IA</h2>
+          <p class="section-subtitle">Ferramentas desenvolvidas e integradas pela 3W Online para automatizar seu negócio</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+          <div v-for="tool in iaTools" :key="tool.title" class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm hover:shadow-md transition-shadow">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-lg flex items-center justify-center" :class="tool.iconBg">
+                <Icon :icon="tool.icon" class="w-4 h-4 text-white" />
+              </div>
+              <h3 class="text-sm font-bold text-gray-900">{{ tool.title }}</h3>
+            </div>
+            <p class="text-xs text-gray-500 leading-relaxed">{{ tool.desc }}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -172,12 +195,12 @@ const benefits = [
 ]
 
 const solutions = [
-  { title: 'Chatbots com IA', desc: 'Atendimento automatizado inteligente que resolve dúvidas, qualifica leads e atende clientes 24/7.', price: 'A partir de R$ 3.000', icon: 'mdi:robot', iconBg: 'bg-blue-500' },
-  { title: 'Automação de Marketing', desc: 'Fluxos automatizados de e-mail, WhatsApp e CRM que nutrem leads e aumentam conversões.', price: 'A partir de R$ 2.500', icon: 'mdi:email-fast', iconBg: 'bg-green-500' },
-  { title: 'RPA (Robotic Process)', desc: 'Automatize tarefas repetitivas como preenchimento de planilhas, envio de relatórios e muito mais.', price: 'A partir de R$ 5.000', icon: 'mdi:cog-transfer', iconBg: 'bg-purple-500' },
-  { title: 'Análise de Dados com IA', desc: 'Dashboards inteligentes e análise preditiva para tomada de decisões baseada em dados.', price: 'A partir de R$ 4.000', icon: 'mdi:chart-bell-curve-cumulative', iconBg: 'bg-orange-500' },
-  { title: 'Assistentes Virtuais', desc: 'Assistentes personalizados com GPT que entendem seu negócio e auxiliam sua equipe.', price: 'A partir de R$ 6.000', icon: 'mdi:head-lightbulb', iconBg: 'bg-indigo-500' },
-  { title: 'Integração de Sistemas', desc: 'Conecte ferramentas (CRM, ERP, e-commerce) com automações inteligentes entre plataformas.', price: 'A partir de R$ 3.500', icon: 'mdi:api', iconBg: 'bg-teal-500' },
+  { title: 'Chatbots com IA', desc: 'Atendimento automatizado inteligente que resolve dúvidas, qualifica leads e atende clientes 24/7 com tecnologia GPT.', price: 'A partir de R$ 3.000', icon: 'mdi:robot', iconBg: 'bg-blue-500' },
+  { title: 'Automação de WhatsApp', desc: 'Fluxos automatizados de atendimento, envio de mensagens, notificações e campanhas via WhatsApp Business com Evolution API.', price: 'A partir de R$ 2.500', icon: 'mdi:whatsapp', iconBg: 'bg-green-500' },
+  { title: 'Atendimento Omnicanal', desc: 'Centralize todos os canais (WhatsApp, Instagram, e-mail, chat) em uma única plataforma com Chatwoot e OmniRoute.', price: 'A partir de R$ 3.500', icon: 'mdi:forum', iconBg: 'bg-purple-500' },
+  { title: 'Agentes de IA', desc: 'Assistentes inteligentes com Hermes Agent e OpenClaw que entendem seu negócio e atendem clientes de forma autônoma.', price: 'A partir de R$ 5.000', icon: 'mdi:head-lightbulb', iconBg: 'bg-indigo-500' },
+  { title: 'Automação de Fluxos (n8n)', desc: 'Conecte sistemas, automatize tarefas e crie fluxos complexos sem código com n8n, Dify e Langflow.', price: 'A partir de R$ 4.000', icon: 'mdi:cog-transfer', iconBg: 'bg-orange-500' },
+  { title: 'IA Conversacional', desc: 'Chatbots avançados com Typebot, Flowise e Bolt para criação de experiências conversacionais inteligentes e personalizadas.', price: 'A partir de R$ 3.500', icon: 'mdi:message-text-fast', iconBg: 'bg-teal-500' },
 ]
 
 const process = [
@@ -197,18 +220,24 @@ const useCases = [
 ]
 
 const technologies = [
+  'OmniRoute',
+  'Bolt',
+  'Hermes Agent',
+  'OpenClaw',
+  'Paperclip',
+  'n8n',
+  'Chatwoot',
+  'Dify',
+  'Langflow',
+  'Typebot',
+  'Flowise',
+  'Ollama',
+  'Evolution API',
   'OpenAI / GPT',
   'LangChain',
-  'n8n / Make',
-  'Zapier',
   'Python',
-  'TensorFlow',
   'Google Cloud AI',
   'AWS AI Services',
-  'Dialogflow',
-  'Botpress',
-  'RD Station',
-  'HubSpot',
 ]
 
 const faqs = [
@@ -217,5 +246,23 @@ const faqs = [
   { question: 'A IA vai substituir minha equipe?', answer: 'Não. O objetivo é liberar sua equipe de tarefas repetitivas para que possam focar em atividades estratégicas e de maior valor.' },
   { question: 'Funciona com as ferramentas que já uso?', answer: 'Sim. Integramos com as principais plataformas: WhatsApp, Google, Meta, Shopify, RD Station, HubSpot, e praticamente qualquer sistema com API.' },
   { question: 'Existe suporte após a implementação?', answer: 'Sim. Oferecemos planos de suporte e manutenção contínua para garantir que tudo funcione perfeitamente e otimizar os resultados ao longo do tempo.' },
+  { question: 'O que são as soluções OmniRoute e Hermes Agent?', answer: 'São ferramentas de atendimento inteligente: OmniRoute distribui conversas entre canais e atendentes automaticamente, e Hermes Agent é um agente de IA que atende e resolve demandas de forma autônoma.' },
+  { question: 'É possível usar IA local (sem nuvem)?', answer: 'Sim! Trabalhamos com Ollama para execução local de modelos de IA, garantindo privacidade e controle total dos dados, sem dependência de servidores externos.' },
+]
+
+const iaTools = [
+  { title: 'OmniRoute', icon: 'mdi:swap-horizontal-circle', iconBg: 'bg-blue-500', desc: 'Roteamento inteligente de conversas entre canais e atendentes. Distribui automaticamente as demandas para o time certo.' },
+  { title: 'Bolt', icon: 'mdi:lightning-bolt', iconBg: 'bg-yellow-500', desc: 'Ferramenta de automação rápida para criação de fluxos e integrações em tempo real, com deploy instantâneo.' },
+  { title: 'Hermes Agent', icon: 'mdi:robot-outline', iconBg: 'bg-indigo-500', desc: 'Agente de IA autônomo que atende clientes, qualifica leads e executa tarefas sem intervenção humana.' },
+  { title: 'OpenClaw', icon: 'mdi:brain', iconBg: 'bg-purple-500', desc: 'Plataforma de IA para criação de assistentes virtuais customizados com memória de contexto e personalidade.' },
+  { title: 'Paperclip', icon: 'mdi:paperclip', iconBg: 'bg-pink-500', desc: 'Processamento inteligente de documentos com IA. Extrai, classifica e organiza dados automaticamente.' },
+  { title: 'n8n', icon: 'mdi:connection', iconBg: 'bg-orange-500', desc: 'Motor de automação open-source para conectar apps, APIs e serviços com fluxos visuais sem código.' },
+  { title: 'Chatwoot', icon: 'mdi:chat-processing', iconBg: 'bg-teal-500', desc: 'Plataforma omnicanal de atendimento ao cliente. Centralize WhatsApp, Instagram, e-mail e chat em um só lugar.' },
+  { title: 'Dify', icon: 'mdi:auto-fix', iconBg: 'bg-green-500', desc: 'Plataforma para criação rápida de aplicações com IA generativa, RAG e orquestração de LLMs.' },
+  { title: 'Langflow', icon: 'mdi:graph', iconBg: 'bg-cyan-500', desc: 'Interface visual para construção de fluxos LangChain. Crie pipelines de IA complexos de forma visual.' },
+  { title: 'Typebot', icon: 'mdi:form-textbox', iconBg: 'bg-red-500', desc: 'Construtor de chatbots conversacionais com interface drag-and-drop. Colete dados e qualifique leads.' },
+  { title: 'Flowise', icon: 'mdi:sitemap', iconBg: 'bg-lime-600', desc: 'Plataforma low-code para construção de fluxos de IA com LLMs, embeddings e chains personalizadas.' },
+  { title: 'Ollama', icon: 'mdi:server-network', iconBg: 'bg-gray-700', desc: 'Execute modelos de IA localmente com total privacidade. Sem envio de dados para nuvem, 100% sob seu controle.' },
+  { title: 'Evolution API', icon: 'mdi:api', iconBg: 'bg-green-600', desc: 'API de integração avançada com WhatsApp. Envie mensagens, gerencie grupos e automatize conversas programaticamente.' },
 ]
 </script>

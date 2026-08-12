@@ -18,6 +18,19 @@
       <img src="https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Organização Comercial" class="w-full rounded-xl shadow-lg" loading="lazy" width="800" height="533" />
     </div></div></section>
     <section ref="simRef" class="section-padding bg-gray-50"><div class="container max-w-4xl mx-auto"><PriceSimulator service-type="business" /></div></section>
+
+    <!-- FAQ -->
+    <section class="section-padding">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre organização comercial</p>
+        </div>
+        <FaqAccordion :items="faqs" />
+      </div>
+    </section>
+
     <section class="cta-section"><div class="container text-center"><h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Pronto para otimizar suas vendas?</h2><p class="text-sm text-blue-200 mb-6">Estruture seus processos e aumente a eficiência comercial</p><RouterLink to="/contato" class="btn-secondary text-sm"><Icon icon="mdi:file-document-edit" class="w-4 h-4 mr-2" /> Solicitar Orçamento</RouterLink></div></section>
   </div>
 </template>
@@ -26,7 +39,15 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 const simRef = ref<HTMLElement>()
 const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
 const benefits = ['Mapeamento de processos comerciais', 'Definição de funil de vendas', 'Treinamento de equipe comercial', 'Implementação de CRM', 'Métricas e acompanhamento']
+const faqs = [
+  { question: 'O que é organização comercial?', answer: 'É a estruturação dos processos de venda da sua empresa — desde a prospecção até o pós-venda — com metodologias, ferramentas e indicadores que aumentam a eficiência da equipe.' },
+  { question: 'Vocês implementam CRM?', answer: 'Sim! Ajudamos na escolha, configuração e implementação do CRM ideal para seu negócio, além de treinar sua equipe para uso eficiente da ferramenta.' },
+  { question: 'Quanto tempo leva para ver resultados?', answer: 'Os primeiros impactos na organização são sentidos em 2-4 semanas. Resultados mensuráveis de vendas geralmente aparecem em 2-3 meses após a implementação.' },
+  { question: 'Vocês treinam a equipe comercial?', answer: 'Sim! Oferecemos treinamento completo para sua equipe, incluindo técnicas de vendas, uso de ferramentas, gestão de pipeline e atendimento ao cliente.' },
+  { question: 'Serve para empresas que estão começando?', answer: 'Sim! É ainda mais importante estruturar processos comerciais desde o início. Ajudamos a construir uma base sólida para crescimento sustentável.' },
+]
 </script>

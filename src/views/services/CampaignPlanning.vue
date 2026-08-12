@@ -18,6 +18,19 @@
       <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Planejamento de Campanhas" class="w-full rounded-xl shadow-lg" loading="lazy" width="800" height="533" />
     </div></div></section>
     <section ref="simRef" class="section-padding bg-gray-50"><div class="container max-w-4xl mx-auto"><PriceSimulator service-type="campaign" /></div></section>
+
+    <!-- FAQ -->
+    <section class="section-padding">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre planejamento de campanhas</p>
+        </div>
+        <FaqAccordion :items="faqs" />
+      </div>
+    </section>
+
     <section class="cta-section"><div class="container text-center"><h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Pronto para planejar sua próxima campanha?</h2><p class="text-sm text-blue-200 mb-6">Conte com nossa expertise para resultados extraordinários</p><RouterLink to="/contato" class="btn-secondary text-sm"><Icon icon="mdi:file-document-edit" class="w-4 h-4 mr-2" /> Solicitar Orçamento</RouterLink></div></section>
   </div>
 </template>
@@ -26,7 +39,15 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 const simRef = ref<HTMLElement>()
 const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
 const benefits = ['Definição de público-alvo e personas', 'Estratégia de mídia multicanal', 'Cronograma detalhado de execução', 'Orçamento otimizado', 'Métricas e KPIs de acompanhamento']
+const faqs = [
+  { question: 'O que inclui o planejamento de campanhas?', answer: 'Inclui definição de público-alvo, escolha de canais, criação de cronograma, definição de orçamento, criação de mensagens-chave e métricas de acompanhamento.' },
+  { question: 'Vocês executam a campanha ou apenas planejam?', answer: 'Oferecemos ambas as opções. Podemos entregar o plano completo para execução interna ou cuidar de toda a execução junto com o planejamento.' },
+  { question: 'Para quais canais vocês planejam campanhas?', answer: 'Planejamos para todos os canais digitais (Google, redes sociais, e-mail marketing) e offline (rádio, TV, outdoor, material impresso) conforme a estratégia.' },
+  { question: 'Quanto tempo leva para receber o planejamento?', answer: 'O planejamento completo é entregue em 7-15 dias após o briefing e levantamento de informações sobre o negócio e objetivos.' },
+  { question: 'Como vocês definem o orçamento ideal?', answer: 'Analisamos o mercado, concorrência, objetivos e histórico de resultados para recomendar um investimento realista e com potencial de retorno mensurável.' },
+]
 </script>

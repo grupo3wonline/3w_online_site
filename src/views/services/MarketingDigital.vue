@@ -108,6 +108,18 @@
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="section-padding bg-gray-50">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre marketing digital</p>
+        </div>
+        <FaqAccordion :items="faqs" />
+      </div>
+    </section>
+
     <section class="cta-section">
       <div class="container text-center">
         <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Pronto para transformar seu negócio?</h2>
@@ -122,9 +134,18 @@
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 
 const simRef = ref<HTMLElement>()
 const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
+
+const faqs = [
+  { question: 'O que está incluído no pacote de R$ 500?', answer: 'O pacote inclui gestão de redes sociais, produção de conteúdo, gestão de anúncios (valor de mídia não incluso), relatório de performance e suporte via WhatsApp por 30 dias.' },
+  { question: 'O valor de mídia dos anúncios está incluso?', answer: 'Não. O valor de R$ 500 cobre a gestão profissional. O investimento em mídia (valor pago ao Google/Meta) é separado e você define conforme seu orçamento.' },
+  { question: 'Preciso de fidelidade para contratar?', answer: 'Não! Não exigimos fidelidade. Recomendamos pelo menos 3 meses para resultados consistentes, mas você pode cancelar quando desejar.' },
+  { question: 'Quando vou começar a ver resultados?', answer: 'Os primeiros resultados de engajamento e tráfego aparecem já nas primeiras semanas. Resultados de conversão consistentes levam de 30-60 dias.' },
+  { question: 'Vocês atendem qualquer tipo de negócio?', answer: 'Sim! Atendemos desde pequenas empresas até grandes corporações, adaptando a estratégia conforme o porte e segmento do seu negócio.' },
+]
 
 const reasons = [
   { title: 'Preço Justo', icon: 'mdi:cash', desc: 'Melhor custo do mercado' },

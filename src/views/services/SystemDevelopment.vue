@@ -88,6 +88,18 @@
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section class="section-padding bg-gray-50">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre criação de sistemas</p>
+        </div>
+        <FaqAccordion :items="faqs" />
+      </div>
+    </section>
+
     <section class="cta-section">
       <div class="container text-center">
         <h2 class="text-2xl md:text-3xl font-bold text-white mb-3">Pronto para automatizar seus processos?</h2>
@@ -103,11 +115,20 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 
 const simRef = ref<HTMLElement>()
 const scrollTo = () => simRef.value?.scrollIntoView({ behavior: 'smooth' })
 
 const benefits = ['Automação de processos', 'Painel administrativo completo', 'Relatórios e dashboards', 'Integração com APIs externas', 'Escalável e seguro']
+
+const faqs = [
+  { question: 'Quanto tempo leva para desenvolver um sistema?', answer: 'Depende da complexidade. Sistemas simples levam de 2-3 meses. Projetos mais robustos como ERPs ou plataformas EAD podem levar de 4-8 meses.' },
+  { question: 'O sistema é hospedado em nuvem?', answer: 'Sim! Nossos sistemas são hospedados em servidores em nuvem com alta disponibilidade, backups automáticos e certificado SSL incluso.' },
+  { question: 'Vocês oferecem treinamento para uso do sistema?', answer: 'Sim! Incluímos treinamento completo para sua equipe, documentação e suporte pós-entrega para garantir que todos consigam utilizar o sistema com facilidade.' },
+  { question: 'Posso solicitar alterações depois de pronto?', answer: 'Sim! Oferecemos pacotes de manutenção e evolução para adicionar funcionalidades, ajustar fluxos e expandir o sistema conforme seu negócio cresce.' },
+  { question: 'O sistema integra com ferramentas que já uso?', answer: 'Sim! Desenvolvemos integrações com APIs de terceiros como gateways de pagamento, sistemas de e-mail, ERPs, CRMs e outras ferramentas que você já utiliza.' },
+]
 
 const types = [
   { title: 'Controle de Gestão (CRM)', desc: 'Gerencie clientes e vendas', price: 'A partir de R$ 15.000' },

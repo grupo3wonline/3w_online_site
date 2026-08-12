@@ -43,6 +43,7 @@
     <section class="section-padding bg-gray-50">
       <div class="container">
         <div class="text-center mb-10">
+          <span class="section-label">Soluções</span>
           <h2 class="section-title">Tipos de sites que desenvolvemos</h2>
           <p class="section-subtitle">Soluções personalizadas para cada necessidade</p>
         </div>
@@ -56,10 +57,57 @@
       </div>
     </section>
 
+    <!-- Technology -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="section-label">Tecnologia</span>
+          <h2 class="section-title">Stack moderna e robusta</h2>
+          <p class="section-subtitle">Usamos as melhores tecnologias do mercado</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-4xl mx-auto">
+          <div v-for="tech in techStack" :key="tech.title" class="text-center p-4 bg-gray-50 rounded-xl">
+            <Icon :icon="tech.icon" class="w-8 h-8 text-primary-600 mx-auto mb-2" />
+            <h4 class="text-xs font-semibold text-gray-900 mb-1">{{ tech.title }}</h4>
+            <p class="text-[10px] text-gray-500">{{ tech.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process -->
+    <section class="section-padding bg-gray-50">
+      <div class="container">
+        <div class="text-center mb-10">
+          <span class="section-label">Metodologia</span>
+          <h2 class="section-title">Nosso processo de desenvolvimento</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div v-for="(s, i) in process" :key="i" class="text-center">
+            <div class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center mx-auto mb-2 text-sm font-bold">{{ i + 1 }}</div>
+            <h4 class="text-xs font-semibold text-gray-900">{{ s.title }}</h4>
+            <p class="text-[10px] text-gray-500 mt-1">{{ s.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Simulator -->
     <section ref="simulatorRef" class="section-padding">
       <div class="container max-w-4xl mx-auto">
         <PriceSimulator service-type="website" />
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section-padding bg-gray-50">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-8">
+          <span class="section-label">Dúvidas?</span>
+          <h2 class="section-title">Perguntas Frequentes</h2>
+          <p class="section-subtitle">Tire suas dúvidas sobre criação de sites</p>
+        </div>
+        <FaqAccordion :items="faqs" />
       </div>
     </section>
 
@@ -81,11 +129,35 @@ import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 
 const simulatorRef = ref<HTMLElement>()
 const scrollToSimulator = () => simulatorRef.value?.scrollIntoView({ behavior: 'smooth' })
 
 const benefits = ['Design responsivo e moderno', 'Otimização para SEO', 'Carregamento rápido', 'Painel administrativo intuitivo', 'Integração com ferramentas de marketing']
+
+const techStack = [
+  { title: 'Frontend Moderno', icon: 'mdi:language-javascript', desc: 'Vue.js, React, HTML5/CSS3 para experiências rápidas e fluidas' },
+  { title: 'Backend Robusto', icon: 'mdi:server', desc: 'PHP, Node.js, Python com arquitetura escalável' },
+  { title: 'Performance', icon: 'mdi:speedometer', desc: 'Carregamento em menos de 3 segundos (Core Web Vitals)' },
+  { title: 'Segurança', icon: 'mdi:shield-lock', desc: 'SSL, proteção contra ataques e LGPD compliance' },
+]
+
+const process = [
+  { title: 'Briefing', desc: 'Entendemos seu negócio e objetivos' },
+  { title: 'Layout', desc: 'Criação do design e aprovação' },
+  { title: 'Desenvolvimento', desc: 'Codificação e implementação' },
+  { title: 'Testes', desc: 'QA em todos os dispositivos' },
+  { title: 'Entrega', desc: 'Publicação e treinamento' },
+]
+
+const faqs = [
+  { question: 'Quanto tempo leva para criar um site?', answer: 'Um site institucional leva de 15 a 30 dias. E-commerces e sistemas web podem levar de 45 a 90 dias dependendo da complexidade.' },
+  { question: 'O site é responsivo (funciona no celular)?', answer: 'Sim! Todos os nossos sites são 100% responsivos, adaptando-se perfeitamente a celulares, tablets e desktops.' },
+  { question: 'O site já vem otimizado para Google (SEO)?', answer: 'Sim! Aplicamos as melhores práticas de SEO técnico, como meta tags, velocidade de carregamento, URLs amigáveis e estrutura semântica.' },
+  { question: 'Consigo editar o conteúdo do site depois?', answer: 'Sim! Entregamos o site com um painel administrativo intuitivo para que você possa atualizar textos, imagens e produtos com facilidade.' },
+  { question: 'Vocês oferecem hospedagem e domínio?', answer: 'Sim! Oferecemos planos de hospedagem e auxiliamos no registro de domínio. O valor é informado durante o orçamento.' },
+]
 
 const types = [
   { title: 'Site Institucional', desc: 'Apresente sua empresa profissionalmente', price: 'A partir de R$ 1.200' },
