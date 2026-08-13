@@ -277,7 +277,6 @@ const contactInfo = [
 const socials = [
   { label: 'Facebook', url: 'https://www.facebook.com/grupo3wonline', icon: 'mdi:facebook' },
   { label: 'Instagram', url: 'https://www.instagram.com/grupo3wonline', icon: 'mdi:instagram' },
-  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/grupo3wonline', icon: 'mdi:linkedin' },
 ]
 
 const testimonials = [

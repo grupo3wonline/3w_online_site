@@ -1,211 +1,305 @@
 <template>
   <div class="tools-page">
-    <!-- Header -->
-    <header class="tools-header">
-      <div class="container">
-        <div class="header-content">
-          <div class="promo-banner">
-            <span class="promo-icon">🎁</span>
-            <span class="promo-text">INDIQUE E GANHE</span>
-            <span class="promo-icon">⭐</span>
-          </div>
-          <div class="header-right">
-            <span class="header-subtitle">Convide amigos e ganhe créditos!</span>
+    <!-- Breadcrumb -->
+    <div class="bg-gradient-to-r from-[#0a1628] to-[#162044] py-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center text-sm text-blue-300" aria-label="Breadcrumb">
+          <RouterLink to="/" class="hover:text-white transition-colors">
+            <i class="fas fa-home"></i>
+          </RouterLink>
+          <i class="fas fa-chevron-right text-xs mx-2 text-blue-500"></i>
+          <span class="text-white font-medium">Ferramentas Digitais</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Promo Carousel Banner -->
+    <div class="bg-gradient-to-r from-accent-500 to-accent-600 py-3 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-center">
+          <div class="flex items-center gap-4 text-white text-sm">
+            <button @click="prevPromo" class="p-1 hover:bg-white/20 rounded-full transition-colors" aria-label="Promoção anterior">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <transition name="fade" mode="out-in">
+              <div :key="currentPromo" class="flex items-center gap-3 min-w-0">
+                <i :class="['fas', promos[currentPromo].icon, 'text-lg']"></i>
+                <span class="font-medium whitespace-nowrap">{{ promos[currentPromo].text }}</span>
+                <a
+                  :href="promos[currentPromo].link"
+                  target="_blank"
+                  class="bg-white text-accent-700 px-3 py-1 rounded-full text-xs font-bold hover:bg-gray-100 transition-colors whitespace-nowrap"
+                >
+                  {{ promos[currentPromo].cta }}
+                </a>
+              </div>
+            </transition>
+            <button @click="nextPromo" class="p-1 hover:bg-white/20 rounded-full transition-colors" aria-label="Próxima promoção">
+              <i class="fas fa-chevron-right"></i>
+            </button>
           </div>
         </div>
       </div>
-    </header>
+    </div>
 
-    <!-- Carrossel de Promoções -->
-    <section class="promotions-carousel">
-      <div class="container">
-        <div class="carousel-wrapper">
-          <button class="carousel-btn prev" @click="prevSlide" aria-label="Slide anterior">
-            <ChevronLeftIcon class="w-6 h-6" />
-          </button>
-          
-          <div class="carousel-container" ref="carouselContainer">
-            <div class="carousel-track" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
-              <!-- Slide 1: Indique e Ganhe -->
-              <div class="carousel-slide active">
-                <div class="slide-content">
-                  <div class="slide-text">
-                    <h2 class="slide-title">Ganhe</h2>
-                    <p class="slide-subtitle">créditos!</p>
-                    <div class="slide-badge">Indique e Ganhe</div>
-                    <p class="slide-description">PROMOÇÃO ATIVA</p>
-                    <button class="slide-cta" @click="openWhatsApp('indique')">
-                      Indicar agora
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Slide 2: Criação de Sites -->
-              <div class="carousel-slide">
-                <div class="slide-content sites-slide">
-                  <div class="slide-text">
-                    <h2 class="slide-title">Sites</h2>
-                    <p class="slide-subtitle">profissionais!</p>
-                    <div class="slide-badge">Criação de Sites</div>
-                    <p class="slide-description">DESENVOLVIMENTO WEB</p>
-                    <button class="slide-cta" @click="openWhatsApp('sites')">
-                      Solicitar orçamento
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Slide 3: Gestão de Redes Sociais -->
-              <div class="carousel-slide">
-                <div class="slide-content social-slide">
-                  <div class="slide-text">
-                    <h2 class="slide-title">Redes</h2>
-                    <p class="slide-subtitle">sociais!</p>
-                    <div class="slide-badge">Gestão de Redes Sociais</div>
-                    <p class="slide-description">MARKETING DIGITAL</p>
-                    <button class="slide-cta" @click="openWhatsApp('redes')">
-                      Começar agora
-                    </button>
-                  </div>
-                </div>
-              </div>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white py-14">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+            <i class="fas fa-tools mr-3 text-secondary-300"></i>
+            Ferramentas Digitais Gratuitas
+          </h1>
+          <p class="text-lg text-primary-100 mb-8">
+            Mais de 120 ferramentas profissionais online para facilitar seu trabalho diário.
+            Processamento 100% local no seu navegador — privacidade e segurança garantidas.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
+              <i class="fas fa-shield-alt mr-2 text-green-300"></i>
+              <span class="text-sm font-medium">100% Seguro</span>
             </div>
-          </div>
-
-          <button class="carousel-btn next" @click="nextSlide" aria-label="Próximo slide">
-            <ChevronRightIcon class="w-6 h-6" />
-          </button>
-
-          <!-- Indicadores -->
-          <div class="carousel-indicators">
-            <button
-              v-for="(slide, index) in 3"
-              :key="index"
-              class="indicator"
-              :class="{ active: currentSlide === index }"
-              @click="goToSlide(index)"
-              :aria-label="`Ir para slide ${index + 1}`"
-            ></button>
+            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
+              <i class="fas fa-bolt mr-2 text-yellow-300"></i>
+              <span class="text-sm font-medium">Rápido e Eficiente</span>
+            </div>
+            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
+              <i class="fas fa-gift mr-2 text-pink-300"></i>
+              <span class="text-sm font-medium">Totalmente Gratuito</span>
+            </div>
+            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
+              <i class="fas fa-mobile-alt mr-2 text-blue-300"></i>
+              <span class="text-sm font-medium">Funciona no Celular</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Seção de Ferramentas -->
-    <section class="tools-section">
-      <div class="container">
-        <!-- Header da seção -->
-        <div class="section-header">
-          <div class="section-title">
-            <CogIcon class="w-6 h-6" />
-            <h2>Ferramentas</h2>
-          </div>
-          <button class="view-more-btn" @click="showAllTools = !showAllTools">
-            {{ showAllTools ? 'Ver menos' : 'Conhecer mais ferramentas' }}
-          </button>
-        </div>
-
-        <!-- Filtros e Busca -->
-        <div class="tools-filters">
-          <div class="search-bar">
-            <MagnifyingGlassIcon class="w-5 h-5 search-icon" />
+    <!-- Busca e Filtros -->
+    <section class="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <!-- Search -->
+          <div class="relative flex-1 w-full">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Buscar ferramentas..."
-              class="search-input"
+              placeholder="Buscar ferramentas por nome ou descrição..."
+              class="w-full pl-12 pr-10 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-base"
             />
-          </div>
-          
-          <div class="category-filters">
             <button
-              v-for="category in categories"
-              :key="category.id"
-              class="filter-btn"
-              :class="{ active: selectedCategory === category.id }"
-              @click="selectCategory(category.id)"
+              v-if="searchQuery"
+              @click="clearSearch"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
             >
-              {{ category.name }}
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <!-- Category filters -->
+          <div class="flex flex-wrap gap-2">
+            <button
+              v-for="cat in categoryButtons"
+              :key="cat.id"
+              :class="[
+                'px-3 py-2 rounded-full text-sm font-medium transition-all border whitespace-nowrap',
+                selectedCategory === cat.id
+                  ? 'bg-primary-600 text-white border-primary-600'
+                  : 'bg-white text-gray-600 border-gray-300 hover:border-primary-400 hover:text-primary-600',
+              ]"
+              @click="selectCategory(cat.id)"
+            >
+              <i :class="['fas', cat.icon, 'mr-1']"></i>
+              {{ cat.name }}
             </button>
           </div>
         </div>
 
-        <!-- Grid de Ferramentas -->
-        <div class="tools-grid">
-          <div
-            v-for="tool in filteredTools"
-            :key="tool.id"
-            class="tool-card"
-          >
-            <div class="tool-image">
-              <component :is="tool.icon" class="w-12 h-12 text-primary-600" />
-            </div>
-            <div class="tool-content">
-              <h3 class="tool-title">{{ tool.name }}</h3>
-              <p class="tool-subtitle">{{ tool.subtitle }}</p>
-              <p class="tool-description">{{ tool.description }}</p>
-              <button class="tool-cta" @click="openWhatsApp('ferramenta', tool.name)">
-                Acessar
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mostrar mais ferramentas -->
-        <div v-if="!showAllTools && filteredTools.length > 4" class="show-more">
-          <button class="show-more-btn" @click="showAllTools = true">
-            Ver todas as ferramentas ({{ allTools.length }})
-          </button>
+        <!-- Search result count -->
+        <div v-if="searchQuery" class="mt-2 text-sm text-gray-600">
+          <span v-if="filteredTools.length > 0">
+            <i class="fas fa-check-circle text-green-500 mr-1"></i>
+            {{ filteredTools.length }} ferramenta(s) encontrada(s)
+          </span>
+          <span v-else class="text-red-500">
+            <i class="fas fa-exclamation-circle mr-1"></i>
+            Nenhuma ferramenta encontrada para "{{ searchQuery }}"
+          </span>
         </div>
       </div>
     </section>
 
-    <!-- Seção de Promoções de Grupo -->
-    <section class="group-promotions">
-      <div class="container">
-        <div class="group-content">
-          <h2 class="group-title">Já está no nosso grupo de promoções?</h2>
-          <p class="group-description">
-            Receba no WhatsApp e no Telegram as melhores promoções e economize mais.
+    <!-- Estatísticas -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div
+          v-for="(info, key) in store.categoryInfo"
+          :key="key"
+          class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center hover:shadow-md hover:border-primary-200 transition-all cursor-pointer"
+          :class="{ 'ring-2 ring-primary-500 border-primary-500': selectedCategory === key }"
+          @click="selectCategory(key as string)"
+        >
+          <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-primary-50 flex items-center justify-center">
+            <i :class="['fas', info.icon, 'text-primary-600']"></i>
+          </div>
+          <p class="text-2xl font-bold text-gray-900">{{ info.total }}</p>
+          <p class="text-xs text-gray-500">{{ info.title }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ferramentas Grid -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+      <!-- Modo filtrado -->
+      <div v-if="searchQuery || selectedCategory !== 'all'">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <ToolCard v-for="tool in filteredTools" :key="tool.id" :tool="tool" />
+        </div>
+      </div>
+
+      <!-- Modo agrupado por categoria -->
+      <div v-else>
+        <div
+          v-for="(categoryTools, category) in store.toolsByCategory"
+          :key="category"
+          :id="`category-${category}`"
+          class="mb-12 scroll-mt-24"
+        >
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center">
+              <i :class="['fas', store.categoryInfo[category]?.icon || 'fa-folder', 'text-primary-600']"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900">
+              {{ store.categoryInfo[category]?.title || category }}
+            </h2>
+            <span class="px-3 py-1 text-sm font-medium rounded-full bg-primary-50 text-primary-700">
+              {{ categoryTools.length }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <ToolCard v-for="tool in categoryTools" :key="tool.id" :tool="tool" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section: Indique e Ganhe -->
+    <section class="bg-gradient-to-r from-secondary-500 to-secondary-700 py-10">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+        <div class="flex items-center justify-center gap-2 mb-3">
+          <i class="fas fa-gift text-2xl text-yellow-300"></i>
+          <h2 class="text-2xl font-bold">Indique e Ganhe!</h2>
+          <i class="fas fa-star text-2xl text-yellow-300"></i>
+        </div>
+        <p class="text-secondary-100 mb-6">
+          Indique amigos para a 3W Online e ganhe créditos nos nossos serviços. Quanto mais indicar, mais você ganha!
+        </p>
+        <a
+          href="https://wa.me/5541996924829?text=Ol%C3%A1!%20Quero%20participar%20do%20programa%20Indique%20e%20Ganhe."
+          target="_blank"
+          class="inline-flex items-center gap-2 bg-white text-secondary-700 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
+        >
+          <i class="fab fa-whatsapp text-lg"></i>
+          Quero indicar agora
+        </a>
+      </div>
+    </section>
+
+    <!-- Serviços da 3W Online -->
+    <section class="py-14 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-10">
+          <span class="text-xs font-semibold text-primary-600 uppercase tracking-wider mb-2 block">Nossos Serviços</span>
+          <h2 class="text-3xl font-bold text-gray-900 mb-3">
+            Potencialize seus resultados com a 3W Online
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Além das ferramentas gratuitas, oferecemos soluções completas de marketing digital,
+            desenvolvimento web e automação com inteligência artificial.
           </p>
-          
-          <div class="group-buttons">
-            <button class="group-btn whatsapp" @click="openWhatsApp('grupo-whatsapp')">
-              <span class="btn-icon">💬</span>
-              Clique aqui para entrar
-            </button>
-            <button class="group-btn telegram" @click="openTelegram()">
-              <span class="btn-icon">📱</span>
-              Clique aqui para entrar
-            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
+            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
+              <i class="fas fa-globe text-blue-600 text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-900 mb-2">Criação de Sites</h4>
+            <p class="text-sm text-gray-600 mb-4">Sites profissionais, responsivos e otimizados para SEO. Design exclusivo.</p>
+            <a href="https://wa.me/5541996924829?text=Quero%20um%20or%C3%A7amento%20para%20cria%C3%A7%C3%A3o%20de%20site." target="_blank" class="text-blue-600 hover:text-blue-700 text-sm font-semibold inline-flex items-center gap-1">
+              Solicitar orçamento <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
+            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
+              <i class="fas fa-bullhorn text-green-600 text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-900 mb-2">Marketing Digital</h4>
+            <p class="text-sm text-gray-600 mb-4">Redes sociais, Google Ads, Meta Ads. ROI comprovado. A partir de R$ 500/mês.</p>
+            <a href="https://wa.me/5541996924829?text=Quero%20saber%20sobre%20marketing%20digital." target="_blank" class="text-green-600 hover:text-green-700 text-sm font-semibold inline-flex items-center gap-1">
+              Ver planos <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
+            <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
+              <i class="fas fa-robot text-purple-600 text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-900 mb-2">Automação com IA</h4>
+            <p class="text-sm text-gray-600 mb-4">Chatbots GPT, atendimento 24h, automação WhatsApp e fluxos inteligentes.</p>
+            <a href="https://wa.me/5541996924829?text=Quero%20automatizar%20com%20IA." target="_blank" class="text-purple-600 hover:text-purple-700 text-sm font-semibold inline-flex items-center gap-1">
+              Automatizar agora <i class="fas fa-arrow-right text-xs"></i>
+            </a>
+          </div>
+
+          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
+            <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-4">
+              <i class="fas fa-code text-orange-600 text-xl"></i>
+            </div>
+            <h4 class="font-bold text-gray-900 mb-2">Sistemas Web</h4>
+            <p class="text-sm text-gray-600 mb-4">CRM, ERP, plataformas SaaS e sistemas sob medida para seu negócio.</p>
+            <a href="https://wa.me/5541996924829?text=Quero%20um%20sistema%20web%20sob%20medida." target="_blank" class="text-orange-600 hover:text-orange-700 text-sm font-semibold inline-flex items-center gap-1">
+              Saber mais <i class="fas fa-arrow-right text-xs"></i>
+            </a>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Seção Todo Mundo Ganha -->
-    <section class="referral-section">
-      <div class="container">
-        <div class="referral-content">
-          <div class="referral-text">
-            <h2 class="referral-title">Todo mundo ganha</h2>
-            <p class="referral-description">
-              Cada pessoa que você indicar recebe desconto na primeira inscrição e você ganha créditos toda vez que seu amigo fizer parte do grupo.
-            </p>
-            <p class="referral-question">
-              Tá esperando o que para indicar seus amigos?
-            </p>
-            <button class="referral-btn" @click="openWhatsApp('indicar')">
-              Indicar
-            </button>
-          </div>
-          <div class="referral-image">
-            <div class="referral-placeholder">
-              <UsersIcon class="w-24 h-24 text-gray-400" />
-            </div>
-          </div>
+    <!-- Final CTA -->
+    <section class="bg-gradient-to-br from-[#0a1628] via-[#111d3a] to-[#162044] py-14">
+      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+        <h2 class="text-2xl md:text-3xl font-bold mb-3">
+          Transforme seu negócio com soluções digitais
+        </h2>
+        <p class="text-blue-200 mb-8">
+          A 3W Online é especialista em marketing digital, desenvolvimento web e automação com IA em Curitiba. Mais de 5 anos e 150+ projetos entregues.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="https://wa.me/5541996924829?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20gratuito."
+            target="_blank"
+            class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-3.5 rounded-lg transition-colors shadow-lg"
+          >
+            <i class="fab fa-whatsapp text-xl"></i>
+            Orçamento Gratuito
+          </a>
+          <RouterLink
+            to="/servicos"
+            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-lg transition-colors border border-white/20"
+          >
+            <i class="fas fa-list-check"></i>
+            Conheça nossos serviços
+          </RouterLink>
         </div>
+        <p class="text-blue-300 text-sm mt-6">
+          <i class="fas fa-phone-alt mr-1"></i> (41) 99692-4829 &nbsp;|&nbsp;
+          <i class="fas fa-envelope mr-1"></i> contato@3wonline.com.br
+        </p>
       </div>
     </section>
   </div>
@@ -213,886 +307,91 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CogIcon,
-  MagnifyingGlassIcon,
-  UsersIcon,
-  CalculatorIcon,
-  CodeBracketIcon,
-  CurrencyDollarIcon,
-  ChartBarIcon,
-  DocumentTextIcon,
-  PhotoIcon,
-  VideoCameraIcon,
-  ClockIcon,
-  PaintBrushIcon,
-  GlobeAltIcon,
-  DevicePhoneMobileIcon,
-  ShoppingCartIcon
-} from '@heroicons/vue/24/outline'
+import { useToolsStore } from '@/stores/tools'
+import ToolCard from '@/components/tools/common/ToolCard.vue'
 
-// Estado do carrossel
-const currentSlide = ref(0)
-const carouselContainer = ref<HTMLElement>()
+const store = useToolsStore()
 
-// Estado das ferramentas
 const searchQuery = ref('')
 const selectedCategory = ref('all')
-const showAllTools = ref(false)
+const currentPromo = ref(0)
+let promoInterval: ReturnType<typeof setInterval> | null = null
 
-// Categorias
-const categories = [
-  { id: 'all', name: 'Todas' },
-  { id: 'calculator', name: 'Calculadoras' },
-  { id: 'development', name: 'Desenvolvimento' },
-  { id: 'design', name: 'Design' },
-  { id: 'marketing', name: 'Marketing' },
-  { id: 'business', name: 'Negócios' }
+const promos = [
+  { icon: 'fa-star', text: '🎁 Sites profissionais a partir de R$ 997', cta: 'SAIBA MAIS', link: 'https://wa.me/5541996924829?text=Quero%20criar%20um%20site%20profissional.' },
+  { icon: 'fa-rocket', text: '🚀 Gestão de Marketing + Anúncios por R$ 500/mês', cta: 'EU QUERO!', link: 'https://wa.me/5541996924829?text=Quero%20saber%20sobre%20marketing%20digital.' },
+  { icon: 'fa-robot', text: '🤖 Automação WhatsApp com IA — Atendimento 24h', cta: 'VER MAIS', link: 'https://wa.me/5541996924829?text=Quero%20automação%20WhatsApp%20com%20IA.' },
+  { icon: 'fa-gift', text: '⭐ Indique amigos e ganhe créditos nos nossos serviços!', cta: 'INDICAR', link: 'https://wa.me/5541996924829?text=Quero%20participar%20do%20Indique%20e%20Ganhe.' },
 ]
 
-// Ferramentas
-const allTools = [
-  {
-    id: 1,
-    name: 'Freelance Calc',
-    subtitle: 'Calcule quanto cobrar como freelancer',
-    description: 'A ferramenta definitiva para programadores freelancers precificarem corretamente seu trabalho e aumentarem seus lucros.',
-    category: 'calculator',
-    icon: CalculatorIcon
-  },
-  {
-    id: 2,
-    name: 'Calc Dev',
-    subtitle: 'Calculadora para Programadores',
-    description: 'Estime projetos, calcule horas e gere orçamentos profissionais em segundos. A ferramenta definitiva para desenvolvedores freelancers.',
-    category: 'calculator',
-    icon: CodeBracketIcon
-  },
-  {
-    id: 3,
-    name: 'Price Savvy Calculator',
-    subtitle: 'Descubra Quanto Cobrar pelo Seu Trabalho',
-    description: 'Calcule preços justos e profissionais para seus produtos e serviços. Grátis, rápido e sem complicação.',
-    category: 'calculator',
-    icon: CurrencyDollarIcon
-  },
-  {
-    id: 4,
-    name: 'Price Calc',
-    subtitle: 'Calcule o Preço Ideal para seus Produtos e Serviços',
-    description: 'Ferramenta inteligente que considera custos, tempo, margem de lucro para sugerir preços justos e competitivos.',
-    category: 'calculator',
-    icon: ChartBarIcon
-  },
-  {
-    id: 5,
-    name: 'Gerador de Contratos',
-    subtitle: 'Crie contratos profissionais',
-    description: 'Gere contratos personalizados para freelancers e prestadores de serviços com cláusulas profissionais.',
-    category: 'business',
-    icon: DocumentTextIcon
-  },
-  {
-    id: 6,
-    name: 'Editor de Imagens',
-    subtitle: 'Edite suas fotos online',
-    description: 'Editor de imagens profissional online com filtros, efeitos e ferramentas avançadas de edição.',
-    category: 'design',
-    icon: PhotoIcon
-  },
-  {
-    id: 7,
-    name: 'Conversor de Vídeo',
-    subtitle: 'Converta vídeos facilmente',
-    description: 'Converta vídeos entre diferentes formatos de forma rápida e gratuita, direto no seu navegador.',
-    category: 'design',
-    icon: VideoCameraIcon
-  },
-  {
-    id: 8,
-    name: 'Time Tracker',
-    subtitle: 'Controle seu tempo de trabalho',
-    description: 'Monitore o tempo gasto em projetos e tarefas para melhorar sua produtividade e precificação.',
-    category: 'business',
-    icon: ClockIcon
-  },
-  {
-    id: 9,
-    name: 'Color Palette Generator',
-    subtitle: 'Gere paletas de cores',
-    description: 'Crie paletas de cores harmoniosas para seus projetos de design e desenvolvimento web.',
-    category: 'design',
-    icon: PaintBrushIcon
-  },
-  {
-    id: 10,
-    name: 'SEO Analyzer',
-    subtitle: 'Analise seu SEO',
-    description: 'Analise e otimize seu site para mecanismos de busca com relatórios detalhados e sugestões.',
-    category: 'marketing',
-    icon: GlobeAltIcon
-  },
-  {
-    id: 11,
-    name: 'App Mockup',
-    subtitle: 'Crie mockups de aplicativos',
-    description: 'Ferramenta para criar protótipos e mockups de aplicativos mobile de forma rápida e profissional.',
-    category: 'design',
-    icon: DevicePhoneMobileIcon
-  },
-  {
-    id: 12,
-    name: 'E-commerce Calculator',
-    subtitle: 'Calcule custos de e-commerce',
-    description: 'Calcule todos os custos envolvidos na operação de um e-commerce e defina preços competitivos.',
-    category: 'business',
-    icon: ShoppingCartIcon
-  }
+const categoryButtons = [
+  { id: 'all', name: 'Todas', icon: 'fa-th-large' },
+  { id: 'calculadoras', name: 'Calculadoras', icon: 'fa-calculator' },
+  { id: 'geradores', name: 'Geradores', icon: 'fa-wand-magic-sparkles' },
+  { id: 'conversores', name: 'Conversores', icon: 'fa-arrows-rotate' },
+  { id: 'validadores', name: 'Validadores', icon: 'fa-check-circle' },
+  { id: 'simuladores', name: 'Simuladores', icon: 'fa-chart-line' },
+  { id: 'texto', name: 'Texto', icon: 'fa-text-height' },
 ]
 
-// Computed
 const filteredTools = computed(() => {
-  let tools = allTools
+  let tools = store.tools
 
-  // Filtrar por categoria
   if (selectedCategory.value !== 'all') {
-    tools = tools.filter(tool => tool.category === selectedCategory.value)
+    tools = tools.filter((t) => t.category === selectedCategory.value)
   }
 
-  // Filtrar por busca
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
-    tools = tools.filter(tool =>
-      tool.name.toLowerCase().includes(query) ||
-      tool.subtitle.toLowerCase().includes(query) ||
-      tool.description.toLowerCase().includes(query)
+    tools = tools.filter(
+      (t) =>
+        t.name.toLowerCase().includes(query) ||
+        t.description.toLowerCase().includes(query) ||
+        t.category.toLowerCase().includes(query),
     )
-  }
-
-  // Limitar quantidade se não estiver mostrando todas
-  if (!showAllTools.value) {
-    tools = tools.slice(0, 4)
   }
 
   return tools
 })
 
-// Métodos do carrossel
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % 3
-}
-
-const prevSlide = () => {
-  currentSlide.value = currentSlide.value === 0 ? 2 : currentSlide.value - 1
-}
-
-const goToSlide = (index: number) => {
-  currentSlide.value = index
-}
-
-// Auto-play do carrossel
-let autoPlayInterval: NodeJS.Timeout
-
-const startAutoPlay = () => {
-  autoPlayInterval = setInterval(() => {
-    nextSlide()
-  }, 5000)
-}
-
-const stopAutoPlay = () => {
-  if (autoPlayInterval) {
-    clearInterval(autoPlayInterval)
+const selectCategory = (category: string) => {
+  selectedCategory.value = category
+  if (category !== 'all' && !searchQuery.value) {
+    setTimeout(() => {
+      const el = document.getElementById(`category-${category}`)
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
   }
 }
 
-// Métodos de filtro
-const selectCategory = (categoryId: string) => {
-  selectedCategory.value = categoryId
-  showAllTools.value = false
+const clearSearch = () => {
+  searchQuery.value = ''
 }
 
-// Métodos de navegação
-const openWhatsApp = (type: string, toolName?: string) => {
-  const messages = {
-    'indique': 'Olá! Gostaria de saber mais sobre o programa Indique e Ganhe.',
-    'sites': 'Olá! Tenho interesse em criar um site profissional. Gostaria de saber mais.',
-    'redes': 'Olá! Preciso de ajuda com gestão de redes sociais. Podem me ajudar?',
-    'ferramenta': `Olá! Gostaria de saber mais sobre a ferramenta ${toolName}.`,
-    'grupo-whatsapp': 'Olá! Gostaria de entrar no grupo de promoções do WhatsApp.',
-    'indicar': 'Olá! Quero indicar amigos e participar do programa de indicações.'
-  }
-
-  const message = messages[type as keyof typeof messages] || 'Olá! Gostaria de saber mais sobre os serviços.'
-  const whatsappUrl = `https://wa.me/5541996924829?text=${encodeURIComponent(message)}`
-  window.open(whatsappUrl, '_blank')
+const nextPromo = () => {
+  currentPromo.value = (currentPromo.value + 1) % promos.length
 }
 
-const openTelegram = () => {
-  // Link do Telegram (substitua pelo link real do grupo)
-  window.open('https://t.me/grupo3wonline', '_blank')
+const prevPromo = () => {
+  currentPromo.value = currentPromo.value === 0 ? promos.length - 1 : currentPromo.value - 1
 }
 
-// Lifecycle
 onMounted(() => {
-  startAutoPlay()
+  promoInterval = setInterval(nextPromo, 4000)
 })
 
 onUnmounted(() => {
-  stopAutoPlay()
+  if (promoInterval) clearInterval(promoInterval)
 })
 </script>
 
 <style scoped>
-/* Reset e Base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.tools-page {
-  font-family: 'Inter', sans-serif;
-  background-color: #f8fafc;
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* Header */
-.tools-header {
-  background: linear-gradient(135deg, #3b4cca 0%, #4f46e5 100%);
-  color: white;
-  padding: 0.75rem 0;
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.promo-banner {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  font-size: 0.875rem;
-}
-
-.promo-icon {
-  font-size: 1rem;
-}
-
-.header-subtitle {
-  font-size: 0.875rem;
-  opacity: 0.9;
-}
-
-/* Carrossel de Promoções */
-.promotions-carousel {
-  background: linear-gradient(135deg, #3b4cca 0%, #4f46e5 100%);
-  padding: 2rem 0;
-  position: relative;
-}
-
-.carousel-wrapper {
-  position: relative;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.carousel-container {
-  overflow: hidden;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.carousel-track {
-  display: flex;
-  transition: transform 0.5s ease-in-out;
-}
-
-.carousel-slide {
-  min-width: 100%;
-  padding: 3rem 2rem;
-}
-
-.slide-content {
-  text-align: center;
-  color: white;
-}
-
-.slide-title {
-  font-size: 3rem;
-  font-weight: 700;
-  color: #fbbf24;
-  margin-bottom: 0.5rem;
-}
-
-.slide-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.slide-badge {
-  display: inline-block;
-  background: #fbbf24;
-  color: #1e293b;
-  padding: 0.5rem 1rem;
-  border-radius: 2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.slide-description {
-  font-size: 0.875rem;
-  opacity: 0.9;
-  margin-bottom: 2rem;
-}
-
-.slide-cta {
-  background: #f97316;
-  color: white;
-  border: none;
-  padding: 0.875rem 2rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.slide-cta:hover {
-  background: #ea580c;
-  transform: translateY(-2px);
-}
-
-/* Slides específicos */
-.sites-slide .slide-title {
-  color: #10b981;
-}
-
-.sites-slide .slide-badge {
-  background: #10b981;
-  color: white;
-}
-
-.social-slide .slide-title {
-  color: #ec4899;
-}
-
-.social-slide .slide-badge {
-  background: #ec4899;
-  color: white;
-}
-
-/* Botões do carrossel */
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
-}
-
-.carousel-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.carousel-btn.prev {
-  left: -1rem;
-}
-
-.carousel-btn.next {
-  right: -1rem;
-}
-
-/* Indicadores */
-.carousel-indicators {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-}
-
-.indicator {
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.4);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.indicator.active {
-  background: white;
-}
-
-/* Seção de Ferramentas */
-.tools-section {
-  padding: 3rem 0;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.view-more-btn {
-  color: #06b6d4;
-  background: none;
-  border: none;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.3s ease;
-}
-
-.view-more-btn:hover {
-  color: #0891b2;
-}
-
-/* Filtros */
-.tools-filters {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.search-bar {
-  position: relative;
-  max-width: 400px;
-}
-
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #64748b;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.875rem 1rem 0.875rem 3rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.category-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.filter-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid #d1d5db;
-  background: white;
-  color: #64748b;
-  border-radius: 2rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.filter-btn:hover {
-  border-color: #3b82f6;
-  color: #3b82f6;
-}
-
-.filter-btn.active {
-  background: #3b82f6;
-  border-color: #3b82f6;
-  color: white;
-}
-
-/* Grid de Ferramentas */
-.tools-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.tool-card {
-  background: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.tool-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-}
-
-.tool-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 4rem;
-  height: 4rem;
-  background: #f1f5f9;
-  border-radius: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.tool-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 0.5rem;
-}
-
-.tool-subtitle {
-  font-size: 0.875rem;
-  color: #64748b;
-  margin-bottom: 0.75rem;
-}
-
-.tool-description {
-  color: #64748b;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.tool-cta {
-  width: 100%;
-  background: #06b6d4;
-  color: white;
-  border: none;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.tool-cta:hover {
-  background: #0891b2;
-}
-
-/* Mostrar mais */
-.show-more {
-  text-align: center;
-}
-
-.show-more-btn {
-  background: #f1f5f9;
-  color: #64748b;
-  border: 1px solid #d1d5db;
-  padding: 0.875rem 2rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.show-more-btn:hover {
-  background: #e2e8f0;
-  color: #475569;
-}
-
-/* Seção de Promoções de Grupo */
-.group-promotions {
-  background: #f8fafc;
-  padding: 3rem 0;
-  text-align: center;
-}
-
-.group-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 1rem;
-}
-
-.group-description {
-  color: #64748b;
-  margin-bottom: 2rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.group-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.group-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  border: none;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.group-btn.whatsapp {
-  background: #22c55e;
-  color: white;
-}
-
-.group-btn.whatsapp:hover {
-  background: #16a34a;
-}
-
-.group-btn.telegram {
-  background: #3b82f6;
-  color: white;
-}
-
-.group-btn.telegram:hover {
-  background: #2563eb;
-}
-
-/* Seção de Indicações */
-.referral-section {
-  padding: 3rem 0;
-  background: white;
-}
-
-.referral-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
-}
-
-.referral-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1e293b;
-  margin-bottom: 1rem;
-}
-
-.referral-description {
-  color: #64748b;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-.referral-question {
-  color: #64748b;
-  margin-bottom: 2rem;
-}
-
-.referral-btn {
-  background: #06b6d4;
-  color: white;
-  border: none;
-  padding: 0.875rem 2rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.referral-btn:hover {
-  background: #0891b2;
-}
-
-.referral-image {
-  display: flex;
-  justify-content: center;
-}
-
-.referral-placeholder {
-  width: 200px;
-  height: 200px;
-  background: #f1f5f9;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
-
-  .header-content {
-    flex-direction: column;
-    gap: 0.5rem;
-    text-align: center;
-  }
-
-  .carousel-slide {
-    padding: 2rem 1rem;
-  }
-
-  .slide-title {
-    font-size: 2rem;
-  }
-
-  .carousel-btn {
-    display: none;
-  }
-
-  .tools-filters {
-    align-items: stretch;
-  }
-
-  .search-bar {
-    max-width: none;
-  }
-
-  .tools-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .group-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .group-btn {
-    width: 100%;
-    max-width: 300px;
-    justify-content: center;
-  }
-
-  .referral-content {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .referral-image {
-    order: -1;
-  }
-}
-
-@media (max-width: 480px) {
-  .slide-title {
-    font-size: 1.5rem;
-  }
-
-  .slide-subtitle {
-    font-size: 1.125rem;
-  }
-
-  .tools-section {
-    padding: 2rem 0;
-  }
-
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .category-filters {
-    justify-content: center;
-  }
-}
-
-/* Animações */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.tool-card {
-  animation: fadeIn 0.6s ease-out;
-}
-
-/* Estados de loading */
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  color: #64748b;
-}
-
-/* Estados vazios */
-.empty-state {
-  text-align: center;
-  padding: 3rem;
-  color: #64748b;
-}
-
-.empty-state h3 {
-  font-size: 1.125rem;
-  margin-bottom: 0.5rem;
-}
-
-/* Acessibilidade */
-@media (prefers-reduced-motion: reduce) {
-  .carousel-track {
-    transition: none;
-  }
-  
-  .tool-card {
-    animation: none;
-  }
-  
-  * {
-    transition: none !important;
-  }
-}
-
-/* Focus states */
-.search-input:focus,
-.filter-btn:focus,
-.tool-cta:focus,
-.group-btn:focus,
-.referral-btn:focus,
-.carousel-btn:focus,
-.indicator:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

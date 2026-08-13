@@ -127,6 +127,7 @@ const navLinks = [
   { path: '/sobre', label: 'Sobre Nós' },
   { path: '/institucional', label: 'Institucional' },
   { path: '/servicos', label: 'Serviços' },
+  { path: '/ferramentas', label: 'Ferramentas' },
   { path: '/contato', label: 'Contato' },
   { path: '/servicos/consultoria-marketing', label: 'Consultoria' },
 ]
@@ -145,8 +146,6 @@ const serviceLinks = [
 const socialLinks = [
   { label: 'Facebook', url: 'https://www.facebook.com/grupo3wonline', icon: 'mdi:facebook' },
   { label: 'Instagram', url: 'https://www.instagram.com/grupo3wonline', icon: 'mdi:instagram' },
-  { label: 'LinkedIn', url: 'https://www.linkedin.com/company/grupo3wonline', icon: 'mdi:linkedin' },
-  { label: 'YouTube', url: 'https://www.youtube.com/@grupo3wonline', icon: 'mdi:youtube' },
   { label: 'WhatsApp', url: 'https://wa.me/5541996924829', icon: 'mdi:whatsapp' },
 ]
 </script>

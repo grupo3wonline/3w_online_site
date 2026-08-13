@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  safelist: [
+    // Dynamic colors used by tools store categories
+    { pattern: /bg-(blue|purple|green|orange|red|teal)-(50|100|900)/ },
+    { pattern: /text-(blue|purple|green|orange|red|teal)-(600|700|800)/ },
+  ],
   theme: {
     extend: {
       colors: {
