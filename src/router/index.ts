@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useSeo } from '@/composables/useSeo'
+import { toolsRoutes } from './tools'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -306,6 +307,9 @@ const routes: RouteRecordRaw[] = [
       keywords: 'automação ia curitiba, chatbot ia, inteligência artificial, n8n, chatwoot, evolution api, whatsapp automação, dify, langflow, typebot',
     },
   },
+
+  // Ferramentas (todas as 126+ ferramentas integradas)
+  ...toolsRoutes,
 
   // Error Pages
   {

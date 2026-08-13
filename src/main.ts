@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import ptBR from './locales/pt-BR'
 import './assets/css/main.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 const i18n = createI18n({
   legacy: false,

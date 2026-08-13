@@ -30,7 +30,7 @@
             </Transition>
           </div>
 
-          <a href="" target="_blank" rel="noopener noreferrer" class="nav-link">Ferramentas</a>
+          <RouterLink to="/ferramentas" class="nav-link">Ferramentas</RouterLink>
         </div>
 
         <!-- Right -->
@@ -75,6 +75,7 @@ const navLinks = [
 ]
 
 const mobileExtra = [
+  { path: '/ferramentas', label: 'Ferramentas' },
   { path: '/servicos', label: 'Serviços' },
   { path: '/institucional', label: 'Institucional' },
   { path: '/sobre', label: 'Sobre' },
