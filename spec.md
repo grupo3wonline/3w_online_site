@@ -13,7 +13,6 @@ Construir e manter uma plataforma web de alta conversão, institucional e de uti
 
 ### 1.2 Identidade da Marca
 - **Nome Comercial**: 3W Online / Grupo 3W Online
-- **CNPJ**: 25.530.623/0001-05
 - **Localização / GEO**: Curitiba, Paraná — Brasil (Atendimento Nacional & Remoto)
 - **Canais Oficiais**:
   - WhatsApp: `+55 (41) 99692-4829`

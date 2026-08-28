@@ -1,0 +1,151 @@
+# ==============================================================================
+# .htaccess — Grupo 3W Online (https://www.3wonline.com.br)
+# Otimizado para Hospedagem Compartilhada HostGator (Apache / cPanel)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Configurações Globais do Servidor
+# ------------------------------------------------------------------------------
+Options -Indexes -MultiViews
+AddDefaultCharset UTF-8
+ServerSignature Off
+
+# ------------------------------------------------------------------------------
+# 2. Redirecionamento HTTPS Obrigatório (SSL)
+# ------------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Forçar HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # ----------------------------------------------------------------------------
+  # 3. Roteamento SPA (Single Page Application - Vue Router HTML5 History Mode)
+  # ----------------------------------------------------------------------------
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 4. Páginas de Erro Personalizadas (Apache Server Fallback)
+# ------------------------------------------------------------------------------
+ErrorDocument 404 /404.html
+ErrorDocument 403 /403.html
+ErrorDocument 500 /500.html
+
+# ------------------------------------------------------------------------------
+# 5. Compressão Gzip / Deflate (Melhoria de Performance e PageSpeed)
+# ------------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/woff
+  AddOutputFilterByType DEFLATE font/woff2
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 6. Cache do Navegador (Browser Caching & Expire Headers)
+# ------------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # HTML & JSON — Sem cache agressivo para atualizações imediatas do Vue
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/json "access plus 0 seconds"
+
+  # Assets estáticos com hash (Vite) — Cache de 1 Ano
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
+
+  # Imagens & Mídias
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # Fontes Web
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 7. Cabeçalhos de Segurança HTTP (Security Headers)
+# ------------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # Previne ataque MIME-sniffing
+  Header always set X-Content-Type-Options "nosniff"
+
+  # Previne Clickjacking (permite carregar em mesmo domínio)
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # Proteção XSS básica dos navegadores
+  Header always set X-XSS-Protection "1; mode=block"
+
+  # Política de Referência
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Política de Recursos do Navegador
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  # Controle de Cache para Assets
+  <FilesMatch "\.(css|js|woff2|woff|ttf|png|jpg|jpeg|webp|svg)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Controle de Cache para HTML
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 8. Proteção contra Acesso a Arquivos Ocultos e Sensíveis
+# ------------------------------------------------------------------------------
+<FilesMatch "^\.(.*)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# Bloquear acesso a arquivos de configuração/pacotes
+<FilesMatch "(package\.json|package-lock\.json|tsconfig\.json|vite\.config\.ts|spec\.md|design-system\.md)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
