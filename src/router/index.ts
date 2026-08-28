@@ -39,7 +39,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/Contact.vue'),
     meta: {
       title: 'Contato | Fale com a 3W Online - Orçamento Gratuito',
-      description: 'Entre em contato com a 3W Online para orçamento gratuito. WhatsApp (41) 99692-4829. Agência de marketing digital em Curitiba, Paraná. Resposta em até 2 horas.',
+      description: 'Entre em contato com a 3W Online para orçamento gratuito. WhatsApp (41) 99692-4829. Agência em Curitiba, Paraná. Resposta em até 24 horas úteis (Segunda a Sexta das 8h às 18h).',
       keywords: 'contato 3w online, orçamento marketing digital, whatsapp agência curitiba, fale conosco',
     },
   },
@@ -164,17 +164,7 @@ const routes: RouteRecordRaw[] = [
       keywords: 'sistemas sob medida curitiba, desenvolvimento sistemas, crm personalizado, erp, sistema web',
     },
   },
-  {
-    path: '/william-portfolio',
-    name: 'WilliamPortfolio',
-    component: () => import('@/views/WilliamPortfolio.vue'),
-    meta: {
-      title: 'William Portfolio | Desenvolvedor Full Stack',
-      description: 'Portfolio de William - Desenvolvedor Full Stack. Projetos de sites, sistemas e aplicações web.',
-      keywords: 'portfolio desenvolvedor, full stack, projetos web',
-      noindex: true,
-    },
-  },
+
 
   // Service Landing Pages
   {
@@ -183,8 +173,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/services/SocialMediaManagement.vue'),
     meta: {
       title: 'Gestão de Redes Sociais em Curitiba | Social Media | 3W Online',
-      description: 'Gestão profissional de redes sociais em Curitiba. Criação de conteúdo, estratégia personalizada, SEO social, funil de vendas e planejamento antecipado. Instagram, Facebook, LinkedIn, TikTok.',
-      keywords: 'gestão redes sociais curitiba, social media, criação conteúdo, instagram, facebook, linkedin, tiktok, marketing redes sociais',
+      description: 'Gestão profissional de redes sociais em Curitiba. Criação de conteúdo, estratégia personalizada, SEO social, funil de vendas e planejamento antecipado. Instagram, Facebook, TikTok.',
+      keywords: 'gestão redes sociais curitiba, social media, criação conteúdo, instagram, facebook, tiktok, marketing redes sociais',
     },
   },
   {

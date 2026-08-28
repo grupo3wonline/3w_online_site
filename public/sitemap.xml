@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Páginas Principais -->
   <url>
     <loc>https://www.3wonline.com.br/</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.3wonline.com.br/sobre</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.3wonline.com.br/servicos</loc>
@@ -16,17 +17,34 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://www.3wonline.com.br/ferramentas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://www.3wonline.com.br/contato</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://www.3wonline.com.br/institucional</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 13 Hotsites de Serviços Especializados -->
+  <url>
+    <loc>https://www.3wonline.com.br/servicos/criacao-sites</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.3wonline.com.br/servicos/gestao-redes-sociais</loc>
+    <loc>https://www.3wonline.com.br/servicos/criacao-sistemas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/servicos/automacao-ia</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -36,7 +54,12 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.3wonline.com.br/servicos/criacao-sites</loc>
+    <loc>https://www.3wonline.com.br/servicos/gestao-redes-sociais</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/servicos/marketing-digital</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -46,14 +69,9 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.3wonline.com.br/servicos/consultoria-marketing</loc>
+    <loc>https://www.3wonline.com.br/servicos/planejamento-campanhas</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.3wonline.com.br/servicos/planejamento-campanhas</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.3wonline.com.br/servicos/design-grafico</loc>
@@ -61,48 +79,72 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.3wonline.com.br/servicos/publicidade</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.3wonline.com.br/servicos/organizacao-comercial</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.3wonline.com.br/servicos/relacoes-publicas</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://www.3wonline.com.br/servicos/marketing-digital</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.3wonline.com.br/servicos/criacao-sistemas</loc>
+    <loc>https://www.3wonline.com.br/servicos/consultoria-marketing</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.3wonline.com.br/servicos/automacao-ia</loc>
+    <loc>https://www.3wonline.com.br/servicos/publicidade-propaganda</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.3wonline.com.br/servicos/organizacao-comercial</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/servicos/relacoes-publicas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Landing Pages de Alta Conversão -->
+  <url>
+    <loc>https://www.3wonline.com.br/anuncios</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/lp-sites-sistemas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/landing-prd</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/lp-mkt</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/g3w</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.3wonline.com.br/lp-sistemas</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Políticas e Legal (Privacidade Global) -->
+  <url>
     <loc>https://www.3wonline.com.br/privacidade</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.3wonline.com.br/termos</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.3wonline.com.br/regulamento</loc>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

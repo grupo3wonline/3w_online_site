@@ -45,9 +45,11 @@ import AppNavbar from '@/components/layout/AppNavbar.vue'
 import AppFooter from '@/components/layout/AppFooter.vue'
 import WhatsAppFloat from '@/components/ui/WhatsAppFloat.vue'
 import CookieBanner from '@/components/ui/CookieBanner.vue'
+import { useUtm } from '@/composables/useUtm'
 
 const router = useRouter()
 const isLoading = ref(false)
+const { captureUtmFromUrl } = useUtm()
 
 // Loading global durante navegação de rota
 router.beforeEach(() => {
@@ -62,6 +64,7 @@ router.afterEach(() => {
 
 onMounted(() => {
   isLoading.value = false
+  captureUtmFromUrl()
 })
 </script>
 

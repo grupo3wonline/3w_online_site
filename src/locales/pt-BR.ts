@@ -42,7 +42,6 @@ export default {
   },
   footer: {
     rights: 'Todos os direitos reservados.',
-    developer: 'Sistema desenvolvido pelo desenvolvedor HOTWYL | WILLFROMBRASIL',
     privacy: 'Política de Privacidade',
     terms: 'Termos de Uso',
     regulations: 'Regulamento de Uso',

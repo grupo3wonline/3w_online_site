@@ -1,41 +1,43 @@
 <template>
   <div class="tools-page">
-    <!-- Breadcrumb -->
-    <div class="bg-gradient-to-r from-[#0a1628] to-[#162044] py-4">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <nav class="flex items-center text-sm text-blue-300" aria-label="Breadcrumb">
-          <RouterLink to="/" class="hover:text-white transition-colors">
-            <i class="fas fa-home"></i>
+    <!-- Breadcrumb & Header Bar -->
+    <div class="bg-gradient-to-r from-[#0a1628] via-[#111d3a] to-[#162044] py-4 border-b border-white/10">
+      <div class="container">
+        <nav class="flex items-center text-xs text-blue-300 gap-1.5" aria-label="Trilha de navegação">
+          <RouterLink to="/" class="hover:text-white transition-colors flex items-center gap-1">
+            <Icon icon="mdi:home" class="w-3.5 h-3.5" />
+            <span>Início</span>
           </RouterLink>
-          <i class="fas fa-chevron-right text-xs mx-2 text-blue-500"></i>
+          <Icon icon="mdi:chevron-right" class="w-3.5 h-3.5 text-blue-400/60" />
           <span class="text-white font-medium">Ferramentas Digitais</span>
         </nav>
       </div>
     </div>
 
     <!-- Promo Carousel Banner -->
-    <div class="bg-gradient-to-r from-accent-500 to-accent-600 py-3 relative overflow-hidden">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-gradient-to-r from-accent-500 to-accent-600 py-2.5 relative overflow-hidden text-white">
+      <div class="container">
         <div class="flex items-center justify-center">
-          <div class="flex items-center gap-4 text-white text-sm">
-            <button @click="prevPromo" class="p-1 hover:bg-white/20 rounded-full transition-colors" aria-label="Promoção anterior">
-              <i class="fas fa-chevron-left"></i>
+          <div class="flex items-center gap-3 text-xs sm:text-sm">
+            <button @click="prevPromo" class="p-1 hover:bg-white/20 rounded-full transition-colors shrink-0" aria-label="Promoção anterior">
+              <Icon icon="mdi:chevron-left" class="w-4 h-4" />
             </button>
-            <transition name="fade" mode="out-in">
-              <div :key="currentPromo" class="flex items-center gap-3 min-w-0">
-                <i :class="['fas', promos[currentPromo].icon, 'text-lg']"></i>
-                <span class="font-medium whitespace-nowrap">{{ promos[currentPromo].text }}</span>
+            <Transition name="fade" mode="out-in">
+              <div :key="currentPromo" class="flex items-center gap-2.5 min-w-0">
+                <Icon :icon="promos[currentPromo].icon" class="w-4 h-4 text-yellow-200 shrink-0" />
+                <span class="font-medium truncate">{{ promos[currentPromo].text }}</span>
                 <a
                   :href="promos[currentPromo].link"
                   target="_blank"
-                  class="bg-white text-accent-700 px-3 py-1 rounded-full text-xs font-bold hover:bg-gray-100 transition-colors whitespace-nowrap"
+                  rel="noopener noreferrer"
+                  class="bg-white text-accent-700 px-3 py-0.5 rounded-full text-[11px] font-bold hover:bg-gray-100 transition-colors whitespace-nowrap shrink-0 shadow-sm"
                 >
                   {{ promos[currentPromo].cta }}
                 </a>
               </div>
-            </transition>
-            <button @click="nextPromo" class="p-1 hover:bg-white/20 rounded-full transition-colors" aria-label="Próxima promoção">
-              <i class="fas fa-chevron-right"></i>
+            </Transition>
+            <button @click="nextPromo" class="p-1 hover:bg-white/20 rounded-full transition-colors shrink-0" aria-label="Próxima promoção">
+              <Icon icon="mdi:chevron-right" class="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -43,139 +45,148 @@
     </div>
 
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white py-14">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="page-hero relative overflow-hidden">
+      <div class="container relative z-10">
         <div class="max-w-3xl">
-          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-            <i class="fas fa-tools mr-3 text-secondary-300"></i>
-            Ferramentas Digitais Gratuitas
+          <div class="inline-flex items-center gap-2 bg-secondary-500/20 text-secondary-300 border border-secondary-500/30 px-3 py-1 rounded-full text-xs font-semibold mb-4">
+            <Icon icon="mdi:lightning-bolt" class="w-3.5 h-3.5 text-secondary-400" />
+            <span>Suíte Completa • 100% Gratuita & Client-Side</span>
+          </div>
+
+          <h1 class="page-hero-title">
+            Ferramentas Digitais Profissionais
           </h1>
-          <p class="text-lg text-primary-100 mb-8">
-            Mais de 120 ferramentas profissionais online para facilitar seu trabalho diário.
-            Processamento 100% local no seu navegador — privacidade e segurança garantidas.
+
+          <p class="page-hero-subtitle mb-8 max-w-2xl leading-relaxed">
+            Mais de 120 utilitários para otimizar sua rotina: calculadoras financeiras, geradores de dados, conversores e validadores com processamento instantâneo no seu navegador.
           </p>
-          <div class="flex flex-wrap gap-3">
-            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-              <i class="fas fa-shield-alt mr-2 text-green-300"></i>
-              <span class="text-sm font-medium">100% Seguro</span>
+
+          <!-- Badges de Garantias -->
+          <div class="flex flex-wrap gap-2.5">
+            <div class="flex items-center bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg px-3.5 py-1.5 text-xs text-white">
+              <Icon icon="mdi:shield-check" class="w-4 h-4 mr-1.5 text-green-400" />
+              <span>Privacidade Total (Zero Upload)</span>
             </div>
-            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-              <i class="fas fa-bolt mr-2 text-yellow-300"></i>
-              <span class="text-sm font-medium">Rápido e Eficiente</span>
+            <div class="flex items-center bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg px-3.5 py-1.5 text-xs text-white">
+              <Icon icon="mdi:flash" class="w-4 h-4 mr-1.5 text-yellow-400" />
+              <span>Processamento Instantâneo</span>
             </div>
-            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-              <i class="fas fa-gift mr-2 text-pink-300"></i>
-              <span class="text-sm font-medium">Totalmente Gratuito</span>
+            <div class="flex items-center bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg px-3.5 py-1.5 text-xs text-white">
+              <Icon icon="mdi:gift-outline" class="w-4 h-4 mr-1.5 text-pink-300" />
+              <span>Livre de Cadastros</span>
             </div>
-            <div class="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2">
-              <i class="fas fa-mobile-alt mr-2 text-blue-300"></i>
-              <span class="text-sm font-medium">Funciona no Celular</span>
+            <div class="flex items-center bg-white/10 backdrop-blur-sm border border-white/15 rounded-lg px-3.5 py-1.5 text-xs text-white">
+              <Icon icon="mdi:cellphone" class="w-4 h-4 mr-1.5 text-cyan-300" />
+              <span>100% Responsivo</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Busca e Filtros -->
-    <section class="sticky top-0 z-20 bg-white border-b border-gray-200 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-          <!-- Search -->
-          <div class="relative flex-1 w-full">
-            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+    <!-- Busca e Filtros Sticky -->
+    <section class="sticky top-14 md:top-16 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm py-3.5">
+      <div class="container">
+        <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+          <!-- Campo de Busca -->
+          <div class="relative flex-1">
+            <Icon icon="mdi:magnify" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               v-model="searchQuery"
               type="text"
-              placeholder="Buscar ferramentas por nome ou descrição..."
-              class="w-full pl-12 pr-10 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-base"
+              placeholder="Buscar ferramentas por nome, categoria ou utilidade..."
+              class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all shadow-inner"
             />
             <button
               v-if="searchQuery"
               @click="clearSearch"
-              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1"
+              aria-label="Limpar busca"
             >
-              <i class="fas fa-times"></i>
+              <Icon icon="mdi:close-circle" class="w-4 h-4" />
             </button>
           </div>
 
-          <!-- Category filters -->
-          <div class="flex flex-wrap gap-2">
+          <!-- Filtros de Categorias -->
+          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
             <button
               v-for="cat in categoryButtons"
               :key="cat.id"
               :class="[
-                'px-3 py-2 rounded-full text-sm font-medium transition-all border whitespace-nowrap',
+                'px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border whitespace-nowrap flex items-center gap-1.5',
                 selectedCategory === cat.id
-                  ? 'bg-primary-600 text-white border-primary-600'
-                  : 'bg-white text-gray-600 border-gray-300 hover:border-primary-400 hover:text-primary-600',
+                  ? 'bg-primary-600 text-white border-primary-600 shadow-sm'
+                  : 'bg-white text-gray-700 border-gray-300 hover:border-primary-400 hover:text-primary-600',
               ]"
               @click="selectCategory(cat.id)"
             >
-              <i :class="['fas', cat.icon, 'mr-1']"></i>
-              {{ cat.name }}
+              <Icon :icon="cat.icon" class="w-3.5 h-3.5" />
+              <span>{{ cat.name }}</span>
             </button>
           </div>
         </div>
 
-        <!-- Search result count -->
-        <div v-if="searchQuery" class="mt-2 text-sm text-gray-600">
-          <span v-if="filteredTools.length > 0">
-            <i class="fas fa-check-circle text-green-500 mr-1"></i>
+        <!-- Indicador de Resultados da Busca -->
+        <div v-if="searchQuery" class="mt-2.5 text-xs text-gray-600 flex items-center gap-1.5">
+          <span v-if="filteredTools.length > 0" class="text-green-700 font-medium flex items-center gap-1">
+            <Icon icon="mdi:check-circle" class="w-4 h-4 text-green-600" />
             {{ filteredTools.length }} ferramenta(s) encontrada(s)
           </span>
-          <span v-else class="text-red-500">
-            <i class="fas fa-exclamation-circle mr-1"></i>
+          <span v-else class="text-red-600 font-medium flex items-center gap-1">
+            <Icon icon="mdi:alert-circle" class="w-4 h-4 text-red-500" />
             Nenhuma ferramenta encontrada para "{{ searchQuery }}"
           </span>
         </div>
       </div>
     </section>
 
-    <!-- Estatísticas -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+    <!-- Cards Métricos de Categorias -->
+    <section class="container py-8">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
         <div
           v-for="(info, key) in store.categoryInfo"
           :key="key"
-          class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center hover:shadow-md hover:border-primary-200 transition-all cursor-pointer"
-          :class="{ 'ring-2 ring-primary-500 border-primary-500': selectedCategory === key }"
+          class="bg-white rounded-xl border border-gray-100 shadow-sm p-4 text-center hover:shadow-md hover:border-primary-300 transition-all cursor-pointer group"
+          :class="{ 'ring-2 ring-primary-500 border-primary-500 bg-primary-50/20': selectedCategory === key }"
           @click="selectCategory(key as string)"
         >
-          <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-primary-50 flex items-center justify-center">
-            <i :class="['fas', info.icon, 'text-primary-600']"></i>
+          <div class="w-10 h-10 mx-auto mb-2 rounded-lg bg-primary-50 text-primary-600 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
+            <i :class="['fas', info.icon, 'text-base']"></i>
           </div>
-          <p class="text-2xl font-bold text-gray-900">{{ info.total }}</p>
-          <p class="text-xs text-gray-500">{{ info.title }}</p>
+          <p class="text-xl font-extrabold text-gray-900 leading-tight">{{ info.total }}</p>
+          <p class="text-[11px] text-gray-500 font-medium">{{ info.title }}</p>
         </div>
       </div>
     </section>
 
-    <!-- Ferramentas Grid -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-      <!-- Modo filtrado -->
+    <!-- Grid de Ferramentas -->
+    <section class="container pb-16">
+      <!-- Modo Filtrado / Busca -->
       <div v-if="searchQuery || selectedCategory !== 'all'">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           <ToolCard v-for="tool in filteredTools" :key="tool.id" :tool="tool" />
         </div>
       </div>
 
-      <!-- Modo agrupado por categoria -->
-      <div v-else>
+      <!-- Modo Agrupado por Categoria -->
+      <div v-else class="space-y-12">
         <div
           v-for="(categoryTools, category) in store.toolsByCategory"
           :key="category"
           :id="`category-${category}`"
-          class="mb-12 scroll-mt-24"
+          class="scroll-mt-36"
         >
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 rounded-lg bg-primary-100 flex items-center justify-center">
-              <i :class="['fas', store.categoryInfo[category]?.icon || 'fa-folder', 'text-primary-600']"></i>
+          <div class="flex items-center justify-between border-b border-gray-200 pb-3 mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-primary-100 text-primary-700 flex items-center justify-center">
+                <i :class="['fas', store.categoryInfo[category]?.icon || 'fa-folder', 'text-sm']"></i>
+              </div>
+              <h2 class="text-xl font-bold text-gray-900">
+                {{ store.categoryInfo[category]?.title || category }}
+              </h2>
             </div>
-            <h2 class="text-2xl font-bold text-gray-900">
-              {{ store.categoryInfo[category]?.title || category }}
-            </h2>
-            <span class="px-3 py-1 text-sm font-medium rounded-full bg-primary-50 text-primary-700">
-              {{ categoryTools.length }}
+            <span class="px-3 py-1 text-xs font-bold rounded-full bg-primary-50 text-primary-700 border border-primary-100">
+              {{ categoryTools.length }} utilitários
             </span>
           </div>
 
@@ -186,120 +197,28 @@
       </div>
     </section>
 
-    <!-- CTA Section: Indique e Ganhe -->
-    <section class="bg-gradient-to-r from-secondary-500 to-secondary-700 py-10">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <div class="flex items-center justify-center gap-2 mb-3">
-          <i class="fas fa-gift text-2xl text-yellow-300"></i>
-          <h2 class="text-2xl font-bold">Indique e Ganhe!</h2>
-          <i class="fas fa-star text-2xl text-yellow-300"></i>
-        </div>
-        <p class="text-secondary-100 mb-6">
-          Indique amigos para a 3W Online e ganhe créditos nos nossos serviços. Quanto mais indicar, mais você ganha!
+    <!-- CTA: Soluções Comerciais da 3W Online -->
+    <section class="cta-section">
+      <div class="container text-center">
+        <span class="text-xs font-semibold text-secondary-400 uppercase tracking-wider block mb-2">Engenharia & Soluções Sob Medida</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">Gostou das ferramentas? Construímos seu sistema personalizado!</h2>
+        <p class="text-sm text-blue-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+          Além das ferramentas gratuitas, criamos plataformas web, CRMs, ERPs sob medida e sites de alta performance para seu negócio.
         </p>
-        <a
-          href="https://wa.me/5541996924829?text=Ol%C3%A1!%20Quero%20participar%20do%20programa%20Indique%20e%20Ganhe."
-          target="_blank"
-          class="inline-flex items-center gap-2 bg-white text-secondary-700 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
-        >
-          <i class="fab fa-whatsapp text-lg"></i>
-          Quero indicar agora
-        </a>
-      </div>
-    </section>
-
-    <!-- Serviços da 3W Online -->
-    <section class="py-14 bg-gray-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-10">
-          <span class="text-xs font-semibold text-primary-600 uppercase tracking-wider mb-2 block">Nossos Serviços</span>
-          <h2 class="text-3xl font-bold text-gray-900 mb-3">
-            Potencialize seus resultados com a 3W Online
-          </h2>
-          <p class="text-gray-600 max-w-2xl mx-auto">
-            Além das ferramentas gratuitas, oferecemos soluções completas de marketing digital,
-            desenvolvimento web e automação com inteligência artificial.
-          </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
-            <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mb-4">
-              <i class="fas fa-globe text-blue-600 text-xl"></i>
-            </div>
-            <h4 class="font-bold text-gray-900 mb-2">Criação de Sites</h4>
-            <p class="text-sm text-gray-600 mb-4">Sites profissionais, responsivos e otimizados para SEO. Design exclusivo.</p>
-            <a href="https://wa.me/5541996924829?text=Quero%20um%20or%C3%A7amento%20para%20cria%C3%A7%C3%A3o%20de%20site." target="_blank" class="text-blue-600 hover:text-blue-700 text-sm font-semibold inline-flex items-center gap-1">
-              Solicitar orçamento <i class="fas fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-
-          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
-            <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-4">
-              <i class="fas fa-bullhorn text-green-600 text-xl"></i>
-            </div>
-            <h4 class="font-bold text-gray-900 mb-2">Marketing Digital</h4>
-            <p class="text-sm text-gray-600 mb-4">Redes sociais, Google Ads, Meta Ads. ROI comprovado. A partir de R$ 500/mês.</p>
-            <a href="https://wa.me/5541996924829?text=Quero%20saber%20sobre%20marketing%20digital." target="_blank" class="text-green-600 hover:text-green-700 text-sm font-semibold inline-flex items-center gap-1">
-              Ver planos <i class="fas fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-
-          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
-            <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center mb-4">
-              <i class="fas fa-robot text-purple-600 text-xl"></i>
-            </div>
-            <h4 class="font-bold text-gray-900 mb-2">Automação com IA</h4>
-            <p class="text-sm text-gray-600 mb-4">Chatbots GPT, atendimento 24h, automação WhatsApp e fluxos inteligentes.</p>
-            <a href="https://wa.me/5541996924829?text=Quero%20automatizar%20com%20IA." target="_blank" class="text-purple-600 hover:text-purple-700 text-sm font-semibold inline-flex items-center gap-1">
-              Automatizar agora <i class="fas fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-
-          <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:-translate-y-1 transition-all">
-            <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-4">
-              <i class="fas fa-code text-orange-600 text-xl"></i>
-            </div>
-            <h4 class="font-bold text-gray-900 mb-2">Sistemas Web</h4>
-            <p class="text-sm text-gray-600 mb-4">CRM, ERP, plataformas SaaS e sistemas sob medida para seu negócio.</p>
-            <a href="https://wa.me/5541996924829?text=Quero%20um%20sistema%20web%20sob%20medida." target="_blank" class="text-orange-600 hover:text-orange-700 text-sm font-semibold inline-flex items-center gap-1">
-              Saber mais <i class="fas fa-arrow-right text-xs"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="bg-gradient-to-br from-[#0a1628] via-[#111d3a] to-[#162044] py-14">
-      <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-        <h2 class="text-2xl md:text-3xl font-bold mb-3">
-          Transforme seu negócio com soluções digitais
-        </h2>
-        <p class="text-blue-200 mb-8">
-          A 3W Online é especialista em marketing digital, desenvolvimento web e automação com IA em Curitiba. Mais de 5 anos e 150+ projetos entregues.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a
-            href="https://wa.me/5541996924829?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20gratuito."
-            target="_blank"
-            class="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-8 py-3.5 rounded-lg transition-colors shadow-lg"
-          >
-            <i class="fab fa-whatsapp text-xl"></i>
-            Orçamento Gratuito
-          </a>
-          <RouterLink
-            to="/servicos"
-            class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-lg transition-colors border border-white/20"
-          >
-            <i class="fas fa-list-check"></i>
-            Conheça nossos serviços
+        <div class="flex flex-col sm:flex-row gap-3.5 justify-center">
+          <RouterLink to="/servicos/criacao-sistemas" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-sm font-bold shadow-lg">
+            Conhecer Sistemas Sob Medida
           </RouterLink>
+          <a
+            href="https://wa.me/5541996924829?text=Olá! Gostaria de um orçamento para desenvolvimento de software."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-secondary text-sm font-bold shadow-lg"
+          >
+            <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-2" />
+            Falar no WhatsApp
+          </a>
         </div>
-        <p class="text-blue-300 text-sm mt-6">
-          <i class="fas fa-phone-alt mr-1"></i> (41) 99692-4829 &nbsp;|&nbsp;
-          <i class="fas fa-envelope mr-1"></i> contato@3wonline.com.br
-        </p>
       </div>
     </section>
   </div>
@@ -307,6 +226,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { Icon } from '@iconify/vue'
 import { useToolsStore } from '@/stores/tools'
 import ToolCard from '@/components/tools/common/ToolCard.vue'
 
@@ -318,20 +238,20 @@ const currentPromo = ref(0)
 let promoInterval: ReturnType<typeof setInterval> | null = null
 
 const promos = [
-  { icon: 'fa-star', text: '🎁 Sites profissionais a partir de R$ 997', cta: 'SAIBA MAIS', link: 'https://wa.me/5541996924829?text=Quero%20criar%20um%20site%20profissional.' },
-  { icon: 'fa-rocket', text: '🚀 Gestão de Marketing + Anúncios por R$ 500/mês', cta: 'EU QUERO!', link: 'https://wa.me/5541996924829?text=Quero%20saber%20sobre%20marketing%20digital.' },
-  { icon: 'fa-robot', text: '🤖 Automação WhatsApp com IA — Atendimento 24h', cta: 'VER MAIS', link: 'https://wa.me/5541996924829?text=Quero%20automação%20WhatsApp%20com%20IA.' },
-  { icon: 'fa-gift', text: '⭐ Indique amigos e ganhe créditos nos nossos serviços!', cta: 'INDICAR', link: 'https://wa.me/5541996924829?text=Quero%20participar%20do%20Indique%20e%20Ganhe.' },
+  { icon: 'mdi:web', text: '🎁 Sites Profissionais a partir de R$ 997', cta: 'VER PLANOS', link: 'https://wa.me/5541996924829?text=Quero%20criar%20um%20site%20profissional.' },
+  { icon: 'mdi:chart-line', text: '🚀 Gestão de Tráfego + Redes Sociais por R$ 500/mês', cta: 'APROVEITAR', link: 'https://wa.me/5541996924829?text=Quero%20saber%20sobre%20marketing%20digital.' },
+  { icon: 'mdi:robot', text: '🤖 Automação WhatsApp com IA — Atendimento 24/7', cta: 'TESTAR', link: 'https://wa.me/5541996924829?text=Quero%20automação%20WhatsApp%20com%20IA.' },
+  { icon: 'mdi:handshake', text: '⭐ Indique parceiros e ganhe bônus em serviços digitais!', cta: 'INDIQUE', link: 'https://wa.me/5541996924829?text=Quero%20participar%20do%20Indique%20e%20Ganhe.' },
 ]
 
 const categoryButtons = [
-  { id: 'all', name: 'Todas', icon: 'fa-th-large' },
-  { id: 'calculadoras', name: 'Calculadoras', icon: 'fa-calculator' },
-  { id: 'geradores', name: 'Geradores', icon: 'fa-wand-magic-sparkles' },
-  { id: 'conversores', name: 'Conversores', icon: 'fa-arrows-rotate' },
-  { id: 'validadores', name: 'Validadores', icon: 'fa-check-circle' },
-  { id: 'simuladores', name: 'Simuladores', icon: 'fa-chart-line' },
-  { id: 'texto', name: 'Texto', icon: 'fa-text-height' },
+  { id: 'all', name: 'Todas (120+)', icon: 'mdi:view-grid-outline' },
+  { id: 'calculadoras', name: 'Calculadoras', icon: 'mdi:calculator' },
+  { id: 'geradores', name: 'Geradores', icon: 'mdi:wand-shining' },
+  { id: 'conversores', name: 'Conversores', icon: 'mdi:swap-horizontal' },
+  { id: 'validadores', name: 'Validadores', icon: 'mdi:checkbox-marked-circle-outline' },
+  { id: 'simuladores', name: 'Simuladores', icon: 'mdi:chart-timeline-variant' },
+  { id: 'texto', name: 'Texto & OCR', icon: 'mdi:format-text' },
 ]
 
 const filteredTools = computed(() => {
@@ -388,7 +308,7 @@ onUnmounted(() => {
 <style scoped>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 .fade-enter-from,
 .fade-leave-to {

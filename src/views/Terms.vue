@@ -1,131 +1,153 @@
 <template>
-  <div>
-    <!-- Hero Section -->
-    <section class="page-hero">
-      <div class="container">
-        <div class="breadcrumb">
-          <router-link to="/">Home</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <span>Termos de Uso</span>
+  <div class="terms-page">
+    <!-- Hero Section — Dark Navy -->
+    <section class="page-hero relative overflow-hidden">
+      <div class="container relative z-10">
+        <AppBreadcrumb :items="[{ label: 'Início', path: '/' }, { label: 'Termos de Uso' }]" />
+
+        <div class="max-w-3xl mt-4">
+          <div class="inline-flex items-center gap-2 bg-primary-500/20 text-blue-200 border border-primary-500/30 px-3.5 py-1 rounded-full text-xs font-semibold mb-4">
+            <Icon icon="mdi:file-document-outline" class="w-3.5 h-3.5 text-secondary-400" />
+            <span>Condições Gerais de Contratação & Utilização</span>
+          </div>
+
+          <h1 class="page-hero-title">
+            Termos de Uso & Serviços
+          </h1>
+          <p class="page-hero-subtitle">
+            Regras, diretrizes e responsabilidades que regem o acesso ao portal e a contratação dos serviços do Grupo 3W Online.
+          </p>
         </div>
-        <h1 class="page-hero-title">Termos de Uso</h1>
-        <p class="page-hero-subtitle">
-          Condições gerais para utilização dos nossos serviços
-        </p>
       </div>
     </section>
-    
+
     <!-- Content Section -->
-    <section class="section-padding">
+    <section class="section-padding bg-slate-50/50">
       <div class="container">
-        <div class="max-w-4xl mx-auto prose prose-lg">
-          <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-            <p class="text-blue-800 mb-0">
-              <strong>Última atualização:</strong> Janeiro de 2024
-            </p>
+        <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl border border-gray-100 shadow-sm">
+          <div class="bg-primary-50 border border-primary-100 rounded-xl p-4 mb-8 flex items-start gap-3">
+            <Icon icon="mdi:information-outline" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
+            <div class="text-xs text-primary-900 leading-relaxed">
+              <strong>Vigência:</strong> Atualizado em Agosto de 2024.<br />
+              Ao navegar neste portal ou contratar quaisquer serviços da <strong>3W Online Soluções Digitais</strong>, você declara ter lido e concordado com as condições descritas abaixo.
+            </div>
           </div>
-          
-          <h2>1. Aceitação dos Termos</h2>
-          <p>
-            Ao acessar e utilizar os serviços da 3W Online, você concorda em cumprir 
-            e estar vinculado a estes Termos de Uso. Se você não concordar com qualquer 
-            parte destes termos, não deve utilizar nossos serviços.
-          </p>
-          
-          <h2>2. Descrição dos Serviços</h2>
-          <p>A 3W Online oferece os seguintes serviços:</p>
-          <ul>
-            <li>Gestão de Redes Sociais</li>
-            <li>Gestão de Anúncios Digitais</li>
-            <li>Criação e Desenvolvimento de Sites</li>
-            <li>Desenvolvimento de Aplicativos</li>
-            <li>Consultoria em Marketing Digital</li>
-            <li>Design Gráfico e Identidade Visual</li>
-            <li>Outros serviços relacionados ao marketing digital</li>
-          </ul>
-          
-          <h2>3. Responsabilidades do Cliente</h2>
-          <p>O cliente se compromete a:</p>
-          <ul>
-            <li>Fornecer informações verdadeiras e atualizadas</li>
-            <li>Colaborar com o fornecimento de materiais necessários</li>
-            <li>Respeitar os prazos acordados para aprovações</li>
-            <li>Efetuar os pagamentos conforme acordado</li>
-            <li>Não utilizar os serviços para atividades ilegais</li>
-            <li>Respeitar direitos autorais e propriedade intelectual</li>
-          </ul>
-          
-          <h2>4. Responsabilidades da 3W Online</h2>
-          <p>A 3W Online se compromete a:</p>
-          <ul>
-            <li>Prestar os serviços com qualidade e profissionalismo</li>
-            <li>Cumprir os prazos acordados</li>
-            <li>Manter confidencialidade das informações do cliente</li>
-            <li>Fornecer suporte técnico adequado</li>
-            <li>Respeitar as diretrizes das plataformas utilizadas</li>
-          </ul>
-          
-          <h2>5. Propriedade Intelectual</h2>
-          <p>
-            Todos os materiais criados pela 3W Online, incluindo designs, códigos, 
-            estratégias e conteúdos, são de propriedade da empresa, salvo acordo 
-            específico em contrário. O cliente recebe licença de uso conforme 
-            especificado no contrato de prestação de serviços.
-          </p>
-          
-          <h2>6. Pagamentos e Cancelamentos</h2>
-          <p>
-            Os valores e condições de pagamento são estabelecidos em contrato específico. 
-            O cancelamento de serviços deve seguir as condições previstas no contrato, 
-            respeitando eventuais períodos de aviso prévio.
-          </p>
-          
-          <h2>7. Limitação de Responsabilidade</h2>
-          <p>
-            A 3W Online não se responsabiliza por danos indiretos, lucros cessantes 
-            ou prejuízos decorrentes de fatores externos ao seu controle, como 
-            mudanças em algoritmos de plataformas, instabilidades técnicas de terceiros 
-            ou decisões de moderação de conteúdo.
-          </p>
-          
-          <h2>8. Confidencialidade</h2>
-          <p>
-            Todas as informações compartilhadas entre as partes serão tratadas como 
-            confidenciais e não serão divulgadas a terceiros sem autorização expressa, 
-            exceto quando exigido por lei.
-          </p>
-          
-          <h2>9. Modificações dos Termos</h2>
-          <p>
-            A 3W Online reserva-se o direito de modificar estes termos a qualquer momento. 
-            As alterações entrarão em vigor imediatamente após a publicação no site. 
-            É responsabilidade do usuário verificar periodicamente os termos atualizados.
-          </p>
-          
-          <h2>10. Resolução de Conflitos</h2>
-          <p>
-            Eventuais conflitos serão resolvidos preferencialmente por negociação direta. 
-            Caso não seja possível, será aplicada a legislação brasileira e o foro 
-            competente será o da comarca de Curitiba, PR.
-          </p>
-          
-          <h2>11. Disposições Gerais</h2>
-          <p>
-            Estes termos constituem o acordo completo entre as partes em relação ao 
-            uso dos serviços. A invalidade de qualquer cláusula não afetará a validade 
-            das demais disposições.
-          </p>
-          
-          <h2>12. Contato</h2>
-          <p>
-            Para dúvidas sobre estes termos ou nossos serviços, entre em contato:
-          </p>
-          <ul>
-            <li><strong>E-mail:</strong> contato@3wonline.com.br</li>
-            <li><strong>Telefone:</strong> (41) 99692-4829</li>
-            <li><strong>Endereço:</strong> Curitiba, PR</li>
-            <li><strong>CNPJ:</strong> 25.530.623/0001-05</li>
-          </ul>
+
+          <div class="space-y-8 text-xs sm:text-sm text-gray-700 leading-relaxed">
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Icon icon="mdi:check-decagram-outline" class="w-5 h-5 text-primary-600" />
+                1. Aceitação e Objeto
+              </h2>
+              <p>
+                Estes Termos de Uso estabelecem as regras para navegação no website da 3W Online e contratação de serviços de desenvolvimento de software, criação de sites, sistemas sob medida, gestão de tráfego pago (Google/Meta Ads), gestão de redes sociais, consultoria e automação com inteligência artificial.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Icon icon="mdi:briefcase-outline" class="w-5 h-5 text-primary-600" />
+                2. Contratação e Prestação de Serviços
+              </h2>
+              <p class="mb-3">A prestação de qualquer serviço sob medida é regida por Proposta Comercial e/ou Contrato Específico, que definirá detalhadamente:</p>
+              <ul class="list-disc list-inside space-y-1.5 pl-2 text-gray-600">
+                <li><strong>Escopo Técnico:</strong> Funcionalidades, páginas, integrações ou periodicidade de campanhas contratadas.</li>
+                <li><strong>Cronograma de Entrega:</strong> Prazos estimados com base no envio tempestivo de materiais e aprovações pelo contratante.</li>
+                <li><strong>Garantia de Funcionamento:</strong> Suporte corretivo e manutenção inicial após a entrega e publicação do projeto.</li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Icon icon="mdi:account-check-outline" class="w-5 h-5 text-primary-600" />
+                3. Responsabilidades das Partes
+              </h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
+                <div class="p-4 bg-slate-50 rounded-xl border border-gray-100">
+                  <p class="font-bold text-gray-900 mb-2 text-xs">Compromissos da 3W Online:</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-600 text-xs">
+                    <li>Executar os serviços com alto padrão técnico e código limpo;</li>
+                    <li>Manter sigilo e proteção de dados (LGPD);</li>
+                    <li>Cumprir os prazos acordados no escopo;</li>
+                    <li>Prestar suporte e esclarecimentos operacionais.</li>
+                  </ul>
+                </div>
+                <div class="p-4 bg-slate-50 rounded-xl border border-gray-100">
+                  <p class="font-bold text-gray-900 mb-2 text-xs">Compromissos do Cliente:</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-600 text-xs">
+                    <li>Fornecer briefing, acessos e textos necessários;</li>
+                    <li>Validar e aprovar entregas dentro dos prazos;</li>
+                    <li>Honrar as datas de pagamento acordadas;</li>
+                    <li>Garantir a legalidade dos conteúdos veiculados.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Icon icon="mdi:copyright" class="w-5 h-5 text-primary-600" />
+                4. Propriedade Intelectual e Código-Fonte
+              </h2>
+              <p>
+                Após a quitação integral dos valores contratados, todos os direitos sobre designs finais, identidades visuais e aplicações sob medida desenvolvidas com exclusividade são transferidos para o cliente contratante. A 3W Online preserva o direito de utilizar bibliotecas proprietárias reutilizáveis e incluir o projeto em seus canais de demonstração técnica, salvo acordo prévio de confidencialidade (NDA).
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Icon icon="mdi:tools" class="w-5 h-5 text-primary-600" />
+                5. Suíte de Ferramentas Gratuitas Client-Side
+              </h2>
+              <p>
+                A 3W Online disponibiliza gratuitamente mais de 120 ferramentas online (calculadoras, conversores, validadores e geradores) no modelo <em>"as-is"</em> (no estado em que se encontram). As ferramentas são executadas exclusivamente no navegador do usuário para fins de conveniência e produtividade, sem garantia explícita de aplicação jurídica ou financeira vinculante.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Icon icon="mdi:shield-lock-outline" class="w-5 h-5 text-primary-600" />
+                6. Privacidade e Proteção Global de Dados
+              </h2>
+              <p>
+                O tratamento de dados pessoais coletados no portal ou durante a prestação de serviços rege-se pela nossa <RouterLink to="/privacidade" class="text-primary-600 font-bold underline">Política de Privacidade Global</RouterLink>, em estrita observância à LGPD (Brasil), GDPR (União Europeia), CCPA/CPRA (EUA) e POPIA (África do Sul). Os usuários podem gerenciar suas preferências ou exercer seus direitos a qualquer momento.
+              </p>
+            </div>
+
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <Icon icon="mdi:scale-balance" class="w-5 h-5 text-primary-600" />
+                7. Foro de Eleição
+              </h2>
+              <p>
+                Fica eleito o Foro da Comarca de Curitiba, Estado do Paraná, como o único competente para dirimir quaisquer dúvidas ou litígios decorrentes destes Termos de Uso ou de serviços prestados, com expressa renúncia a qualquer outro, por mais privilegiado que seja.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA — Dark Navy -->
+    <section class="cta-section">
+      <div class="container text-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">Pronto para formalizar sua proposta com a 3W Online?</h2>
+        <p class="text-sm text-blue-200 mb-6 max-w-xl mx-auto">
+          Entre em contato e solicite um escopo detalhado e transparente para o seu projeto.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3.5 justify-center">
+          <RouterLink to="/contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
+            Solicitar Proposta Comercial
+          </RouterLink>
+          <a
+            href="https://wa.me/5541996924829?text=Olá! Gostaria de esclarecer dúvidas sobre os Termos de Serviço."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-secondary text-xs sm:text-sm font-bold shadow-lg"
+          >
+            <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-1.5" />
+            WhatsApp Comercial
+          </a>
         </div>
       </div>
     </section>
@@ -133,23 +155,15 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronRightIcon } from '@heroicons/vue/24/outline'
+import { Icon } from '@iconify/vue'
+import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import { useSeo } from '@/composables/useSeo'
+
+const { applySeo } = useSeo()
+applySeo({
+  title: 'Termos de Uso | 3W Online - Condições Gerais de Serviços',
+  description: 'Leia os Termos de Uso da 3W Online: diretrizes de prestação de serviços, desenvolvimento de software, propriedade intelectual e responsabilidades.',
+  path: '/termos',
+  keywords: 'termos de uso 3w online, contrato de prestação de serviços, termos legais tecnologia',
+})
 </script>
-
-<style scoped>
-.prose h2 {
-  @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
-}
-
-.prose p {
-  @apply text-gray-600 mb-4;
-}
-
-.prose ul {
-  @apply list-disc list-inside text-gray-600 mb-4 space-y-1;
-}
-
-.prose li {
-  @apply ml-4;
-}
-</style>

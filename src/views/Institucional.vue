@@ -1,629 +1,303 @@
 <template>
-  <div>
-    <!-- Hero Section -->
-    <section class="page-hero">
-      <div class="container">
-        <div class="breadcrumb">
-          <router-link to="/">Home</router-link>
-          <ChevronRightIcon class="w-4 h-4 breadcrumb-separator" />
-          <span>Institucional</span>
+  <div class="institucional-page">
+    <!-- Hero Section — Dark Navy -->
+    <section class="page-hero relative overflow-hidden">
+      <div class="container relative z-10">
+        <AppBreadcrumb :items="[{ label: 'Início', path: '/' }, { label: 'Institucional' }]" />
+
+        <div class="max-w-3xl mt-4">
+          <div class="inline-flex items-center gap-2 bg-primary-500/20 text-blue-200 border border-primary-500/30 px-3.5 py-1 rounded-full text-xs font-semibold mb-4">
+            <Icon icon="mdi:shield-account" class="w-3.5 h-3.5 text-secondary-400" />
+            <span>Governança, Conformidade & Transparência</span>
+          </div>
+
+          <h1 class="page-hero-title">
+            Grupo 3W Online Soluções Digitais
+          </h1>
+          <p class="page-hero-subtitle">
+            Transformando negócios através da engenharia de software, inteligência artificial e marketing digital de alta performance desde 2019.
+          </p>
+
+          <div class="flex flex-wrap gap-3.5 mt-6">
+            <RouterLink to="/contato" class="btn-primary text-xs sm:text-sm shadow-lg">
+              <Icon icon="mdi:email-fast-outline" class="w-4 h-4 mr-1.5" />
+              Falar com a Diretoria
+            </RouterLink>
+            <a
+              href="https://wa.me/5541996924829?text=Olá! Gostaria de conversar com a 3W Online."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-secondary text-xs sm:text-sm shadow-lg"
+            >
+              <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-1.5" />
+              Canal WhatsApp Corporativo
+            </a>
+          </div>
         </div>
-        <h1 class="page-hero-title">3W Online</h1>
-        <p class="page-hero-subtitle">
-          Transformando negócios através da tecnologia e marketing digital desde 2019
-        </p>
       </div>
     </section>
-    
-    <!-- Company Overview -->
-    <section class="section-padding">
+
+    <!-- Visão Geral Institucional -->
+    <section class="section-padding bg-white">
       <div class="container">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 class="section-title">Mais do que uma Agência de Marketing e Software</h2>
-            <p class="text-lg text-gray-600 mb-6">
-              No GRUPO 3W ONLINE, acreditamos que a inovação nasce da coragem de desafiar o convencional e explorar o novo. Nossa missão é impulsionar a mudança e oferecer ferramentas para gerar impacto duradouro. Somos uma força criativa, especializada em soluções digitais, com o compromisso de levar os negócios de nossos clientes a um novo patamar.
+            <span class="section-label">Quem Somos</span>
+            <h2 class="section-title">Mais do que uma Agência: Sua Parceira de Engenharia & Crescimento</h2>
+            <p class="text-sm text-gray-600 leading-relaxed mb-4">
+              No <strong>Grupo 3W Online</strong>, acreditamos que a inovação nasce da coragem de desafiar o convencional e explorar novas tecnologias com rigor técnico. Nossa missão é impulsionar a mudança sustentável e fornecer ferramentas digitais de alto impacto para empresas em todo o Brasil.
             </p>
-            <p class="text-lg text-gray-600 mb-8">
-              O Grupo 3W Online iniciou as atividades em 2020 com a missão de impulsionar o crescimento de empresas locais no ambiente digital. Desde então, temos conquistado resultados excepcionais para nossos clientes, construindo uma trajetória de sucesso marcada pela inovação e compromisso.
+            <p class="text-sm text-gray-600 leading-relaxed mb-4">
+              Iniciamos nossas atividades em 2019 em Curitiba com foco em desenvolvimento web e campanhas de conversão. Ao longo dessa jornada, evoluímos para uma software house moderna e agência full service, entregando mais de 150 projetos de alta complexidade.
             </p>
-            <p class="text-lg text-gray-600 mb-8">
-              Nosso foco é oferecer soluções digitais eficientes, criando não apenas marcas, mas parcerias duradouras que geram resultados consistentes. Se você busca uma agência de marketing e software que vai além do convencional, a 3W Online é a escolha ideal para levar seu negócio ao próximo nível.
+            <p class="text-sm text-gray-600 leading-relaxed mb-6">
+              Nosso compromisso é com parcerias duradouras, métricas transparentes e total conformidade com as legislações brasileiras e padrões de segurança de dados.
             </p>
-            <p class="text-lg text-gray-600 mb-8">
-              Explore nosso site para conhecer nossos serviços e descobrir como podemos ajudá-lo a alcançar seus objetivos. Seja bem-vindo à nossa jornada de transformação digital!
-            </p>
-            
-            <!-- Company Stats -->
-            <div class="grid grid-cols-2 gap-6">
-              <div class="text-center">
-                <div class="text-3xl font-bold text-primary-600 mb-2">150+</div>
-                <div class="text-gray-600">Projetos Entregues</div>
+
+            <!-- Métricas Principais -->
+            <div class="grid grid-cols-3 gap-4 border-t border-gray-100 pt-6">
+              <div class="text-center p-3 bg-slate-50 rounded-xl border border-gray-100">
+                <div class="text-2xl sm:text-3xl font-extrabold text-primary-600">150+</div>
+                <div class="text-[11px] text-gray-500 font-medium">Projetos Entregues</div>
               </div>
-              <div class="text-center">
-                <div class="text-3xl font-bold text-primary-600 mb-2">5+</div>
-                <div class="text-gray-600">Anos de Experiência</div>
+              <div class="text-center p-3 bg-slate-50 rounded-xl border border-gray-100">
+                <div class="text-2xl sm:text-3xl font-extrabold text-primary-600">5+</div>
+                <div class="text-[11px] text-gray-500 font-medium">Anos de Atuação</div>
+              </div>
+              <div class="text-center p-3 bg-slate-50 rounded-xl border border-gray-100">
+                <div class="text-2xl sm:text-3xl font-extrabold text-primary-600">98%</div>
+                <div class="text-[11px] text-gray-500 font-medium">Aprovação de Clientes</div>
               </div>
             </div>
           </div>
-          
-          <div>
+
+          <div class="relative">
             <img
-              src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Equipe 3W Online"
-              class="w-full h-auto rounded-lg shadow-lg"
+              src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800"
+              alt="Ambiente Corporativo 3W Online"
+              class="w-full h-auto rounded-2xl shadow-xl border border-gray-100"
+              loading="lazy"
+              width="800"
+              height="533"
             />
           </div>
         </div>
       </div>
     </section>
-    
-    <!-- What Makes Us Exceptional Section -->
-    <section class="section-padding bg-gray-50">
+
+    <!-- Pilares Fundamentais: Missão, Visão e Valores -->
+    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
       <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Descubra o que nos torna excepcionais</h2>
-          <p class="section-subtitle">Os diferenciais que fazem da 3W Online sua melhor escolha</p>
-        </div>
-        
-        <div class="space-y-12">
-          <!-- Compromisso com Resultados -->
-          <div class="flex items-start space-x-6">
-            <div class="flex-shrink-0">
-              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                <ChartBarIcon class="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                ✅ Compromisso com Resultados Tangíveis
-              </h3>
-              <p class="text-lg text-gray-600">
-                Não nos contentamos com o "bom o suficiente". Aqui na 3W Online, nossa missão é impulsionar o sucesso de nossos clientes através de estratégias e campanhas que geram resultados reais e mensuráveis. Não apenas criamos anúncios bonitos, mas sim soluções que convertem e impulsionam o crescimento do seu negócio.
-              </p>
-            </div>
-          </div>
-          
-          <!-- Equipe Especializada -->
-          <div class="flex items-start space-x-6">
-            <div class="flex-shrink-0">
-              <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-                <UserGroupIcon class="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                👥 Equipe de Especialistas Apaixonados
-              </h3>
-              <p class="text-lg text-gray-600">
-                Por trás de cada projeto de sucesso, há uma equipe dedicada e apaixonada. Na 3W Online, reunimos os melhores talentos da indústria, cada um trazendo uma perspectiva única e habilidades excepcionais para a mesa. Nossa paixão pelo que fazemos transparece em cada pixel de design, em cada linha de código e em cada estratégia de marketing concebida para nossos clientes.
-              </p>
-            </div>
-          </div>
-          
-          <!-- Inovação -->
-          <div class="flex items-start space-x-6">
-            <div class="flex-shrink-0">
-              <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-                <LightBulbIcon class="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                🚀 Inovação Constante
-              </h3>
-              <p class="text-lg text-gray-600">
-                O mundo digital está em constante evolução, e nós estamos na vanguarda dessa mudança. Na 3W Online, abraçamos a inovação como parte do nosso DNA. Estamos sempre explorando novas tecnologias, tendências e estratégias para garantir que nossos clientes estejam um passo à frente da concorrência.
-              </p>
-            </div>
-          </div>
-          
-          <!-- Personalização -->
-          <div class="flex items-start space-x-6">
-            <div class="flex-shrink-0">
-              <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center">
-                <CogIcon class="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                🎯 Personalização Sob Medida
-              </h3>
-              <p class="text-lg text-gray-600">
-                Entendemos que cada negócio é único, e não existe uma solução universal. É por isso que nos dedicamos a entender profundamente as necessidades e os objetivos de cada cliente. Na 3W Online, não oferecemos soluções genéricas, mas sim estratégias personalizadas que se alinham perfeitamente com as expectativas e metas específicas de cada cliente.
-              </p>
-            </div>
-          </div>
-          
-          <!-- Transparência -->
-          <div class="flex items-start space-x-6">
-            <div class="flex-shrink-0">
-              <div class="w-16 h-16 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center">
-                <ShieldCheckIcon class="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                🛡️ Transparência e Integridade
-              </h3>
-              <p class="text-lg text-gray-600">
-                Acreditamos que a confiança é a base de qualquer relacionamento bem-sucedido. Na 3W Online, valorizamos a transparência e a integridade em tudo o que fazemos. Nossos clientes podem confiar em nós para fornecer soluções honestas, éticas e eficazes que impulsionam o crescimento de seus negócios.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Mission, Vision, Values -->
-    <section class="section-padding bg-gray-50">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Nossos Pilares</h2>
-          <p class="section-subtitle">Os valores que guiam nossa empresa</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="card p-8 text-center">
-            <div class="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <RocketLaunchIcon class="w-8 h-8 text-primary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Missão</h3>
-            <p class="text-gray-600">
-              Transformar ideias em resultados concretos, oferecendo soluções digitais 
-              que impulsionam o crescimento e o sucesso dos nossos clientes através de 
-              tecnologia inovadora e estratégias de marketing eficazes.
-            </p>
-          </div>
-          
-          <div class="card p-8 text-center">
-            <div class="w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <EyeIcon class="w-8 h-8 text-secondary-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Visão</h3>
-            <p class="text-gray-600">
-              Ser reconhecida como a principal referência em soluções digitais integradas 
-              no Brasil, contribuindo para o crescimento sustentável dos negócios e 
-              democratizando o acesso à tecnologia de qualidade.
-            </p>
-          </div>
-          
-          <div class="card p-8 text-center">
-            <div class="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <HeartIcon class="w-8 h-8 text-accent-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Valores</h3>
-            <p class="text-gray-600">
-              Inovação constante, compromisso com a excelência, transparência nas relações, 
-              foco no cliente, trabalho em equipe e responsabilidade social. Estes valores 
-              norteiam todas as nossas decisões e ações.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Company Information -->
-    <section class="section-padding">
-      <div class="container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <!-- Legal Information -->
-          <div class="card p-8">
-            <h3 class="text-2xl font-bold text-gray-900 mb-6">Informações Legais</h3>
-            <div class="space-y-4">
-              <div class="flex items-start space-x-3">
-                <BuildingOfficeIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">Razão Social</h4>
-                  <p class="text-gray-600">3W Online Soluções Digitais LTDA</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <DocumentTextIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">CNPJ</h4>
-                  <p class="text-gray-600">25.530.623/0001-05</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <MapPinIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">Endereço</h4>
-                  <p class="text-gray-600">Curitiba, Paraná, Brasil</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <CalendarDaysIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">Fundação</h4>
-                  <p class="text-gray-600">2019</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <UserGroupIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">Porte</h4>
-                  <p class="text-gray-600">Microempresa</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Contact Information -->
-          <div class="card p-8">
-            <h3 class="text-2xl font-bold text-gray-900 mb-6">Contato</h3>
-            <div class="space-y-4">
-              <div class="flex items-start space-x-3">
-                <PhoneIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">Telefone</h4>
-                  <p class="text-gray-600">(41) 99692-4829</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <EnvelopeIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">E-mail</h4>
-                  <p class="text-gray-600">contato@3wonline.com.br</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <ClockIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">Horário de Atendimento</h4>
-                  <p class="text-gray-600">Segunda à Sexta: 8h às 18h</p>
-                </div>
-              </div>
-              
-              <div class="flex items-start space-x-3">
-                <GlobeAltIcon class="w-6 h-6 text-primary-600 mt-1" />
-                <div>
-                  <h4 class="font-semibold text-gray-900">Website</h4>
-                  <p class="text-gray-600">www.3wonline.com.br</p>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Quick Actions -->
-            <div class="mt-8 space-y-3">
-              <a
-                href="tel:+5541996924829"
-                class="btn-primary w-full text-center"
-              >
-                📞 Ligar Agora
-              </a>
-              <a
-                href="https://wa.me/5541996924829?text=Olá! Gostaria de conhecer melhor a 3W Online."
-                target="_blank"
-                class="btn-secondary w-full text-center"
-              >
-                💬 WhatsApp
-              </a>
-              <router-link to="/contato" class="btn-outline w-full text-center">
-                📧 Enviar E-mail
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Services Overview -->
-    <section class="section-padding bg-gray-50">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Áreas de Atuação</h2>
-          <p class="section-subtitle">Soluções completas para transformar seu negócio</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="card p-6 text-center hover:shadow-xl transition-shadow">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <ChatBubbleBottomCenterTextIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Marketing Digital</h3>
-            <p class="text-sm text-gray-600">Gestão de redes sociais e campanhas publicitárias</p>
-          </div>
-          
-          <div class="card p-6 text-center hover:shadow-xl transition-shadow">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <ComputerDesktopIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Desenvolvimento Web</h3>
-            <p class="text-sm text-gray-600">Sites, sistemas e e-commerce personalizados</p>
-          </div>
-          
-          <div class="card p-6 text-center hover:shadow-xl transition-shadow">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <DevicePhoneMobileIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Apps Mobile</h3>
-            <p class="text-sm text-gray-600">Aplicativos para iOS e Android</p>
-          </div>
-          
-          <div class="card p-6 text-center hover:shadow-xl transition-shadow">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <PaintBrushIcon class="w-6 h-6 text-primary-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Design Gráfico</h3>
-            <p class="text-sm text-gray-600">Identidade visual e materiais gráficos</p>
-          </div>
-        </div>
-        
-        <div class="text-center mt-8">
-          <router-link to="/servicos" class="btn-primary">
-            Ver Todos os Serviços
-          </router-link>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Certifications and Partnerships -->
-    <section class="section-padding">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Certificações e Parcerias</h2>
-          <p class="section-subtitle">Reconhecimento e qualificações que garantem excelência</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="text-center">
-            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl font-bold text-blue-600">G</span>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Google Partner</h3>
-            <p class="text-sm text-gray-600">Certificação em Google Ads e Analytics</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span class="text-2xl font-bold text-blue-600">M</span>
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Meta Business</h3>
-            <p class="text-sm text-gray-600">Parceiro certificado em Facebook e Instagram Ads</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckBadgeIcon class="w-10 h-10 text-green-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">ISO 9001</h3>
-            <p class="text-sm text-gray-600">Gestão da qualidade certificada</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <ShieldCheckIcon class="w-10 h-10 text-purple-600" />
-            </div>
-            <h3 class="font-semibold text-gray-900 mb-2">LGPD Compliance</h3>
-            <p class="text-sm text-gray-600">Conformidade com proteção de dados</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Timeline -->
-    <section class="section-padding bg-gray-50">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Nossa Trajetória</h2>
-          <p class="section-subtitle">Marcos importantes da nossa história</p>
-        </div>
-        
-        <div class="max-w-4xl mx-auto">
-          <div class="space-y-8">
-            <div class="flex items-start space-x-6">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
-                  <span class="text-white font-bold">2019</span>
-                </div>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Fundação da 3W Online</h3>
-                <p class="text-gray-600">
-                  Início das atividades com foco em desenvolvimento web e marketing digital 
-                  para pequenas e médias empresas em Curitiba.
-                </p>
-              </div>
-            </div>
-            
-            <div class="flex items-start space-x-6">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
-                  <span class="text-white font-bold">2020</span>
-                </div>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Expansão dos Serviços</h3>
-                <p class="text-gray-600">
-                  Ampliação do portfólio com desenvolvimento de aplicativos mobile e 
-                  sistemas personalizados. Primeiros 50 projetos entregues.
-                </p>
-              </div>
-            </div>
-            
-            <div class="flex items-start space-x-6">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
-                  <span class="text-white font-bold">2021</span>
-                </div>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Certificações Importantes</h3>
-                <p class="text-gray-600">
-                  Obtenção das certificações Google Partner e Meta Business Partner, 
-                  consolidando nossa expertise em marketing digital.
-                </p>
-              </div>
-            </div>
-            
-            <div class="flex items-start space-x-6">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
-                  <span class="text-white font-bold">2022</span>
-                </div>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Crescimento Nacional</h3>
-                <p class="text-gray-600">
-                  Expansão do atendimento para todo o Brasil, com clientes em mais de 
-                  15 estados. Marco de 100 projetos entregues.
-                </p>
-              </div>
-            </div>
-            
-            <div class="flex items-start space-x-6">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center">
-                  <span class="text-white font-bold">2023</span>
-                </div>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Inovação e Tecnologia</h3>
-                <p class="text-gray-600">
-                  Implementação de IA em nossos processos e lançamento de soluções 
-                  inovadoras para e-commerce e automação comercial.
-                </p>
-              </div>
-            </div>
-            
-            <div class="flex items-start space-x-6">
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-secondary-600 rounded-full flex items-center justify-center">
-                  <span class="text-white font-bold">2024</span>
-                </div>
-              </div>
-              <div class="flex-1">
-                <h3 class="text-xl font-semibold text-gray-900 mb-2">Consolidação e Futuro</h3>
-                <p class="text-gray-600">
-                  Mais de 150 projetos entregues, equipe especializada e foco em 
-                  soluções sustentáveis e responsabilidade social.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Team Section -->
-    <section class="section-padding">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Nossa Equipe</h2>
-          <p class="section-subtitle">Profissionais especializados e apaixonados pelo que fazem</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="text-center">
-            <div class="w-24 h-24 bg-primary-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <CodeBracketIcon class="w-12 h-12 text-primary-600" />
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Desenvolvedores</h3>
-            <p class="text-gray-600">Especialistas em tecnologias modernas e melhores práticas</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-24 h-24 bg-secondary-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <PresentationChartLineIcon class="w-12 h-12 text-secondary-600" />
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Marketing</h3>
-            <p class="text-gray-600">Estrategistas digitais focados em resultados mensuráveis</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-24 h-24 bg-accent-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <PaintBrushIcon class="w-12 h-12 text-accent-600" />
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Designers</h3>
-            <p class="text-gray-600">Criativos experientes em UX/UI e identidade visual</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-24 h-24 bg-purple-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <UserGroupIcon class="w-12 h-12 text-purple-600" />
-            </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Consultores</h3>
-            <p class="text-gray-600">Especialistas em estratégia e gestão de projetos</p>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Social Responsibility -->
-    <section class="section-padding bg-gray-50">
-      <div class="container">
-        <div class="text-center mb-16">
-          <h2 class="section-title">Responsabilidade Social</h2>
-          <p class="section-subtitle">Nosso compromisso com a sociedade e meio ambiente</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="card p-8 text-center">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <GlobeAltIcon class="w-8 h-8 text-green-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Sustentabilidade</h3>
-            <p class="text-gray-600">
-              Utilizamos serviços de cloud computing sustentáveis e promovemos 
-              a digitalização para reduzir o uso de papel e recursos físicos.
-            </p>
-          </div>
-          
-          <div class="card p-8 text-center">
-            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <AcademicCapIcon class="w-8 h-8 text-blue-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Educação</h3>
-            <p class="text-gray-600">
-              Oferecemos workshops gratuitos sobre marketing digital e tecnologia 
-              para pequenos empreendedores e estudantes.
-            </p>
-          </div>
-          
-          <div class="card p-8 text-center">
-            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <HandRaisedIcon class="w-8 h-8 text-purple-600" />
-            </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-4">Comunidade</h3>
-            <p class="text-gray-600">
-              Apoiamos ONGs locais com serviços pro bono e participamos de 
-              iniciativas de desenvolvimento tecnológico na região.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- CTA Section -->
-    <section class="cta-section">
-      <div class="container">
-        <div class="text-center">
-          <h2 class="text-3xl font-bold text-white mb-6">
-            Pronto para começar sua jornada conosco?
-          </h2>
-          <p class="text-xl text-blue-100 mb-8">
-            Se você busca marketing, publicidade e propaganda que vai além do convencional, somos a escolha certa.
-            Pronto para levar o seu negócio para o próximo nível? Entre em contato hoje mesmo! Estamos ansiosos para colaborar com você e ajudá-lo a alcançar o sucesso que você merece.
+        <div class="text-center mb-12">
+          <span class="section-label">Diretrizes Estratégicas</span>
+          <h2 class="section-title">Nossos Pilares Fundamentais</h2>
+          <p class="section-subtitle max-w-2xl mx-auto">
+            Princípios inegociáveis que orientam nossa atuação profissional e relacionamento com parceiros.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <router-link to="/contato" class="btn-secondary bg-white text-primary-600 hover:bg-gray-100">
-              Fale Conosco
-            </router-link>
-            <a
-              href="https://wa.me/5541996924829?text=Olá! Gostaria de conhecer melhor a 3W Online."
-              target="_blank"
-              class="btn-outline border-white text-white hover:bg-white hover:text-primary-600"
-            >
-              WhatsApp
-            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div class="card p-6 sm:p-8 text-center bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all">
+            <div class="w-14 h-14 bg-primary-50 text-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm">
+              <Icon icon="mdi:rocket-launch-outline" class="w-7 h-7" />
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-3">Missão</h3>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              Transformar ideias em resultados concretos, desenvolvendo soluções de tecnologia e marketing que impulsionam o faturamento e a eficiência operacional dos nossos clientes.
+            </p>
           </div>
+
+          <div class="card p-6 sm:p-8 text-center bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all">
+            <div class="w-14 h-14 bg-secondary-50 text-secondary-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm">
+              <Icon icon="mdi:eye-outline" class="w-7 h-7" />
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-3">Visão</h3>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              Ser referência em soluções digitais e automação com inteligência artificial no Brasil, reconhecida pelo rigor técnico, transparência e democratização da tecnologia.
+            </p>
+          </div>
+
+          <div class="card p-6 sm:p-8 text-center bg-white border border-gray-100 shadow-sm hover:shadow-lg transition-all">
+            <div class="w-14 h-14 bg-orange-50 text-accent-600 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm">
+              <Icon icon="mdi:handshake-outline" class="w-7 h-7" />
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-3">Valores</h3>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              Inovação contínua, compromisso com entregas no prazo, respeito à privacidade (LGPD), contratos sem letras miúdas e atendimento humanizado.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dados Jurídicos, Fiscais e Compliance B2B -->
+    <section class="section-padding bg-white">
+      <div class="container">
+        <div class="text-center mb-12">
+          <span class="section-label">Transparência B2B</span>
+          <h2 class="section-title">Informações Jurídicas & Fiscais</h2>
+          <p class="section-subtitle max-w-2xl mx-auto">
+            Todos os dados necessários para cadastro e homologação de fornecedores corporativos.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <!-- Card Jurídico -->
+          <div class="card p-6 sm:p-8 bg-slate-50 border border-gray-200">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+              <div class="w-10 h-10 rounded-lg bg-primary-600 text-white flex items-center justify-center shrink-0">
+                <Icon icon="mdi:domain" class="w-6 h-6" />
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 text-base">Identificação da Empresa</h3>
+                <p class="text-xs text-gray-500">Dados cadastrais oficiais da Receita Federal</p>
+              </div>
+            </div>
+
+            <dl class="space-y-3.5 text-xs">
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">Razão Social:</dt>
+                <dd class="text-gray-900 font-bold text-right">3W Online Soluções Digitais</dd>
+              </div>
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">Nome Fantasia:</dt>
+                <dd class="text-gray-900 font-bold text-right">Grupo 3W Online</dd>
+              </div>
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">Sede / Município:</dt>
+                <dd class="text-gray-900 font-medium text-right">Curitiba, Paraná — Brasil</dd>
+              </div>
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">Ano de Fundação:</dt>
+                <dd class="text-gray-900 font-medium text-right">2019</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-gray-500 font-medium">Enquadramento Tributário:</dt>
+                <dd class="text-gray-900 font-medium text-right">Simples Nacional (Emissão de NF-e)</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Card de Contatos Oficiais & Compliance -->
+          <div class="card p-6 sm:p-8 bg-slate-50 border border-gray-200">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+              <div class="w-10 h-10 rounded-lg bg-green-600 text-white flex items-center justify-center shrink-0">
+                <Icon icon="mdi:shield-check" class="w-6 h-6" />
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-900 text-base">Canais Oficiais & Compliance</h3>
+                <p class="text-xs text-gray-500">Atendimento direto e segurança jurídica</p>
+              </div>
+            </div>
+
+            <dl class="space-y-3.5 text-xs">
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">Telefone / WhatsApp:</dt>
+                <dd class="text-gray-900 font-bold text-right">(41) 99692-4829</dd>
+              </div>
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">E-mail Corporativo:</dt>
+                <dd class="text-primary-600 font-medium text-right">contato@3wonline.com.br</dd>
+              </div>
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">Proteção de Dados:</dt>
+                <dd class="text-green-700 font-bold text-right">100% Conforme LGPD</dd>
+              </div>
+              <div class="flex justify-between border-b border-gray-200/60 pb-2">
+                <dt class="text-gray-500 font-medium">Horário de Funcionamento:</dt>
+                <dd class="text-gray-900 font-medium text-right">Seg–Sex: 8h às 18h</dd>
+              </div>
+              <div class="flex justify-between">
+                <dt class="text-gray-500 font-medium">Área de Atendimento:</dt>
+                <dd class="text-gray-900 font-medium text-right">Todo o Território Nacional</dd>
+              </div>
+            </dl>
+
+            <div class="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row gap-2">
+              <RouterLink to="/contato" class="btn-primary flex-1 text-center text-xs !py-2.5 justify-center">
+                Enviar E-mail
+              </RouterLink>
+              <a
+                href="https://wa.me/5541996924829?text=Olá! Gostaria de falar com o departamento institucional da 3W Online."
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-secondary flex-1 text-center text-xs !py-2.5 justify-center"
+              >
+                <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-1" />
+                WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Linha do Tempo / Trajetória -->
+    <section class="section-padding bg-slate-50 border-t border-gray-200/60">
+      <div class="container">
+        <div class="text-center mb-12">
+          <span class="section-label">Histórico de Crescimento</span>
+          <h2 class="section-title">Nossa Trajetória de Sucesso</h2>
+          <p class="section-subtitle max-w-2xl mx-auto">
+            Os principais marcos que construíram a reputação da 3W Online ao longo dos anos.
+          </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto space-y-6">
+          <div v-for="item in timeline" :key="item.year" class="flex items-start gap-4 sm:gap-6 bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 text-white flex items-center justify-center shrink-0 font-black text-sm shadow-md shadow-primary-600/20">
+              {{ item.year }}
+            </div>
+            <div class="flex-1">
+              <h3 class="text-sm sm:text-base font-bold text-gray-900 mb-1">{{ item.title }}</h3>
+              <p class="text-xs text-gray-600 leading-relaxed">{{ item.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificações e Alianças Tecnológicas -->
+    <section class="section-padding bg-white">
+      <div class="container">
+        <div class="text-center mb-12">
+          <span class="section-label">Credenciais</span>
+          <h2 class="section-title">Certificações & Padrões Técnicos</h2>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div v-for="cert in certifications" :key="cert.title" class="p-6 rounded-xl border border-gray-100 bg-slate-50 text-center hover:shadow-md transition-all">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" :class="cert.bgColor">
+              <Icon :icon="cert.icon" class="w-6 h-6 text-white" />
+            </div>
+            <h4 class="font-bold text-gray-900 text-sm mb-1">{{ cert.title }}</h4>
+            <p class="text-xs text-gray-500 leading-relaxed">{{ cert.desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Final — Dark Navy -->
+    <section class="cta-section">
+      <div class="container text-center">
+        <span class="text-xs font-semibold text-secondary-400 uppercase tracking-wider block mb-2">Construa o Futuro da Sua Empresa</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-3">Pronto para iniciar sua parceria com o Grupo 3W Online?</h2>
+        <p class="text-sm text-blue-200 mb-8 max-w-xl mx-auto">
+          Entre em contato com nossa diretoria comercial e descubra como nossas soluções podem acelerar seus resultados.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3.5 justify-center">
+          <RouterLink to="/contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
+            Solicitar Contato Comercial
+          </RouterLink>
+          <a
+            href="https://wa.me/5541996924829?text=Olá! Gostaria de conversar sobre uma parceria com a 3W Online."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-secondary text-xs sm:text-sm font-bold shadow-lg"
+          >
+            <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-1.5" />
+            Atendimento no WhatsApp
+          </a>
         </div>
       </div>
     </section>
@@ -631,32 +305,75 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  ChevronRightIcon,
-  RocketLaunchIcon,
-  EyeIcon,
-  HeartIcon,
-  BuildingOfficeIcon,
-  DocumentTextIcon,
-  MapPinIcon,
-  CalendarDaysIcon,
-  UserGroupIcon,
-  PhoneIcon,
-  EnvelopeIcon,
-  ClockIcon,
-  GlobeAltIcon,
-  ChatBubbleBottomCenterTextIcon,
-  ComputerDesktopIcon,
-  DevicePhoneMobileIcon,
-  PaintBrushIcon,
-  CheckBadgeIcon,
-  ShieldCheckIcon,
-  CodeBracketIcon,
-  PresentationChartLineIcon,
-  AcademicCapIcon,
-  HandRaisedIcon,
-  ChartBarIcon,
-  LightBulbIcon,
-  CogIcon
-} from '@heroicons/vue/24/outline'
+import { Icon } from '@iconify/vue'
+import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import { useSeo } from '@/composables/useSeo'
+
+const { applySeo } = useSeo()
+applySeo({
+  title: 'Institucional | Grupo 3W Online - Missão, Visão e Governança',
+  description: 'Conheça o Grupo 3W Online: história, missão, visão, governança e conformidade LGPD da agência e software house em Curitiba.',
+  path: '/institucional',
+  keywords: 'institucional 3w online, razão social 3w online, agência curitiba pr, história 3w online',
+})
+
+const timeline = [
+  {
+    year: '2019',
+    title: 'Fundação da 3W Online em Curitiba',
+    description: 'Início das operações com foco no desenvolvimento de sites institucionais modernos e marketing digital de performance para PMEs.',
+  },
+  {
+    year: '2020',
+    title: 'Expansão para Sistemas & Aplicativos',
+    description: 'Ampliação do portfólio com desenvolvimento de software sob medida, plataformas web e integração de APIs.',
+  },
+  {
+    year: '2021',
+    title: 'Consolidação em Tráfego Pago & Parcerias',
+    description: 'Certificações em Google Ads e Meta Ads, atingindo mais de 50 projetos entregues com alto retorno sobre investimento.',
+  },
+  {
+    year: '2022',
+    title: 'Atendimento em Escala Nacional',
+    description: 'Expansão da carteira de clientes para múltiplos estados do Brasil com suporte remoto ágil e de alta qualidade.',
+  },
+  {
+    year: '2023',
+    title: 'Pioneirismo em Automação & Inteligência Artificial',
+    description: 'Implantação de agentes inteligentes com LLMs, automações de WhatsApp e ferramentas de produtividade para empresas.',
+  },
+  {
+    year: '2024+',
+    title: 'Marca de 150+ Projetos & Suíte de 120+ Ferramentas',
+    description: 'Lançamento da suíte digital com mais de 120 utilitários gratuitos client-side e consolidação como referência em tecnologia.',
+  },
+]
+
+const certifications = [
+  {
+    title: 'Google Partner',
+    desc: 'Especialistas certificados em Google Ads, Search, Display e Analytics.',
+    icon: 'mdi:google',
+    bgColor: 'bg-blue-600',
+  },
+  {
+    title: 'Meta Business',
+    desc: 'Gestão avançada de campanhas no Facebook Ads e Instagram Ads.',
+    icon: 'mdi:facebook',
+    bgColor: 'bg-indigo-600',
+  },
+  {
+    title: 'LGPD Compliance',
+    desc: 'Processamento de dados em conformidade rigorosa com a legislação brasileira.',
+    icon: 'mdi:shield-check',
+    bgColor: 'bg-emerald-600',
+  },
+  {
+    title: 'Cloud de Alta Performance',
+    desc: 'Arquiteturas resilientes com CDN global e SSL de alta criptografia.',
+    icon: 'mdi:cloud-check',
+    bgColor: 'bg-purple-600',
+  },
+]
 </script>

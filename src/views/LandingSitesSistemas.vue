@@ -1,768 +1,423 @@
 <template>
-  <div class="landing-sites-sistemas">
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-      <div class="container mx-auto px-4 py-4">
-        <div class="flex items-center justify-between">
-          <div class="text-2xl font-bold text-primary-600">3W Online</div>
-          <nav class="hidden md:flex space-x-8">
-            <a href="#solucoes" class="text-gray-700 hover:text-primary-600 transition-colors">Soluções</a>
-            <a href="#sobre" class="text-gray-700 hover:text-primary-600 transition-colors">Sobre</a>
-            <a href="#depoimentos" class="text-gray-700 hover:text-primary-600 transition-colors">Clientes</a>
-            <a href="#contato" class="text-gray-700 hover:text-primary-600 transition-colors">Contato</a>
-          </nav>
+  <div class="landing-sites-sistemas-page">
+    <!-- Hero / Primeira Dobra — Dark Navy com Escassez & Confiança -->
+    <section class="page-hero relative overflow-hidden py-16 md:py-24">
+      <div class="container relative z-10">
+        <AppBreadcrumb :items="[{ label: 'Início', path: '/' }, { label: 'Criação de Sites & Sistemas' }]" />
+
+        <div class="max-w-4xl mt-4">
+          <!-- Selo de Escassez -->
+          <div class="inline-flex items-center gap-2 bg-secondary-500/20 text-secondary-200 border border-secondary-500/30 px-3.5 py-1 rounded-full text-xs font-bold mb-4">
+            <Icon icon="mdi:lightning-bolt" class="w-4 h-4 text-secondary-400" />
+            <span>APENAS 2 NOVOS PROJETOS INICIADOS POR SEMANA • DESENVOLVIMENTO EXCLUSIVO</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-6">
+            Sites Modernos & Sistemas Web que <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary-400 to-primary-400">Multiplicam Suas Vendas</span>
+          </h1>
+
+          <p class="text-base sm:text-lg text-blue-200 mb-8 max-w-3xl leading-relaxed">
+            Desenvolvimento de alta performance com Vue 3 e TypeScript. Sites que carregam em menos de 1.5s, ranqueiam no Google e sistemas sob medida sem mensalidades por usuário.
+          </p>
+
+          <!-- CTAs Principais -->
+          <div class="flex flex-wrap gap-4 items-center mb-10">
+            <a
+              href="https://wa.me/5541996924829?text=Olá! Gostaria de um orçamento para criação de site/sistema sob medida."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary !bg-green-500 hover:!bg-green-600 !text-white text-sm sm:text-base !py-4 !px-8 font-bold shadow-xl shadow-green-500/25 flex items-center gap-2 transform hover:scale-105 transition-all"
+            >
+              <Icon icon="mdi:whatsapp" class="w-5 h-5" />
+              Solicitar Orçamento no WhatsApp
+            </a>
+            <a href="#simulador" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+              <Icon icon="mdi:calculator" class="w-4 h-4 mr-1.5" />
+              Simular Meu Projeto
+            </a>
+          </div>
+
+          <!-- Elementos de Confiança Próximos ao CTA -->
+          <div class="flex flex-wrap items-center gap-6 text-xs text-blue-200">
+            <span class="flex items-center gap-1.5"><Icon icon="mdi:shield-check" class="w-4 h-4 text-emerald-400" /> 30 Dias de Garantia Total</span>
+            <span class="flex items-center gap-1.5"><Icon icon="mdi:code-braces" class="w-4 h-4 text-secondary-400" /> Código 100% Próprio</span>
+            <span class="flex items-center gap-1.5"><Icon icon="mdi:speedometer" class="w-4 h-4 text-cyan-400" /> Carregamento em &lt; 1.5s</span>
+          </div>
         </div>
       </div>
-    </header>
+    </section>
 
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-20 md:py-32">
-      <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
-          Transforme Sua Presença Digital com Sites e Sistemas Profissionais
-        </h1>
-        <p class="text-xl md:text-2xl mb-4 text-blue-100 animate-slide-up">
-          Desenvolvimento sob medida que impulsiona seu negócio
+    <!-- Prova Social Imediata -->
+    <section class="bg-slate-900 text-white py-6 border-y border-white/10">
+      <div class="container">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div class="p-2">
+            <div class="text-2xl sm:text-4xl font-black text-secondary-400 mb-1">+150</div>
+            <div class="text-xs text-slate-300">Sites & Sistemas Entregues</div>
+          </div>
+          <div class="p-2">
+            <div class="text-2xl sm:text-4xl font-black text-primary-400 mb-1">&lt; 1.5s</div>
+            <div class="text-xs text-slate-300">Tempo de Carregamento Médio</div>
+          </div>
+          <div class="p-2">
+            <div class="text-2xl sm:text-4xl font-black text-secondary-400 mb-1">0 R$</div>
+            <div class="text-xs text-slate-300">Mensalidade por Usuário</div>
+          </div>
+          <div class="p-2">
+            <div class="text-2xl sm:text-4xl font-black text-emerald-400 mb-1">98%</div>
+            <div class="text-xs text-slate-300">Índice de Aprovação de Clientes</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problema / O Custo da Inação (Dor) -->
+    <section class="section-padding bg-white">
+      <div class="container">
+        <div class="text-center mb-12">
+          <span class="section-label">O Diagnóstico</span>
+          <h2 class="section-title">Seu Site e Seus Processos Estão Afastando Clientes?</h2>
+          <p class="section-subtitle max-w-2xl mx-auto">
+            Um site lento ou processos manuais desorganizados custam muito mais caro do que investir na tecnologia correta.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
+          <!-- Card de Problemas -->
+          <div class="p-6 sm:p-8 rounded-2xl bg-red-50/70 border border-red-200 flex flex-col justify-between">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-red-900 mb-4 flex items-center gap-2">
+                <Icon icon="mdi:alert-octagon" class="w-5 h-5 text-red-600" />
+                Sintomas de Sites & Sistemas Obsoletos:
+              </h3>
+              <ul class="space-y-3.5 text-xs sm:text-sm text-red-800">
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:close-circle" class="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <span><strong>Sites Lentos no Celular:</strong> 53% dos visitantes fecham a página se ela demora mais de 3 segundos para abrir.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:close-circle" class="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <span><strong>Temas Prontos Genéricos:</strong> Layouts batidos que não transmitem credibilidade e parecem cópias de concorrentes.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:close-circle" class="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <span><strong>Falta de SEO Técnico:</strong> Seu site é invisível para quem busca no Google sem pagar anúncios.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:close-circle" class="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                  <span><strong>Planilhas Confusas:</strong> Erros humanos, perda de dados e retrabalho contínuo da equipe.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-6 p-3.5 bg-red-100 rounded-xl text-xs text-red-900 font-semibold text-center">
+              ⚠️ Um site amador faz sua empresa parecer pequena mesmo quando você é o melhor do mercado.
+            </div>
+          </div>
+
+          <!-- Card de Solução -->
+          <div class="p-6 sm:p-8 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex flex-col justify-between">
+            <div>
+              <h3 class="text-base sm:text-lg font-bold text-emerald-900 mb-4 flex items-center gap-2">
+                <Icon icon="mdi:check-decagram" class="w-5 h-5 text-emerald-600" />
+                O Padrão de Engenharia 3W Online:
+              </h3>
+              <ul class="space-y-3.5 text-xs sm:text-sm text-emerald-800">
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:check-circle" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span><strong>Velocidade Imbatível:</strong> Arquitetura SPA moderna que carrega instantaneamente em qualquer conexão.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:check-circle" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span><strong>Design Exclusivo de Alto Padrão:</strong> Identidade visual refinada para elevar o valor percebido da sua marca.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:check-circle" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span><strong>SEO Estruturado Nativo:</strong> Marcação semântica e metadados para colocar suas páginas no topo do Google.</span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon icon="mdi:check-circle" class="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span><strong>Sistemas Sob Medida Sem Licenças:</strong> Painel intuitivo moldado exatamente à rotina dos seus colaboradores.</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-6 p-3.5 bg-emerald-100 rounded-xl text-xs text-emerald-900 font-semibold text-center">
+              🚀 Código 100% proprietário entregue com transferência de direitos.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Como Funciona em 4 Passos -->
+    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+      <div class="container">
+        <div class="text-center mb-12">
+          <span class="section-label">Metodologia Ágil</span>
+          <h2 class="section-title">Como Desenvolvemos Seu Projeto</h2>
+          <p class="section-subtitle max-w-2xl mx-auto">
+            Processo transparente com validações constantes para garantir que o resultado final supere suas expectativas.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+          <div class="p-6 bg-white rounded-2xl border border-gray-200 text-center shadow-sm hover:shadow-md transition-all">
+            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 font-black text-lg">
+              1
+            </div>
+            <h3 class="text-sm font-bold text-gray-900 mb-2">Briefing & Estratégia</h3>
+            <p class="text-xs text-gray-500 leading-relaxed">Mapeamos as necessidades, público-alvo e os objetivos comerciais do projeto.</p>
+          </div>
+
+          <div class="p-6 bg-white rounded-2xl border border-gray-200 text-center shadow-sm hover:shadow-md transition-all">
+            <div class="w-12 h-12 rounded-xl bg-secondary-50 text-secondary-600 flex items-center justify-center mx-auto mb-4 font-black text-lg">
+              2
+            </div>
+            <h3 class="text-sm font-bold text-gray-900 mb-2">Design & Prototipagem</h3>
+            <p class="text-xs text-gray-500 leading-relaxed">Criamos o layout visual exclusivo para sua aprovação antes de qualquer linha de código.</p>
+          </div>
+
+          <div class="p-6 bg-white rounded-2xl border border-gray-200 text-center shadow-sm hover:shadow-md transition-all">
+            <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto mb-4 font-black text-lg">
+              3
+            </div>
+            <h3 class="text-sm font-bold text-gray-900 mb-2">Codificação & Testes</h3>
+            <p class="text-xs text-gray-500 leading-relaxed">Desenvolvimento ágil com Vue 3, testes de responsividade e otimização de velocidade.</p>
+          </div>
+
+          <div class="p-6 bg-white rounded-2xl border border-gray-200 text-center shadow-sm hover:shadow-md transition-all">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4 font-black text-lg">
+              4
+            </div>
+            <h3 class="text-sm font-bold text-gray-900 mb-2">Publicação & Garantia</h3>
+            <p class="text-xs text-gray-500 leading-relaxed">Subida em produção com SSL, domínio e 30 dias de garantia técnica integral.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Casos Reais & Depoimentos -->
+    <section class="section-padding bg-white">
+      <div class="container">
+        <div class="text-center mb-12">
+          <span class="section-label">Depoimentos</span>
+          <h2 class="section-title">O que Nossos Clientes Dizem</h2>
+          <p class="section-subtitle max-w-2xl mx-auto">
+            Projetos reais que geraram crescimento e organização para empresas de diversos setores.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div class="p-6 rounded-2xl bg-slate-50 border border-gray-200 flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-center gap-1 text-amber-400 mb-3">
+                <Icon v-for="i in 5" :key="i" icon="mdi:star" class="w-4 h-4" />
+              </div>
+              <p class="text-xs sm:text-sm text-gray-700 italic mb-4 leading-relaxed">
+                "O site novo desenvolvido pela 3W Online aumentou em <strong>+140% as solicitações de orçamento</strong> pelo WhatsApp. O carregamento é quase instantâneo."
+              </p>
+            </div>
+            <div class="pt-4 border-t border-gray-200">
+              <div class="font-bold text-xs text-gray-900">Guilherme Prado</div>
+              <div class="text-[11px] text-gray-500">Sócio • Escritório de Engenharia</div>
+              <div class="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                <Icon icon="mdi:speedometer" class="w-3.5 h-3.5" /> 99/100 no Google PageSpeed
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-50 border border-gray-200 flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-center gap-1 text-amber-400 mb-3">
+                <Icon v-for="i in 5" :key="i" icon="mdi:star" class="w-4 h-4" />
+              </div>
+              <p class="text-xs sm:text-sm text-gray-700 italic mb-4 leading-relaxed">
+                "Substituímos 4 planilhas pesadas por um sistema web exclusivo. Economizamos mais de <strong>20 horas por semana</strong> na conferência de pedidos."
+              </p>
+            </div>
+            <div class="pt-4 border-t border-gray-200">
+              <div class="font-bold text-xs text-gray-900">Fernanda Meirelles</div>
+              <div class="text-[11px] text-gray-500">Gerente de Operações • Distribuidora</div>
+              <div class="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                <Icon icon="mdi:clock-check-outline" class="w-3.5 h-3.5" /> 20h Economizadas/Semana
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-50 border border-gray-200 flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-center gap-1 text-amber-400 mb-3">
+                <Icon v-for="i in 5" :key="i" icon="mdi:star" class="w-4 h-4" />
+              </div>
+              <p class="text-xs sm:text-sm text-gray-700 italic mb-4 leading-relaxed">
+                "A entrega foi feita rigorosamente dentro do prazo acordado e com suporte impecável. Qualquer dúvida técnica que tínhamos era respondida em minutos."
+              </p>
+            </div>
+            <div class="pt-4 border-t border-gray-200">
+              <div class="font-bold text-xs text-gray-900">Lucas Silveira</div>
+              <div class="text-[11px] text-gray-500">CEO • Startup de Tecnologia</div>
+              <div class="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                <Icon icon="mdi:shield-check" class="w-3.5 h-3.5" /> Suporte VIP 5 Estrelas
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Oferta Irresistível + Bônus Inclusos -->
+    <section class="section-padding bg-gradient-to-b from-slate-900 to-[#0a1628] text-white">
+      <div class="container max-w-4xl">
+        <div class="text-center mb-10">
+          <span class="inline-flex items-center gap-1 bg-secondary-500/20 text-secondary-300 border border-secondary-500/30 px-3.5 py-1 rounded-full text-xs font-bold mb-3">
+            <Icon icon="mdi:gift-outline" class="w-4 h-4 text-secondary-400" />
+            <span>PACOTE COMPLETO DE DESENVOLVIMENTO</span>
+          </span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-3">O Que Está Incluso no Seu Projeto</h2>
+          <p class="text-xs sm:text-sm text-blue-200 max-w-xl mx-auto">
+            Uma solução turn-key pronta para operar e gerar receita.
+          </p>
+        </div>
+
+        <div class="bg-white/5 border border-white/15 rounded-2xl p-6 sm:p-10 backdrop-blur-md shadow-2xl">
+          <div class="space-y-4 mb-8">
+            <div class="flex items-start gap-3">
+              <Icon icon="mdi:check-circle" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <span class="text-xs sm:text-sm text-gray-100"><strong>Design 100% Exclusivo & Responsivo:</strong> Adaptado perfeitamente a computadores, tablets e celulares.</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon icon="mdi:check-circle" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <span class="text-xs sm:text-sm text-gray-100"><strong>Botões de Conversão WhatsApp:</strong> Integração com mensagens pré-formatadas para facilitar o contato do cliente.</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon icon="mdi:check-circle" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <span class="text-xs sm:text-sm text-gray-100"><strong>Painel Administrativo Intuitivo:</strong> Atualize textos, fotos e produtos sem depender de programador.</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <Icon icon="mdi:check-circle" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <span class="text-xs sm:text-sm text-gray-100"><strong>Transferência Total de Código:</strong> Você é o dono legal e definitivo de todo o software criado.</span>
+            </div>
+          </div>
+
+          <!-- Bônus Gratuitos -->
+          <div class="pt-6 border-t border-white/10">
+            <h4 class="text-xs font-bold text-secondary-400 uppercase tracking-wider mb-4">🎁 Bônus Especiais Inclusos no Contrato:</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                <div class="text-xs font-bold text-white mb-1">Bônus 1: Otimização SEO</div>
+                <div class="text-[11px] text-blue-200">Indexação e tags para ranquear no Google. <span class="line-through text-gray-400">R$ 700</span> <strong>GRÁTIS</strong></div>
+              </div>
+              <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                <div class="text-xs font-bold text-white mb-1">Bônus 2: Hospedagem + SSL</div>
+                <div class="text-[11px] text-blue-200">1 ano de infraestrutura em nuvem segura. <span class="line-through text-gray-400">R$ 450</span> <strong>GRÁTIS</strong></div>
+              </div>
+              <div class="p-4 bg-white/5 rounded-xl border border-white/10">
+                <div class="text-xs font-bold text-white mb-1">Bônus 3: Treinamento em Vídeo</div>
+                <div class="text-[11px] text-blue-200">Gravação passo a passo de como operar o site. <span class="line-through text-gray-400">R$ 350</span> <strong>GRÁTIS</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Garantia Incondicional & CTA -->
+          <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <Icon icon="mdi:shield-check" class="w-10 h-10 text-emerald-400 shrink-0" />
+              <div class="text-xs">
+                <div class="font-bold text-white">30 Dias de Garantia Técnica</div>
+                <div class="text-blue-200">Suporte e correções gratuitas para sua total tranquilidade.</div>
+              </div>
+            </div>
+            <a
+              href="https://wa.me/5541996924829?text=Olá! Quero garantir minha vaga para criar meu site/sistema com todos os bônus inclusos."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn-primary !bg-green-500 hover:!bg-green-600 !text-white text-xs sm:text-sm !py-3.5 !px-6 font-bold shadow-lg shrink-0 whitespace-nowrap"
+            >
+              Garantir Projeto no WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Simulador de Preço Integrado -->
+    <section id="simulador" class="testimonial-section section-padding">
+      <div class="container">
+        <div class="text-center mb-10 max-w-2xl mx-auto">
+          <span class="text-xs font-semibold text-secondary-400 uppercase tracking-wider block mb-2">Simulação Imediata</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Calcule a Estimativa do Seu Projeto</h2>
+          <p class="text-xs sm:text-sm text-blue-200">Obtenha um valor referencial em menos de 1 minuto.</p>
+        </div>
+        <div class="max-w-3xl mx-auto bg-white rounded-2xl p-6 sm:p-8 shadow-2xl text-gray-900">
+          <PriceSimulator service-type="website" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Quebra de Objeções & FAQ Decisivo -->
+    <section class="section-padding bg-white">
+      <div class="container max-w-3xl mx-auto">
+        <div class="text-center mb-10">
+          <span class="section-label">Perguntas Decisivas</span>
+          <h2 class="section-title">Dúvidas Frequentes sobre Criação de Sites & Sistemas</h2>
+          <p class="section-subtitle">Tudo sobre prazos, custos e metodologia de entrega.</p>
+        </div>
+        <FaqAccordion :items="faqs" />
+      </div>
+    </section>
+
+    <!-- CTA Final — Dark Navy -->
+    <section class="cta-section">
+      <div class="container text-center max-w-3xl">
+        <div class="inline-flex items-center gap-2 bg-rose-500/20 text-rose-200 border border-rose-500/30 px-3.5 py-1 rounded-full text-xs font-bold mb-4">
+          <Icon icon="mdi:clock-alert" class="w-4 h-4 text-rose-400" />
+          <span>Agenda Aberta para Início Imediato</span>
+        </div>
+        <h2 class="text-2xl sm:text-4xl font-extrabold text-white mb-4">
+          Pronto para ter um site profissional que converte visitantes em clientes?
+        </h2>
+        <p class="text-sm sm:text-base text-blue-200 mb-8 max-w-xl mx-auto leading-relaxed">
+          Converse com nossos engenheiros de software e receba uma proposta técnica sob medida para sua empresa.
         </p>
-        <p class="text-lg md:text-xl mb-8 text-blue-200 animate-slide-up">
-          Sites responsivos, sistemas personalizados e soluções que geram resultados reais
-        </p>
-        <div class="animate-slide-up">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="#contato"
-            class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-block mr-4 mb-4"
-          >
-            Solicitar Orçamento Gratuito
-          </a>
-          <a
-            href="https://wa.me/5541996924829?text=Olá! Quero saber mais sobre desenvolvimento de sites e sistemas."
+            href="https://wa.me/5541996924829?text=Olá! Gostaria de uma proposta sob medida para desenvolvimento de site/sistema."
             target="_blank"
-            class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-block mb-4"
+            rel="noopener noreferrer"
+            class="btn-primary !bg-green-500 hover:!bg-green-600 !text-white text-xs sm:text-base !py-4 !px-8 font-bold shadow-xl shadow-green-500/30 flex items-center justify-center gap-2"
           >
-            Fale Conosco no WhatsApp
+            <Icon icon="mdi:whatsapp" class="w-5 h-5" />
+            Falar com Engenheiro no WhatsApp
           </a>
-        </div>
-        
-        <!-- Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
-          <div class="text-center">
-            <div class="text-3xl font-bold text-yellow-300 mb-2">150+</div>
-            <div class="text-blue-200">Projetos Entregues</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-yellow-300 mb-2">98%</div>
-            <div class="text-blue-200">Clientes Satisfeitos</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-yellow-300 mb-2">5+</div>
-            <div class="text-blue-200">Anos de Experiência</div>
-          </div>
-          <div class="text-center">
-            <div class="text-3xl font-bold text-yellow-300 mb-2">24h</div>
-            <div class="text-blue-200">Suporte Técnico</div>
-          </div>
+          <RouterLink to="/contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+            Enviar Mensagem por Formulário
+          </RouterLink>
         </div>
       </div>
     </section>
-
-    <!-- Por que escolher a 3W Online -->
-    <section class="py-20 bg-gray-50">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">
-          Por que escolher a 3W Online?
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <!-- Soluções Sob Medida -->
-          <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
-            <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Soluções Sob Medida</h3>
-            <p class="text-gray-600">
-              Sistemas criados de acordo com a realidade e demanda do seu negócio.
-            </p>
-          </div>
-
-          <!-- Eficiência Garantida -->
-          <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
-            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Eficiência Garantida</h3>
-            <p class="text-gray-600">
-              Tecnologias inovadoras que melhoram a produtividade e decisões.
-            </p>
-          </div>
-
-          <!-- Escalabilidade -->
-          <div class="bg-white rounded-lg shadow-lg p-8 text-center hover:shadow-xl transition-shadow duration-300">
-            <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <svg class="w-10 h-10 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"></path>
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Escalabilidade</h3>
-            <p class="text-gray-600">
-              Sistemas que crescem junto com sua empresa, acompanhando sua evolução.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quem Somos -->
-    <section id="sobre" class="py-20 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto text-center">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-8">Quem Somos</h2>
-          <p class="text-lg text-gray-600 leading-relaxed mb-8">
-            Na 3W Online, somos apaixonados por tecnologia e inovação. Nossa missão é ajudar 
-            empresas a alcançarem o sucesso digital por meio de soluções personalizadas e 
-            eficientes. Com anos de experiência no mercado, trabalhamos lado a lado com nossos 
-            clientes para entender suas necessidades e entregar projetos de alta qualidade que 
-            fazem a diferença.
-          </p>
-          <p class="text-lg text-gray-600 leading-relaxed">
-            Seja você uma pequena empresa ou uma grande organização, estamos aqui para 
-            transformar suas ideias em realidade e impulsionar seus negócios para o próximo nível.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Nossas Soluções -->
-    <section id="solucoes" class="py-20 bg-gray-50">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">
-          Nossas Soluções
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <!-- Desenvolvimento de Sites -->
-          <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
-            <div class="text-center mb-6">
-              <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-800 mb-4">Desenvolvimento de Sites</h3>
-              <p class="text-gray-600 mb-6">
-                Sites que precisam de uma presença online profissional.
-              </p>
-            </div>
-            <div class="text-center mb-6">
-              <span class="text-orange-500 font-bold text-lg">A partir de</span>
-              <div class="text-3xl font-bold text-gray-800">R$ 1.200,00</div>
-            </div>
-            <button 
-              @click="openWhatsApp('site')"
-              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300"
-            >
-              Saiba Mais
-            </button>
-          </div>
-
-          <!-- Sistemas Personalizados -->
-          <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow duration-300 border-2 border-orange-500 relative">
-            <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-              MAIS POPULAR
-            </div>
-            <div class="text-center mb-6">
-              <div class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                </svg>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-800 mb-4">Sistemas Personalizados</h3>
-              <p class="text-gray-600 mb-6">
-                Automatize processos e controle sua gestão com sistemas sob medida.
-              </p>
-            </div>
-            <div class="text-center mb-6">
-              <span class="text-orange-500 font-bold text-lg">A partir de</span>
-              <div class="text-3xl font-bold text-gray-800">R$ 5.000,00</div>
-            </div>
-            <button 
-              @click="openWhatsApp('sistema')"
-              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300"
-            >
-              Saiba Mais
-            </button>
-          </div>
-
-          <!-- Aplicativos Mobile -->
-          <div class="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow duration-300">
-            <div class="text-center mb-6">
-              <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                </svg>
-              </div>
-              <h3 class="text-xl font-semibold text-gray-800 mb-4">Aplicativos Mobile</h3>
-              <p class="text-gray-600 mb-6">
-                Leve sua ideia para dispositivos móveis com design intuitivo.
-              </p>
-            </div>
-            <div class="text-center mb-6">
-              <span class="text-orange-500 font-bold text-lg">A partir de</span>
-              <div class="text-3xl font-bold text-gray-800">R$ 7.500,00</div>
-            </div>
-            <button 
-              @click="openWhatsApp('app')"
-              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300"
-            >
-              Saiba Mais
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Garantia -->
-    <section class="py-16 bg-primary-600 text-white">
-      <div class="container mx-auto px-4 text-center">
-        <div class="max-w-4xl mx-auto">
-          <h2 class="text-3xl font-bold mb-6">🛡️ Garantia de Satisfação</h2>
-          <p class="text-xl text-blue-100 mb-8">
-            Oferecemos 30 dias de garantia em todos os nossos projetos. Se não ficar satisfeito, 
-            fazemos os ajustes necessários sem custo adicional.
-          </p>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-blue-700 rounded-lg p-6">
-              <h3 class="font-semibold mb-2">✅ Suporte Técnico</h3>
-              <p class="text-blue-200">30 dias de suporte gratuito</p>
-            </div>
-            <div class="bg-blue-700 rounded-lg p-6">
-              <h3 class="font-semibold mb-2">🔧 Ajustes Inclusos</h3>
-              <p class="text-blue-200">Correções sem custo adicional</p>
-            </div>
-            <div class="bg-blue-700 rounded-lg p-6">
-              <h3 class="font-semibold mb-2">📞 Atendimento Direto</h3>
-              <p class="text-blue-200">Contato direto com nossa equipe</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Depoimentos -->
-    <section id="depoimentos" class="py-20 bg-white">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">
-          O que nossos clientes dizem
-        </h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div class="bg-gray-50 rounded-lg p-6 shadow-lg">
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
-                <span class="text-white font-bold">JS</span>
-              </div>
-              <div>
-                <h4 class="font-semibold text-gray-800">João Silva</h4>
-                <p class="text-sm text-gray-600">CEO, TechStart</p>
-              </div>
-            </div>
-            <p class="text-gray-700 italic mb-4">
-              "A 3W Online transformou completamente nossos processos internos com um sistema incrível!"
-            </p>
-            <div class="flex text-yellow-400">
-              <span class="text-2xl">⭐⭐⭐⭐⭐</span>
-            </div>
-          </div>
-
-          <div class="bg-gray-50 rounded-lg p-6 shadow-lg">
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mr-4">
-                <span class="text-white font-bold">MO</span>
-              </div>
-              <div>
-                <h4 class="font-semibold text-gray-800">Maria Oliveira</h4>
-                <p class="text-sm text-gray-600">Diretora, Inovação Corp</p>
-              </div>
-            </div>
-            <p class="text-gray-700 italic mb-4">
-              "Graças ao aplicativo desenvolvido pela 3W, nossos vendas aumentaram significativamente."
-            </p>
-            <div class="flex text-yellow-400">
-              <span class="text-2xl">⭐⭐⭐⭐⭐</span>
-            </div>
-          </div>
-
-          <div class="bg-gray-50 rounded-lg p-6 shadow-lg">
-            <div class="flex items-center mb-4">
-              <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
-                <span class="text-white font-bold">CS</span>
-              </div>
-              <div>
-                <h4 class="font-semibold text-gray-800">Carlos Souza</h4>
-                <p class="text-sm text-gray-600">Proprietário, Loja Virtual</p>
-              </div>
-            </div>
-            <p class="text-gray-700 italic mb-4">
-              "Equipe altamente profissional e dedicada. Recomendo!"
-            </p>
-            <div class="flex text-yellow-400">
-              <span class="text-2xl">⭐⭐⭐⭐⭐</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-20 bg-gradient-to-br from-primary-600 to-primary-800 text-white">
-      <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
-          Entre em contato
-        </h2>
-        <p class="text-xl text-blue-100 mb-8">
-          Quer saber mais sobre nossas soluções? Estamos prontos para ajudar!
-        </p>
-        <a
-          href="https://wa.me/5541996924829?text=Olá! Quero saber mais sobre desenvolvimento de sites e sistemas."
-          target="_blank"
-          class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg inline-block"
-        >
-          Fale Conosco no WhatsApp
-        </a>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="py-20 bg-gray-50">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">
-          Perguntas Frequentes
-        </h2>
-        
-        <div class="max-w-4xl mx-auto space-y-6">
-          <div 
-            v-for="(faq, index) in faqs" 
-            :key="index"
-            class="bg-white rounded-lg shadow-lg overflow-hidden"
-          >
-            <button 
-              @click="toggleFaq(index)"
-              class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-300"
-            >
-              <span class="font-semibold text-gray-800">{{ faq.question }}</span>
-              <svg 
-                class="w-5 h-5 text-gray-600 transition-transform duration-300"
-                :class="{ 'rotate-180': openFaq === index }"
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            <div 
-              v-if="openFaq === index"
-              class="px-6 pb-4 text-gray-600"
-            >
-              {{ faq.answer }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact Form -->
-    <section id="contato" class="py-20 bg-white">
-      <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto">
-          <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-16">
-            Solicite Seu Orçamento
-          </h2>
-          
-          <div class="bg-gray-50 rounded-lg shadow-lg p-8">
-            <form @submit.prevent="submitForm" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">
-                    Nome Completo *
-                  </label>
-                  <input
-                    id="nome"
-                    v-model="form.nome"
-                    type="text"
-                    required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    placeholder="Seu nome completo"
-                  />
-                </div>
-                
-                <div>
-                  <label for="empresa" class="block text-sm font-medium text-gray-700 mb-2">
-                    Empresa
-                  </label>
-                  <input
-                    id="empresa"
-                    v-model="form.empresa"
-                    type="text"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    placeholder="Nome da sua empresa"
-                  />
-                </div>
-              </div>
-              
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                    E-mail *
-                  </label>
-                  <input
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    placeholder="seu@email.com"
-                  />
-                </div>
-                
-                <div>
-                  <label for="telefone" class="block text-sm font-medium text-gray-700 mb-2">
-                    Telefone *
-                  </label>
-                  <input
-                    id="telefone"
-                    v-model="form.telefone"
-                    type="tel"
-                    required
-                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-300"
-                    placeholder="(XX) XXXXX-XXXX"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-4">
-                  Tipo de Projeto *
-                </label>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <label class="flex items-center">
-                    <input
-                      v-model="form.projeto"
-                      type="radio"
-                      value="site"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
-                    />
-                    <span class="ml-2 text-gray-700">Site Institucional</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input
-                      v-model="form.projeto"
-                      type="radio"
-                      value="sistema"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
-                    />
-                    <span class="ml-2 text-gray-700">Sistema Personalizado</span>
-                  </label>
-                  <label class="flex items-center">
-                    <input
-                      v-model="form.projeto"
-                      type="radio"
-                      value="app"
-                      class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
-                    />
-                    <span class="ml-2 text-gray-700">Aplicativo Mobile</span>
-                  </label>
-                </div>
-              </div>
-              
-              <div>
-                <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-2">
-                  Descrição do Projeto
-                </label>
-                <textarea
-                  id="mensagem"
-                  v-model="form.mensagem"
-                  rows="4"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none transition-colors duration-300"
-                  placeholder="Descreva seu projeto e necessidades..."
-                ></textarea>
-              </div>
-              
-              <div class="text-center">
-                <button
-                  type="submit"
-                  :disabled="isSubmitting"
-                  class="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  <span v-if="isSubmitting">Enviando...</span>
-                  <span v-else>Solicitar Orçamento Gratuito</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-primary-800 text-white py-12">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <div class="text-2xl font-bold mb-4">3W Online</div>
-            <p class="text-blue-200 mb-4">
-              Especialistas em desenvolvimento de sites, sistemas personalizados e aplicativos mobile.
-            </p>
-            <p class="text-sm text-blue-300">
-              CNPJ: 25.530.623/0001-05
-            </p>
-          </div>
-          
-          <div>
-            <h3 class="text-lg font-semibold mb-4">Contato</h3>
-            <div class="space-y-2 text-blue-200">
-              <p>📧 contato@3wonline.com.br</p>
-              <p>📱 (41) 99692-4829</p>
-              <p>🌐 www.3wonline.com.br</p>
-              <p>📍 Curitiba, PR</p>
-            </div>
-          </div>
-          
-          <div>
-            <h3 class="text-lg font-semibold mb-4">Redes Sociais</h3>
-            <div class="flex space-x-4">
-              <a href="https://www.facebook.com/grupo3wonline" target="_blank" class="text-blue-200 hover:text-white transition-colors">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-              <a href="https://www.instagram.com/grupo3wonline" target="_blank" class="text-blue-200 hover:text-white transition-colors">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.004 5.367 18.637.001 12.017.001zM8.449 16.988c-2.458 0-4.467-2.01-4.467-4.468s2.009-4.467 4.467-4.467c2.458 0 4.467 2.009 4.467 4.467s-2.009 4.468-4.467 4.468zm7.519 0c-2.458 0-4.467-2.01-4.467-4.468s2.009-4.467 4.467-4.467c2.458 0 4.467 2.009 4.467 4.467s-2.009 4.468-4.467 4.468z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="border-t border-primary-700 mt-8 pt-8 text-center text-blue-200">
-          <p>&copy; 2025 3W Online – Todos os direitos reservados.</p>
-        </div>
-      </div>
-    </footer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { Icon } from '@iconify/vue'
+import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import PriceSimulator from '@/components/PriceSimulator.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import { useSeo } from '@/composables/useSeo'
 
-const isSubmitting = ref(false)
-const openFaq = ref<number | null>(null)
-
-const form = reactive({
-  nome: '',
-  empresa: '',
-  email: '',
-  telefone: '',
-  projeto: '',
-  mensagem: ''
+const { applySeo } = useSeo()
+applySeo({
+  title: 'Criação de Sites e Sistemas Web Sob Medida em Curitiba | 3W Online',
+  description: 'Criação de sites profissionais, landing pages e sistemas sob medida em Curitiba. Carregamento ultrarrápido em menos de 1.5s, código limpo e 30 dias de garantia.',
+  path: '/lp-sites-sistemas',
+  keywords: 'criação de sites curitiba, desenvolvimento sistemas curitiba, landing pages alta conversão, software house curitiba',
 })
 
 const faqs = [
-  {
-    question: "Quanto tempo leva para desenvolver um site?",
-    answer: "O prazo varia de acordo com a complexidade do projeto. Sites simples ficam prontos em 7-15 dias, enquanto projetos mais complexos podem levar de 30 a 60 dias."
-  },
-  {
-    question: "Vocês oferecem suporte após a entrega do projeto?",
-    answer: "Sim! Oferecemos 30 dias de suporte gratuito para correções e ajustes. Também temos planos de manutenção mensal para atualizações contínuas."
-  },
-  {
-    question: "Quais são as formas de pagamento?",
-    answer: "Aceitamos PIX, cartão de crédito, débito, transferência bancária e boleto. Para projetos maiores, oferecemos parcelamento personalizado."
-  },
-  {
-    question: "Posso alterar o projeto depois de iniciado?",
-    answer: "Sim, mas alterações significativas podem impactar prazo e valor. Sempre discutimos mudanças antes de implementá-las."
-  },
-  {
-    question: "Como é feito o acompanhamento do projeto?",
-    answer: "Mantemos comunicação constante via WhatsApp e e-mail, com atualizações regulares sobre o progresso do desenvolvimento."
-  },
-  {
-    question: "Vocês trabalham com empresas de outros estados?",
-    answer: "Sim! Atendemos clientes de todo o Brasil. Todo o processo pode ser feito remotamente com total eficiência."
-  },
-  {
-    question: "Existe algum tipo de garantia?",
-    answer: "Oferecemos 30 dias de garantia para correções de bugs e ajustes sem custo adicional."
-  },
-  {
-    question: "Posso solicitar uma consultoria antes de contratar?",
-    answer: "Claro! Oferecemos consultoria gratuita para entender suas necessidades e propor a melhor solução."
-  },
-  {
-    question: "Vocês fazem apenas sites ou também sistemas complexos?",
-    answer: "Desenvolvemos desde sites institucionais até sistemas complexos de gestão, e-commerce e aplicativos mobile."
-  },
-  {
-    question: "Como posso solicitar um orçamento?",
-    answer: "Você pode preencher o formulário nesta página ou entrar em contato diretamente pelo WhatsApp. Respondemos em até 24 horas."
-  }
+  { question: 'Quanto tempo demora para desenvolver um site ou sistema?', answer: 'Sites institucionais e landing pages de alta conversão costumam ser entregues em 7 a 15 dias úteis. Sistemas web sob medida têm prazos médios de 15 a 30 dias úteis, com entregas parciais para validação contínua.' },
+  { question: 'O código-fonte será da minha empresa ou fico preso à 3W Online?', answer: 'O código é 100% de sua propriedade. Após a conclusão e pagamento do projeto, fornecemos o repositório completo e arquivos finais para sua empresa hospedar onde preferir.' },
+  { question: 'Como funciona a garantia pós-entrega?', answer: 'Todos os nossos projetos contam com 30 dias de garantia técnica gratuita pós-publicação. Se qualquer problema ou instabilidade ocorrer, corrigimos sem qualquer custo adicional.' },
+  { question: 'Vocês ajudam a registrar o domínio e hospedar o site?', answer: 'Sim! Como bônus exclusivo, fornecemos a configuração completa de domínio, hospedagem SSD e certificado SSL de segurança grátis no primeiro ano.' },
+  { question: 'Consigo atualizar o conteúdo do site sozinho depois?', answer: 'Com certeza! Desenvolvemos áreas administrativas intuitivas e fornecemos um treinamento gravado em vídeo ensinando como alterar textos, fotos e produtos com facilidade.' },
+  { question: 'Quais as formas de pagamento disponíveis?', answer: 'Facilitamos o pagamento com 5% de desconto no PIX, parcelamento em até 12x no cartão de crédito ou faturamento via boleto com emissão de NF-e para pessoa jurídica.' },
 ]
-
-const toggleFaq = (index: number) => {
-  openFaq.value = openFaq.value === index ? null : index
-}
-
-const openWhatsApp = (tipo: string) => {
-  const messages = {
-    site: "Olá! Tenho interesse em desenvolver um site. Gostaria de saber mais detalhes.",
-    sistema: "Olá! Preciso de um sistema personalizado para minha empresa. Podem me ajudar?",
-    app: "Olá! Quero desenvolver um aplicativo mobile. Vamos conversar?"
-  }
-  
-  const message = messages[tipo as keyof typeof messages] || "Olá! Gostaria de saber mais sobre os serviços da 3W Online."
-  const whatsappUrl = `https://wa.me/5541996924829?text=${encodeURIComponent(message)}`
-  window.open(whatsappUrl, '_blank')
-}
-
-const submitForm = async () => {
-  isSubmitting.value = true
-  
-  try {
-    // Simulating form submission
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // Create WhatsApp message
-    const message = `
-Novo orçamento solicitado:
-
-Nome: ${form.nome}
-Empresa: ${form.empresa || 'Não informado'}
-Email: ${form.email}
-Telefone: ${form.telefone}
-Tipo de Projeto: ${form.projeto}
-Descrição: ${form.mensagem || 'Não informado'}
-    `.trim()
-    
-    // Open WhatsApp with the message
-    const whatsappUrl = `https://wa.me/5541996924829?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
-    
-    // Reset form
-    Object.assign(form, {
-      nome: '',
-      empresa: '',
-      email: '',
-      telefone: '',
-      projeto: '',
-      mensagem: ''
-    })
-    
-    alert('Obrigado pelo seu interesse! Entraremos em contato em breve.')
-    
-  } catch (error) {
-    alert('Erro ao enviar mensagem. Tente novamente.')
-  } finally {
-    isSubmitting.value = false
-  }
-}
 </script>
-
-<style scoped>
-.landing-sites-sistemas {
-  font-family: 'Inter', sans-serif;
-}
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 1s ease-out;
-}
-
-.animate-slide-up {
-  animation: slideUp 1s ease-out 0.3s both;
-}
-
-/* Hover effects */
-.hover\:shadow-xl:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .grid {
-    gap: 1.5rem;
-  }
-  
-  .hero-section h1 {
-    font-size: 2.5rem;
-  }
-  
-  .hero-section p {
-    font-size: 1.125rem;
-  }
-}
-
-/* Focus styles for accessibility */
-input:focus,
-textarea:focus,
-button:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-</style>

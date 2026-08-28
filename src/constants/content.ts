@@ -7,7 +7,6 @@ export const WHATSAPP_NUMBER = '5541996924829'
 export const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_NUMBER}`
 export const COMPANY_EMAIL = 'contato@3wonline.com.br'
 export const COMPANY_PHONE = '(41) 99692-4829'
-export const COMPANY_CNPJ = '25.530.623/0001-05'
 
 export interface FaqItem {
   question: string

@@ -1,45 +1,38 @@
 <template>
-  <router-link
+  <RouterLink
     :to="tool.path"
-    class="block bg-white rounded-xl border border-gray-100 shadow-sm p-6 hover:shadow-lg hover:scale-[1.02] transition-all duration-200 cursor-pointer group"
+    class="block bg-white rounded-xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:border-primary-200 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer group flex flex-col justify-between"
   >
-    <div class="flex items-start space-x-4">
-      <div class="flex-shrink-0">
-        <div
-          class="w-12 h-12 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform"
-        >
-          <i :class="['fas', tool.icon, 'text-white text-xl']"></i>
+    <div>
+      <div class="flex items-start gap-3.5 mb-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform shadow-sm">
+          <i :class="['fas', tool.icon, 'text-lg']"></i>
         </div>
-      </div>
-
-      <div class="flex-1 min-w-0">
-        <h3
-          class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors"
-        >
-          {{ tool.name }}
-        </h3>
-        <p class="text-sm text-gray-600 line-clamp-2">
-          {{ tool.description }}
-        </p>
-
-        <div class="mt-3 flex items-center justify-between">
-          <span
-            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700 capitalize"
-          >
-            <i :class="getCategoryIcon(tool.category)" class="mr-1"></i>
+        <div class="flex-1 min-w-0">
+          <h3 class="text-sm font-bold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors line-clamp-1">
+            {{ tool.name }}
+          </h3>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 capitalize">
             {{ getCategoryName(tool.category) }}
           </span>
-
-          <span class="text-primary-600 group-hover:translate-x-1 transition-transform">
-            <i class="fas fa-arrow-right"></i>
-          </span>
         </div>
       </div>
+
+      <p class="text-xs text-gray-500 line-clamp-2 leading-relaxed mb-3">
+        {{ tool.description }}
+      </p>
     </div>
-  </router-link>
+
+    <div class="pt-2.5 border-t border-gray-100 flex items-center justify-between text-xs text-primary-600 font-semibold group-hover:text-primary-700">
+      <span class="text-[11px]">Abrir Ferramenta</span>
+      <Icon icon="mdi:arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+    </div>
+  </RouterLink>
 </template>
 
 <script setup lang="ts">
+import { Icon } from '@iconify/vue'
+
 export interface Tool {
   id: string
   name: string
@@ -52,18 +45,6 @@ export interface Tool {
 defineProps<{
   tool: Tool
 }>()
-
-const getCategoryIcon = (category: string): string => {
-  const icons: Record<string, string> = {
-    calculadoras: 'fas fa-calculator',
-    geradores: 'fas fa-wand-magic-sparkles',
-    texto: 'fas fa-text-height',
-    conversores: 'fas fa-arrows-rotate',
-    validadores: 'fas fa-check-circle',
-    simuladores: 'fas fa-chart-line',
-  }
-  return icons[category] || 'fas fa-folder'
-}
 
 const getCategoryName = (category: string): string => {
   const names: Record<string, string> = {
@@ -79,6 +60,12 @@ const getCategoryName = (category: string): string => {
 </script>
 
 <style scoped>
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

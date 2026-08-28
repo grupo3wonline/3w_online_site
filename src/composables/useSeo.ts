@@ -1,7 +1,7 @@
 /**
  * Composable para SEO, SEM, GEO e AEO (Answer Engine Optimization).
  * Gerencia meta tags, dados estruturados (Schema.org/JSON-LD),
- * Open Graph, Twitter Cards, canonical URLs, geo-targeting e AEO.
+ * Open Graph, Twitter Cards, canonical URLs, geo-targeting, AEO para IA e SEM.
  */
 
 const BASE_URL = 'https://www.3wonline.com.br'
@@ -11,7 +11,17 @@ const GEO_REGION = 'BR-PR'
 const GEO_PLACE = 'Curitiba'
 const GEO_POSITION = '-25.4284;-49.2733'
 
-interface SeoConfig {
+export interface FaqItem {
+  question: string
+  answer: string
+}
+
+export interface StepItem {
+  name: string
+  text: string
+}
+
+export interface SeoConfig {
   title: string
   description: string
   path?: string
@@ -19,6 +29,10 @@ interface SeoConfig {
   type?: string
   keywords?: string
   noindex?: boolean
+  faqs?: FaqItem[]
+  steps?: StepItem[]
+  serviceType?: string
+  servicePrice?: string
 }
 
 export function useSeo() {
@@ -71,46 +85,6 @@ export function useSeo() {
     document.head.appendChild(script)
   }
 
-  /** Apply full SEO configuration to current page */
-  function applySeo(config: SeoConfig) {
-    const { title, description, path = '/', image = DEFAULT_IMAGE, type = 'website', keywords, noindex } = config
-    const fullUrl = `${BASE_URL}${path}`
-
-    // Title
-    document.title = title
-
-    // Basic meta
-    setMetaName('description', description)
-    setMetaName('robots', noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
-    if (keywords) setMetaName('keywords', keywords)
-
-    // Open Graph
-    setMetaProperty('og:title', title)
-    setMetaProperty('og:description', description)
-    setMetaProperty('og:url', fullUrl)
-    setMetaProperty('og:type', type)
-    setMetaProperty('og:image', image)
-    setMetaProperty('og:image:width', '1200')
-    setMetaProperty('og:image:height', '630')
-    setMetaProperty('og:site_name', SITE_NAME)
-    setMetaProperty('og:locale', 'pt_BR')
-
-    // Twitter Cards
-    setMetaName('twitter:card', 'summary_large_image')
-    setMetaName('twitter:title', title)
-    setMetaName('twitter:description', description)
-    setMetaName('twitter:image', image)
-
-    // GEO targeting
-    setMetaName('geo.region', GEO_REGION)
-    setMetaName('geo.placename', GEO_PLACE)
-    setMetaName('geo.position', GEO_POSITION)
-    setMetaName('ICBM', GEO_POSITION.replace(';', ', '))
-
-    // Canonical
-    setCanonical(fullUrl)
-  }
-
   /** Schema.org — Organization (site-wide) */
   const organizationSchema = {
     '@context': 'https://schema.org',
@@ -119,7 +93,7 @@ export function useSeo() {
     alternateName: 'Grupo 3W Online',
     url: BASE_URL,
     logo: `${BASE_URL}/favicon.svg`,
-    description: 'Agência de marketing digital, criação de sites, sistemas e automação com IA em Curitiba, Paraná, Brasil.',
+    description: 'Agência de marketing digital, criação de sites, sistemas sob medida e automação com IA em Curitiba/PR.',
     foundingDate: '2019',
     address: {
       '@type': 'PostalAddress',
@@ -136,14 +110,12 @@ export function useSeo() {
       '@type': 'ContactPoint',
       telephone: '+55-41-99692-4829',
       contactType: 'customer service',
-      availableLanguage: ['Portuguese'],
-      areaServed: 'BR',
+      availableLanguage: ['Portuguese', 'English'],
+      areaServed: ['BR', 'US', 'EU'],
     },
     sameAs: [
       'https://www.facebook.com/grupo3wonline',
       'https://www.instagram.com/grupo3wonline',
-      'https://www.linkedin.com/company/grupo3wonline',
-      'https://www.youtube.com/@grupo3wonline',
     ],
   }
 
@@ -208,14 +180,43 @@ export function useSeo() {
         '@type': 'ListItem',
         position: index + 1,
         name: item.name,
-        item: item.url,
+        item: item.url.startsWith('http') ? item.url : `${BASE_URL}${item.url}`,
       })),
     }
   }
 
-  /** Schema.org — Service */
-  function serviceSchema(name: string, description: string, url: string) {
+  /** Schema.org — FAQPage (AEO - Answer Engine Optimization) */
+  function faqSchema(faqs: FaqItem[]) {
     return {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+    }
+  }
+
+  /** Schema.org — Speakable (AEO para IA e Voice Search) */
+  function speakableSchema(url: string) {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      url,
+      speakable: {
+        '@type': 'SpeakableSpecification',
+        cssSelector: ['h1', '.page-hero-subtitle', '.section-title', '.section-subtitle'],
+      },
+    }
+  }
+
+  /** Schema.org — Service (SEM / SEO) */
+  function serviceSchema(name: string, description: string, url: string, price?: string) {
+    const schema: Record<string, unknown> = {
       '@context': 'https://schema.org',
       '@type': 'Service',
       serviceType: name,
@@ -234,23 +235,21 @@ export function useSeo() {
         servicePhone: '+55-41-99692-4829',
       },
     }
-  }
 
-  /** Schema.org — FAQPage (AEO - Answer Engine Optimization) */
-  function faqSchema(faqs: { question: string; answer: string }[]) {
-    return {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: faqs.map((faq) => ({
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
-      })),
+    if (price) {
+      schema.offers = {
+        '@type': 'Offer',
+        price,
+        priceCurrency: 'BRL',
+        availability: 'https://schema.org/InStock',
+      }
     }
+
+    return schema
   }
 
   /** Schema.org — HowTo (AEO) */
-  function howToSchema(name: string, description: string, steps: { name: string; text: string }[]) {
+  function howToSchema(name: string, description: string, steps: StepItem[]) {
     return {
       '@context': 'https://schema.org',
       '@type': 'HowTo',
@@ -265,17 +264,77 @@ export function useSeo() {
     }
   }
 
-  /** Schema.org — Offer (SEM) */
-  function offerSchema(name: string, description: string, price: string, currency = 'BRL') {
-    return {
-      '@context': 'https://schema.org',
-      '@type': 'Offer',
-      name,
+  /** Apply full SEO configuration to current page */
+  function applySeo(config: SeoConfig) {
+    const {
+      title,
       description,
-      price,
-      priceCurrency: currency,
-      availability: 'https://schema.org/InStock',
-      seller: { '@type': 'Organization', name: SITE_NAME },
+      path = '/',
+      image = DEFAULT_IMAGE,
+      type = 'website',
+      keywords,
+      noindex,
+      faqs,
+      steps,
+      serviceType,
+      servicePrice,
+    } = config
+
+    const fullUrl = `${BASE_URL}${path}`
+
+    // Title
+    document.title = title
+
+    // Basic meta
+    setMetaName('description', description)
+    setMetaName('robots', noindex ? 'noindex, nofollow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1')
+    if (keywords) setMetaName('keywords', keywords)
+
+    // Open Graph
+    setMetaProperty('og:title', title)
+    setMetaProperty('og:description', description)
+    setMetaProperty('og:url', fullUrl)
+    setMetaProperty('og:type', type)
+    setMetaProperty('og:image', image)
+    setMetaProperty('og:image:width', '1200')
+    setMetaProperty('og:image:height', '630')
+    setMetaProperty('og:site_name', SITE_NAME)
+    setMetaProperty('og:locale', 'pt_BR')
+
+    // Twitter Cards
+    setMetaName('twitter:card', 'summary_large_image')
+    setMetaName('twitter:title', title)
+    setMetaName('twitter:description', description)
+    setMetaName('twitter:image', image)
+
+    // GEO targeting (Curitiba / PR / Brasil)
+    setMetaName('geo.region', GEO_REGION)
+    setMetaName('geo.placename', GEO_PLACE)
+    setMetaName('geo.position', GEO_POSITION)
+    setMetaName('ICBM', GEO_POSITION.replace(';', ', '))
+
+    // AEO & Voice Search Meta
+    setMetaName('ai-search-bot', 'index, follow')
+    setMetaName('format-detection', 'telephone=no')
+
+    // Canonical
+    setCanonical(fullUrl)
+
+    // Injeção de Schemas Dinâmicos para AEO e SEO
+    injectJsonLd(organizationSchema, 'schema-org')
+    injectJsonLd(localBusinessSchema, 'schema-local')
+    injectJsonLd(speakableSchema(fullUrl), 'schema-speakable')
+
+    if (faqs && faqs.length > 0) {
+      injectJsonLd(faqSchema(faqs), 'schema-faq')
+    }
+
+    if (steps && steps.length > 0) {
+      injectJsonLd(howToSchema(title, description, steps), 'schema-howto')
+    }
+
+    if (serviceType) {
+      injectJsonLd(serviceSchema(serviceType, description, path, servicePrice), 'schema-service')
     }
   }
 
@@ -292,7 +351,7 @@ export function useSeo() {
     serviceSchema,
     faqSchema,
     howToSchema,
-    offerSchema,
+    speakableSchema,
     BASE_URL,
   }
 }

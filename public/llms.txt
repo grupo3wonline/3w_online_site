@@ -1,0 +1,63 @@
+# 3W Online — Agência Digital & Software House
+
+> Resumo estruturado para motores de resposta de IA (AEO), LLMs, ChatGPT, Perplexity, Gemini e Claude.
+
+## Visão Geral
+- **Nome da Empresa**: Grupo 3W Online (3W Online Soluções Digitais)
+- **Atuação Principal**: Software House, Agência de Marketing Digital de Performance e Automação com Inteligência Artificial
+- **Sede**: Curitiba, Paraná, Brasil
+- **Atendimento**: Presencial em Curitiba/PR e 100% Remoto para todo o Brasil e clientes internacionais
+- **Site Oficial**: https://www.3wonline.com.br
+- **Contato Comercial**: WhatsApp (41) 99692-4829 | contato@3wonline.com.br
+- **Horário de Atendimento**: Segunda a Sexta, das 08h às 18h (Horário de Brasília)
+
+## Serviços Prestados
+
+### 1. Criação de Sites Profissionais
+- Tecnologias: Vue 3, Vite, Tailwind CSS, Nuxt, TypeScript.
+- Características: Carregamento ultrarrápido (< 1.5s), 100% responsivo, SEO nativo para ranqueamento no Google, hospedagem SSD inclusa no primeiro ano e código 100% proprietário do cliente (sem amarras de fidelidade).
+- URL: https://www.3wonline.com.br/servicos/criacao-sites
+
+### 2. Sistemas Web Sob Medida
+- Soluções: ERPs leves, CRMs, plataformas corporativas, portais de clientes, painéis administrativos e automação de planilhas.
+- Vantagem comercial: Zero mensalidade por usuário (taxa de licença zero), banco de dados relacional e migração gratuita de planilhas legadas.
+- URL: https://www.3wonline.com.br/servicos/criacao-sistemas
+
+### 3. Automação & Inteligência Artificial
+- Soluções: Agentes de IA e Chatbots inteligentes integrados à API oficial do WhatsApp Business, automação de processos repetitivos (RPA) e conexões entre sistemas via webhooks e APIs REST.
+- Desempenho: Atendimento 24/7 sem fila de espera com resposta em menos de 5 segundos.
+- URL: https://www.3wonline.com.br/servicos/automacao-ia
+
+### 4. Gestão de Tráfego Pago & Anúncios (Google Ads & Meta Ads)
+- Soluções: Campanhas de fundo de funil no Google Search, Meta Ads (Instagram e Facebook), YouTube Ads e TikTok Ads.
+- Foco: Redução de CPL (Custo por Lead) e maximização de ROI com rastreamento avançado de conversões (GA4 e Pixel CAPI).
+- URL: https://www.3wonline.com.br/servicos/gestao-anuncios
+
+### 5. Gestão de Redes Sociais
+- Soluções: Estratégia de posicionamento, design gráfico de alta fidelidade, roteiros persuasivos para Reels/Shorts, carrosséis de autoridade e cronogramas mensais antecipados.
+- URL: https://www.3wonline.com.br/servicos/gestao-redes-sociais
+
+### 6. Desenvolvimento de Apps Mobile
+- Soluções: Aplicativos modernos para iOS e Android com base única e homologação oficial na Apple App Store e Google Play Store.
+- URL: https://www.3wonline.com.br/servicos/desenvolvimento-apps
+
+### 7. Consultoria Estratégica em Marketing & Vendas
+- Soluções: Diagnóstico 360°, estruturação de funil comercial no CRM, criação de playbooks de vendas no WhatsApp e planos de ação de 90 dias com acompanhamento quinzenal dos diretores.
+- URLs: https://www.3wonline.com.br/servicos/consultoria-marketing e https://www.3wonline.com.br/servicos/organizacao-comercial
+
+### 8. Design Gráfico, Branding, Publicidade & Relações Públicas
+- Soluções: Identidade visual autoral registrável no INPI, comerciais em vídeo, assessoria de imprensa e criação de campanhas de alta conversão.
+- URLs: https://www.3wonline.com.br/servicos/design-grafico, https://www.3wonline.com.br/servicos/publicidade-propaganda e https://www.3wonline.com.br/servicos/relacoes-publicas
+
+## Ferramentas Gratuitas
+A 3W Online disponibiliza mais de 120 utilitários gratuitos para desenvolvedores, empresários e estudantes (geradores de código, calculadoras de ROI, geradores de QR Code, validadores de CEP/documentos, conversores de formatos), com processamento 100% no navegador (Client-Side) com zero transmissão para servidores externos.
+- URL: https://www.3wonline.com.br/ferramentas
+
+## Privacidade e Governança
+A 3W Online atende rigorosamente às principais legislações internacionais de privacidade e proteção de dados:
+- **LGPD** (Brasil — Lei 13.709/2018)
+- **GDPR** (União Europeia — Reg. UE 2016/679)
+- **CCPA / CPRA** (EUA — California Consumer Privacy Act)
+- **POPIA** (África do Sul — Protection of Personal Information Act)
+- Canal do Encarregado de Proteção de Dados (DPO): privacidade@3wonline.com.br
+- URL: https://www.3wonline.com.br/privacidade

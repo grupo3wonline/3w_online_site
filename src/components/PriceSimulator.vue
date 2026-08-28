@@ -57,7 +57,7 @@
             <option value="google">Apenas Google Ads</option>
             <option value="meta">Apenas Meta Ads (Facebook/Instagram)</option>
             <option value="both">Google Ads + Meta Ads</option>
-            <option value="all">Google + Meta + TikTok/LinkedIn</option>
+            <option value="all">Google Ads + Meta Ads + TikTok Ads</option>
           </select>
         </div>
         <div>
