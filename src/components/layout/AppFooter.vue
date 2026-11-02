@@ -113,13 +113,20 @@
       <!-- Bottom Bar -->
       <div class="border-t border-slate-800/80 pt-6 mt-6">
         <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-gray-400 text-xs text-center md:text-left">
-            © {{ currentYear }} Grupo 3W Online. Todos os direitos reservados.
-          </p>
+          <div>
+            <p class="text-gray-400 text-xs text-center md:text-left">
+              © {{ currentYear }} Grupo 3W Online. Todos os direitos reservados.
+            </p>
+            <p class="text-gray-500 text-[10px] text-center md:text-left mt-1">
+              Sistema desenvolvido por <span class="text-gray-400 font-medium">HOTWYL</span> <span class="text-gray-600">|</span> <span class="text-gray-400 font-medium">WILLFROMBRASIL</span>
+            </p>
+          </div>
           <div class="flex flex-wrap justify-center items-center gap-4 text-xs">
             <RouterLink to="/privacidade" class="footer-link">Política de Privacidade Global</RouterLink>
             <span class="text-gray-700">•</span>
             <RouterLink to="/termos" class="footer-link">Termos de Uso</RouterLink>
+            <span class="text-gray-700">•</span>
+            <RouterLink to="/cookies" class="footer-link">Política de Cookies</RouterLink>
             <span class="text-gray-700">•</span>
             <RouterLink to="/regulamento" class="footer-link">Regulamento</RouterLink>
             <span class="text-gray-700">•</span>

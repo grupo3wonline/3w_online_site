@@ -106,6 +106,16 @@
             <span>Orçamento Grátis</span>
           </RouterLink>
 
+          <!-- Dark Mode Toggle -->
+          <button
+            @click="toggleDark()"
+            class="p-2 rounded-lg hover:bg-white/10 transition-colors text-white focus:outline-none focus:ring-2 focus:ring-primary-400"
+            :aria-label="isDark ? 'Ativar tema claro' : 'Ativar tema escuro'"
+            :title="isDark ? 'Tema claro' : 'Tema escuro'"
+          >
+            <i :class="['fas', isDark ? 'fa-sun' : 'fa-moon', 'w-5 h-5']"></i>
+          </button>
+
           <!-- Mobile Hamburger Toggle -->
           <button
             class="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors text-white focus:outline-none focus:ring-2 focus:ring-primary-400"
@@ -172,6 +182,9 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
+import { useDarkMode } from '@/composables/useDarkMode'
+
+const { isDark, toggleDark } = useDarkMode()
 
 const route = useRoute()
 const mobileOpen = ref(false)

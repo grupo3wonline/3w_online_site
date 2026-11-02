@@ -74,6 +74,16 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    path: '/cookies',
+    name: 'Cookies',
+    component: () => import('@/views/Cookies.vue'),
+    meta: {
+      title: 'Política de Cookies | 3W Online',
+      description: 'Saiba quais cookies utilizamos e como gerenciar suas preferências de privacidade na 3W Online.',
+      keywords: 'cookies, política de cookies, privacidade, lgpd, 3w online',
+    },
+  },
+  {
     path: '/institucional',
     name: 'Institucional',
     component: () => import('@/views/Institucional.vue'),
