@@ -73,6 +73,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import DOMPurify from 'dompurify'
 import Swal from 'sweetalert2'
 import { useAnalytics } from '../../composables/useAnalytics'
 
@@ -147,7 +148,7 @@ const markdownToHTML = (md) => {
 }
 
 const converter = () => {
-  html.value = markdownToHTML(markdown.value)
+  html.value = DOMPurify.sanitize(markdownToHTML(markdown.value))
   
   if (markdown.value) {
     trackToolUsage('Conversor Markdown', 'convert')

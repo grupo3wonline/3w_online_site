@@ -27,6 +27,7 @@
         :min="min"
         :max="max"
         :step="step"
+        autocomplete="off"
         :class="inputClasses"
         @input="handleInput"
         @blur="$emit('blur', $event)"

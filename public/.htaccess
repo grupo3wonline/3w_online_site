@@ -101,8 +101,8 @@ ErrorDocument 500 /500.html
   # Previne ataque MIME-sniffing
   Header always set X-Content-Type-Options "nosniff"
 
-  # Previne Clickjacking (permite carregar em mesmo domínio)
-  Header always set X-Frame-Options "SAMEORIGIN"
+  # Previne Clickjacking (bloqueia iframe em qualquer origem)
+  Header always set X-Frame-Options "DENY"
 
   # Proteção XSS básica dos navegadores
   Header always set X-XSS-Protection "1; mode=block"
@@ -112,6 +112,9 @@ ErrorDocument 500 /500.html
 
   # Política de Recursos do Navegador
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  # HSTS — Força HTTPS por 1 ano em todos os subdomínios
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
 
   # Controle de Cache para Assets
   <FilesMatch "\.(css|js|woff2|woff|ttf|png|jpg|jpeg|webp|svg)$">

@@ -100,6 +100,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import DOMPurify from 'dompurify'
 import BaseButton from './common/BaseButton.vue'
 import BaseInput from './common/BaseInput.vue'
 import { useAnalytics } from '../../composables/useAnalytics'
@@ -193,7 +194,7 @@ const calcular = () => {
     denominador: denResultado,
     decimal: numResultado / denResultado,
     mmc: mmcDen,
-    explicacao,
+    explicacao: DOMPurify.sanitize(explicacao),
     simplificado: precisaSimplificar,
     numSimplificado: simplificado.numerador,
     denSimplificado: simplificado.denominador

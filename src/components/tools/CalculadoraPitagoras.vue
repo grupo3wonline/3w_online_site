@@ -136,6 +136,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import DOMPurify from 'dompurify'
 import BaseButton from './common/BaseButton.vue'
 import BaseInput from './common/BaseInput.vue'
 import { useAnalytics } from '../../composables/useAnalytics'
@@ -196,7 +197,7 @@ const calcular = () => {
   }
 
   resultado.value = valor
-  explicacao.value = explicacaoTexto
+  explicacao.value = DOMPurify.sanitize(explicacaoTexto)
   calculado.value = true
   trackToolUsage('Calculadora Pitagoras', 'calculate', { mode: modoSelecionado.value })
 }

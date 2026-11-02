@@ -70,6 +70,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import DOMPurify from 'dompurify'
 import BaseInput from './common/BaseInput.vue'
 import { useAnalytics } from '../../composables/useAnalytics'
 
@@ -102,7 +103,7 @@ const testar = () => {
         highlighted = highlighted.replace(match, `<mark class="bg-yellow-300 dark:bg-yellow-600">${match}</mark>`)
       })
     }
-    textoHighlighted.value = highlighted
+    textoHighlighted.value = DOMPurify.sanitize(highlighted)
     
     resultado.value = true
     erro.value = ''

@@ -64,7 +64,7 @@
               </div>
             </div>
 
-            <form @submit.prevent="handleSubmit" novalidate class="space-y-4 pt-2">
+            <form @submit.prevent="debouncedSubmit" novalidate autocomplete="off" class="space-y-4 pt-2">
               <!-- Áreas de Interesse (Multi-seleção com checkboxes estilizados) -->
               <div>
                 <label class="form-label text-xs">Quais serviços você tem interesse?</label>
@@ -170,6 +170,19 @@
                 </label>
               </div>
               <p v-if="errors.privacy" class="form-error -mt-1">{{ errors.privacy }}</p>
+
+              <!-- Honeypot (anti-bot) — invisível ao usuário real -->
+              <input
+                type="text"
+                v-model="hpField"
+                name="hp_field"
+                tabindex="-1"
+                aria-hidden="true"
+                style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;"
+                autocomplete="off"
+              />
+              <!-- CSRF token -->
+              <input type="hidden" name="_csrf" :value="getToken()" />
 
               <!-- Botão de Envio -->
               <div class="pt-2">
@@ -350,6 +363,9 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { FAQ_ITEMS } from '@/constants/content'
 import { useSeo } from '@/composables/useSeo'
+import { useHoneypot } from '@/composables/useHoneypot'
+import { useCSRFToken } from '@/composables/useCSRFToken'
+import { debounce } from '@/composables/useDebounce'
 
 const { applySeo } = useSeo()
 applySeo({
@@ -358,6 +374,9 @@ applySeo({
   path: '/contato',
   keywords: 'contato 3w online, orçamento criação de sites, orçamento marketing digital, whatsapp 3w online',
 })
+
+const { hpField, isBot, resetHoneypot } = useHoneypot()
+const { getToken } = useCSRFToken()
 
 const isSubmitting = ref(false)
 const errors = reactive<Record<string, string>>({})
@@ -426,6 +445,7 @@ async function handleSubmit() {
 
     window.open(`https://wa.me/5541996924829?text=${encodeURIComponent(msg)}`, '_blank')
     Object.assign(form, { name: '', email: '', phone: '', company: '', message: '', privacy: false, areas: [] })
+    resetHoneypot()
   } catch {
     await Swal.fire({
       icon: 'error',
@@ -437,4 +457,9 @@ async function handleSubmit() {
     isSubmitting.value = false
   }
 }
+
+const debouncedSubmit = debounce(async () => {
+  if (isBot.value) return
+  await handleSubmit()
+}, 300)
 </script>
