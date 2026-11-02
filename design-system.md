@@ -312,7 +312,84 @@ Com as classes CSS de suporte:
 
 ---
 
-## 6. Diretrizes de Acessibilidade & Boas Práticas (A11y)
+## 6. Dark Mode
+
+### Como Ativar
+
+O tema escuro é ativado pelo botão de alternância localizado na **barra de navegação principal** (`AppNavbar.vue`). O botão chama `toggleDark()` do composable `useDarkMode`, que:
+
+1. Adiciona ou remove a classe `dark` do elemento `<html>` (`document.documentElement`).
+2. Persiste a preferência no `localStorage` com a chave `theme` (`"dark"` ou `"light"`).
+3. Na próxima visita, o tema salvo é restaurado automaticamente via `onMounted`.
+
+### Persistência (localStorage)
+
+| Chave | Valores possíveis | Descrição |
+|---|---|---|
+| `theme` | `"dark"` / `"light"` | Preferência de tema do usuário |
+
+Se a chave não existir, o composable detecta a preferência do sistema operacional via `window.matchMedia('(prefers-color-scheme: dark)')`.
+
+### Como Usar Tokens Tailwind `dark:` nas Classes
+
+O Tailwind CSS está configurado com `darkMode: 'class'` no `tailwind.config.js`. Para estilizar elementos de forma diferente no tema escuro, use o prefixo `dark:`:
+
+```html
+<!-- Fundo e texto que se adaptam ao tema -->
+<div class="bg-white text-gray-900 dark:bg-slate-900 dark:text-white">
+  Conteúdo adaptável
+</div>
+
+<!-- Bordas e sombras -->
+<div class="border border-gray-200 dark:border-slate-700 shadow-sm dark:shadow-slate-900/50">
+  Card adaptável
+</div>
+
+<!-- Botão com variação dark -->
+<button class="bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600">
+  Ação
+</button>
+```
+
+### Exemplo de Uso do Composable `useDarkMode`
+
+```typescript
+// Em qualquer componente Vue
+import { useDarkMode } from '@/composables/useDarkMode'
+
+const { isDark, toggleDark } = useDarkMode()
+
+// isDark.value → true quando o tema escuro está ativo
+// toggleDark()  → alterna entre dark e light, persiste no localStorage
+```
+
+```vue
+<template>
+  <button @click="toggleDark" :aria-label="isDark ? 'Ativar tema claro' : 'Ativar tema escuro'">
+    <Icon :icon="isDark ? 'mdi:weather-sunny' : 'mdi:weather-night'" class="w-5 h-5" />
+  </button>
+</template>
+
+<script setup lang="ts">
+import { useDarkMode } from '@/composables/useDarkMode'
+import { Icon } from '@iconify/vue'
+
+const { isDark, toggleDark } = useDarkMode()
+</script>
+```
+
+### Teste Unitário
+
+O composable `useDarkMode` é coberto por 4 testes em `src/tests/composables/useDarkMode.test.ts`:
+
+- `toggleDark()` adiciona a classe `dark` ao `documentElement`
+- Segunda chamada remove a classe `dark`
+- `isDark.value` reflete corretamente o estado atual
+- `localStorage` persiste `"dark"` ou `"light"` conforme o estado
+
+---
+
+## 7. Diretrizes de Acessibilidade & Boas Práticas (A11y)
 
 1. **Foco Visível Global**:
    - Todo elemento interativo focado via teclado recebe `outline: 2px solid #3b82f6; outline-offset: 2px;`.
