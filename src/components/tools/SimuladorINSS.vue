@@ -1,224 +1,309 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full mb-4">
-          <i class="fas fa-hands-helping text-purple-600 dark:text-purple-400 text-2xl"></i>
+  <ToolShell
+    title="Simulador de INSS"
+    description="Calcule a contribuição mensal do INSS 2025 pela tabela progressiva ou estime seu benefício futuro."
+    icon="fa-shield-halved"
+    icon-gradient="from-blue-500 to-indigo-700"
+    orb-color="blue"
+    :quick-tips="['Tabela 2025 progressiva', 'Teto R$ 908,86', 'Benefício estimado']"
+    :tips="[
+      { title: 'Tabela INSS 2025', text: 'Faixas: 7,5% até R$ 1.412 | 9% até R$ 2.667 | 12% até R$ 4.000 | 14% até R$ 7.786. Teto: R$ 908,86.', type: 'info' },
+      { title: 'Alíquota efetiva', text: 'O INSS usa tabela progressiva: você paga a alíquota mais alta apenas sobre a parte do salário que ultrapassa cada faixa.' },
+      { title: 'Benefício mínimo', text: 'O benefício do INSS não pode ser inferior ao salário mínimo (R$ 1.412 em 2025), mesmo para quem contribuiu pouco.', type: 'success' },
+    ]"
+    :examples="[
+      { title: 'Salário R$ 2.000', desc: 'Empregado CLT, tabela 2025', result: 'INSS: ~R$ 157,09 (alíquota efetiva 7,85%)' },
+      { title: 'Salário R$ 5.000', desc: 'Empregado CLT, tabela 2025', result: 'INSS: ~R$ 489,22 (alíquota efetiva 9,78%)' },
+      { title: 'Salário R$ 7.786+', desc: 'Teto do INSS 2025', result: 'INSS máximo: R$ 908,86 (teto da contribuição)' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0">
+          <!-- Abas -->
+          <div class="grid grid-cols-2 gap-2 mb-4">
+            <button
+              @click="tipoCalculo = 'contribuicao'"
+              :class="['p-3 rounded-xl font-semibold text-sm transition-all', tipoCalculo === 'contribuicao' ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-200 hover:bg-gray-200 dark:hover:bg-slate-600']"
+            >
+              <i class="fas fa-money-bill-wave mr-1.5"></i>
+              Contribuição
+            </button>
+            <button
+              @click="tipoCalculo = 'beneficio'"
+              :class="['p-3 rounded-xl font-semibold text-sm transition-all', tipoCalculo === 'beneficio' ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-slate-200 hover:bg-gray-200 dark:hover:bg-slate-600']"
+            >
+              <i class="fas fa-gift mr-1.5"></i>
+              Benefício Futuro
+            </button>
+          </div>
+
+          <!-- Formulário Contribuição -->
+          <div v-if="tipoCalculo === 'contribuicao'" class="space-y-3">
+            <BaseInput
+              v-model="salarioBruto"
+              label="Salário Bruto (R$)"
+              type="number" :min="0" step="100"
+              icon="fa-money-bill"
+              placeholder="3000"
+              tooltip="Informe seu salário bruto mensal. O INSS é calculado sobre este valor."
+              @input="calcularContribuicaoAuto"
+            />
+            <div>
+              <label class="input-aurora-label">
+                <i class="fas fa-user-tie mr-1.5 text-blue-500"></i>
+                Tipo de Segurado
+              </label>
+              <div class="grid grid-cols-2 gap-2 mt-1">
+                <button
+                  @click="tipoSegurado = 'empregado'; calcularContribuicaoAuto()"
+                  :class="['p-3 rounded-xl border-2 text-sm transition-all text-left', tipoSegurado === 'empregado' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-slate-600']"
+                >
+                  <div class="font-bold text-sm">Empregado CLT</div>
+                  <div class="text-[10px] opacity-70 mt-0.5">Desconto 7,5% a 14%</div>
+                </button>
+                <button
+                  @click="tipoSegurado = 'autonomo'; calcularContribuicaoAuto()"
+                  :class="['p-3 rounded-xl border-2 text-sm transition-all text-left', tipoSegurado === 'autonomo' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-slate-600']"
+                >
+                  <div class="font-bold text-sm">Autônomo/MEI</div>
+                  <div class="text-[10px] opacity-70 mt-0.5">Contribuição variável</div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formulário Benefício -->
+          <div v-else class="space-y-3">
+            <BaseInput
+              v-model="idadeAtual"
+              label="Idade Atual"
+              type="number" :min="18" :max="80"
+              icon="fa-user"
+              placeholder="35"
+              @input="calcularBeneficioAuto"
+            />
+            <BaseInput
+              v-model="tempoContribuicao"
+              label="Tempo de Contribuição (anos)"
+              type="number" :min="0" :max="50"
+              icon="fa-calendar-check"
+              placeholder="15"
+              tooltip="Tempo total de contribuição ao INSS em anos."
+              @input="calcularBeneficioAuto"
+            />
+            <BaseInput
+              v-model="mediaSalarial"
+              label="Média Salarial Histórica (R$)"
+              type="number" :min="0" step="100"
+              icon="fa-chart-line"
+              placeholder="3500"
+              hint="Média dos seus salários de contribuição"
+              @input="calcularBeneficioAuto"
+            />
+          </div>
+
+          <div class="flex gap-3 mt-4">
+            <BaseButton
+              variant="success" icon="fa-calculator"
+              @click="tipoCalculo === 'contribuicao' ? calcularContribuicao() : calcularBeneficio()"
+              class="flex-1"
+            >
+              Calcular
+            </BaseButton>
+            <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
+              Limpar
+            </BaseButton>
+          </div>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Simulador de INSS</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule suas contribuições e benefícios previdenciários</p>
       </div>
 
-      <div class="space-y-6">
-        <div class="flex gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <button @click="tipoCalculo = 'contribuicao'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="tipoCalculo === 'contribuicao' ? 'bg-purple-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-money-bill-wave mr-2"></i>
-            Contribuição Mensal
-          </button>
-          <button @click="tipoCalculo = 'beneficio'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="tipoCalculo === 'beneficio' ? 'bg-purple-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-gift mr-2"></i>
-            Benefício Futuro
-          </button>
-        </div>
-
-        <div v-if="tipoCalculo === 'contribuicao'" class="space-y-4">
-          <BaseInput v-model="salarioBruto" label="Salário Bruto (R$)" type="number" :min="0" step="100" icon="fa-solid fa-money-bill" />
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de Segurado</label>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <button @click="tipoSegurado = 'empregado'" class="p-4 rounded-lg border-2 transition-all text-left" :class="tipoSegurado === 'empregado' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-300 dark:border-gray-600'">
-                <div class="font-bold text-gray-900 dark:text-white">Empregado CLT</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Desconto de 7,5% a 14%</div>
-              </button>
-              <button @click="tipoSegurado = 'autonomo'" class="p-4 rounded-lg border-2 transition-all text-left" :class="tipoSegurado === 'autonomo' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-300 dark:border-gray-600'">
-                <div class="font-bold text-gray-900 dark:text-white">Autônomo/MEI</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400 mt-1">Contribuição variável</div>
-              </button>
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="resultado" class="space-y-4">
+            <!-- Destaque principal -->
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">{{ resultado.titulo }}</p>
+              <p class="text-5xl font-black text-white mb-2">R$ {{ resultado.valor }}</p>
+              <p class="text-indigo-300 text-sm font-semibold">{{ resultado.subtitulo }}</p>
             </div>
-          </div>
 
-          <BaseButton @click="calcularContribuicao" variant="primary" class="w-full">
-            <i class="fas fa-calculator mr-2"></i>
-            Calcular Contribuição
-          </BaseButton>
-        </div>
-
-        <div v-else class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <BaseInput v-model="idadeAtual" label="Idade Atual" type="number" :min="18" :max="80" icon="fa-solid fa-user" />
-            <BaseInput v-model="tempoContribuicao" label="Tempo de Contribuição (anos)" type="number" :min="0" :max="50" icon="fa-solid fa-calendar-check" />
-            <BaseInput v-model="mediaSalarial" label="Média Salarial Histórica (R$)" type="number" :min="0" step="100" icon="fa-solid fa-chart-line" />
-          </div>
-
-          <BaseButton @click="calcularBeneficio" variant="primary" class="w-full">
-            <i class="fas fa-calculator mr-2"></i>
-            Simular Benefício
-          </BaseButton>
-        </div>
-
-        <div v-if="resultado" class="space-y-4">
-          <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-8 text-center text-white">
-            <div class="text-sm font-medium mb-2">{{ resultado.titulo }}</div>
-            <div class="text-5xl font-bold mb-2">R$ {{ resultado.valor }}</div>
-            <div class="text-purple-100">{{ resultado.subtitulo }}</div>
-          </div>
-
-          <div v-if="resultado.detalhes" class="space-y-3">
-            <div v-for="item in resultado.detalhes" :key="item.label" class="flex justify-between items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div>
-                <div class="font-semibold text-gray-900 dark:text-white">{{ item.label }}</div>
-                <div class="text-sm text-gray-600 dark:text-gray-400">{{ item.descricao }}</div>
-              </div>
-              <div class="text-xl font-bold text-purple-600 dark:text-purple-400">{{ item.valor }}</div>
-            </div>
-          </div>
-
-          <div class="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 p-4">
-            <div class="flex">
-              <i class="fas fa-info-circle text-purple-600 dark:text-purple-400 mt-1 mr-3"></i>
-              <div class="text-sm text-purple-800 dark:text-purple-300">
-                <p class="font-semibold mb-2">{{ resultado.infoTitulo }}</p>
-                <ul class="list-disc list-inside space-y-1 text-xs">
-                  <li v-for="info in resultado.infos" :key="info">{{ info }}</li>
-                </ul>
+            <!-- Detalhes -->
+            <div v-if="resultado.detalhes" class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+                <i class="fas fa-list-check text-blue-500"></i>
+                Detalhamento
+              </h4>
+              <div class="space-y-1.5">
+                <div
+                  v-for="item in resultado.detalhes" :key="item.label"
+                  class="flex justify-between items-start py-1.5 border-b border-gray-100 dark:border-slate-700 last:border-0 text-sm"
+                >
+                  <div>
+                    <div class="font-semibold text-gray-800 dark:text-slate-200">{{ item.label }}</div>
+                    <div class="text-xs text-gray-500 dark:text-slate-400">{{ item.descricao }}</div>
+                  </div>
+                  <span class="font-bold text-blue-600 dark:text-blue-400 ml-2 shrink-0">{{ item.valor }}</span>
+                </div>
               </div>
             </div>
+
+            <!-- Tabela INSS (contribuição CLT) -->
+            <div v-if="tipoCalculo === 'contribuicao' && tipoSegurado === 'empregado'" class="glass-panel p-4">
+              <h4 class="text-xs font-bold text-gray-700 dark:text-slate-200 mb-2 flex items-center gap-2">
+                <i class="fas fa-table text-indigo-500"></i>
+                Tabela INSS 2025
+              </h4>
+              <div class="space-y-1 text-xs">
+                <div v-for="f in faixasINSS" :key="f.faixa" class="flex justify-between py-1 border-b border-gray-100 dark:border-slate-700 last:border-0">
+                  <span class="text-gray-600 dark:text-slate-300">{{ f.faixa }}</span>
+                  <span :class="['font-bold', f.ativa ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500']">{{ f.aliquota }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tip-card">
+              <i class="fas fa-info-circle text-blue-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">{{ resultado.infoTitulo }}</span>
+            </div>
           </div>
+        </Transition>
+
+        <div v-if="!resultado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-shield-halved text-4xl mb-3 opacity-30 block text-blue-400"></i>
+          <p class="text-sm">Informe o salário para calcular a contribuição do INSS</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+<script setup lang="ts">
+// @ts-nocheck
+import { ref, computed, watch } from 'vue'
+import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage } = useAnalytics()
-
-const tipoCalculo = ref('contribuicao')
-const salarioBruto = ref(3000)
-const tipoSegurado = ref('empregado')
-const idadeAtual = ref(35)
+const tipoCalculo       = ref('contribuicao')
+const salarioBruto      = ref(3000)
+const tipoSegurado      = ref('empregado')
+const idadeAtual        = ref(35)
 const tempoContribuicao = ref(15)
-const mediaSalarial = ref(3500)
-const resultado = ref(null)
+const mediaSalarial     = ref(3500)
+const resultado         = ref(null)
 
-const calcularContribuicao = () => {
+const faixasINSS = computed(() => {
+  const sal = Number(salarioBruto.value)
+  return [
+    { faixa: 'Até R$ 1.412,00',           aliquota: '7,5%',  ativa: sal > 0 },
+    { faixa: 'R$ 1.412,01 – R$ 2.666,68', aliquota: '9%',    ativa: sal > 1412 },
+    { faixa: 'R$ 2.666,69 – R$ 4.000,03', aliquota: '12%',   ativa: sal > 2666.68 },
+    { faixa: 'R$ 4.000,04 – R$ 7.786,02', aliquota: '14%',   ativa: sal > 4000.03 },
+    { faixa: 'Teto máximo',               aliquota: 'R$ 908,86', ativa: sal >= 7786.02 },
+  ]
+})
+
+function calcularContribuicao() {
   const salario = Number(salarioBruto.value)
-  
+  if (!salario) { Swal.fire({ icon: 'warning', title: 'Informe o salário bruto', confirmButtonColor: '#2563eb' }); return }
+
   if (tipoSegurado.value === 'empregado') {
-    // Tabela progressiva INSS 2025
     let inss = 0
-    if (salario <= 1412) {
-      inss = salario * 0.075
-    } else if (salario <= 2666.68) {
-      inss = 1412 * 0.075 + (salario - 1412) * 0.09
-    } else if (salario <= 4000.03) {
-      inss = 1412 * 0.075 + (2666.68 - 1412) * 0.09 + (salario - 2666.68) * 0.12
-    } else if (salario <= 7786.02) {
-      inss = 1412 * 0.075 + (2666.68 - 1412) * 0.09 + (4000.03 - 2666.68) * 0.12 + (salario - 4000.03) * 0.14
-    } else {
-      inss = 1412 * 0.075 + (2666.68 - 1412) * 0.09 + (4000.03 - 2666.68) * 0.12 + (7786.02 - 4000.03) * 0.14
-    }
-    
+    if (salario <= 1412)        inss = salario * 0.075
+    else if (salario <= 2666.68) inss = 1412 * 0.075 + (salario - 1412) * 0.09
+    else if (salario <= 4000.03) inss = 1412 * 0.075 + (2666.68 - 1412) * 0.09 + (salario - 2666.68) * 0.12
+    else if (salario <= 7786.02) inss = 1412 * 0.075 + (2666.68 - 1412) * 0.09 + (4000.03 - 2666.68) * 0.12 + (salario - 4000.03) * 0.14
+    else                         inss = 1412 * 0.075 + (2666.68 - 1412) * 0.09 + (4000.03 - 2666.68) * 0.12 + (7786.02 - 4000.03) * 0.14
+
     const aliquotaEfetiva = (inss / salario) * 100
-    const salarioLiquido = salario - inss
-    const contribuicaoAnual = inss * 12
-    
+    const salarioLiquido  = salario - inss
+
     resultado.value = {
-      titulo: 'Contribuição Mensal INSS',
-      valor: inss.toFixed(2),
+      titulo:    'Contribuição Mensal INSS',
+      valor:     inss.toFixed(2),
       subtitulo: `Alíquota efetiva: ${aliquotaEfetiva.toFixed(2)}%`,
       detalhes: [
-        { label: 'Salário Bruto', descricao: 'Valor antes dos descontos', valor: `R$ ${salario.toFixed(2)}` },
-        { label: 'Desconto INSS', descricao: 'Contribuição progressiva', valor: `R$ ${inss.toFixed(2)}` },
-        { label: 'Salário após INSS', descricao: 'Valor que recebe', valor: `R$ ${salarioLiquido.toFixed(2)}` },
-        { label: 'Contribuição Anual', descricao: '12 meses × desconto', valor: `R$ ${contribuicaoAnual.toFixed(2)}` }
+        { label: 'Salário bruto',      descricao: 'Valor antes dos descontos', valor: `R$ ${salario.toFixed(2)}` },
+        { label: 'Desconto INSS',      descricao: 'Tabela progressiva 2025',   valor: `R$ ${inss.toFixed(2)}` },
+        { label: 'Salário após INSS',  descricao: 'Sem descontar IRRF',        valor: `R$ ${salarioLiquido.toFixed(2)}` },
+        { label: 'Contribuição anual', descricao: '12 × desconto mensal',      valor: `R$ ${(inss * 12).toFixed(2)}` },
       ],
-      infoTitulo: 'Tabela INSS 2025 (Progressiva):',
-      infos: [
-        'Até R$ 1.412,00: 7,5%',
-        'De R$ 1.412,01 a R$ 2.666,68: 9%',
-        'De R$ 2.666,69 a R$ 4.000,03: 12%',
-        'De R$ 4.000,04 a R$ 7.786,02: 14%',
-        'Teto máximo de contribuição: R$ 908,86'
-      ]
+      infoTitulo: 'Tabela progressiva: você paga alíquota maior apenas sobre a faixa excedente.',
     }
   } else {
-    // Autônomo/MEI
-    const contribuicaoMEI = 70.60 // 5% salário mínimo (R$ 1.412)
-    const contribuicaoAutonomo20 = salario * 0.20 // 20% sobre salário
-    const contribuicaoAutonomo11 = 1412 * 0.11 // 11% sobre salário mínimo
-    
+    const contribuicaoMEI       = 70.60
+    const contribuicaoAut11     = 1412 * 0.11
+    const contribuicaoAut20     = salario * 0.20
     resultado.value = {
-      titulo: 'Opções de Contribuição',
-      valor: contribuicaoAutonomo20.toFixed(2),
-      subtitulo: 'Escolha a melhor modalidade para você',
+      titulo:    'Opções de Contribuição',
+      valor:     contribuicaoAut20.toFixed(2),
+      subtitulo: 'Autônomo contribuindo com 20%',
       detalhes: [
-        { label: 'MEI (5%)', descricao: 'Aposentadoria por idade apenas', valor: `R$ ${contribuicaoMEI.toFixed(2)}` },
-        { label: 'Autônomo (11%)', descricao: 'Aposentadoria por idade apenas', valor: `R$ ${contribuicaoAutonomo11.toFixed(2)}` },
-        { label: 'Autônomo (20%)', descricao: 'Todos os benefícios', valor: `R$ ${contribuicaoAutonomo20.toFixed(2)}` }
+        { label: 'MEI (5%)',         descricao: 'Apenas aposentadoria por idade', valor: `R$ ${contribuicaoMEI.toFixed(2)}` },
+        { label: 'Autônomo (11%)',   descricao: 'Apenas aposentadoria por idade', valor: `R$ ${contribuicaoAut11.toFixed(2)}` },
+        { label: 'Autônomo (20%)',   descricao: 'Todos os benefícios',            valor: `R$ ${contribuicaoAut20.toFixed(2)}` },
       ],
-      infoTitulo: 'Diferenças entre modalidades:',
-      infos: [
-        'MEI: Apenas aposentadoria por idade (1 salário mínimo)',
-        '11%: Apenas aposentadoria por idade (1 salário mínimo)',
-        '20%: Aposentadoria por idade e por tempo de contribuição',
-        'Complementação permitida para aumentar benefício'
-      ]
+      infoTitulo: 'MEI e 11% garantem apenas aposentadoria por idade. Para todos os benefícios, contribua com 20%.',
     }
   }
-
-  trackToolUsage('Simulador INSS', 'contribuicao', { tipo: tipoSegurado.value })
 }
 
-const calcularBeneficio = () => {
-  const idade = Number(idadeAtual.value)
-  const tempoContrib = Number(tempoContribuicao.value)
-  const mediaSal = Number(mediaSalarial.value)
-  
-  // Regras de 2025 (EC 103/2019 - Reforma da Previdência)
-  const idadeMinimaHomem = 65
-  const idadeMinimaMulher = 62
-  const tempoMinimoContribuicao = 15
-  
-  // Cálculo simplificado do benefício
-  // 60% + 2% por ano acima de 15 anos de contribuição
+function calcularBeneficio() {
+  const idade         = Number(idadeAtual.value)
+  const tempoContrib  = Number(tempoContribuicao.value)
+  const mediaSal      = Number(mediaSalarial.value)
+
+  if (!mediaSal) { Swal.fire({ icon: 'warning', title: 'Informe a média salarial', confirmButtonColor: '#2563eb' }); return }
+
   let percentual = 0.60
-  if (tempoContrib > 15) {
-    percentual += (tempoContrib - 15) * 0.02
-  }
-  percentual = Math.min(percentual, 1.0) // Máximo 100%
-  
-  const beneficioEstimado = mediaSal * percentual
-  const anosRestantesHomem = Math.max(0, idadeMinimaHomem - idade)
-  const anosRestantesMulher = Math.max(0, idadeMinimaMulher - idade)
-  const tempoRestante = Math.max(0, tempoMinimoContribuicao - tempoContrib)
-  
+  if (tempoContrib > 15) percentual += (tempoContrib - 15) * 0.02
+  percentual = Math.min(percentual, 1.0)
+
+  const beneficioEstimado  = Math.max(mediaSal * percentual, 1412)
+  const anosRestantesHomem = Math.max(0, 65 - idade)
+  const anosRestantesMulher = Math.max(0, 62 - idade)
+  const tempoRestante      = Math.max(0, 15 - tempoContrib)
+
   resultado.value = {
-    titulo: 'Benefício Estimado',
-    valor: beneficioEstimado.toFixed(2),
+    titulo:    'Benefício Estimado',
+    valor:     beneficioEstimado.toFixed(2),
     subtitulo: `${(percentual * 100).toFixed(0)}% da média salarial`,
     detalhes: [
-      { label: 'Tempo de Contribuição', descricao: 'Anos contribuídos', valor: `${tempoContrib} anos` },
-      { label: 'Percentual do Benefício', descricao: 'Com base no tempo', valor: `${(percentual * 100).toFixed(0)}%` },
-      { label: 'Idade para Aposentar (Homem)', descricao: 'Requisito mínimo', valor: `${idadeMinimaHomem} anos` },
-      { label: 'Idade para Aposentar (Mulher)', descricao: 'Requisito mínimo', valor: `${idadeMinimaMulher} anos` }
+      { label: 'Tempo de contribuição',          descricao: 'Anos contribuídos',         valor: `${tempoContrib} anos` },
+      { label: 'Percentual do benefício',         descricao: 'Com base no tempo',         valor: `${(percentual * 100).toFixed(0)}%` },
+      { label: 'Idade para aposentar (Homem)',    descricao: 'Faltam ' + anosRestantesHomem + ' anos', valor: '65 anos' },
+      { label: 'Idade para aposentar (Mulher)',   descricao: 'Faltam ' + anosRestantesMulher + ' anos', valor: '62 anos' },
+      { label: 'Contribuição mínima faltante',   descricao: 'Para atingir 15 anos',      valor: `${tempoRestante} anos` },
     ],
-    infoTitulo: 'Requisitos para Aposentadoria (2025):',
-    infos: [
-      `Homens: ${idadeMinimaHomem} anos de idade + ${tempoMinimoContribuicao} anos de contribuição`,
-      `Mulheres: ${idadeMinimaMulher} anos de idade + ${tempoMinimoContribuicao} anos de contribuição`,
-      `Faltam ${tempoRestante > 0 ? tempoRestante : 0} anos de contribuição para requisito mínimo`,
-      `Benefício = 60% + 2% por ano acima de 15 anos de contribuição`,
-      'Média de 100% dos salários desde julho/1994'
-    ]
+    infoTitulo: 'Benefício = 60% + 2% por ano acima de 15 anos de contribuição. Mínimo: 1 salário mínimo.',
   }
-
-  trackToolUsage('Simulador INSS', 'beneficio')
 }
+
+function calcularContribuicaoAuto() {
+  if (salarioBruto.value) calcularContribuicao()
+}
+
+function calcularBeneficioAuto() {
+  if (mediaSalarial.value) calcularBeneficio()
+}
+
+function limpar() {
+  salarioBruto.value = 3000; idadeAtual.value = 35; tempoContribuicao.value = 15
+  mediaSalarial.value = 3500; resultado.value = null
+}
+
+calcularContribuicao()
+watch(tipoCalculo, () => { resultado.value = null })
+watch([salarioBruto, tipoSegurado], calcularContribuicaoAuto)
+watch([idadeAtual, tempoContribuicao, mediaSalarial], calcularBeneficioAuto)
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

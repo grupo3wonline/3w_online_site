@@ -1,221 +1,243 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-slate-100 dark:bg-slate-900/30 rounded-full mb-4">
-          <i class="fas fa-shield-alt text-slate-600 dark:text-slate-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Simulador de Seguro</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule o custo de seguros e coberturas</p>
-      </div>
-
-      <div class="space-y-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de Seguro</label>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <button @click="tipoSeguro = 'auto'" class="p-4 rounded-lg border-2 transition-all" :class="tipoSeguro === 'auto' ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20' : 'border-gray-300 dark:border-gray-600'">
-              <i class="fas fa-car text-2xl mb-2 text-slate-600 dark:text-slate-400"></i>
-              <div class="font-bold text-gray-900 dark:text-white">Automóvel</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Seguro de carro</div>
-            </button>
-            <button @click="tipoSeguro = 'residencial'" class="p-4 rounded-lg border-2 transition-all" :class="tipoSeguro === 'residencial' ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20' : 'border-gray-300 dark:border-gray-600'">
-              <i class="fas fa-home text-2xl mb-2 text-slate-600 dark:text-slate-400"></i>
-              <div class="font-bold text-gray-900 dark:text-white">Residencial</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Seguro de casa</div>
-            </button>
-            <button @click="tipoSeguro = 'vida'" class="p-4 rounded-lg border-2 transition-all" :class="tipoSeguro === 'vida' ? 'border-slate-500 bg-slate-50 dark:bg-slate-900/20' : 'border-gray-300 dark:border-gray-600'">
-              <i class="fas fa-heart text-2xl mb-2 text-slate-600 dark:text-slate-400"></i>
-              <div class="font-bold text-gray-900 dark:text-white">Vida</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Seguro de vida</div>
-            </button>
-          </div>
-        </div>
-
-        <div v-if="tipoSeguro === 'auto'" class="space-y-4">
-          <BaseInput v-model="valorVeiculo" label="Valor do Veículo (R$)" type="number" :min="0" step="1000" icon="fa-solid fa-car" />
-          <BaseInput v-model="idadeCondutor" label="Idade do Condutor" type="number" :min="18" :max="100" icon="fa-solid fa-user" />
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Perfil de Uso</label>
-            <select v-model="perfilUso" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-              <option value="lazer">Lazer (uso eventual)</option>
-              <option value="trabalho">Trabalho (uso diário)</option>
-              <option value="uber">Uber/App (profissional)</option>
-            </select>
-          </div>
-          <BaseInput v-model="franquia" label="Franquia (R$)" type="number" :min="0" step="500" icon="fa-solid fa-dollar-sign" />
-        </div>
-
-        <div v-if="tipoSeguro === 'residencial'" class="space-y-4">
-          <BaseInput v-model="valorImovel" label="Valor do Imóvel (R$)" type="number" :min="0" step="10000" icon="fa-solid fa-home" />
-          <BaseInput v-model="valorConteudo" label="Valor do Conteúdo (R$)" type="number" :min="0" step="5000" icon="fa-solid fa-couch" />
-          <div>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input v-model="coberturaIncendio" type="checkbox" class="w-4 h-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500" />
-              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Cobertura contra incêndio</span>
-            </label>
-          </div>
-          <div>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input v-model="coberturaRoubo" type="checkbox" class="w-4 h-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500" />
-              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Cobertura contra roubo</span>
-            </label>
-          </div>
-        </div>
-
-        <div v-if="tipoSeguro === 'vida'" class="space-y-4">
-          <BaseInput v-model="capitalSegurado" label="Capital Segurado (R$)" type="number" :min="0" step="10000" icon="fa-solid fa-hand-holding-dollar" />
-          <BaseInput v-model="idadeContratante" label="Idade do Contratante" type="number" :min="18" :max="80" icon="fa-solid fa-user" />
-          <div>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input v-model="fumante" type="checkbox" class="w-4 h-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500" />
-              <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Fumante</span>
-            </label>
-          </div>
-        </div>
-
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>
-          Calcular Prêmio do Seguro
-        </BaseButton>
-
-        <div v-if="resultado" class="space-y-4">
-          <div class="bg-gradient-to-br from-slate-500 to-slate-600 rounded-2xl p-8 text-center text-white">
-            <div class="text-sm font-medium mb-2">Prêmio Anual do Seguro</div>
-            <div class="text-5xl font-bold mb-2">R$ {{ resultado.premioAnual }}</div>
-            <div class="text-slate-100">ou {{ resultado.parcelas }}x de R$ {{ resultado.premioMensal }}</div>
-          </div>
-
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-slate-600 dark:text-slate-400">{{ resultado.percentual }}%</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">% do Valor</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-green-600 dark:text-green-400">R$ {{ resultado.cobertura }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Cobertura Total</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-slate-600 dark:text-slate-400">R$ {{ resultado.custoCincoAnos }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Custo 5 anos</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-slate-600 dark:text-slate-400">{{ resultado.perfil }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Perfil de Risco</div>
-            </div>
-          </div>
-
-          <div class="bg-slate-50 dark:bg-slate-900/20 border-l-4 border-slate-500 p-4">
-            <div class="flex">
-              <i class="fas fa-info-circle text-slate-600 dark:text-slate-400 mt-1 mr-3"></i>
-              <div class="text-sm text-slate-800 dark:text-slate-300">
-                <p class="font-semibold mb-2">Dicas sobre seguros:</p>
-                <ul class="list-disc list-inside space-y-1 text-xs">
-                  <li><strong>Compare:</strong> Cotação em pelo menos 3 seguradoras diferentes</li>
-                  <li><strong>Franquia:</strong> Franquia maior = prêmio menor</li>
-                  <li><strong>Cobertura:</strong> Entenda o que está e o que não está coberto</li>
-                  <li><strong>Perfil:</strong> Jovens e fumantes pagam mais (maior risco)</li>
-                  <li><strong>Desconto:</strong> Bônus por não sinistro pode reduzir até 50%</li>
-                  <li><strong>Renovação:</strong> Reavalie anualmente - pode conseguir melhor preço</li>
-                  <li><strong>Carência:</strong> Alguns seguros têm período de carência</li>
-                </ul>
+  <ToolShell
+    title="Simulador de Seguro"
+    description="Estime o prêmio de seguro para automóvel, residencial ou vida com base no perfil de risco."
+    icon="fa-shield-alt"
+    icon-gradient="from-blue-500 to-indigo-700"
+    orb-color="blue"
+    :quick-tips="['Comparar CET entre seguradoras', 'Franquia maior = prêmio menor', 'Perfil de risco define valor']"
+    :tips="[
+      { title: 'Compare cotações', text: 'Sempre compare o CET (Custo Efetivo Total) em pelo menos 3 seguradoras diferentes. Preços podem variar em até 50%.', type: 'info' },
+      { title: 'Franquia e bônus', text: 'Franquia maior reduz o prêmio anual. Bônus por não sinistro pode reduzir até 50% do prêmio após alguns anos sem acionamento.' },
+      { title: 'Perfil de risco', text: 'Jovens (< 25 anos), fumantes e uso profissional (Uber) pagam prêmios maiores. Perfil influencia significativamente o valor.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Carro R$ 50.000, 30 anos, lazer', desc: 'Franquia R$ 2.000, perfil médio', result: 'Prêmio estimado: ~R$ 3.500/ano (R$ 292/mês)' },
+      { title: 'Residência R$ 300.000', desc: 'Com cobertura incêndio e roubo', result: 'Prêmio estimado: ~R$ 1.800/ano (R$ 150/mês)' },
+      { title: 'Vida, 35 anos, não fumante', desc: 'Capital R$ 500.000', result: 'Prêmio estimado: ~R$ 1.000/ano (R$ 83/mês)' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0">
+          <div class="space-y-3">
+            <!-- Tipo de seguro -->
+            <div>
+              <label class="input-aurora-label">
+                <i class="fas fa-shield-alt mr-1.5 text-blue-500"></i>
+                Tipo de Seguro
+              </label>
+              <div class="grid grid-cols-3 gap-2 mt-1">
+                <button
+                  v-for="tipo in tiposSeguro" :key="tipo.value"
+                  @click="tipoSeguro = tipo.value; resultado = null"
+                  :class="['p-2.5 rounded-xl border-2 text-sm transition-all text-center', tipoSeguro === tipo.value ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-slate-600']"
+                >
+                  <i :class="['fas', tipo.icon, 'text-lg mb-1 block', tipoSeguro === tipo.value ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400']"></i>
+                  <div class="font-bold text-xs">{{ tipo.label }}</div>
+                </button>
               </div>
             </div>
+
+            <!-- Campos Automóvel -->
+            <template v-if="tipoSeguro === 'auto'">
+              <BaseInput v-model="valorVeiculo" label="Valor do Veículo (R$)" type="number" :min="0" step="1000" icon="fa-car" placeholder="50000" @input="calcularAuto" />
+              <BaseInput v-model="idadeCondutor" label="Idade do Condutor" type="number" :min="18" :max="100" icon="fa-user" placeholder="30" @input="calcularAuto" />
+              <div>
+                <label class="input-aurora-label">
+                  <i class="fas fa-route mr-1.5 text-blue-500"></i>
+                  Perfil de Uso
+                </label>
+                <select v-model="perfilUso" class="input-aurora" @change="calcularAuto">
+                  <option value="lazer">Lazer (uso eventual)</option>
+                  <option value="trabalho">Trabalho (uso diário)</option>
+                  <option value="uber">Uber/App (profissional)</option>
+                </select>
+              </div>
+              <BaseInput v-model="franquia" label="Franquia (R$)" type="number" :min="0" step="500" icon="fa-dollar-sign" placeholder="2000" hint="Franquia maior = prêmio menor" @input="calcularAuto" />
+            </template>
+
+            <!-- Campos Residencial -->
+            <template v-if="tipoSeguro === 'residencial'">
+              <BaseInput v-model="valorImovel" label="Valor do Imóvel (R$)" type="number" :min="0" step="10000" icon="fa-home" placeholder="300000" @input="calcularAuto" />
+              <BaseInput v-model="valorConteudo" label="Valor do Conteúdo (R$)" type="number" :min="0" step="5000" icon="fa-couch" placeholder="50000" hint="Móveis, eletrodomésticos, etc." @input="calcularAuto" />
+              <label class="checkbox-aurora cursor-pointer select-none">
+                <input v-model="coberturaIncendio" type="checkbox" class="w-4 h-4 rounded text-blue-600" @change="calcularAuto" />
+                <span class="text-sm font-medium">Cobertura contra incêndio</span>
+              </label>
+              <label class="checkbox-aurora cursor-pointer select-none">
+                <input v-model="coberturaRoubo" type="checkbox" class="w-4 h-4 rounded text-blue-600" @change="calcularAuto" />
+                <span class="text-sm font-medium">Cobertura contra roubo</span>
+              </label>
+            </template>
+
+            <!-- Campos Vida -->
+            <template v-if="tipoSeguro === 'vida'">
+              <BaseInput v-model="capitalSegurado" label="Capital Segurado (R$)" type="number" :min="0" step="10000" icon="fa-hand-holding-dollar" placeholder="500000" @input="calcularAuto" />
+              <BaseInput v-model="idadeContratante" label="Idade do Contratante" type="number" :min="18" :max="80" icon="fa-user" placeholder="35" @input="calcularAuto" />
+              <label class="checkbox-aurora cursor-pointer select-none">
+                <input v-model="fumante" type="checkbox" class="w-4 h-4 rounded text-blue-600" @change="calcularAuto" />
+                <span class="text-sm font-medium">Fumante (aumento de até 50%)</span>
+              </label>
+            </template>
           </div>
+
+          <div class="flex gap-3 mt-4">
+            <BaseButton variant="success" icon="fa-shield-alt" @click="calcular" class="flex-1">
+              Calcular Prêmio
+            </BaseButton>
+            <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
+              Limpar
+            </BaseButton>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="resultado" class="space-y-4">
+            <!-- Destaque principal -->
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">Prêmio Anual Estimado</p>
+              <p class="text-5xl font-black text-white mb-2">R$ {{ resultado.premioAnual }}</p>
+              <p class="text-indigo-300 text-sm font-semibold">
+                <i class="fas fa-calendar-alt mr-1"></i>
+                ou 12× R$ {{ resultado.premioMensal }} · Perfil: {{ resultado.perfil }}
+              </p>
+            </div>
+
+            <!-- Métricas -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+                <div class="metric-glass-value text-blue-600 dark:text-blue-400">{{ resultado.percentual }}%</div>
+                <div class="metric-glass-label">% do valor segurado</div>
+              </div>
+              <div class="metric-glass ring-1 ring-emerald-100 dark:ring-emerald-900">
+                <div class="metric-glass-value text-emerald-600 dark:text-emerald-400">R$ {{ resultado.cobertura }}</div>
+                <div class="metric-glass-label">Cobertura total</div>
+              </div>
+              <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+                <div class="metric-glass-value text-purple-600 dark:text-purple-400">R$ {{ resultado.premioMensal }}</div>
+                <div class="metric-glass-label">Prêmio mensal</div>
+              </div>
+              <div class="metric-glass ring-1 ring-orange-100 dark:ring-orange-900">
+                <div class="metric-glass-value text-orange-600 dark:text-orange-400">R$ {{ resultado.custoCincoAnos }}</div>
+                <div class="metric-glass-label">Custo 5 anos</div>
+              </div>
+            </div>
+
+            <div class="tip-card-warning">
+              <i class="fas fa-exclamation-triangle text-amber-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">
+                Valor estimado. Sempre solicite cotações em pelo menos 3 seguradoras para comparar o CET real.
+              </span>
+            </div>
+          </div>
+        </Transition>
+
+        <div v-if="!resultado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-shield-alt text-4xl mb-3 opacity-30 block text-blue-400"></i>
+          <p class="text-sm">Selecione o tipo de seguro e preencha os dados para estimar o prêmio</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+<script setup lang="ts">
+// @ts-nocheck
+import { ref, watch } from 'vue'
+import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage } = useAnalytics()
-
-const tipoSeguro = ref('auto')
-const valorVeiculo = ref(50000)
-const idadeCondutor = ref(30)
-const perfilUso = ref('lazer')
-const franquia = ref(2000)
-const valorImovel = ref(300000)
-const valorConteudo = ref(50000)
+const tipoSeguro        = ref('auto')
+const valorVeiculo      = ref(50000)
+const idadeCondutor     = ref(30)
+const perfilUso         = ref('lazer')
+const franquia          = ref(2000)
+const valorImovel       = ref(300000)
+const valorConteudo     = ref(50000)
 const coberturaIncendio = ref(true)
-const coberturaRoubo = ref(true)
-const capitalSegurado = ref(500000)
-const idadeContratante = ref(35)
-const fumante = ref(false)
-const resultado = ref(null)
+const coberturaRoubo    = ref(true)
+const capitalSegurado   = ref(500000)
+const idadeContratante  = ref(35)
+const fumante           = ref(false)
+const resultado         = ref(null)
 
-const calcular = () => {
-  let premioAnual = 0
-  let cobertura = 0
-  let perfil = 'Médio'
-  
+const tiposSeguro = [
+  { value: 'auto',        label: 'Automóvel',   icon: 'fa-car' },
+  { value: 'residencial', label: 'Residencial', icon: 'fa-home' },
+  { value: 'vida',        label: 'Vida',         icon: 'fa-heart' },
+]
+
+function calcular() {
+  let premioAnual = 0, cobertura = 0, perfil = 'Médio'
+
   if (tipoSeguro.value === 'auto') {
     const valor = Number(valorVeiculo.value)
     const idade = Number(idadeCondutor.value)
-    
-    let taxa = 0.06 // 6% base
-    
+    if (!valor) { Swal.fire({ icon: 'warning', title: 'Informe o valor do veículo', confirmButtonColor: '#2563eb' }); return }
+    let taxa = 0.06
     if (idade < 25) taxa += 0.02
     else if (idade > 60) taxa += 0.01
-    
     if (perfilUso.value === 'trabalho') taxa += 0.01
     else if (perfilUso.value === 'uber') taxa += 0.03
-    
     if (Number(franquia.value) > 3000) taxa -= 0.01
-    
-    premioAnual = valor * taxa
-    cobertura = valor
+    premioAnual = valor * taxa; cobertura = valor
     perfil = idade < 25 || perfilUso.value === 'uber' ? 'Alto' : idade > 50 && perfilUso.value === 'lazer' ? 'Baixo' : 'Médio'
-    
+
   } else if (tipoSeguro.value === 'residencial') {
-    const valorIm = Number(valorImovel.value)
+    const valorIm   = Number(valorImovel.value)
     const valorCont = Number(valorConteudo.value)
-    
-    let taxa = 0.003 // 0,3% base
-    
+    if (!valorIm) { Swal.fire({ icon: 'warning', title: 'Informe o valor do imóvel', confirmButtonColor: '#2563eb' }); return }
+    let taxa = 0.003
     if (coberturaIncendio.value) taxa += 0.001
-    if (coberturaRoubo.value) taxa += 0.002
-    
-    premioAnual = (valorIm + valorCont) * taxa
-    cobertura = valorIm + valorCont
+    if (coberturaRoubo.value)    taxa += 0.002
+    premioAnual = (valorIm + valorCont) * taxa; cobertura = valorIm + valorCont
     perfil = coberturaIncendio.value && coberturaRoubo.value ? 'Completo' : 'Básico'
-    
+
   } else if (tipoSeguro.value === 'vida') {
     const capital = Number(capitalSegurado.value)
-    const idade = Number(idadeContratante.value)
-    
-    let taxa = 0.002 // 0,2% base
-    
-    if (idade < 30) taxa = 0.0015
-    else if (idade > 50) taxa = 0.004
-    else if (idade > 60) taxa = 0.007
-    
+    const idade   = Number(idadeContratante.value)
+    if (!capital) { Swal.fire({ icon: 'warning', title: 'Informe o capital segurado', confirmButtonColor: '#2563eb' }); return }
+    let taxa = idade < 30 ? 0.0015 : idade > 60 ? 0.007 : idade > 50 ? 0.004 : 0.002
     if (fumante.value) taxa *= 1.5
-    
-    premioAnual = capital * taxa
-    cobertura = capital
+    premioAnual = capital * taxa; cobertura = capital
     perfil = fumante.value || idade > 60 ? 'Alto' : idade < 40 ? 'Baixo' : 'Médio'
   }
-  
-  const premioMensal = premioAnual / 12
-  const percentual = cobertura > 0 ? ((premioAnual / cobertura) * 100) : 0
-  const custoCincoAnos = premioAnual * 5
 
   resultado.value = {
-    premioAnual: premioAnual.toFixed(2),
-    premioMensal: premioMensal.toFixed(2),
-    parcelas: '12',
-    cobertura: cobertura.toFixed(2),
-    percentual: percentual.toFixed(2),
-    custoCincoAnos: custoCincoAnos.toFixed(2),
-    perfil: perfil
+    premioAnual:    premioAnual.toFixed(2),
+    premioMensal:   (premioAnual / 12).toFixed(2),
+    parcelas:       '12',
+    cobertura:      cobertura.toFixed(2),
+    percentual:     cobertura > 0 ? ((premioAnual / cobertura) * 100).toFixed(2) : '0',
+    custoCincoAnos: (premioAnual * 5).toFixed(2),
+    perfil,
   }
-
-  trackToolUsage('Simulador Seguro', 'calculate', { tipo: tipoSeguro.value })
 }
+
+function calcularAuto() {
+  calcular()
+}
+
+function limpar() {
+  valorVeiculo.value = 50000; idadeCondutor.value = 30; perfilUso.value = 'lazer'
+  franquia.value = 2000; valorImovel.value = 300000; valorConteudo.value = 50000
+  coberturaIncendio.value = true; coberturaRoubo.value = true
+  capitalSegurado.value = 500000; idadeContratante.value = 35; fumante.value = false
+  resultado.value = null
+}
+
+watch(tipoSeguro, () => { resultado.value = null })
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>
