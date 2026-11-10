@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-004",
+  "type": "feat",
+  "description": "Convert 13 React→Vue solution components (batch 1). Source files are TSX/JSX at d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/src/views/solucoees/<folder>/src/. Each is converted to a self-contained Vue 3 SFC at src/components/solucoes/<slug>.vue in the worktree. This FEAT is independent of FEAT-002 and FEAT-003 but depends on FEAT-001.",
+  "status": "completed",
+  "steps": [
+    "REACT→VUE CONVERSION RULES (apply to all 13 components): (1) Read the source TSX/JSX pages at .../src/pages/*.tsx or .../src/components/<Tool>.tsx — find the main interactive component (not landing/home pages). (2) Convert React hooks to Vue 3 composition API: useState(x) → const x = ref(X); useEffect(fn, []) → onMounted(fn); useEffect(fn, [dep]) → watch(dep, fn); useCallback(fn) → const fn = () => {}; useMemo(() => expr, [dep]) → computed(() => expr). (3) Convert JSX to Vue template: className → class; onClick → @click; onChange → @input or @change; htmlFor → for; {condition && <el>} → v-if; {items.map(fn)} → v-for; {variable} interpolation → {{ variable }}. (4) React Router navigate('/x') → useRouter().push('/x') or simply remove internal routing (the tool runs in-place). (5) Remove React-specific imports: React, useState, useEffect, etc. Add Vue imports: ref, computed, watch, onMounted, onUnmounted from 'vue'. (6) Remove all shadcn/ui component imports and replace with equivalent Tailwind markup (Button → <button class='...'>, Card → <div class='...'>, Input → <input class='...'>, etc.). (7) Remove lucide-react imports; replace with @iconify/vue Icon with equivalent mdi: icons. (8) Same rules for standalone stores, fonts, toast libraries not in main project. (9) Use <script setup lang=\"ts\">. (10) Component filename: kebab-case matching slug.",
+    "Convert code-gen: Source is d:/.../solucoees/code_gen/src/pages/Generator.tsx + src/components/QRCodeGenerator.tsx + BarcodeGenerator.tsx. The app generates QR codes (uses qrcode library) and barcodes. Main project has the 'qrcode' package. For barcodes, check if 'jsbarcode' is available — if not, use a pure-canvas fallback or the qrcode library only. Create src/components/solucoes/code-gen.vue.",
+    "Convert color-craft: Source is d:/.../solucoees/color_craft/src/components/ColorTool.tsx. This is a color palette generator/picker tool. Use native input[type=color] and pure JS color manipulation. Create src/components/solucoes/color-craft.vue.",
+    "Convert conversor-cores: Source is d:/.../solucoees/conversor_cores/src/ (66 TSX files). Find the main color converter component. Extract: HEX↔RGB↔HSL↔CMYK conversion logic. Create src/components/solucoes/conversor-cores.vue.",
+    "Convert convert-share: Source is d:/.../solucoees/convert_share/src/ (57 TSX files). Find the main file converter/sharer. Extract the conversion logic. Create src/components/solucoes/convert-share.vue.",
+    "Convert digitador: Source is d:/.../solucoees/digitador/src/ (61 TSX files). This is likely a typing speed tester or auto-typer. Find and port the main interactive component. Create src/components/solucoes/digitador.vue.",
+    "Convert divisor-texto: Source is d:/.../solucoees/divisor_texto/src/ (61 TSX files). Find the text splitter/divider component. Extract: input text, split by chars/words/sentences/paragraphs, output sections. Create src/components/solucoes/divisor-texto.vue.",
+    "Convert extrator-email-cpf-cnpj: Source is d:/.../solucoees/extrator_email_cpf_cnpj/src/ (67 TSX files). Find the main extractor. Extract: regex-based email, CPF, CNPJ extraction from pasted text. Create src/components/solucoes/extrator-email-cpf-cnpj.vue.",
+    "Convert extrator-texto: Source is d:/.../solucoees/extrator_texto/src/ (56 TSX files). Find the text extraction component (extract keywords, numbers, URLs, etc.). Create src/components/solucoes/extrator-texto.vue.",
+    "Convert finance-flow: Source is d:/.../solucoees/finance_flow/src/ (58 TSX files). Find the main financial flow component (income/expense tracker, cash flow). Create src/components/solucoes/finance-flow.vue.",
+    "Convert gerador-fatura: Source is d:/.../solucoees/gerador_fatura/src/ (JSX files, not TSX). Main files are src/App.jsx and src/components/BillToSection.jsx, FloatingLabelInput.jsx. Port the invoice/billing generator. Create src/components/solucoes/gerador-fatura.vue.",
+    "Convert gerador-gradiente: Source is d:/.../solucoees/gerador_gradiente/src/ (74 TSX files). Find the CSS gradient generator. Extract: gradient type (linear/radial), angle, color stops, CSS output. Create src/components/solucoes/gerador-gradiente.vue.",
+    "Convert ipsum-generator-plus: Source is d:/.../solucoees/ipsum_generator_plus/src/ (68 TSX files). Extract: lorem ipsum / custom placeholder text generator. Create src/components/solucoes/ipsum-generator-plus.vue.",
+    "Convert manipulador-lista: Source is d:/.../solucoees/manipulador_lista/src/ (57 TSX files). Find the list manipulator (sort, deduplicate, filter, join). Create src/components/solucoes/manipulador-lista.vue.",
+    "Update src/components/solucoes/index.ts (worktree) to add entries for all 13 converted components: 'code-gen', 'color-craft', 'conversor-cores', 'convert-share', 'digitador', 'divisor-texto', 'extrator-email-cpf-cnpj', 'extrator-texto', 'finance-flow', 'gerador-fatura', 'gerador-gradiente', 'ipsum-generator-plus', 'manipulador-lista'. Append — do not remove existing entries."
+  ],
+  "acceptance_criteria": [
+    "All 13 .vue files exist at src/components/solucoes/<slug>.vue in the worktree",
+    "src/components/solucoes/index.ts now has 49 entries",
+    "npm run build completes with 0 TS errors",
+    "npx vitest run — all existing tests pass"
+  ],
+  "verification": [
+    "npm run build (in worktree) — exits 0",
+    "npx vitest run (in worktree) — all tests pass"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
