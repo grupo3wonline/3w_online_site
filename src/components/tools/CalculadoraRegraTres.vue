@@ -1,199 +1,220 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-teal-100 dark:bg-teal-900/30 rounded-full mb-4">
-          <i class="fas fa-square-root-variable text-teal-600 dark:text-teal-400 text-2xl"></i>
+  <ToolShell
+    title="Regra de Três"
+    description="Resolva regras de três simples (direta/inversa) e compostas com grandezas múltiplas."
+    icon="fa-calculator"
+    icon-gradient="from-teal-500 to-cyan-700"
+    orb-color="teal"
+    :quick-tips="['Simples e composta', 'Direta e inversa', 'Passo a passo']"
+    :tips="[
+      { title: 'Regra de três simples', text: 'Use quando há duas grandezas relacionadas: se A → B, então C → X. Fórmula: X = (B × C) / A.' },
+      { title: 'Proporção direta', text: 'As grandezas crescem juntas: mais produto → mais custo.', type: 'info' },
+      { title: 'Proporção inversa', text: 'Uma cresce enquanto a outra diminui: mais trabalhadores → menos dias de obra.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Receita de bolo', desc: 'Se 2 xícaras de farinha fazem 12 porcões, quantas fazem 30?', result: 'X = 5 xícaras' },
+      { title: 'Tempo de obra', desc: '5 pedreiros constroem em 20 dias. Com 10 pedreiros? (inversa)', result: 'X = 10 dias' },
+      { title: 'Regra de câmbio', desc: 'R$ 100 = US$ 19. Quanto são US$ 50?', result: 'X = R$ 263,16' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0">
+          <!-- Seleção de tipo -->
+          <div class="mb-4">
+            <label class="input-aurora-label">
+              <i class="fas fa-th-large mr-1.5 text-teal-500"></i>
+              Tipo de Regra de Três
+            </label>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <button
+                @click="tipo = 'simples'; resultado = null"
+                :class="['p-3 rounded-xl border-2 transition-all text-center', tipo === 'simples' ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/30 shadow-md' : 'border-gray-200 dark:border-slate-700 hover:border-teal-300']"
+              >
+                <i :class="['fas fa-equals text-xl mb-1 block', tipo === 'simples' ? 'text-teal-600 dark:text-teal-400' : 'text-gray-400']"></i>
+                <span :class="['text-xs font-medium', tipo === 'simples' ? 'text-teal-900 dark:text-teal-300' : 'text-gray-500']">Simples</span>
+              </button>
+              <button
+                @click="tipo = 'composta'; resultado = null"
+                :class="['p-3 rounded-xl border-2 transition-all text-center', tipo === 'composta' ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/30 shadow-md' : 'border-gray-200 dark:border-slate-700 hover:border-teal-300']"
+              >
+                <i :class="['fas fa-layer-group text-xl mb-1 block', tipo === 'composta' ? 'text-teal-600 dark:text-teal-400' : 'text-gray-400']"></i>
+                <span :class="['text-xs font-medium', tipo === 'composta' ? 'text-teal-900 dark:text-teal-300' : 'text-gray-500']">Composta</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Regra de Três Simples -->
+          <div v-if="tipo === 'simples'" class="glass-panel p-4 space-y-3">
+            <p class="text-xs text-gray-500 dark:text-slate-400 font-medium">Se A → B, então C → X</p>
+            <div class="grid grid-cols-3 gap-3">
+              <BaseInput v-model="a" label="A" type="number" step="0.01" icon="fa-arrow-right" tooltip="Valor inicial da primeira grandeza." />
+              <BaseInput v-model="b" label="B" type="number" step="0.01" icon="fa-arrow-right" tooltip="Valor final da primeira grandeza." />
+              <BaseInput v-model="c" label="C" type="number" step="0.01" icon="fa-question" tooltip="Valor inicial da segunda grandeza (correspondente a A)." />
+            </div>
+            <div>
+              <label class="input-aurora-label">
+                <i class="fas fa-arrows-alt-h mr-1.5 text-teal-500"></i>
+                Tipo de proporção
+              </label>
+              <select v-model="propSimples" class="input-aurora mt-1">
+                <option value="direta">Direta — grandezas crescem juntas</option>
+                <option value="inversa">Inversa — uma cresce, outra diminui</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Regra de Três Composta -->
+          <div v-if="tipo === 'composta'" class="glass-panel p-4 space-y-3">
+            <p class="text-xs text-gray-500 dark:text-slate-400 font-medium">Múltiplas grandezas relacionadas</p>
+            <div class="grid grid-cols-3 gap-2">
+              <BaseInput v-model="g1a" label="Grandeza 1 (A)" type="number" step="0.01" icon="fa-hashtag" />
+              <BaseInput v-model="g1b" label="Grandeza 1 (B)" type="number" step="0.01" icon="fa-hashtag" />
+              <div>
+                <label class="input-aurora-label text-xs">Proporção 1</label>
+                <select v-model="prop1" class="input-aurora mt-1 text-sm">
+                  <option value="direta">Direta</option>
+                  <option value="inversa">Inversa</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <BaseInput v-model="g2a" label="Grandeza 2 (A)" type="number" step="0.01" icon="fa-hashtag" />
+              <BaseInput v-model="g2b" label="Grandeza 2 (B)" type="number" step="0.01" icon="fa-hashtag" />
+              <div>
+                <label class="input-aurora-label text-xs">Proporção 2</label>
+                <select v-model="prop2" class="input-aurora mt-1 text-sm">
+                  <option value="direta">Direta</option>
+                  <option value="inversa">Inversa</option>
+                </select>
+              </div>
+            </div>
+            <BaseInput v-model="valorInicial" label="Valor Inicial (a calcular)" type="number" step="0.01" icon="fa-equals" tooltip="Valor de referência que será proporcionalmente ajustado." />
+          </div>
+
+          <div class="flex gap-3 mt-4">
+            <BaseButton variant="success" icon="fa-calculator" @click="calcular" class="flex-1">
+              Calcular
+            </BaseButton>
+            <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
+              Limpar
+            </BaseButton>
+          </div>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de Regra de Três</h1>
-        <p class="text-gray-600 dark:text-gray-400">Resolva problemas de proporção facilmente</p>
       </div>
 
-      <div class="space-y-6">
-        <!-- Tipo -->
-        <div class="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-            Tipo de Regra de Três
-          </label>
-          <div class="grid md:grid-cols-2 gap-3">
-            <button
-              @click="tipo = 'simples'"
-              :class="[
-                'p-4 rounded-lg border-2 transition-all',
-                tipo === 'simples' ? 'border-teal-600 bg-teal-50 dark:bg-teal-900/30' : 'border-gray-200 dark:border-gray-600'
-              ]"
-            >
-              <div class="font-semibold text-gray-900 dark:text-white">Simples</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Duas grandezas proporcionais</div>
-            </button>
-            <button
-              @click="tipo = 'composta'"
-              :class="[
-                'p-4 rounded-lg border-2 transition-all',
-                tipo === 'composta' ? 'border-teal-600 bg-teal-50 dark:bg-teal-900/30' : 'border-gray-200 dark:border-gray-600'
-              ]"
-            >
-              <div class="font-semibold text-gray-900 dark:text-white">Composta</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Três ou mais grandezas</div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Regra de Três Simples -->
-        <div v-if="tipo === 'simples'" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-          <h3 class="font-bold text-gray-900 dark:text-white mb-4">
-            Se A está para B, então C está para X
-          </h3>
-          
-          <div class="grid grid-cols-2 gap-6">
-            <div class="space-y-4">
-              <BaseInput v-model="a" label="A" type="number" step="0.01" />
-              <BaseInput v-model="b" label="B" type="number" step="0.01" />
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="resultado !== null" class="space-y-4">
+            <!-- Destaque -->
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">Valor de X</p>
+              <p class="text-5xl font-black text-white mb-2">{{ resultado.toFixed(4) }}</p>
+              <p class="text-teal-300 text-sm">Regra de três {{ tipo }}</p>
             </div>
-            <div class="space-y-4">
-              <BaseInput v-model="c" label="C" type="number" step="0.01" />
-              <div class="bg-teal-100 dark:bg-teal-900/30 rounded-lg p-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">X (Resultado)</label>
-                <div class="text-3xl font-bold text-teal-600 dark:text-teal-400">
-                  {{ resultadoSimples.toFixed(2) }}
-                </div>
+
+            <!-- Verificação -->
+            <div class="metric-glass ring-1 ring-teal-100 dark:ring-teal-900">
+              <div class="metric-glass-value text-teal-600 dark:text-teal-400">{{ resultado.toFixed(2) }}</div>
+              <div class="metric-glass-label">X (resultado)</div>
+            </div>
+
+            <!-- Proporção detalhada -->
+            <div class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+                <i class="fas fa-equals text-teal-500"></i>
+                Verificação
+              </h4>
+              <div v-if="tipo === 'simples'" class="text-sm text-gray-600 dark:text-slate-300 space-y-2">
+                <p class="font-mono bg-gray-50 dark:bg-slate-800 rounded p-2 text-xs">
+                  <span v-if="propSimples === 'direta'">{{ a }} / {{ b }} = {{ c }} / X → X = ({{ b }} × {{ c }}) / {{ a }}</span>
+                  <span v-else>{{ a }} × {{ b }} = {{ c }} × X → X = ({{ a }} × {{ b }}) / {{ c }}</span>
+                </p>
+                <p class="text-sm">
+                  <strong>Proporção {{ propSimples }}:</strong>
+                  {{ a }} está para {{ b }} assim como {{ c }} está para <strong class="text-teal-600 dark:text-teal-400">{{ resultado.toFixed(2) }}</strong>
+                </p>
               </div>
-            </div>
-          </div>
-
-          <BaseButton @click="calcularSimples" variant="primary" class="w-full mt-6">
-            <i class="fas fa-calculator mr-2"></i>Calcular
-          </BaseButton>
-
-          <div v-if="calculado" class="mt-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-            <p class="text-sm text-gray-700 dark:text-gray-300">
-              <strong>Proporção:</strong> {{ a }} está para {{ b }}, assim como {{ c }} está para <strong class="text-teal-600">{{ resultadoSimples.toFixed(2) }}</strong>
-            </p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 font-mono">
-              {{ a }} / {{ b }} = {{ c }} / {{ resultadoSimples.toFixed(2) }}
-            </p>
-          </div>
-        </div>
-
-        <!-- Regra de Três Composta -->
-        <div v-if="tipo === 'composta'" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-          <h3 class="font-bold text-gray-900 dark:text-white mb-4">
-            Múltiplas Grandezas Proporcionais
-          </h3>
-          
-          <div class="space-y-4">
-            <div class="grid md:grid-cols-3 gap-4">
-              <BaseInput v-model="g1a" label="Grandeza 1 (inicial)" type="number" step="0.01" />
-              <BaseInput v-model="g1b" label="Grandeza 1 (final)" type="number" step="0.01" />
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Proporção</label>
-                <select v-model="prop1" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
-                  <option value="direta">Direta</option>
-                  <option value="inversa">Inversa</option>
-                </select>
+              <div v-else class="text-xs text-gray-600 dark:text-slate-300 space-y-1 font-mono bg-gray-50 dark:bg-slate-800 rounded p-2">
+                <p>Grandeza 1 ({{ prop1 }}): fator = {{ prop1 === 'direta' ? (Number(g1b)/Number(g1a)).toFixed(4) : (Number(g1a)/Number(g1b)).toFixed(4) }}</p>
+                <p>Grandeza 2 ({{ prop2 }}): fator = {{ prop2 === 'direta' ? (Number(g2b)/Number(g2a)).toFixed(4) : (Number(g2a)/Number(g2b)).toFixed(4) }}</p>
+                <p>X = {{ valorInicial }} × fatores = {{ resultado.toFixed(4) }}</p>
               </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-4">
-              <BaseInput v-model="g2a" label="Grandeza 2 (inicial)" type="number" step="0.01" />
-              <BaseInput v-model="g2b" label="Grandeza 2 (final)" type="number" step="0.01" />
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Proporção</label>
-                <select v-model="prop2" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
-                  <option value="direta">Direta</option>
-                  <option value="inversa">Inversa</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 gap-4">
-              <BaseInput v-model="valorInicial" label="Valor Inicial" type="number" step="0.01" />
-              <div class="bg-teal-100 dark:bg-teal-900/30 rounded-lg p-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Valor Final (X)</label>
-                <div class="text-3xl font-bold text-teal-600 dark:text-teal-400">
-                  {{ resultadoComposta.toFixed(2) }}
-                </div>
-              </div>
+            <div class="tip-card">
+              <i class="fas fa-info-circle text-teal-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">
+                Resultado: <strong>X = {{ resultado.toFixed(2) }}</strong>
+                <span v-if="tipo === 'simples'"> · proporção {{ propSimples }}</span>
+              </span>
             </div>
           </div>
+        </Transition>
 
-          <BaseButton @click="calcularComposta" variant="primary" class="w-full mt-6">
-            <i class="fas fa-calculator mr-2"></i>Calcular Regra de Três Composta
-          </BaseButton>
-        </div>
-
-        <div class="bg-teal-50 dark:bg-teal-900/20 border-l-4 border-teal-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-teal-600 dark:text-teal-400 mt-1 mr-3"></i>
-            <div class="text-sm text-teal-800 dark:text-teal-300">
-              <p class="font-semibold mb-2">Dicas:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>Simples:</strong> Use quando tiver duas grandezas relacionadas</li>
-                <li><strong>Composta:</strong> Use quando tiver 3 ou mais grandezas</li>
-                <li><strong>Direta:</strong> Quando as grandezas aumentam juntas</li>
-                <li><strong>Inversa:</strong> Quando uma aumenta e outra diminui</li>
-                <li>Exemplo: Mais pessoas fazem o trabalho em menos tempo (inversa)</li>
-              </ul>
-            </div>
-          </div>
+        <div v-if="resultado === null" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-calculator text-4xl mb-3 opacity-30 block text-teal-400"></i>
+          <p class="text-sm">Preencha os valores e calcule a proporção</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage } = useAnalytics()
+const tipo       = ref<'simples' | 'composta'>('simples')
+const resultado  = ref<number | null>(null)
 
-const tipo = ref('simples')
-const calculado = ref(false)
+// Simples
+const a          = ref<number | ''>(10)
+const b          = ref<number | ''>(20)
+const c          = ref<number | ''>(15)
+const propSimples = ref<'direta' | 'inversa'>('direta')
 
-// Regra de 3 Simples
-const a = ref(10)
-const b = ref(20)
-const c = ref(15)
-const resultadoSimples = ref(0)
+// Composta
+const g1a         = ref<number | ''>(10)
+const g1b         = ref<number | ''>(20)
+const prop1       = ref<'direta' | 'inversa'>('direta')
+const g2a         = ref<number | ''>(5)
+const g2b         = ref<number | ''>(10)
+const prop2       = ref<'direta' | 'inversa'>('direta')
+const valorInicial = ref<number | ''>(100)
 
-// Regra de 3 Composta
-const g1a = ref(10)
-const g1b = ref(20)
-const prop1 = ref('direta')
-const g2a = ref(5)
-const g2b = ref(10)
-const prop2 = ref('direta')
-const valorInicial = ref(100)
-const resultadoComposta = ref(0)
-
-const calcularSimples = () => {
-  // X = (B × C) / A
-  resultadoSimples.value = (Number(b.value) * Number(c.value)) / Number(a.value)
-  calculado.value = true
-  trackToolUsage('Calculadora Regra Tres', 'simples')
+const calcular = () => {
+  if (tipo.value === 'simples') {
+    const av = Number(a.value), bv = Number(b.value), cv = Number(c.value)
+    if (!av || !bv || !cv) { Swal.fire({ icon: 'warning', title: 'Informe A, B e C', confirmButtonColor: '#2563eb' }); return }
+    resultado.value = propSimples.value === 'direta'
+      ? (bv * cv) / av
+      : (av * bv) / cv
+  } else {
+    const vals = [g1a.value, g1b.value, g2a.value, g2b.value, valorInicial.value].map(Number)
+    if (vals.some(v => !v)) { Swal.fire({ icon: 'warning', title: 'Preencha todos os campos', confirmButtonColor: '#2563eb' }); return }
+    let x = Number(valorInicial.value)
+    x = prop1.value === 'direta' ? x * (Number(g1b.value) / Number(g1a.value)) : x * (Number(g1a.value) / Number(g1b.value))
+    x = prop2.value === 'direta' ? x * (Number(g2b.value) / Number(g2a.value)) : x * (Number(g2a.value) / Number(g2b.value))
+    resultado.value = x
+  }
 }
 
-const calcularComposta = () => {
-  let resultado = Number(valorInicial.value)
-  
-  // Aplicar primeira grandeza
-  if (prop1.value === 'direta') {
-    resultado = resultado * (Number(g1b.value) / Number(g1a.value))
-  } else {
-    resultado = resultado * (Number(g1a.value) / Number(g1b.value))
-  }
-  
-  // Aplicar segunda grandeza
-  if (prop2.value === 'direta') {
-    resultado = resultado * (Number(g2b.value) / Number(g2a.value))
-  } else {
-    resultado = resultado * (Number(g2a.value) / Number(g2b.value))
-  }
-  
-  resultadoComposta.value = resultado
-  trackToolUsage('Calculadora Regra Tres', 'composta')
+const limpar = () => {
+  a.value = 10; b.value = 20; c.value = 15; propSimples.value = 'direta'
+  g1a.value = 10; g1b.value = 20; prop1.value = 'direta'
+  g2a.value = 5;  g2b.value = 10; prop2.value = 'direta'
+  valorInicial.value = 100; resultado.value = null
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

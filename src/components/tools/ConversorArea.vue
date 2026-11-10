@@ -1,156 +1,196 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-lime-100 dark:bg-lime-900/30 rounded-full mb-4">
-          <i class="fas fa-border-all text-lime-600 dark:text-lime-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Conversor de Área</h1>
-        <p class="text-gray-600 dark:text-gray-400">Converta entre diferentes unidades de área</p>
+  <ToolShell
+    title="Conversor de Área"
+    description="Converta entre m², cm², km², pés², acres, hectares e mais unidades de área."
+    icon="fa-vector-square"
+    icon-gradient="from-lime-500 to-green-700"
+    orb-color="teal"
+    :quick-tips="['10 unidades', 'Conversão ao digitar', 'Conversões rápidas']"
+    :tips="[
+      { title: 'Métricas de área', text: '1 m² = 10.000 cm² · 1 hectare = 10.000 m² · 1 km² = 100 hectares = 1.000.000 m².' },
+      { title: 'Sistema imperial', text: '1 acre = 4.046,86 m² · 1 ft² = 0,0929 m² · 1 mi² = 2,59 km².', type: 'info' },
+      { title: 'Agricultura', text: 'No Brasil, medidas rurais usam hectares. 1 alqueire paulista ≈ 2,42 ha · 1 alqueire mineiro ≈ 4,84 ha.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Sala de 15 m²', desc: '15 m² em pés quadrados', result: '161,46 ft²' },
+      { title: 'Fazenda 500 ha', desc: '500 hectares em km²', result: '5 km²' },
+      { title: '1 acre em m²', desc: '1 acre', result: '4.046,86 m²' },
+    ]"
+  >
+
+    <!-- Cards de conversão -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+      <!-- De -->
+      <div class="glass-panel p-4">
+        <label class="input-aurora-label mb-2">
+          <i class="fas fa-arrow-right mr-1.5 text-lime-500"></i>
+          De
+        </label>
+        <select v-model="unidadeOrigem" @change="converter" class="input-aurora mb-3">
+          <option v-for="u in unidades" :key="u.codigo" :value="u.codigo">{{ u.nome }}</option>
+        </select>
+        <input
+          v-model="valorOrigem"
+          @input="converter"
+          type="number"
+          step="0.001"
+          placeholder="0"
+          class="input-aurora w-full text-right text-2xl font-black"
+        />
       </div>
 
-      <div class="space-y-6">
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">De</label>
-            <div class="flex gap-2">
-              <select v-model="unidadeOrigem" @change="converter" class="w-1/3 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                <option v-for="unidade in unidades" :key="unidade.codigo" :value="unidade.codigo">{{ unidade.nome }}</option>
-              </select>
-              <input v-model="valorOrigem" @input="converter" type="number" step="0.001" placeholder="0" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-right text-2xl font-bold" />
-            </div>
-          </div>
-
-          <div class="flex justify-center">
-            <button @click="inverter" class="p-3 bg-lime-100 dark:bg-lime-900/30 hover:bg-lime-200 dark:hover:bg-lime-900/50 rounded-full transition-colors">
-              <i class="fas fa-exchange-alt text-lime-600 dark:text-lime-400 text-xl"></i>
-            </button>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Para</label>
-            <div class="flex gap-2">
-              <select v-model="unidadeDestino" @change="converter" class="w-1/3 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                <option v-for="unidade in unidades" :key="unidade.codigo" :value="unidade.codigo">{{ unidade.nome }}</option>
-              </select>
-              <div class="flex-1 px-4 py-2 border-2 border-lime-500 rounded-lg bg-lime-50 dark:bg-lime-900/20 text-gray-900 dark:text-white text-right text-2xl font-bold">
-                {{ valorDestino }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <button v-for="conv in conversoesRapidas" :key="conv.de + conv.para" @click="usarConversao(conv)" class="p-3 bg-gray-50 dark:bg-gray-700 hover:bg-lime-50 dark:hover:bg-lime-900/20 rounded-lg transition-colors">
-            <div class="font-bold text-gray-900 dark:text-white text-sm">{{ conv.de }} → {{ conv.para }}</div>
+      <!-- Para -->
+      <div class="glass-panel p-4">
+        <div class="flex items-center justify-between mb-2">
+          <label class="input-aurora-label !mb-0">
+            <i class="fas fa-arrow-left mr-1.5 text-lime-500"></i>
+            Para
+          </label>
+          <button
+            @click="inverter"
+            class="p-2 rounded-xl bg-lime-50 dark:bg-lime-900/20 hover:bg-lime-100 dark:hover:bg-lime-900/40 transition-colors"
+            title="Inverter conversão"
+          >
+            <i class="fas fa-exchange-alt text-lime-600 dark:text-lime-400 text-sm"></i>
           </button>
         </div>
-
-        <div v-if="conversoes.length" class="space-y-2">
-          <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Conversões para outras unidades:</h3>
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-            <div v-for="conv in conversoes" :key="conv.unidade" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
-              <div class="text-xs text-gray-600 dark:text-gray-400">{{ conv.nome }}</div>
-              <div class="text-lg font-bold text-lime-600 dark:text-lime-400">{{ conv.valor }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-lime-50 dark:bg-lime-900/20 border-l-4 border-lime-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-lime-600 dark:text-lime-400 mt-1 mr-3"></i>
-            <div class="text-sm text-lime-800 dark:text-lime-300">
-              <p class="font-semibold mb-2">Unidades de área:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>Sistema Métrico:</strong> mm², cm², m², km², hectare (ha)</li>
-                <li><strong>Sistema Imperial:</strong> in², ft², yd², acre, mi²</li>
-                <li>1 m² = 10.000 cm² | 1 hectare = 10.000 m² | 1 km² = 100 hectares</li>
-                <li>1 acre = 4.047 m² | 1 ft² = 0.0929 m²</li>
-              </ul>
-            </div>
-          </div>
+        <select v-model="unidadeDestino" @change="converter" class="input-aurora mb-3">
+          <option v-for="u in unidades" :key="u.codigo" :value="u.codigo">{{ u.nome }}</option>
+        </select>
+        <div class="w-full px-4 py-3 rounded-xl border-2 border-lime-400 dark:border-lime-600 bg-lime-50 dark:bg-lime-900/20 text-right text-2xl font-black text-lime-700 dark:text-lime-300">
+          {{ valorDestino }}
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Resultado principal -->
+    <Transition name="scale-in" appear>
+      <div v-if="Number(valorOrigem) > 0" class="space-y-4 mb-5">
+        <!-- Métricas de outras unidades -->
+        <div class="glass-panel p-4">
+          <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+            <i class="fas fa-list-check text-lime-500"></i>
+            Conversões para outras unidades
+          </h4>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div
+              v-for="conv in conversoes"
+              :key="conv.unidade"
+              class="metric-glass ring-1 ring-lime-100 dark:ring-lime-900 cursor-pointer hover:ring-lime-400 dark:hover:ring-lime-600 transition-all"
+              @click="unidadeDestino = conv.unidade; converter()"
+              title="Clique para selecionar"
+            >
+              <div class="metric-glass-value text-lime-700 dark:text-lime-300 text-base">{{ conv.valor }}</div>
+              <div class="metric-glass-label">{{ conv.nomeBreve }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Conversões rápidas -->
+    <div>
+      <label class="input-aurora-label mb-2">
+        <i class="fas fa-bolt mr-1.5 text-lime-500"></i>
+        Conversões rápidas
+      </label>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button
+          v-for="conv in conversoesRapidas"
+          :key="conv.de + conv.para"
+          @click="usarConversao(conv)"
+          class="p-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-lime-400 dark:hover:border-lime-600 hover:bg-lime-50/50 dark:hover:bg-lime-900/10 transition-all text-left"
+        >
+          <span class="text-xs font-bold text-lime-600 dark:text-lime-400 block">{{ conv.de }} → {{ conv.para }}</span>
+          <span class="text-[10px] text-gray-500 dark:text-slate-400">{{ conv.desc }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Referência rápida -->
+    <div class="mt-4 tip-card">
+      <i class="fas fa-info-circle text-lime-600 flex-shrink-0 mt-0.5"></i>
+      <span class="text-xs">
+        1 m² = 10.000 cm² = 0,0001 ha · 1 ha = 10.000 m² · 1 km² = 100 ha · 1 acre = 4.047 m²
+      </span>
+    </div>
+
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+<script setup lang="ts">
+// @ts-nocheck
+import { ref, computed } from 'vue'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 
-const { trackToolUsage } = useAnalytics()
+interface Unidade { codigo: string; nome: string; nomeBreve: string; paraM2: number }
 
-const unidadeOrigem = ref('m2')
-const unidadeDestino = ref('ft2')
-const valorOrigem = ref(100)
-const valorDestino = ref('0')
-const conversoes = ref([])
-
-const unidades = [
-  { codigo: 'mm2', nome: 'Milímetro² (mm²)', paraMetrosQuadrados: 0.000001 },
-  { codigo: 'cm2', nome: 'Centímetro² (cm²)', paraMetrosQuadrados: 0.0001 },
-  { codigo: 'm2', nome: 'Metro² (m²)', paraMetrosQuadrados: 1 },
-  { codigo: 'ha', nome: 'Hectare (ha)', paraMetrosQuadrados: 10000 },
-  { codigo: 'km2', nome: 'Quilômetro² (km²)', paraMetrosQuadrados: 1000000 },
-  { codigo: 'in2', nome: 'Polegada² (in²)', paraMetrosQuadrados: 0.00064516 },
-  { codigo: 'ft2', nome: 'Pé² (ft²)', paraMetrosQuadrados: 0.092903 },
-  { codigo: 'yd2', nome: 'Jarda² (yd²)', paraMetrosQuadrados: 0.836127 },
-  { codigo: 'acre', nome: 'Acre', paraMetrosQuadrados: 4046.86 },
-  { codigo: 'mi2', nome: 'Milha² (mi²)', paraMetrosQuadrados: 2589988 }
+const unidades: Unidade[] = [
+  { codigo: 'mm2',  nome: 'Milímetro² (mm²)',   nomeBreve: 'mm²',  paraM2: 0.000001 },
+  { codigo: 'cm2',  nome: 'Centímetro² (cm²)',  nomeBreve: 'cm²',  paraM2: 0.0001 },
+  { codigo: 'm2',   nome: 'Metro² (m²)',         nomeBreve: 'm²',   paraM2: 1 },
+  { codigo: 'ha',   nome: 'Hectare (ha)',        nomeBreve: 'ha',   paraM2: 10000 },
+  { codigo: 'km2',  nome: 'Quilômetro² (km²)',   nomeBreve: 'km²',  paraM2: 1000000 },
+  { codigo: 'in2',  nome: 'Polegada² (in²)',     nomeBreve: 'in²',  paraM2: 0.00064516 },
+  { codigo: 'ft2',  nome: 'Pé² (ft²)',           nomeBreve: 'ft²',  paraM2: 0.092903 },
+  { codigo: 'yd2',  nome: 'Jarda² (yd²)',        nomeBreve: 'yd²',  paraM2: 0.836127 },
+  { codigo: 'acre', nome: 'Acre',               nomeBreve: 'acre', paraM2: 4046.86 },
+  { codigo: 'mi2',  nome: 'Milha² (mi²)',        nomeBreve: 'mi²',  paraM2: 2589988 },
 ]
 
 const conversoesRapidas = [
-  { de: 'm2', para: 'ft2' },
-  { de: 'ha', para: 'acre' },
-  { de: 'km2', para: 'mi2' },
-  { de: 'ft2', para: 'm2' }
+  { de: 'm²',   para: 'ft²',  desc: 'Metro → Pé',      deCode: 'm2',  paraCode: 'ft2' },
+  { de: 'ha',   para: 'acre', desc: 'Hectare → Acre',   deCode: 'ha',  paraCode: 'acre' },
+  { de: 'km²',  para: 'mi²',  desc: 'Km² → Milha²',    deCode: 'km2', paraCode: 'mi2' },
+  { de: 'ft²',  para: 'm²',   desc: 'Pé → Metro',      deCode: 'ft2', paraCode: 'm2' },
 ]
 
-const calcularValor = (valor, de, para) => {
-  const unidadeDe = unidades.find(u => u.codigo === de)
-  const unidadePara = unidades.find(u => u.codigo === para)
-  
-  if (!unidadeDe || !unidadePara) return '0'
-  
-  const valorEmMetrosQuadrados = valor * unidadeDe.paraMetrosQuadrados
-  const valorConvertido = valorEmMetrosQuadrados / unidadePara.paraMetrosQuadrados
-  
-  if (valorConvertido >= 1000 || valorConvertido < 0.01) {
-    return valorConvertido.toExponential(3)
-  }
-  
-  return valorConvertido.toFixed(3)
+const unidadeOrigem  = ref('m2')
+const unidadeDestino = ref('ft2')
+const valorOrigem    = ref(100)
+const valorDestino   = ref('0')
+
+const calcVal = (valor: number, de: string, para: string): string => {
+  const uDe   = unidades.find(u => u.codigo === de)
+  const uPara = unidades.find(u => u.codigo === para)
+  if (!uDe || !uPara) return '0'
+  const em2 = valor * uDe.paraM2
+  const v   = em2 / uPara.paraM2
+  if (Math.abs(v) >= 1e6 || (Math.abs(v) < 0.001 && v !== 0)) return v.toExponential(3)
+  return v.toFixed(4).replace(/\.?0+$/, '') || '0'
 }
 
 const converter = () => {
-  const valor = Number(valorOrigem.value) || 0
-  valorDestino.value = calcularValor(valor, unidadeOrigem.value, unidadeDestino.value)
-  
-  conversoes.value = unidades
-    .filter(u => u.codigo !== unidadeOrigem.value)
-    .slice(0, 6)
-    .map(u => ({
-      unidade: u.codigo,
-      nome: u.nome,
-      valor: calcularValor(valor, unidadeOrigem.value, u.codigo)
-    }))
-  
-  trackToolUsage('Conversor Área', 'convert', { de: unidadeOrigem.value, para: unidadeDestino.value })
+  const v = Number(valorOrigem.value) || 0
+  valorDestino.value = calcVal(v, unidadeOrigem.value, unidadeDestino.value)
 }
 
+const conversoes = computed(() => {
+  const v = Number(valorOrigem.value) || 0
+  return unidades
+    .filter(u => u.codigo !== unidadeOrigem.value)
+    .slice(0, 6)
+    .map(u => ({ unidade: u.codigo, nomeBreve: u.nomeBreve, valor: calcVal(v, unidadeOrigem.value, u.codigo) }))
+})
+
 const inverter = () => {
-  const temp = unidadeOrigem.value
-  unidadeOrigem.value = unidadeDestino.value
-  unidadeDestino.value = temp
+  const tmp = unidadeOrigem.value
+  unidadeOrigem.value  = unidadeDestino.value
+  unidadeDestino.value = tmp
   converter()
 }
 
-const usarConversao = (conversao) => {
-  unidadeOrigem.value = conversao.de
-  unidadeDestino.value = conversao.para
+const usarConversao = (conv: { deCode: string; paraCode: string }) => {
+  unidadeOrigem.value  = conv.deCode
+  unidadeDestino.value = conv.paraCode
   converter()
 }
 
 converter()
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>
