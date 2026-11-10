@@ -13,7 +13,7 @@ export const solucoesRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/solucoes/analisador-texto',
-    name: 'AnalisadorTexto',
+    name: 'AnalisadorTextoSolucao', // tools.ts has AnalisadorTexto; suffix avoids duplicate name warning
     component: () => import('@/views/SolucaoView.vue'),
     meta: { title: 'Analisador de Texto | Soluções 3W Online' },
   },
@@ -259,7 +259,7 @@ export const solucoesRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/solucoes/divisor-texto',
-    name: 'DivisorTexto',
+    name: 'DivisorTextoSolucao', // tools.ts has DivisorTexto; suffix avoids duplicate name warning
     component: () => import('@/views/SolucaoView.vue'),
     meta: { title: 'Divisor de Texto | Soluções 3W Online' },
   },
@@ -313,7 +313,7 @@ export const solucoesRoutes: RouteRecordRaw[] = [
   },
   {
     path: '/solucoes/modificador-texto',
-    name: 'ModificadorTexto',
+    name: 'ModificadorTextoSolucao', // tools.ts has ModificadorTexto; suffix avoids duplicate name warning
     component: () => import('@/views/SolucaoView.vue'),
     meta: { title: 'Modificador de Texto | Soluções 3W Online' },
   },

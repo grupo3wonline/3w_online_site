@@ -30,7 +30,9 @@ import SolucaoLayout from '@/components/solucoes/SolucaoLayout.vue'
 import { solucoesMap } from '@/components/solucoes/index'
 
 const route = useRoute()
-const slug = computed(() => route.params.slug as string)
+// Routes in solucoes.ts use hardcoded paths (/solucoes/<slug>) without a :slug param,
+// so we derive the slug from the last path segment as a fallback.
+const slug = computed(() => (route.params.slug as string) || route.path.split('/').pop() || '')
 
 const solutionMeta: Record<string, { name: string }> = {
   'analisador-texto': { name: 'Analisador de Texto' },
