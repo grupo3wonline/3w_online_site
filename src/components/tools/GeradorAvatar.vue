@@ -1,279 +1,239 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-cyan-100 dark:bg-cyan-900/30 rounded-full mb-4">
-          <i class="fas fa-user-circle text-cyan-600 dark:text-cyan-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Gerador de Avatar</h1>
-        <p class="text-gray-600 dark:text-gray-400">Gere avatars aleatórios únicos para perfis e placeholders</p>
-      </div>
+  <ToolShell
+    title="Gerador de Avatar"
+    description="Gere avatares coloridos e únicos a partir de iniciais, nomes ou seeds aleatórias. Ideal para sistemas de perfil."
+    icon="fa-user-circle"
+    icon-gradient="from-pink-500 to-rose-700"
+    orb-color="pink"
+    :quick-tips="['4 estilos', 'Download PNG/SVG', 'URL copiável']"
+    :tips="[
+      { title: 'Determinístico', text: 'O mesmo nome/seed sempre gera o mesmo avatar. Útil para sistemas onde o usuário ainda não enviou foto.' },
+      { title: 'API DiceBear', text: 'Os avatares são gerados pela API pública DiceBear 7.x. Não é necessário autenticação.', type: 'info' },
+      { title: 'Uso em produção', text: 'Para produção, considere hospedar as imagens localmente para garantir disponibilidade.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Avatar de usuário', desc: 'Seed: João Silva, Estilo: Avataaars', result: 'Avatar humano consistente para João Silva' },
+      { title: 'Robô para sistema', desc: 'Seed: aleatória, Estilo: Robôs', result: 'Avatar robótico único gerado aleatoriamente' },
+      { title: 'Iniciais formais', desc: 'Seed: Maria, Estilo: Iniciais', result: 'Círculo colorido com as letras MA' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0 space-y-4">
+          <!-- Estilos -->
+          <div>
+            <label class="input-aurora-label">
+              <i class="fas fa-palette mr-1.5 text-pink-500"></i>
+              Estilo do avatar
+            </label>
+            <div class="grid grid-cols-2 gap-2">
+              <button
+                v-for="estilo in estilos"
+                :key="estilo.id"
+                @click="estiloSelecionado = estilo.id; gerar()"
+                :class="[
+                  'p-3 rounded-xl border-2 transition-all text-center',
+                  estiloSelecionado === estilo.id
+                    ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300'
+                    : 'border-gray-200 dark:border-slate-700 hover:border-pink-300 text-gray-700 dark:text-slate-300'
+                ]"
+              >
+                <i :class="[estilo.icon, 'text-xl mb-1 block']"></i>
+                <span class="text-xs font-semibold">{{ estilo.nome }}</span>
+              </button>
+            </div>
+          </div>
 
-      <div class="space-y-6">
-        <!-- Estilo do Avatar -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <button
-            v-for="estilo in estilos"
-            :key="estilo.id"
-            @click="estiloSelecionado = estilo.id; gerar()"
-            class="p-4 rounded-lg font-medium transition-all"
-            :class="estiloSelecionado === estilo.id 
-              ? 'bg-cyan-600 text-white shadow-lg' 
-              : 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300'"
-          >
-            <i :class="estilo.icon" class="text-2xl mb-2"></i>
-            <div class="text-sm">{{ estilo.nome }}</div>
-          </button>
-        </div>
-
-        <!-- Configurações -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <BaseInput
             v-model="nome"
-            label="Nome ou Seed (opcional)"
-            type="text"
-            icon="fa-solid fa-user"
+            label="Nome ou Seed"
+            icon="fa-user"
             placeholder="João Silva"
-            hint="Deixe vazio para aleatório"
+            tooltip="O mesmo nome sempre gera o mesmo avatar. Deixe vazio para gerar aleatoriamente."
+            hint="Deixe vazio para seed aleatória"
           />
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              <i class="fas fa-expand text-cyan-600 dark:text-cyan-400 mr-2"></i>
+            <label class="input-aurora-label">
+              <i class="fas fa-expand mr-1.5 text-rose-500"></i>
               Tamanho
             </label>
-            <select 
-              v-model="tamanho" 
-              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option value="64">64x64 (Pequeno)</option>
-              <option value="128">128x128 (Médio)</option>
-              <option value="256">256x256 (Grande)</option>
-              <option value="512">512x512 (Extra Grande)</option>
+            <select v-model="tamanho" class="input-aurora">
+              <option value="64">64×64 px (Pequeno)</option>
+              <option value="128">128×128 px (Médio)</option>
+              <option value="256">256×256 px (Grande)</option>
+              <option value="512">512×512 px (Extra Grande)</option>
             </select>
           </div>
-        </div>
 
-        <!-- Botões -->
-        <div class="flex gap-4">
-          <BaseButton @click="gerar" variant="primary" class="flex-1">
-            <i class="fas fa-rotate mr-2"></i>
-            Gerar Avatar
-          </BaseButton>
-          <BaseButton @click="limpar" variant="outline">
-            <i class="fas fa-eraser"></i>
-          </BaseButton>
-        </div>
-
-        <!-- Avatar Gerado -->
-        <div v-if="avatarGerado" class="space-y-4">
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-2xl p-8">
-            <div class="flex flex-col items-center gap-6">
-              <div class="relative">
-                <img
-                  :src="avatarUrl"
-                  :alt="nome || 'Avatar'"
-                  class="rounded-full shadow-2xl"
-                  :style="{ width: `${Math.min(Number(tamanho), 256)}px`, height: `${Math.min(Number(tamanho), 256)}px` }"
-                />
-              </div>
-
-              <div class="text-center">
-                <div class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                  {{ nome || 'Avatar Aleatório' }}
-                </div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">
-                  {{ tamanho }}x{{ tamanho }}px • {{ estiloNome }}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Ações -->
-          <div class="grid grid-cols-2 gap-4">
-            <BaseButton @click="baixar" variant="primary" class="flex-1">
-              <i class="fas fa-download mr-2"></i>
-              Baixar PNG
+          <div class="flex gap-3">
+            <BaseButton variant="success" icon="fa-rotate" @click="gerar" class="flex-1">
+              Gerar Avatar
             </BaseButton>
-            <BaseButton @click="copiarURL" variant="outline" class="flex-1">
-              <i class="fas fa-link mr-2"></i>
-              Copiar URL
+            <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
+              Limpar
             </BaseButton>
-          </div>
-
-          <!-- URLs e Código -->
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-            <h3 class="font-semibold text-gray-900 dark:text-white">
-              <i class="fas fa-code text-cyan-600 dark:text-cyan-400 mr-2"></i>
-              Código para Usar
-            </h3>
-
-            <div>
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">URL do Avatar</div>
-              <div class="bg-white dark:bg-gray-600 rounded p-3 font-mono text-xs overflow-x-auto">
-                <code class="text-gray-900 dark:text-white break-all">{{ avatarUrl }}</code>
-              </div>
-            </div>
-
-            <div>
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">HTML</div>
-              <div class="bg-white dark:bg-gray-600 rounded p-3 font-mono text-xs overflow-x-auto">
-                <pre class="text-gray-900 dark:text-white">&lt;img src="{{ avatarUrl }}" alt="Avatar" /&gt;</pre>
-              </div>
-            </div>
-
-            <div>
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">React / Next.js</div>
-              <div class="bg-white dark:bg-gray-600 rounded p-3 font-mono text-xs overflow-x-auto">
-                <pre class="text-gray-900 dark:text-white">&lt;Image src="{{ avatarUrl }}" alt="Avatar" width="{{ tamanho }}" height="{{ tamanho }}" /&gt;</pre>
-              </div>
-            </div>
-          </div>
-
-          <!-- Galeria de Variações -->
-          <div class="space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="font-semibold text-gray-900 dark:text-white">
-                <i class="fas fa-images text-cyan-600 dark:text-cyan-400 mr-2"></i>
-                Mais Variações
-              </h3>
-              <BaseButton @click="gerarVariacoes" variant="outline" size="sm">
-                <i class="fas fa-rotate mr-2"></i>
-                Gerar Mais
-              </BaseButton>
-            </div>
-
-            <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
-              <div
-                v-for="(variacao, index) in variacoes"
-                :key="index"
-                @click="selecionarVariacao(variacao)"
-                class="cursor-pointer hover:scale-105 transition-transform"
-              >
-                <img
-                  :src="variacao"
-                  alt="Variação"
-                  class="w-full rounded-lg shadow hover:shadow-lg"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Informações -->
-          <div class="bg-cyan-50 dark:bg-cyan-900/20 border-l-4 border-cyan-500 p-4">
-            <div class="flex">
-              <i class="fas fa-info-circle text-cyan-600 dark:text-cyan-400 mt-1 mr-3"></i>
-              <div class="text-sm text-cyan-800 dark:text-cyan-300">
-                <p class="font-semibold mb-2">Sobre os Avatars:</p>
-                <ul class="list-disc list-inside space-y-1">
-                  <li>Os avatars são gerados usando serviços públicos de API</li>
-                  <li>Cada nome/seed gera sempre o mesmo avatar (determinístico)</li>
-                  <li>Perfeito para placeholders, perfis de teste e prototipagem</li>
-                  <li>Totalmente gratuito e sem necessidade de registro</li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </div>
+
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in">
+          <div v-if="avatarGerado" class="space-y-4">
+            <!-- Avatar principal -->
+            <div class="glass-panel p-6 text-center">
+              <div class="inline-block relative mb-4">
+                <img
+                  :src="avatarUrl"
+                  :alt="nome || 'Avatar'"
+                  class="rounded-full shadow-2xl ring-4 ring-pink-200 dark:ring-pink-800"
+                  :style="{ width: `${Math.min(Number(tamanho), 200)}px`, height: `${Math.min(Number(tamanho), 200)}px` }"
+                />
+                <span class="absolute -bottom-1 -right-1 w-7 h-7 bg-pink-500 rounded-full flex items-center justify-center shadow">
+                  <i class="fas fa-check text-white text-xs"></i>
+                </span>
+              </div>
+              <div class="text-base font-bold text-gray-900 dark:text-white mb-0.5">{{ nome || 'Avatar Aleatório' }}</div>
+              <div class="text-xs text-gray-500 dark:text-slate-400">{{ tamanho }}×{{ tamanho }}px · {{ estiloNome }}</div>
+            </div>
+
+            <!-- Ações -->
+            <div class="grid grid-cols-2 gap-3">
+              <BaseButton variant="primary" icon="fa-download" @click="baixar" class="w-full">
+                Baixar
+              </BaseButton>
+              <BaseButton variant="outline" icon="fa-link" @click="copiarURL" class="w-full">
+                Copiar URL
+              </BaseButton>
+            </div>
+
+            <!-- URL e código -->
+            <div class="glass-panel p-4 space-y-3">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+                <i class="fas fa-code text-pink-500"></i>
+                Código de integração
+              </h4>
+              <div>
+                <p class="text-[10px] text-gray-500 dark:text-slate-400 mb-1">URL direta</p>
+                <div class="bg-gray-50 dark:bg-slate-900 rounded-lg p-2 font-mono text-xs text-gray-700 dark:text-slate-200 break-all overflow-x-auto">
+                  {{ avatarUrl }}
+                </div>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-500 dark:text-slate-400 mb-1">HTML</p>
+                <div class="bg-gray-50 dark:bg-slate-900 rounded-lg p-2 font-mono text-xs text-gray-700 dark:text-slate-200">
+                  &lt;img src="{{ avatarUrl }}" alt="Avatar" /&gt;
+                </div>
+              </div>
+            </div>
+
+            <!-- Variações -->
+            <div class="glass-panel p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+                  <i class="fas fa-images text-pink-500"></i>
+                  Mais variações
+                </h4>
+                <BaseButton variant="outline" size="xs" icon="fa-rotate" @click="gerarVariacoes">Gerar</BaseButton>
+              </div>
+              <div class="grid grid-cols-6 gap-2">
+                <div
+                  v-for="(variacao, index) in variacoes"
+                  :key="index"
+                  @click="selecionarVariacao(variacao)"
+                  class="cursor-pointer hover:scale-110 transition-transform"
+                >
+                  <img :src="variacao" alt="Variação" class="w-full rounded-lg shadow hover:shadow-lg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Transition>
+
+        <div v-if="!avatarGerado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-user-circle text-3xl mb-3 opacity-30 block text-pink-400"></i>
+          <p class="text-sm">Configure e clique em <strong>Gerar Avatar</strong></p>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <!-- Dica final -->
+    <div class="mt-4 tip-card">
+      <i class="fas fa-info-circle text-pink-500 flex-shrink-0 mt-0.5"></i>
+      <span class="text-xs">
+        Avatares são gerados via API <strong>DiceBear</strong> (gratuita e pública). Cada seed gera sempre o mesmo avatar — perfeito para sistemas com foto de perfil opcional.
+      </span>
+    </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref, computed } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
-
-const { trackToolUsage, trackConversion } = useAnalytics()
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
 const estilos = [
-  { id: 'avataaars', nome: 'Avataaars', icon: 'fas fa-smile' },
-  { id: 'bottts', nome: 'Robôs', icon: 'fas fa-robot' },
-  { id: 'identicon', nome: 'Identicon', icon: 'fas fa-shapes' },
-  { id: 'initials', nome: 'Iniciais', icon: 'fas fa-font' }
+  { id: 'avataaars', nome: 'Humano',   icon: 'fas fa-smile' },
+  { id: 'bottts',    nome: 'Robôs',    icon: 'fas fa-robot' },
+  { id: 'identicon', nome: 'Identicon',icon: 'fas fa-shapes' },
+  { id: 'initials',  nome: 'Iniciais', icon: 'fas fa-font' },
 ]
 
 const estiloSelecionado = ref('avataaars')
-const nome = ref('')
-const tamanho = ref('256')
-const avatarGerado = ref(false)
-const avatarUrl = ref('')
-const variacoes = ref([])
+const nome              = ref('')
+const tamanho           = ref('256')
+const avatarGerado      = ref(false)
+const avatarUrl         = ref('')
+const variacoes         = ref([])
 
-const estiloNome = computed(() => {
-  return estilos.find(e => e.id === estiloSelecionado.value)?.nome || ''
-})
+const estiloNome = computed(() => estilos.find(e => e.id === estiloSelecionado.value)?.nome || '')
 
-const gerarSeed = () => {
-  if (nome.value.trim()) {
-    return nome.value.trim().toLowerCase().replace(/\s+/g, '-')
-  }
-  return Math.random().toString(36).substring(2, 15)
-}
+const gerarSeed = () =>
+  nome.value.trim() ? nome.value.trim().toLowerCase().replace(/\s+/g, '-')
+                     : Math.random().toString(36).substring(2, 15)
 
 const gerarURL = (seed, estilo = estiloSelecionado.value) => {
-  const tamanhoNum = tamanho.value
-  
+  const sz = tamanho.value
   switch (estilo) {
-    case 'avataaars':
-      return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&size=${tamanhoNum}`
-    case 'bottts':
-      return `https://api.dicebear.com/7.x/bottts/svg?seed=${seed}&size=${tamanhoNum}`
-    case 'identicon':
-      return `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}&size=${tamanhoNum}`
-    case 'initials':
-      return `https://ui-avatars.com/api/?name=${encodeURIComponent(seed)}&size=${tamanhoNum}&background=random&color=fff&bold=true`
-    default:
-      return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&size=${tamanhoNum}`
+    case 'avataaars': return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&size=${sz}`
+    case 'bottts':    return `https://api.dicebear.com/7.x/bottts/svg?seed=${seed}&size=${sz}`
+    case 'identicon': return `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}&size=${sz}`
+    case 'initials':  return `https://ui-avatars.com/api/?name=${encodeURIComponent(seed)}&size=${sz}&background=random&color=fff&bold=true`
+    default:          return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&size=${sz}`
   }
 }
 
 const gerar = () => {
-  const seed = gerarSeed()
-  avatarUrl.value = gerarURL(seed)
+  avatarUrl.value = gerarURL(gerarSeed())
   avatarGerado.value = true
-  
   gerarVariacoes()
-  trackToolUsage('Gerador Avatar', 'generate')
 }
 
 const gerarVariacoes = () => {
-  variacoes.value = []
-  for (let i = 0; i < 6; i++) {
-    const seed = Math.random().toString(36).substring(2, 15)
-    variacoes.value.push(gerarURL(seed))
-  }
+  variacoes.value = Array.from({ length: 6 }, () => gerarURL(Math.random().toString(36).substring(2, 15)))
 }
 
 const selecionarVariacao = (url) => {
   avatarUrl.value = url
-  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
 const baixar = async () => {
   try {
     const response = await fetch(avatarUrl.value)
     const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    
+    const url  = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
     link.download = `avatar-${Date.now()}.${estiloSelecionado.value === 'initials' ? 'png' : 'svg'}`
     link.click()
-    
     window.URL.revokeObjectURL(url)
-    
-    trackConversion('download', 'avatar')
-    Swal.fire({
-      icon: 'success',
-      title: 'Download iniciado!',
-      timer: 1500,
-      showConfirmButton: false
-    })
-  } catch (error) {
+    Swal.fire({ icon: 'success', title: 'Download iniciado!', timer: 1500, showConfirmButton: false })
+  } catch {
     Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível baixar o avatar' })
   }
 }
@@ -281,15 +241,8 @@ const baixar = async () => {
 const copiarURL = async () => {
   try {
     await navigator.clipboard.writeText(avatarUrl.value)
-    trackConversion('copy', 'avatar-url')
-    Swal.fire({
-      icon: 'success',
-      title: 'Copiado!',
-      text: 'URL do avatar copiada',
-      timer: 1500,
-      showConfirmButton: false
-    })
-  } catch (error) {
+    Swal.fire({ icon: 'success', title: 'URL copiada!', timer: 1500, showConfirmButton: false })
+  } catch {
     Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível copiar' })
   }
 }
@@ -300,3 +253,9 @@ const limpar = () => {
   variacoes.value = []
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>

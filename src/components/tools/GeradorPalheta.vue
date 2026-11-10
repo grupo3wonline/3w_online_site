@@ -1,184 +1,207 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full mb-4">
-          <i class="fas fa-palette text-purple-600 dark:text-purple-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Gerador de Palheta de Cores</h1>
-        <p class="text-gray-600 dark:text-gray-400">Gere paletas harmônicas baseadas em teoria das cores</p>
-      </div>
-
-      <div class="space-y-6">
-        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6">
-          <div class="grid md:grid-cols-2 gap-6">
-            <div>
-              <label for="corBase" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Cor Base
-              </label>
-              <div class="flex gap-3">
-                <input 
-                  id="corBase"
-                  v-model="corBase" 
-                  type="color" 
-                  class="w-20 h-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 cursor-pointer"
-                />
-                <input 
-                  v-model="corBaseHex" 
-                  type="text" 
-                  placeholder="#FF5733" 
-                  class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  @input="atualizarCorBase"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label for="esquema" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Esquema de Cores
-              </label>
-              <select 
-                id="esquema"
-                v-model="esquemaSelecionado" 
-                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              >
-                <option value="complementar">Complementar (2 cores)</option>
-                <option value="analogo">Análogo (3 cores)</option>
-                <option value="triadico">Triádico (3 cores)</option>
-                <option value="tetradico">Tetrádico (4 cores)</option>
-                <option value="monocromatico">Monocromático (5 cores)</option>
-              </select>
+  <ToolShell
+    title="Gerador de Palheta de Cores"
+    description="Gere palhetas de cores baseadas em teoria das cores: complementar, análogo, triádico, tetrádico e monocromático."
+    icon="fa-swatchbook"
+    icon-gradient="from-pink-500 to-rose-700"
+    orb-color="pink"
+    :quick-tips="['5 esquemas', 'Formatos HEX/RGB/HSL', 'Exportar CSS/JSON']"
+    :tips="[
+      { title: 'Paleta 60-30-10', text: 'Use 60% da cor dominante, 30% da secundária e 10% de destaque. Paletas com 5 cores cobrem bem essa regra.' },
+      { title: 'Verificar contraste', text: 'Sempre verifique o contraste entre texto e fundo para acessibilidade. Mínimo WCAG AA: 4.5:1.', type: 'info' },
+      { title: 'Tetrádico', text: 'O esquema tetrádico oferece muitas possibilidades, mas pode ser difícil de equilibrar. Use uma cor como dominante.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'UI Corporativa', desc: 'Cor base: #1D4ED8 (azul), Esquema: Análogo', result: 'Palheta em tons de azul e índigo' },
+      { title: 'App Vibrante', desc: 'Cor base: #E11D48 (rosa), Esquema: Triádico', result: 'Rosa, verde e amarelo equilibrados' },
+      { title: 'Dashboard', desc: 'Cor base: #7C3AED (roxo), Esquema: Monocromático', result: 'Hierarquia visual com 5 tons do mesmo roxo' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0 space-y-4">
+          <!-- Cor base -->
+          <div>
+            <label class="input-aurora-label">
+              <i class="fas fa-droplet mr-1.5 text-pink-500"></i>
+              Cor base
+            </label>
+            <div class="flex gap-2">
+              <input
+                v-model="corBase"
+                type="color"
+                class="w-14 h-10 rounded-xl cursor-pointer border border-gray-200 dark:border-slate-700 flex-shrink-0"
+              />
+              <input
+                v-model="corBaseHex"
+                type="text"
+                placeholder="#6366F1"
+                class="input-aurora font-mono flex-1"
+                @input="atualizarCorBase"
+              />
             </div>
           </div>
 
-          <BaseButton @click="gerarPalheta" variant="primary" class="w-full mt-6">
-            <i class="fas fa-magic mr-2"></i>Gerar Palheta
-          </BaseButton>
-        </div>
-
-        <div v-if="palhetaGerada" class="space-y-4">
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-            <div class="flex justify-between items-center mb-4">
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ nomesEsquemas[esquemaSelecionado] }}</h3>
-              <button @click="exportarPalheta" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm">
-                <i class="fas fa-download mr-2"></i>Exportar
+          <!-- Esquema -->
+          <div>
+            <label class="input-aurora-label">
+              <i class="fas fa-circle-half-stroke mr-1.5 text-rose-500"></i>
+              Esquema de cores
+            </label>
+            <div class="space-y-1.5">
+              <button
+                v-for="(nome, id) in nomesEsquemas"
+                :key="id"
+                @click="esquemaSelecionado = id"
+                :class="[
+                  'w-full p-2.5 rounded-xl border-2 transition-all text-left flex items-center justify-between',
+                  esquemaSelecionado === id
+                    ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20'
+                    : 'border-gray-200 dark:border-slate-700 hover:border-pink-300'
+                ]"
+              >
+                <span class="text-xs font-semibold text-gray-700 dark:text-slate-200">{{ nome }}</span>
+                <span
+                  v-if="esquemaSelecionado === id"
+                  class="w-4 h-4 rounded-full bg-pink-500 flex items-center justify-center flex-shrink-0"
+                >
+                  <i class="fas fa-check text-white text-[8px]"></i>
+                </span>
               </button>
             </div>
+          </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              <div 
-                v-for="(cor, index) in cores" 
-                :key="index" 
-                class="group cursor-pointer"
-                @click="copiarCor(cor.hex)"
-              >
-                <div 
-                  class="h-32 rounded-lg shadow-lg transition-transform group-hover:scale-105 border-2 border-gray-200 dark:border-gray-600"
-                  :style="{ backgroundColor: cor.hex }"
-                ></div>
-                <div class="mt-3 space-y-1">
-                  <div class="flex items-center justify-between">
-                    <p class="text-sm font-mono font-bold text-gray-900 dark:text-white">{{ cor.hex }}</p>
-                    <button class="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <i class="fas fa-copy text-gray-600 dark:text-gray-400 text-xs"></i>
-                    </button>
+          <BaseButton variant="success" icon="fa-magic" @click="gerarPalheta" class="w-full">
+            Gerar Palheta
+          </BaseButton>
+        </div>
+      </div>
+
+      <!-- Resultado -->
+      <div class="lg:col-span-2 space-y-4">
+        <Transition name="scale-in">
+          <div v-if="palhetaGerada" class="space-y-4">
+            <!-- Cores da palheta -->
+            <div class="glass-panel p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+                  <i class="fas fa-swatchbook text-pink-500"></i>
+                  {{ nomesEsquemas[esquemaSelecionado] }}
+                  <span class="badge-aurora-purple">{{ cores.length }} cores</span>
+                </h4>
+                <button @click="exportarPalheta" class="copy-btn">
+                  <i class="fas fa-download text-xs"></i>
+                </button>
+              </div>
+              <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div
+                  v-for="(cor, index) in cores"
+                  :key="index"
+                  class="group cursor-pointer"
+                  @click="copiarCor(cor.hex)"
+                >
+                  <div
+                    class="h-24 rounded-xl shadow-lg transition-transform group-hover:scale-105 relative overflow-hidden"
+                    :style="{ backgroundColor: cor.hex }"
+                  >
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                      <i class="fas fa-copy text-white text-sm drop-shadow"></i>
+                    </div>
                   </div>
-                  <p class="text-xs font-mono text-gray-600 dark:text-gray-400">{{ cor.rgb }}</p>
-                  <p class="text-xs font-mono text-gray-600 dark:text-gray-400">{{ cor.hsl }}</p>
+                  <div class="mt-2 space-y-0.5">
+                    <div class="font-mono text-xs font-bold text-gray-900 dark:text-white">{{ cor.hex }}</div>
+                    <div class="font-mono text-[10px] text-gray-500 dark:text-slate-400">{{ cor.rgb }}</div>
+                    <div class="font-mono text-[10px] text-gray-400 dark:text-slate-500">{{ cor.hsl }}</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <h3 class="font-bold text-gray-900 dark:text-white mb-3">Código CSS</h3>
-            <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-auto">
-              <pre>{{ cssCode }}</pre>
+            <!-- Código CSS -->
+            <div class="glass-panel p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+                  <i class="fas fa-code text-pink-500"></i>
+                  Variáveis CSS
+                </h4>
+                <BaseButton variant="outline" icon="fa-copy" size="xs" @click="copiarCSS">Copiar</BaseButton>
+              </div>
+              <div class="bg-gray-900 text-green-400 rounded-xl p-4 font-mono text-xs overflow-auto">
+                <pre>{{ cssCode }}</pre>
+              </div>
             </div>
-            <button @click="copiarCSS" class="mt-3 w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg text-sm">
-              <i class="fas fa-copy mr-2"></i>Copiar CSS
-            </button>
-          </div>
-        </div>
 
-        <div class="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-purple-600 dark:text-purple-400 mt-1 mr-3"></i>
-            <div class="text-sm text-purple-800 dark:text-purple-300">
-              <p class="font-semibold mb-2">Teoria das Cores:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>Complementar:</strong> Cores opostas no círculo cromático (180°)</li>
-                <li><strong>Análogo:</strong> Cores adjacentes no círculo cromático (±30°)</li>
-                <li><strong>Triádico:</strong> Três cores igualmente espaçadas (120°)</li>
-                <li><strong>Tetrádico:</strong> Quatro cores em pares complementares (90°)</li>
-                <li><strong>Monocromático:</strong> Variações de luminosidade da mesma cor</li>
-              </ul>
+            <!-- Dica de teoria das cores -->
+            <div class="tip-card">
+              <i class="fas fa-info-circle text-pink-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">{{ descricaoEsquema }}</span>
             </div>
           </div>
+        </Transition>
+
+        <div v-if="!palhetaGerada" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-swatchbook text-3xl mb-3 opacity-30 block text-pink-400"></i>
+          <p class="text-sm">Escolha uma cor base e clique em <strong>Gerar Palheta</strong></p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref, computed, watch } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
 import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
-const { trackToolUsage } = useAnalytics()
-
-const corBase = ref('#6366f1')
-const corBaseHex = ref('#6366f1')
+const corBase            = ref('#6366f1')
+const corBaseHex         = ref('#6366f1')
 const esquemaSelecionado = ref('complementar')
-const palhetaGerada = ref(false)
-const cores = ref([])
+const palhetaGerada      = ref(false)
+const cores              = ref([])
 
 const nomesEsquemas = {
-  complementar: 'Esquema Complementar',
-  analogo: 'Esquema Análogo',
-  triadico: 'Esquema Triádico',
-  tetradico: 'Esquema Tetrádico',
-  monocromatico: 'Esquema Monocromático'
+  complementar:  'Complementar (2 cores)',
+  analogo:       'Análogo (3 cores)',
+  triadico:      'Triádico (3 cores)',
+  tetradico:     'Tetrádico (4 cores)',
+  monocromatico: 'Monocromático (5 tons)',
 }
+
+const descricaoEsquema = computed(() => ({
+  complementar:  'Cores opostas no círculo cromático (180°). Alto contraste, ótimas para CTAs.',
+  analogo:       'Cores adjacentes (±30°). Harmoniosas, ideais para interfaces limpas e modernas.',
+  triadico:      'Três cores espaçadas 120°. Vibrantes e equilibradas ao mesmo tempo.',
+  tetradico:     'Quatro cores espaçadas 90°. Muitas possibilidades; use uma como dominante.',
+  monocromatico: 'Variações de luminosidade de uma única cor. Hierarquia visual elegante.',
+}[esquemaSelecionado.value] || ''))
 
 const cssCode = computed(() => {
   let css = ':root {\n'
-  cores.value.forEach((cor, index) => {
-    css += `  --color-${index + 1}: ${cor.hex};\n`
-  })
+  cores.value.forEach((cor, i) => { css += `  --color-${i + 1}: ${cor.hex};\n` })
   css += '}'
   return css
 })
 
-watch(corBase, (novoValor) => {
-  corBaseHex.value = novoValor
-})
+watch(corBase, (v) => { corBaseHex.value = v })
 
 const atualizarCorBase = () => {
-  if (/^#[0-9A-F]{6}$/i.test(corBaseHex.value)) {
-    corBase.value = corBaseHex.value
-  }
+  if (/^#[0-9A-F]{6}$/i.test(corBaseHex.value)) corBase.value = corBaseHex.value
 }
 
-const hexParaRgb = (hex) => {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return { r, g, b }
-}
+// ── Conversões ────────────────────────────────────────────────────
+const hexParaRgb = (hex) => ({
+  r: parseInt(hex.slice(1, 3), 16),
+  g: parseInt(hex.slice(3, 5), 16),
+  b: parseInt(hex.slice(5, 7), 16),
+})
 
 const rgbParaHsl = (r, g, b) => {
-  r /= 255
-  g /= 255
-  b /= 255
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-  let h = 0
-  let s = 0
-  const l = (max + min) / 2
-
+  r /= 255; g /= 255; b /= 255
+  const max = Math.max(r, g, b); const min = Math.min(r, g, b)
+  let h = 0; let s = 0; const l = (max + min) / 2
   if (max !== min) {
     const d = max - min
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
@@ -188,62 +211,34 @@ const rgbParaHsl = (r, g, b) => {
       case b: h = ((r - g) / d + 4) / 6; break
     }
   }
-
-  return {
-    h: Math.round(h * 360),
-    s: Math.round(s * 100),
-    l: Math.round(l * 100)
-  }
+  return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) }
 }
 
 const hslParaRgb = (h, s, l) => {
-  h /= 360
-  s /= 100
-  l /= 100
-  
-  let r, g, b
-
-  if (s === 0) {
-    r = g = b = l
-  } else {
-    const hue2rgb = (p, q, t) => {
-      if (t < 0) t += 1
-      if (t > 1) t -= 1
-      if (t < 1/6) return p + (q - p) * 6 * t
-      if (t < 1/2) return q
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6
-      return p
-    }
-
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s
-    const p = 2 * l - q
-    r = hue2rgb(p, q, h + 1/3)
-    g = hue2rgb(p, q, h)
-    b = hue2rgb(p, q, h - 1/3)
+  h /= 360; s /= 100; l /= 100
+  if (s === 0) { const v = Math.round(l * 255); return { r: v, g: v, b: v } }
+  const hue2rgb = (p, q, t) => {
+    if (t < 0) t += 1; if (t > 1) t -= 1
+    if (t < 1/6) return p + (q - p) * 6 * t
+    if (t < 1/2) return q
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6
+    return p
   }
-
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s
+  const p = 2 * l - q
   return {
-    r: Math.round(r * 255),
-    g: Math.round(g * 255),
-    b: Math.round(b * 255)
+    r: Math.round(hue2rgb(p, q, h + 1/3) * 255),
+    g: Math.round(hue2rgb(p, q, h) * 255),
+    b: Math.round(hue2rgb(p, q, h - 1/3) * 255),
   }
 }
 
-const rgbParaHex = (r, g, b) => {
-  return '#' + [r, g, b].map(x => {
-    const hex = x.toString(16)
-    return hex.length === 1 ? '0' + hex : hex
-  }).join('').toUpperCase()
-}
+const rgbParaHex = (r, g, b) => '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
 
 const gerarCor = (h, s, l) => {
   const rgb = hslParaRgb(h, s, l)
   const hex = rgbParaHex(rgb.r, rgb.g, rgb.b)
-  return {
-    hex,
-    rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,
-    hsl: `hsl(${h}, ${s}%, ${l}%)`
-  }
+  return { hex, rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`, hsl: `hsl(${h}, ${s}%, ${l}%)` }
 }
 
 const gerarPalheta = () => {
@@ -253,98 +248,69 @@ const gerarPalheta = () => {
 
   switch (esquemaSelecionado.value) {
     case 'complementar':
-      cores.value = [
-        gerarCor(hsl.h, hsl.s, hsl.l),
-        gerarCor((hsl.h + 180) % 360, hsl.s, hsl.l)
-      ]
+      cores.value = [gerarCor(hsl.h, hsl.s, hsl.l), gerarCor((hsl.h + 180) % 360, hsl.s, hsl.l)]
       break
-
     case 'analogo':
       cores.value = [
         gerarCor((hsl.h - 30 + 360) % 360, hsl.s, hsl.l),
         gerarCor(hsl.h, hsl.s, hsl.l),
-        gerarCor((hsl.h + 30) % 360, hsl.s, hsl.l)
+        gerarCor((hsl.h + 30) % 360, hsl.s, hsl.l),
       ]
       break
-
     case 'triadico':
       cores.value = [
         gerarCor(hsl.h, hsl.s, hsl.l),
         gerarCor((hsl.h + 120) % 360, hsl.s, hsl.l),
-        gerarCor((hsl.h + 240) % 360, hsl.s, hsl.l)
+        gerarCor((hsl.h + 240) % 360, hsl.s, hsl.l),
       ]
       break
-
     case 'tetradico':
       cores.value = [
         gerarCor(hsl.h, hsl.s, hsl.l),
         gerarCor((hsl.h + 90) % 360, hsl.s, hsl.l),
         gerarCor((hsl.h + 180) % 360, hsl.s, hsl.l),
-        gerarCor((hsl.h + 270) % 360, hsl.s, hsl.l)
+        gerarCor((hsl.h + 270) % 360, hsl.s, hsl.l),
       ]
       break
-
     case 'monocromatico':
       cores.value = [
         gerarCor(hsl.h, hsl.s, Math.max(hsl.l - 30, 10)),
         gerarCor(hsl.h, hsl.s, Math.max(hsl.l - 15, 20)),
         gerarCor(hsl.h, hsl.s, hsl.l),
         gerarCor(hsl.h, hsl.s, Math.min(hsl.l + 15, 80)),
-        gerarCor(hsl.h, hsl.s, Math.min(hsl.l + 30, 90))
+        gerarCor(hsl.h, hsl.s, Math.min(hsl.l + 30, 90)),
       ]
       break
   }
 
   palhetaGerada.value = true
-  trackToolUsage('Gerador Palheta', 'generate', { scheme: esquemaSelecionado.value })
-  
-  Swal.fire({
-    icon: 'success',
-    title: 'Palheta Gerada!',
-    text: `${cores.value.length} cores no esquema ${nomesEsquemas[esquemaSelecionado.value]}`,
-    confirmButtonColor: '#9333ea'
-  })
 }
 
 const copiarCor = (hex) => {
-  navigator.clipboard.writeText(hex)
-  Swal.fire({
-    icon: 'success',
-    title: 'Copiado!',
-    text: `Cor ${hex} copiada`,
-    timer: 1500,
-    showConfirmButton: false
+  navigator.clipboard.writeText(hex).then(() => {
+    Swal.fire({ icon: 'success', title: `${hex} copiado!`, timer: 1200, showConfirmButton: false })
   })
 }
 
 const copiarCSS = () => {
-  navigator.clipboard.writeText(cssCode.value)
-  Swal.fire({
-    icon: 'success',
-    title: 'CSS Copiado!',
-    text: 'Código CSS copiado para área de transferência',
-    timer: 2000,
-    showConfirmButton: false
+  navigator.clipboard.writeText(cssCode.value).then(() => {
+    Swal.fire({ icon: 'success', title: 'CSS copiado!', timer: 1500, showConfirmButton: false })
   })
 }
 
 const exportarPalheta = () => {
-  const json = {
-    scheme: esquemaSelecionado.value,
-    baseColor: corBase.value,
-    colors: cores.value
-  }
-  
+  const json = { scheme: esquemaSelecionado.value, baseColor: corBase.value, colors: cores.value }
   const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
+  const url  = URL.createObjectURL(blob)
   const link = document.createElement('a')
-  link.href = url
-  link.download = `palheta_${esquemaSelecionado.value}_${Date.now()}.json`
-  document.body.appendChild(link)
-  link.click()
-  link.remove()
+  link.href = url; link.download = `palheta_${esquemaSelecionado.value}_${Date.now()}.json`
+  document.body.appendChild(link); link.click(); link.remove()
   URL.revokeObjectURL(url)
-  
-  trackToolUsage('Gerador Palheta', 'export')
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>

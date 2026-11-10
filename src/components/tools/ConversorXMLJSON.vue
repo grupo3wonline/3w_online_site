@@ -1,112 +1,143 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-pink-100 dark:bg-pink-900/30 rounded-full mb-4">
-          <i class="fas fa-exchange-alt text-pink-600 dark:text-pink-400 text-2xl"></i>
+  <ToolShell
+    title="Conversor XML ↔ JSON"
+    description="Converta entre XML e JSON de forma bidirecional. Atributos, namespaces e tags aninhadas são preservados."
+    icon="fa-file-code"
+    icon-gradient="from-orange-500 to-amber-700"
+    orb-color="orange"
+    :quick-tips="['XML → JSON', 'JSON → XML', 'Validação automática']"
+    :tips="[
+      { title: 'Atributos XML', text: 'Atributos XML são convertidos para a propriedade @attributes no JSON resultante.' },
+      { title: 'Tags repetidas', text: 'Tags XML repetidas no mesmo nível são automaticamente convertidas em arrays JSON.', type: 'info' },
+      { title: 'JSON → XML', text: 'Ao converter JSON para XML, o objeto raiz recebe a tag <root>. Personalize conforme necessário.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'XML simples', desc: 'Input: &lt;pessoa&gt;&lt;nome&gt;João&lt;/nome&gt;&lt;/pessoa&gt;', result: 'JSON com chave pessoa contendo chave nome: João' },
+      { title: 'Com atributos', desc: 'Input: &lt;item id=1&gt;Texto&lt;/item&gt;', result: 'JSON com @attributes.id = 1 e #text = Texto' },
+      { title: 'Tags repetidas', desc: 'Input: &lt;lista&gt;&lt;item&gt;A&lt;/item&gt;&lt;item&gt;B&lt;/item&gt;&lt;/lista&gt;', result: 'JSON com lista.item como array [A, B]' },
+    ]"
+  >
+    <div class="space-y-4">
+      <!-- Seletor de modo -->
+      <div class="tool-body !mb-0">
+        <div class="flex gap-2 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl">
+          <button
+            @click="modo = 'xml-json'"
+            :class="['flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all', modo === 'xml-json' ? 'bg-orange-600 text-white shadow' : 'text-gray-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700']"
+          >
+            <i class="fas fa-arrow-right mr-2"></i>XML → JSON
+          </button>
+          <button
+            @click="modo = 'json-xml'"
+            :class="['flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all', modo === 'json-xml' ? 'bg-orange-600 text-white shadow' : 'text-gray-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700']"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>JSON → XML
+          </button>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Conversor XML ↔ JSON</h1>
-        <p class="text-gray-600 dark:text-gray-400">Converta entre XML e JSON facilmente</p>
       </div>
 
-      <div class="space-y-6">
-        <div class="flex gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <button @click="modo = 'xml-json'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'xml-json' ? 'bg-pink-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-arrow-right mr-2"></i>
-            XML → JSON
-          </button>
-          <button @click="modo = 'json-xml'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'json-xml' ? 'bg-pink-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-arrow-left mr-2"></i>
-            JSON → XML
-          </button>
+      <!-- Editor duplo -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Entrada -->
+        <div class="tool-body !mb-0 space-y-2">
+          <label class="input-aurora-label">
+            <i :class="['fas mr-1.5', modo === 'xml-json' ? 'fa-code text-orange-500' : 'fa-braces text-amber-500']"></i>
+            {{ modo === 'xml-json' ? 'XML de Entrada' : 'JSON de Entrada' }}
+          </label>
+          <textarea
+            v-model="input"
+            @input="converter"
+            rows="18"
+            :placeholder="modo === 'xml-json' ? xmlPlaceholder : jsonPlaceholder"
+            class="input-aurora font-mono text-sm resize-y"
+          ></textarea>
+          <div class="flex gap-2">
+            <BaseButton variant="outline" icon="fa-trash" size="sm" @click="limpar">Limpar</BaseButton>
+            <BaseButton variant="success" icon="fa-play" size="sm" @click="converter" class="flex-1">Converter</BaseButton>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {{ modo === 'xml-json' ? 'XML' : 'JSON' }}
+        <!-- Saída -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="input-aurora-label !mb-0">
+              <i :class="['fas mr-1.5', modo === 'xml-json' ? 'fa-braces text-amber-500' : 'fa-code text-orange-500']"></i>
+              {{ modo === 'xml-json' ? 'JSON Resultante' : 'XML Resultante' }}
             </label>
-            <textarea v-model="input" @input="converter" rows="18" :placeholder="modo === 'xml-json' ? '<root><name>John</name></root>' : '{ \u0022name\u0022: \u0022John\u0022 }'" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none font-mono text-sm"></textarea>
+            <BaseButton v-if="output" variant="primary" icon="fa-copy" size="xs" @click="copiar">Copiar</BaseButton>
           </div>
 
-          <div>
-            <div class="flex justify-between items-center mb-2">
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                {{ modo === 'xml-json' ? 'JSON' : 'XML' }}
-              </label>
-              <button @click="copiar" class="px-3 py-1.5 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-sm transition-colors">
-                <i class="fas fa-copy mr-1"></i>
-                Copiar
-              </button>
+          <div
+            class="min-h-[380px] rounded-xl border font-mono text-sm p-4 overflow-auto bg-gray-50 dark:bg-slate-900"
+            :class="erro ? 'border-red-400 dark:border-red-600' : 'border-gray-200 dark:border-slate-700'"
+          >
+            <div v-if="erro" class="tip-card-warning">
+              <i class="fas fa-exclamation-triangle text-amber-500 flex-shrink-0"></i>
+              <span class="text-xs">{{ erro }}</span>
             </div>
-            <div class="h-[470px] px-4 py-3 border rounded-lg bg-gray-50 dark:bg-gray-900 overflow-auto" :class="erro ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'">
-              <pre v-if="!erro" class="text-gray-900 dark:text-gray-100 text-sm font-mono">{{ output }}</pre>
-              <div v-else class="text-red-600 dark:text-red-400 text-sm">
-                <i class="fas fa-exclamation-triangle mr-2"></i>
-                {{ erro }}
-              </div>
+            <pre v-else-if="output" class="text-gray-900 dark:text-slate-100 text-xs whitespace-pre-wrap">{{ output }}</pre>
+            <div v-else class="text-center py-12 text-gray-400 dark:text-slate-500">
+              <i class="fas fa-file-code text-3xl mb-3 opacity-30 block text-orange-400"></i>
+              <p class="text-sm">O resultado aparece aqui</p>
             </div>
           </div>
-        </div>
 
-        <div class="flex gap-3">
-          <button @click="formatarOutput" class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-sm transition-colors">
-            <i class="fas fa-indent mr-2"></i>
-            Formatar
-          </button>
-          <button @click="limpar" class="ml-auto px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white rounded-lg text-sm transition-colors">
-            <i class="fas fa-trash mr-2"></i>
-            Limpar
-          </button>
+          <BaseButton v-if="output && !erro" variant="outline" icon="fa-indent" size="sm" class="w-full" @click="formatarOutput">
+            Formatar saída
+          </BaseButton>
         </div>
+      </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-            <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ input.split('\n').length }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400">Linhas Entrada</div>
+      <!-- Métricas -->
+      <Transition name="scale-in">
+        <div v-if="output && !erro" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="metric-glass ring-1 ring-orange-100 dark:ring-orange-900">
+            <div class="metric-glass-value text-orange-600 dark:text-orange-400">{{ input.split('\n').length }}</div>
+            <div class="metric-glass-label">Linhas entrada</div>
           </div>
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-            <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ output.split('\n').length }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400">Linhas Saída</div>
+          <div class="metric-glass ring-1 ring-amber-100 dark:ring-amber-900">
+            <div class="metric-glass-value text-amber-600 dark:text-amber-400">{{ output.split('\n').length }}</div>
+            <div class="metric-glass-label">Linhas saída</div>
           </div>
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-            <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ input.length }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400">Bytes Entrada</div>
+          <div class="metric-glass ring-1 ring-orange-100 dark:ring-orange-900">
+            <div class="metric-glass-value text-orange-600 dark:text-orange-400">{{ input.length }}</div>
+            <div class="metric-glass-label">Bytes entrada</div>
           </div>
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-            <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ output.length }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400">Bytes Saída</div>
+          <div class="metric-glass ring-1 ring-amber-100 dark:ring-amber-900">
+            <div class="metric-glass-value text-amber-600 dark:text-amber-400">{{ output.length }}</div>
+            <div class="metric-glass-label">Bytes saída</div>
           </div>
         </div>
+      </Transition>
 
-        <div class="bg-pink-50 dark:bg-pink-900/20 border-l-4 border-pink-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-pink-600 dark:text-pink-400 mt-1 mr-3"></i>
-            <div class="text-sm text-pink-800 dark:text-pink-300">
-              <p class="font-semibold mb-2">Casos de uso:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>APIs:</strong> Integração entre sistemas XML e JSON</li>
-                <li><strong>Configurações:</strong> Migração de configs XML para JSON</li>
-                <li><strong>Web Services:</strong> SOAP (XML) para REST (JSON)</li>
-                <li><strong>Dados:</strong> Transformação de formatos legados</li>
-              </ul>
-            </div>
-          </div>
+      <!-- Dica de casos de uso -->
+      <div class="glass-panel p-4">
+        <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-2 flex items-center gap-2">
+          <i class="fas fa-lightbulb text-amber-500"></i>
+          Casos de uso comuns
+        </h4>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs text-gray-600 dark:text-slate-300">
+          <span><i class="fas fa-check text-teal-500 mr-1"></i> Integração de APIs</span>
+          <span><i class="fas fa-check text-teal-500 mr-1"></i> Migração de configs</span>
+          <span><i class="fas fa-check text-teal-500 mr-1"></i> SOAP → REST</span>
+          <span><i class="fas fa-check text-teal-500 mr-1"></i> Dados legados</span>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref } from 'vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
-const { trackToolUsage } = useAnalytics()
-
-const modo = ref('xml-json')
-const input = ref(`<?xml version="1.0" encoding="UTF-8"?>
+const xmlPlaceholder = `<?xml version="1.0"?>\n<root>\n  <name>João</name>\n</root>`
+const jsonPlaceholder = `{\n  "name": "João"\n}`
+const modo   = ref('xml-json')
+const input  = ref(`<?xml version="1.0" encoding="UTF-8"?>
 <pessoa>
   <nome>João Silva</nome>
   <idade>30</idade>
@@ -118,55 +149,31 @@ const input = ref(`<?xml version="1.0" encoding="UTF-8"?>
   <hobbies>
     <hobby>Leitura</hobby>
     <hobby>Games</hobby>
-    <hobby>Programação</hobby>
   </hobbies>
 </pessoa>`)
 const output = ref('')
-const erro = ref('')
+const erro   = ref('')
 
-const xmlToJSON = (xml) => {
-  try {
-    const parser = new DOMParser()
-    const xmlDoc = parser.parseFromString(xml, 'text/xml')
-    
-    if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
-      throw new Error('XML inválido')
-    }
-    
-    const obj = parseXMLNode(xmlDoc.documentElement)
-    return JSON.stringify(obj, null, 2)
-  } catch (e) {
-    throw new Error(`Erro ao converter XML: ${e.message}`)
-  }
-}
-
+// ── XML → JSON ────────────────────────────────────────────────────
 const parseXMLNode = (node) => {
   const obj = {}
-  
-  if (node.attributes && node.attributes.length > 0) {
+  if (node.attributes?.length) {
     obj['@attributes'] = {}
     for (let i = 0; i < node.attributes.length; i++) {
-      const attr = node.attributes[i]
-      obj['@attributes'][attr.name] = attr.value
+      const a = node.attributes[i]
+      obj['@attributes'][a.name] = a.value
     }
   }
-  
   if (node.hasChildNodes()) {
     for (let i = 0; i < node.childNodes.length; i++) {
       const child = node.childNodes[i]
-      
       if (child.nodeType === 3) {
         const text = child.nodeValue.trim()
-        if (text) {
-          obj['#text'] = text
-        }
+        if (text) obj['#text'] = text
       } else if (child.nodeType === 1) {
         const childObj = parseXMLNode(child)
-        
         if (obj[child.nodeName]) {
-          if (!Array.isArray(obj[child.nodeName])) {
-            obj[child.nodeName] = [obj[child.nodeName]]
-          }
+          if (!Array.isArray(obj[child.nodeName])) obj[child.nodeName] = [obj[child.nodeName]]
           obj[child.nodeName].push(childObj)
         } else {
           obj[child.nodeName] = childObj
@@ -174,68 +181,42 @@ const parseXMLNode = (node) => {
       }
     }
   }
-  
-  if (Object.keys(obj).length === 1 && obj['#text']) {
-    return obj['#text']
-  }
-  
+  if (Object.keys(obj).length === 1 && obj['#text']) return obj['#text']
   return obj
 }
 
-const jsonToXML = (json) => {
-  try {
-    const obj = JSON.parse(json)
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    xml += objectToXML(obj, 'root', 0)
-    return xml
-  } catch (e) {
-    throw new Error(`JSON inválido: ${e.message}`)
-  }
+const xmlToJSON = (xml) => {
+  const parser = new DOMParser()
+  const xmlDoc = parser.parseFromString(xml, 'text/xml')
+  if (xmlDoc.getElementsByTagName('parsererror').length > 0) throw new Error('XML inválido')
+  return JSON.stringify(parseXMLNode(xmlDoc.documentElement), null, 2)
 }
 
+// ── JSON → XML ────────────────────────────────────────────────────
 const objectToXML = (obj, tagName, indent = 0) => {
   const spaces = '  '.repeat(indent)
+  if (typeof obj !== 'object' || obj === null) return `${spaces}<${tagName}>${obj}</${tagName}>\n`
+  if (Array.isArray(obj)) return obj.map(item => objectToXML(item, 'item', indent)).join('')
   let xml = `${spaces}<${tagName}>\n`
-  
-  if (typeof obj === 'object' && obj !== null) {
-    if (Array.isArray(obj)) {
-      for (const item of obj) {
-        xml += objectToXML(item, 'item', indent + 1)
-      }
-    } else {
-      for (const [key, value] of Object.entries(obj)) {
-        if (typeof value === 'object' && value !== null) {
-          xml += objectToXML(value, key, indent + 1)
-        } else {
-          xml += `${spaces}  <${key}>${value}</${key}>\n`
-        }
-      }
-    }
-  } else {
-    xml = `${spaces}<${tagName}>${obj}</${tagName}>\n`
-    return xml
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === 'object' && value !== null) xml += objectToXML(value, key, indent + 1)
+    else xml += `${spaces}  <${key}>${value}</${key}>\n`
   }
-  
   xml += `${spaces}</${tagName}>\n`
   return xml
 }
 
+const jsonToXML = (json) => {
+  const obj = JSON.parse(json)
+  return '<?xml version="1.0" encoding="UTF-8"?>\n' + objectToXML(obj, 'root', 0)
+}
+
+// ── Converter ─────────────────────────────────────────────────────
 const converter = () => {
   erro.value = ''
-  
-  if (!input.value.trim()) {
-    output.value = ''
-    return
-  }
-  
+  if (!input.value.trim()) { output.value = ''; return }
   try {
-    if (modo.value === 'xml-json') {
-      output.value = xmlToJSON(input.value)
-    } else {
-      output.value = jsonToXML(input.value)
-    }
-    
-    trackToolUsage('Conversor XML/JSON', modo.value)
+    output.value = modo.value === 'xml-json' ? xmlToJSON(input.value) : jsonToXML(input.value)
   } catch (e) {
     erro.value = e.message
     output.value = ''
@@ -244,40 +225,28 @@ const converter = () => {
 
 const formatarOutput = () => {
   if (!output.value || erro.value) return
-  
   try {
-    if (modo.value === 'xml-json') {
-      const obj = JSON.parse(output.value)
-      output.value = JSON.stringify(obj, null, 2)
-    }
-  } catch {
-    // Já formatado
-  }
+    if (modo.value === 'xml-json') output.value = JSON.stringify(JSON.parse(output.value), null, 2)
+  } catch {}
 }
 
-const limpar = () => {
-  input.value = ''
-  output.value = ''
-  erro.value = ''
-}
+const limpar = () => { input.value = ''; output.value = ''; erro.value = '' }
 
 const copiar = async () => {
   if (!output.value) return
-  
   try {
     await navigator.clipboard.writeText(output.value)
-    Swal.fire({
-      title: 'Copiado!',
-      text: 'Código copiado para área de transferência',
-      icon: 'success',
-      timer: 1500,
-      showConfirmButton: false
-    })
+    Swal.fire({ title: 'Copiado!', icon: 'success', timer: 1500, showConfirmButton: false })
   } catch {
     Swal.fire('Erro', 'Não foi possível copiar', 'error')
   }
 }
 
-// Conversão inicial
 converter()
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>

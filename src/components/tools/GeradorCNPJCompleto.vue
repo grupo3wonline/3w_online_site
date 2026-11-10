@@ -1,222 +1,227 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mb-4">
-          <i class="fas fa-building text-indigo-600 dark:text-indigo-400 text-2xl"></i>
+  <ToolShell
+    title="Gerador de CNPJ Completo"
+    description="Gere dados completos de empresas fictícias com CNPJ válido, razão social, endereço e contatos para testes."
+    icon="fa-building"
+    icon-gradient="from-indigo-500 to-blue-700"
+    orb-color="indigo"
+    :quick-tips="['CNPJ válido', 'Dados completos', 'Apenas para testes']"
+    :tips="[
+      { title: 'Validação do CNPJ', text: 'Os CNPJs gerados passam na validação matemática (dígitos verificadores corretos), mas não correspondem a empresas reais.' },
+      { title: 'Campos gerados', text: 'Razão social, nome fantasia, CNPJ, data de abertura, telefone, email e endereço completo.', type: 'info' },
+      { title: '⚠️ Uso legal apenas', text: 'Use exclusivamente em ambientes de desenvolvimento/homologação. Uso em documentos oficiais é crime de falsidade ideológica.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Empresa de TI', desc: 'Gera dados de empresa fictícia do setor tecnológico', result: 'Tech Solutions Ltda · CNPJ: XX.XXX.XXX/0001-XX' },
+      { title: 'Lote de empresas', desc: 'Quantidade: 10', result: '10 empresas fictícias com dados completos' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0 space-y-4">
+          <BaseInput
+            v-model="quantidade"
+            label="Quantidade de empresas"
+            type="number"
+            :min="1"
+            :max="50"
+            icon="fa-hashtag"
+            hint="Máximo: 50 empresas por geração"
+            tooltip="Quantas empresas fictícias você quer gerar de uma vez."
+          />
+
+          <BaseButton variant="primary" icon="fa-building" @click="gerar" class="w-full">
+            Gerar Empresas
+          </BaseButton>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Gerador de CNPJ Completo</h1>
-        <p class="text-gray-600 dark:text-gray-400">Gere dados completos de empresas fictícias para testes</p>
+
+        <!-- Aviso -->
+        <div class="tip-card-warning">
+          <i class="fas fa-exclamation-triangle text-amber-500 flex-shrink-0 mt-0.5"></i>
+          <div class="text-xs">
+            <strong class="block mb-1">⚠️ Uso exclusivo para desenvolvimento</strong>
+            CNPJs são fictícios. Uso em documentos oficiais configura crime de falsificação.
+          </div>
+        </div>
+
+        <!-- Se já houver empresas, mostrar métricas -->
+        <Transition name="scale-in">
+          <div v-if="empresas.length" class="glass-panel p-4">
+            <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+              <i class="fas fa-chart-bar text-indigo-500"></i>
+              Resumo da geração
+            </h4>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="metric-glass ring-1 ring-indigo-100 dark:ring-indigo-900">
+                <div class="metric-glass-value text-indigo-600 dark:text-indigo-400">{{ empresas.length }}</div>
+                <div class="metric-glass-label">Empresas</div>
+              </div>
+              <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+                <div class="metric-glass-value text-blue-600 dark:text-blue-400">{{ cidades.length }}</div>
+                <div class="metric-glass-label">Cidades</div>
+              </div>
+            </div>
+          </div>
+        </Transition>
       </div>
 
-      <div class="space-y-6">
-        <BaseInput v-model="quantidade" label="Quantidade de Empresas" type="number" :min="1" :max="50" icon="fa-solid fa-hashtag" />
-
-        <BaseButton @click="gerar" variant="primary" class="w-full">
-          <i class="fas fa-building mr-2"></i>
-          Gerar Empresas
-        </BaseButton>
-
-        <div v-if="empresas.length" class="space-y-4">
-          <div class="flex justify-between items-center">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ empresas.length }} Empresas Geradas</h3>
-            <BaseButton @click="baixarTXT" variant="secondary" size="sm">
-              <i class="fas fa-download mr-2"></i>
-              Baixar TXT
-            </BaseButton>
-          </div>
-
-          <div v-for="(empresa, index) in empresas" :key="index" class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-xl p-6 border border-indigo-200 dark:border-indigo-800">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ empresa.razaoSocial }}</h4>
-                <p class="text-sm text-gray-600 dark:text-gray-400">{{ empresa.nomeFantasia }}</p>
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in">
+          <div v-if="empresas.length" class="space-y-3">
+            <!-- Ações -->
+            <div class="flex gap-2">
+              <div class="flex-1 text-sm font-semibold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+                <i class="fas fa-building text-indigo-500"></i>
+                {{ empresas.length }} empresa(s) gerada(s)
               </div>
-              <button @click="copiar(empresa)" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm transition-colors">
-                <i class="fas fa-copy mr-1"></i>
-                Copiar
-              </button>
+              <BaseButton variant="outline" icon="fa-download" size="sm" @click="baixarTXT">
+                TXT
+              </BaseButton>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-              <div class="flex items-center">
-                <i class="fas fa-id-card text-indigo-600 dark:text-indigo-400 w-5 mr-2"></i>
-                <span class="text-gray-600 dark:text-gray-400">CNPJ:</span>
-                <span class="ml-2 font-mono font-semibold text-gray-900 dark:text-white">{{ empresa.cnpj }}</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-calendar text-indigo-600 dark:text-indigo-400 w-5 mr-2"></i>
-                <span class="text-gray-600 dark:text-gray-400">Abertura:</span>
-                <span class="ml-2 font-semibold text-gray-900 dark:text-white">{{ empresa.dataAbertura }}</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-phone text-indigo-600 dark:text-indigo-400 w-5 mr-2"></i>
-                <span class="text-gray-600 dark:text-gray-400">Telefone:</span>
-                <span class="ml-2 font-semibold text-gray-900 dark:text-white">{{ empresa.telefone }}</span>
-              </div>
-              <div class="flex items-center">
-                <i class="fas fa-envelope text-indigo-600 dark:text-indigo-400 w-5 mr-2"></i>
-                <span class="text-gray-600 dark:text-gray-400">Email:</span>
-                <span class="ml-2 font-semibold text-gray-900 dark:text-white">{{ empresa.email }}</span>
-              </div>
-              <div class="flex items-start col-span-2">
-                <i class="fas fa-map-marker-alt text-indigo-600 dark:text-indigo-400 w-5 mr-2 mt-0.5"></i>
-                <span class="text-gray-600 dark:text-gray-400">Endereço:</span>
-                <span class="ml-2 font-semibold text-gray-900 dark:text-white">{{ empresa.endereco }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4">
-            <div class="flex">
-              <i class="fas fa-exclamation-triangle text-red-600 dark:text-red-400 mt-1 mr-3"></i>
-              <div class="text-sm text-red-800 dark:text-red-300">
-                <p class="font-semibold mb-2">⚠️ AVISO IMPORTANTE:</p>
-                <ul class="list-disc list-inside space-y-1 text-xs">
-                  <li>Estes CNPJs são fictícios e gerados apenas para TESTES</li>
-                  <li>NÃO use para fraudes, documentos oficiais ou declarações fiscais</li>
-                  <li>Uso indevido pode configurar crime de falsificação de documentos</li>
-                  <li>Destinado exclusivamente para desenvolvimento e homologação de sistemas</li>
-                </ul>
+            <!-- Lista de empresas -->
+            <div class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+              <div
+                v-for="(empresa, index) in empresas"
+                :key="index"
+                class="glass-panel p-4"
+              >
+                <div class="flex items-start justify-between gap-2 mb-3">
+                  <div>
+                    <h4 class="font-bold text-gray-900 dark:text-white text-sm">{{ empresa.razaoSocial }}</h4>
+                    <p class="text-xs text-gray-500 dark:text-slate-400">{{ empresa.nomeFantasia }}</p>
+                  </div>
+                  <button @click="copiar(empresa)" class="copy-btn flex-shrink-0">
+                    <i class="fas fa-copy text-xs"></i>
+                  </button>
+                </div>
+                <div class="grid grid-cols-1 gap-1.5 text-xs">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-id-card text-indigo-500 w-3"></i>
+                    <span class="text-gray-500 dark:text-slate-400">CNPJ:</span>
+                    <span class="font-mono font-bold text-gray-900 dark:text-white">{{ empresa.cnpj }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-calendar text-indigo-500 w-3"></i>
+                    <span class="text-gray-500 dark:text-slate-400">Abertura:</span>
+                    <span class="font-semibold text-gray-900 dark:text-white">{{ empresa.dataAbertura }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-phone text-indigo-500 w-3"></i>
+                    <span class="text-gray-500 dark:text-slate-400">Tel:</span>
+                    <span class="font-semibold text-gray-900 dark:text-white">{{ empresa.telefone }}</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-envelope text-indigo-500 w-3"></i>
+                    <span class="text-gray-500 dark:text-slate-400">Email:</span>
+                    <span class="font-semibold text-gray-900 dark:text-white">{{ empresa.email }}</span>
+                  </div>
+                  <div class="flex items-start gap-2">
+                    <i class="fas fa-map-marker-alt text-indigo-500 w-3 mt-0.5"></i>
+                    <span class="text-gray-900 dark:text-white leading-tight">{{ empresa.endereco }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </Transition>
+
+        <div v-if="!empresas.length" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-building text-3xl mb-3 opacity-30 block text-indigo-400"></i>
+          <p class="text-sm">Informe a quantidade e clique em <strong>Gerar Empresas</strong></p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
-
-const { trackToolUsage, trackConversion } = useAnalytics()
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
 const quantidade = ref(5)
-const empresas = ref([])
-
-const gerarCNPJ = () => {
-  const n1 = Math.floor(Math.random() * 10)
-  const n2 = Math.floor(Math.random() * 10)
-  const n3 = Math.floor(Math.random() * 10)
-  const n4 = Math.floor(Math.random() * 10)
-  const n5 = Math.floor(Math.random() * 10)
-  const n6 = Math.floor(Math.random() * 10)
-  const n7 = Math.floor(Math.random() * 10)
-  const n8 = Math.floor(Math.random() * 10)
-  const n9 = 0
-  const n10 = 0
-  const n11 = 0
-  const n12 = 1
-  
-  const d1 = ((n1 * 5) + (n2 * 4) + (n3 * 3) + (n4 * 2) + (n5 * 9) + (n6 * 8) + (n7 * 7) + (n8 * 6) + (n9 * 5) + (n10 * 4) + (n11 * 3) + (n12 * 2)) % 11
-  const dig1 = d1 < 2 ? 0 : 11 - d1
-  
-  const d2 = ((n1 * 6) + (n2 * 5) + (n3 * 4) + (n4 * 3) + (n5 * 2) + (n6 * 9) + (n7 * 8) + (n8 * 7) + (n9 * 6) + (n10 * 5) + (n11 * 4) + (n12 * 3) + (dig1 * 2)) % 11
-  const dig2 = d2 < 2 ? 0 : 11 - d2
-  
-  const cnpj = `${n1}${n2}.${n3}${n4}${n5}.${n6}${n7}${n8}/${n9}${n10}${n11}${n12}-${dig1}${dig2}`
-  return cnpj
-}
+const empresas   = ref([])
 
 const nomesPrefixo = ['Tech', 'Digital', 'Smart', 'Global', 'Prime', 'Mega', 'Super', 'Ultra', 'Inova', 'Multi']
-const nomesSufixo = ['Solutions', 'Systems', 'Services', 'Group', 'Corp', 'Ltda', 'Tecnologia', 'Comercio', 'Industria', 'Distribuidora']
-const ruas = ['Rua das Flores', 'Av. Paulista', 'Rua Oscar Freire', 'Av. Faria Lima', 'Rua Augusta', 'Av. Brigadeiro', 'Rua da Consolação', 'Av. Rebouças']
-const cidades = ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Curitiba', 'Porto Alegre', 'Brasília', 'Salvador', 'Fortaleza']
+const nomesSufixo  = ['Solutions', 'Systems', 'Services', 'Group', 'Corp', 'Ltda', 'Tecnologia', 'Comércio', 'Indústria', 'Distribuidora']
+const ruas         = ['Rua das Flores', 'Av. Paulista', 'Rua Oscar Freire', 'Av. Faria Lima', 'Rua Augusta', 'Av. Brigadeiro']
+const cidades      = ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Curitiba', 'Porto Alegre', 'Brasília', 'Salvador', 'Fortaleza']
+const ddds         = ['11', '21', '31', '41', '51', '61', '71', '85']
+
+const rnd = (arr) => arr[Math.floor(Math.random() * arr.length)]
+const rndInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+
+const gerarCNPJ = () => {
+  const n = Array.from({ length: 8 }, () => rndInt(0, 9))
+  const e = [0, 0, 0, 1]
+  const all = [...n, ...e]
+  const pesos1 = [5,4,3,2,9,8,7,6,5,4,3,2]
+  const pesos2 = [6,5,4,3,2,9,8,7,6,5,4,3,2]
+  const d1r = all.reduce((s, v, i) => s + v * pesos1[i], 0) % 11
+  const d1  = d1r < 2 ? 0 : 11 - d1r
+  const all2 = [...all, d1]
+  const d2r = all2.reduce((s, v, i) => s + v * pesos2[i], 0) % 11
+  const d2  = d2r < 2 ? 0 : 11 - d2r
+  const p = all
+  return `${p[0]}${p[1]}.${p[2]}${p[3]}${p[4]}.${p[5]}${p[6]}${p[7]}/0001-${d1}${d2}`
+}
 
 const gerar = () => {
   const qtd = Number(quantidade.value)
-  empresas.value = []
-  
-  for (let i = 0; i < qtd; i++) {
-    const prefixo = nomesPrefixo[Math.floor(Math.random() * nomesPrefixo.length)]
-    const sufixo = nomesSufixo[Math.floor(Math.random() * nomesSufixo.length)]
+  empresas.value = Array.from({ length: qtd }, () => {
+    const prefixo    = rnd(nomesPrefixo)
+    const sufixo     = rnd(nomesSufixo)
     const razaoSocial = `${prefixo} ${sufixo}`
-    const nomeFantasia = prefixo
-    
-    const cnpj = gerarCNPJ()
-    
-    const ano = 2010 + Math.floor(Math.random() * 14)
-    const mes = String(1 + Math.floor(Math.random() * 12)).padStart(2, '0')
-    const dia = String(1 + Math.floor(Math.random() * 28)).padStart(2, '0')
-    const dataAbertura = `${dia}/${mes}/${ano}`
-    
-    const ddd = ['11', '21', '31', '41', '51', '61', '71', '85'][Math.floor(Math.random() * 8)]
-    const telefone = `(${ddd}) ${9000 + Math.floor(Math.random() * 1000)}-${1000 + Math.floor(Math.random() * 9000)}`
-    
-    const emailDomain = nomeFantasia.toLowerCase().replace(/\s/g, '')
-    const email = `contato@${emailDomain}.com.br`
-    
-    const rua = ruas[Math.floor(Math.random() * ruas.length)]
-    const numero = 100 + Math.floor(Math.random() * 900)
-    const cidade = cidades[Math.floor(Math.random() * cidades.length)]
-    const cep = `${10000 + Math.floor(Math.random() * 90000)}-${100 + Math.floor(Math.random() * 900)}`
-    const endereco = `${rua}, ${numero} - ${cidade} - CEP ${cep}`
-    
-    empresas.value.push({
+    const ano        = rndInt(2010, 2023)
+    const mes        = String(rndInt(1, 12)).padStart(2, '0')
+    const dia        = String(rndInt(1, 28)).padStart(2, '0')
+    const ddd        = rnd(ddds)
+    const cidade     = rnd(cidades)
+    const rua        = rnd(ruas)
+    const cep        = `${rndInt(10000, 99999)}-${String(rndInt(100, 999))}`
+    return {
       razaoSocial,
-      nomeFantasia,
-      cnpj,
-      dataAbertura,
-      telefone,
-      email,
-      endereco
-    })
-  }
-
-  trackToolUsage('Gerador CNPJ Completo', 'generate', { quantidade: qtd })
-  trackConversion('Gerador CNPJ Completo', 'generation_complete')
+      nomeFantasia: prefixo,
+      cnpj:         gerarCNPJ(),
+      dataAbertura: `${dia}/${mes}/${ano}`,
+      telefone:     `(${ddd}) ${rndInt(9000, 9999)}-${rndInt(1000, 9999)}`,
+      email:        `contato@${prefixo.toLowerCase()}.com.br`,
+      endereco:     `${rua}, ${rndInt(100, 9999)} — ${cidade} · CEP ${cep}`,
+    }
+  })
 }
 
 const copiar = async (empresa) => {
-  const texto = `Razão Social: ${empresa.razaoSocial}
-Nome Fantasia: ${empresa.nomeFantasia}
-CNPJ: ${empresa.cnpj}
-Data de Abertura: ${empresa.dataAbertura}
-Telefone: ${empresa.telefone}
-Email: ${empresa.email}
-Endereço: ${empresa.endereco}`
-
+  const texto = `Razão Social: ${empresa.razaoSocial}\nNome Fantasia: ${empresa.nomeFantasia}\nCNPJ: ${empresa.cnpj}\nAbertura: ${empresa.dataAbertura}\nTelefone: ${empresa.telefone}\nEmail: ${empresa.email}\nEndereço: ${empresa.endereco}`
   try {
     await navigator.clipboard.writeText(texto)
-    Swal.fire({
-      title: 'Copiado!',
-      text: 'Dados da empresa copiados',
-      icon: 'success',
-      timer: 1500,
-      showConfirmButton: false
-    })
+    Swal.fire({ title: 'Dados copiados!', icon: 'success', timer: 1500, showConfirmButton: false })
   } catch {
     Swal.fire('Erro', 'Não foi possível copiar', 'error')
   }
 }
 
 const baixarTXT = () => {
-  let conteudo = 'EMPRESAS FICTÍCIAS PARA TESTE\n'
-  conteudo += '================================\n\n'
-  
-  empresas.value.forEach((empresa, index) => {
-    conteudo += `EMPRESA ${index + 1}\n`
-    conteudo += `Razão Social: ${empresa.razaoSocial}\n`
-    conteudo += `Nome Fantasia: ${empresa.nomeFantasia}\n`
-    conteudo += `CNPJ: ${empresa.cnpj}\n`
-    conteudo += `Data de Abertura: ${empresa.dataAbertura}\n`
-    conteudo += `Telefone: ${empresa.telefone}\n`
-    conteudo += `Email: ${empresa.email}\n`
-    conteudo += `Endereço: ${empresa.endereco}\n`
-    conteudo += '\n---\n\n'
+  let conteudo = 'EMPRESAS FICTÍCIAS PARA TESTE\n================================\n\n'
+  empresas.value.forEach((e, i) => {
+    conteudo += `EMPRESA ${i + 1}\nRazão Social: ${e.razaoSocial}\nNome Fantasia: ${e.nomeFantasia}\nCNPJ: ${e.cnpj}\nAbertura: ${e.dataAbertura}\nTelefone: ${e.telefone}\nEmail: ${e.email}\nEndereço: ${e.endereco}\n\n---\n\n`
   })
-  
   const blob = new Blob([conteudo], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'empresas-teste.txt'
-  a.click()
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href = url; a.download = 'empresas-teste.txt'; a.click()
   URL.revokeObjectURL(url)
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>
