@@ -1,132 +1,179 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full mb-4">
-          <i class="fas fa-chart-line text-red-600 dark:text-red-400 text-2xl"></i>
+  <ToolShell
+    title="Simulador de Consórcio"
+    description="Simule custos, parcelas e prazo de um consórcio comparando com financiamento direto."
+    icon="fa-people-group"
+    icon-gradient="from-purple-500 to-violet-700"
+    orb-color="purple"
+    :quick-tips="['Sem juros no consórcio', 'Taxa de administração inclusa', 'Contemplação por lance ou sorteio']"
+    :tips="[
+      { title: 'Consórcio não tem juros', text: 'O consórcio cobra apenas taxa de administração (10-25%) e fundo de reserva. Não há incidência de juros como no financiamento.', type: 'info' },
+      { title: 'Contemplação', text: 'A carta de crédito pode ser contemplada por sorteio mensal ou por lance. Lances aceleram o acesso ao bem.', type: 'info' },
+      { title: 'Desvantagem principal', text: 'Você paga as parcelas mas pode esperar anos até ser contemplado — sem previsão exata de quando receberá o bem.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Carro R$ 50k, 60 meses', desc: 'Taxa adm: 20% | Fundo: 2% | 60 meses', result: 'Parcela: ~R$ 933/mês | Total: ~R$ 56.000' },
+      { title: 'Imóvel R$ 300k, 180 meses', desc: 'Taxa adm: 15% | Fundo: 2% | 180 meses', result: 'Parcela: ~R$ 1.950/mês | Total: ~R$ 351.000' },
+      { title: 'Moto R$ 15k, 36 meses', desc: 'Taxa adm: 25% | Fundo: 2% | 36 meses', result: 'Parcela: ~R$ 489/mês | Total: ~R$ 17.600' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0 space-y-4">
+          <!-- Tipo -->
+          <div>
+            <label class="input-aurora-label mb-2">
+              <i class="fas fa-people-group mr-1.5 text-purple-500"></i>
+              Tipo de Consórcio
+            </label>
+            <div class="grid grid-cols-3 gap-2">
+              <button
+                v-for="tipo in tiposConsorcio"
+                :key="tipo.value"
+                @click="tipoConsorcio = tipo.value"
+                :class="['p-3 rounded-xl border-2 transition-all text-center', tipoConsorcio === tipo.value ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-slate-700 hover:border-purple-300']"
+              >
+                <i :class="['fas', tipo.icon, 'text-purple-600 dark:text-purple-400 mb-1 block text-xl']"></i>
+                <div class="font-bold text-xs text-gray-900 dark:text-white">{{ tipo.label }}</div>
+                <div class="text-[10px] text-gray-500">Taxa ~{{ tipo.taxaMedia }}</div>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="valorBem"    label="Valor do Bem (R$)"            type="number" :min="0"   step="1000"  icon="fa-tag"       tooltip="Valor total da carta de crédito/bem desejado." />
+            <BaseInput v-model="prazoMeses"  label="Prazo (meses)"                type="number" :min="12"  :max="240"   step="12" icon="fa-calendar" hint="12 a 240 meses" />
+            <BaseInput v-model="taxaAdmin"   label="Taxa de Administração (%)"    type="number" :min="10"  :max="30"    step="0.5" icon="fa-percentage" tooltip="Taxa paga à administradora — incide sobre o valor do bem." />
+            <BaseInput v-model="fundoReserva"label="Fundo de Reserva (%)"         type="number" :min="0"   :max="5"     step="0.5" icon="fa-piggy-bank"  tooltip="Fundo de segurança do grupo, cobrado além da taxa de administração." />
+          </div>
+
+          <div class="flex gap-3">
+            <BaseButton variant="primary" icon="fa-calculator" @click="calcular" class="flex-1">Calcular Consórcio</BaseButton>
+            <BaseButton variant="outline" icon="fa-eraser" @click="resultado = null">Limpar</BaseButton>
+          </div>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Simulador de Consórcio</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule parcelas e prazos de consórcio</p>
       </div>
 
-      <div class="space-y-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de Consórcio</label>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <button @click="tipoConsorcio = 'imovel'" class="p-4 rounded-lg border-2 transition-all" :class="tipoConsorcio === 'imovel' ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600'">
-              <i class="fas fa-home text-2xl mb-2 text-red-600 dark:text-red-400"></i>
-              <div class="font-bold text-gray-900 dark:text-white">Imóvel</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Taxa ~15-20%</div>
-            </button>
-            <button @click="tipoConsorcio = 'automovel'" class="p-4 rounded-lg border-2 transition-all" :class="tipoConsorcio === 'automovel' ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600'">
-              <i class="fas fa-car text-2xl mb-2 text-red-600 dark:text-red-400"></i>
-              <div class="font-bold text-gray-900 dark:text-white">Automóvel</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Taxa ~20-25%</div>
-            </button>
-            <button @click="tipoConsorcio = 'moto'" class="p-4 rounded-lg border-2 transition-all" :class="tipoConsorcio === 'moto' ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-300 dark:border-gray-600'">
-              <i class="fas fa-motorcycle text-2xl mb-2 text-red-600 dark:text-red-400"></i>
-              <div class="font-bold text-gray-900 dark:text-white">Moto</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">Taxa ~25-30%</div>
-            </button>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <BaseInput v-model="valorBem" label="Valor do Bem (R$)" type="number" :min="0" step="1000" icon="fa-solid fa-tag" />
-          <BaseInput v-model="prazoMeses" label="Prazo (meses)" type="number" :min="12" :max="240" step="12" icon="fa-solid fa-calendar" />
-          <BaseInput v-model="taxaAdmin" label="Taxa de Administração (%)" type="number" :min="10" :max="30" step="0.5" icon="fa-solid fa-percentage" />
-          <BaseInput v-model="fundoReserva" label="Fundo de Reserva (%)" type="number" :min="0" :max="5" step="0.5" icon="fa-solid fa-piggy-bank" />
-        </div>
-
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>
-          Calcular Consórcio
-        </BaseButton>
-
-        <div v-if="resultado" class="space-y-4">
-          <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-8 text-center text-white">
-            <div class="text-sm font-medium mb-2">Parcela Mensal</div>
-            <div class="text-5xl font-bold mb-2">R$ {{ resultado.parcelaMensal }}</div>
-            <div class="text-red-100">{{ prazoMeses }} meses</div>
-          </div>
-
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-red-600 dark:text-red-400">R$ {{ resultado.valorTotal }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Total a Pagar</div>
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="resultado" class="space-y-4">
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">Parcela Mensal</p>
+              <p class="text-5xl font-black text-white mb-2">{{ fmtBRL(resultado.parcelaMensal) }}</p>
+              <p class="text-purple-300 text-sm font-semibold">
+                <i class="fas fa-calendar-alt mr-1"></i>{{ prazoMeses }} meses ({{ resultado.anos }} anos)
+              </p>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-red-600 dark:text-red-400">R$ {{ resultado.taxaTotal }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Taxas</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ resultado.anos }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Anos</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ resultado.percentualExtra }}%</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">% sobre valor</div>
-            </div>
-          </div>
 
-          <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4">
-            <div class="flex">
-              <i class="fas fa-info-circle text-red-600 dark:text-red-400 mt-1 mr-3"></i>
-              <div class="text-sm text-red-800 dark:text-red-300">
-                <p class="font-semibold mb-2">Como funciona o consórcio:</p>
-                <ul class="list-disc list-inside space-y-1 text-xs">
-                  <li><strong>Não há juros:</strong> Apenas taxa de administração e fundo de reserva</li>
-                  <li><strong>Contemplação:</strong> Por sorteio mensal ou lance</li>
-                  <li><strong>Lance:</strong> Antecipe sua contemplação oferecendo parte do valor</li>
-                  <li><strong>Vantagem:</strong> Valor total menor que financiamento</li>
-                  <li><strong>Desvantagem:</strong> Não recebe o bem imediatamente (exceto se contemplado)</li>
-                </ul>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+                <div class="metric-glass-value text-purple-600 dark:text-purple-400">{{ fmtBRL(resultado.valorTotal) }}</div>
+                <div class="metric-glass-label">Total a Pagar</div>
+              </div>
+              <div class="metric-glass ring-1 ring-orange-100 dark:ring-orange-900">
+                <div class="metric-glass-value text-orange-600 dark:text-orange-400">{{ fmtBRL(resultado.taxaTotal) }}</div>
+                <div class="metric-glass-label">Taxas (adm + fundo)</div>
+              </div>
+              <div class="metric-glass ring-1 ring-violet-100 dark:ring-violet-900">
+                <div class="metric-glass-value text-violet-600 dark:text-violet-400">{{ resultado.anos }}</div>
+                <div class="metric-glass-label">Anos</div>
+              </div>
+              <div class="metric-glass ring-1 ring-pink-100 dark:ring-pink-900">
+                <div class="metric-glass-value text-pink-600 dark:text-pink-400">{{ resultado.percentualExtra }}%</div>
+                <div class="metric-glass-label">Acréscimo sobre o bem</div>
               </div>
             </div>
+
+            <div class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+                <i class="fas fa-list-check text-purple-500"></i>Composição da Parcela
+              </h4>
+              <div class="space-y-2 text-sm">
+                <div v-for="item in breakdown" :key="item.label"
+                  class="flex justify-between py-1.5 border-b border-gray-100 dark:border-slate-700 last:border-0">
+                  <span class="text-gray-600 dark:text-slate-300">{{ item.label }}</span>
+                  <span :class="['font-bold', item.cls || 'text-gray-900 dark:text-white']">{{ item.value }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tip-card-warning">
+              <i class="fas fa-exclamation-triangle text-amber-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">Lembre-se: você paga as parcelas mas pode aguardar anos para ser contemplado. Avalie se o prazo de espera é compatível com sua necessidade.</span>
+            </div>
           </div>
+        </Transition>
+
+        <div v-if="!resultado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-people-group text-4xl mb-3 opacity-30 block text-purple-400"></i>
+          <p class="text-sm">Configure o consórcio e clique em Calcular</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+<script setup lang="ts">
+// @ts-nocheck
+import { ref, computed } from 'vue'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
-const { trackToolUsage } = useAnalytics()
+interface ResultadoConsorcio {
+  parcelaMensal: number; valorTotal: number; taxaTotal: number; anos: string; percentualExtra: string
+}
 
 const tipoConsorcio = ref('automovel')
-const valorBem = ref(50000)
-const prazoMeses = ref(60)
-const taxaAdmin = ref(20)
-const fundoReserva = ref(2)
-const resultado = ref(null)
+const valorBem      = ref<number | ''>(50000)
+const prazoMeses    = ref<number | ''>(60)
+const taxaAdmin     = ref<number | ''>(20)
+const fundoReserva  = ref<number | ''>(2)
+const resultado     = ref<ResultadoConsorcio | null>(null)
+
+const tiposConsorcio = [
+  { value: 'imovel',    label: 'Imóvel',    icon: 'fa-home',       taxaMedia: '15–20%' },
+  { value: 'automovel', label: 'Automóvel', icon: 'fa-car',        taxaMedia: '20–25%' },
+  { value: 'moto',      label: 'Moto',      icon: 'fa-motorcycle', taxaMedia: '25–30%' },
+]
+
+const fmtBRL = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+
+const breakdown = computed(() => {
+  if (!resultado.value) return []
+  const r = resultado.value
+  const vBem = Number(valorBem.value) || 0
+  const prazo = Number(prazoMeses.value) || 1
+  return [
+    { label: 'Valor do bem (carta)',    value: fmtBRL(vBem) },
+    { label: 'Taxa de administração',  value: fmtBRL(vBem * (Number(taxaAdmin.value) / 100)),   cls: 'text-orange-600 dark:text-orange-400' },
+    { label: 'Fundo de reserva',       value: fmtBRL(vBem * (Number(fundoReserva.value) / 100)),cls: 'text-orange-600 dark:text-orange-400' },
+    { label: 'Total do consórcio',     value: fmtBRL(r.valorTotal),                              cls: 'text-purple-600 dark:text-purple-400' },
+    { label: 'Parcela mensal',         value: fmtBRL(r.parcelaMensal),                           cls: 'text-primary-600 dark:text-primary-400' },
+  ]
+})
 
 const calcular = () => {
-  const valor = Number(valorBem.value)
-  const prazo = Number(prazoMeses.value)
-  const taxa = Number(taxaAdmin.value) / 100
+  const valor = Number(valorBem.value) || 0
+  const prazo = Number(prazoMeses.value) || 60
+  const taxa  = Number(taxaAdmin.value) / 100
   const fundo = Number(fundoReserva.value) / 100
-  
+
   const taxaTotal = valor * taxa
-  const fundoTotal = valor * fundo
-  const valorTotalConsorcio = valor + taxaTotal + fundoTotal
-  
-  const parcelaMensal = valorTotalConsorcio / prazo
-  const anos = (prazo / 12).toFixed(1)
-  const percentualExtra = ((valorTotalConsorcio / valor - 1) * 100)
+  const fundoTotal= valor * fundo
+  const totalPagar= valor + taxaTotal + fundoTotal
+  const parcela   = totalPagar / prazo
+  const anos      = (prazo / 12).toFixed(1)
+  const extra     = ((totalPagar / valor - 1) * 100).toFixed(1)
 
-  resultado.value = {
-    parcelaMensal: parcelaMensal.toFixed(2),
-    valorTotal: valorTotalConsorcio.toFixed(2),
-    taxaTotal: (taxaTotal + fundoTotal).toFixed(2),
-    anos: anos,
-    percentualExtra: percentualExtra.toFixed(1)
-  }
-
-  trackToolUsage('Simulador Consórcio', 'calculate', { tipo: tipoConsorcio.value })
+  resultado.value = { parcelaMensal: parcela, valorTotal: totalPagar, taxaTotal: taxaTotal + fundoTotal, anos, percentualExtra: extra }
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

@@ -1,184 +1,212 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-rose-100 dark:bg-rose-900/30 rounded-full mb-4">
-          <i class="fas fa-chart-line text-rose-600 dark:text-rose-400 text-2xl"></i>
+  <ToolShell
+    title="Simulador de Investimento em Ações"
+    description="Simule o crescimento patrimonial com ações, incluindo valorização, dividendos e aportes mensais."
+    icon="fa-chart-line"
+    icon-gradient="from-rose-500 to-pink-700"
+    orb-color="pink"
+    :quick-tips="['3 cenários prontos', 'Reinvestimento de dividendos', 'CAGR calculado']"
+    :tips="[
+      { title: 'Rentabilidade passada', text: 'Rentabilidade passada não garante resultados futuros. Use os cenários como referência, não como promessa de ganhos.', type: 'warning' },
+      { title: 'Diversifique', text: 'Invista em pelo menos 8-10 empresas de setores diferentes para reduzir o risco específico.', type: 'info' },
+      { title: 'Longo prazo vence', text: 'A bolsa brasileira historicamente rende acima da inflação no longo prazo (10+ anos), mas espere oscilações.', type: 'success' },
+    ]"
+    :examples="[
+      { title: 'Perfil conservador', desc: 'R$ 10k + R$ 500/mês | 8% a.a. | 10 anos', result: 'Patrimônio: ~R$ 180k (100% de retorno)' },
+      { title: 'Perfil moderado', desc: 'R$ 10k + R$ 1k/mês | 12% a.a. | 10 anos', result: 'Patrimônio: ~R$ 300k (150% de retorno)' },
+      { title: 'Perfil agressivo', desc: 'R$ 10k + R$ 1k/mês | 15% a.a. | 15 anos', result: 'Patrimônio: ~R$ 800k (450% de retorno)' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <BaseInput v-model="valorInicial"     label="Valor Inicial (R$)"     type="number" :min="0"  step="1000" icon="fa-coins"              tooltip="Capital inicial a investir." />
+            <BaseInput v-model="aportesMensais"   label="Aportes Mensais (R$)"   type="number" :min="0"  step="100"  icon="fa-calendar-plus"      tooltip="Valor adicional investido todo mês." />
+            <BaseInput v-model="valorizacaoAnual" label="Valorização Anual (%)"  type="number"           step="0.5"  icon="fa-arrow-trend-up"     tooltip="Expectativa de valorização das ações por ano." />
+            <BaseInput v-model="dividendYield"    label="Dividend Yield (% a.a.)"type="number"           step="0.1"  icon="fa-hand-holding-dollar" tooltip="Rendimento de dividendos anual sobre o patrimônio." />
+            <BaseInput v-model="prazoAnos"        label="Prazo (anos)"           type="number" :min="1"  :max="30"   icon="fa-hourglass-half"     tooltip="Por quantos anos vai simular o investimento." />
+            <BaseInput v-model="taxaCorretagem"   label="Corretagem (%)"         type="number"           step="0.1"  icon="fa-percentage"         tooltip="Taxa percentual cobrada por transação." />
+          </div>
+
+          <!-- Cenários -->
+          <div>
+            <label class="input-aurora-label mb-2">
+              <i class="fas fa-chart-bar mr-1.5 text-rose-500"></i>
+              Cenários do Ibovespa
+            </label>
+            <div class="grid grid-cols-3 gap-2">
+              <button @click="usarCenario('conservador')" class="p-2.5 rounded-xl border-2 border-blue-200 dark:border-blue-800 hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all text-center">
+                <div class="font-bold text-blue-700 dark:text-blue-300 text-xs">Conservador</div>
+                <div class="text-[10px] text-gray-500 mt-0.5">8% a.a.</div>
+              </button>
+              <button @click="usarCenario('moderado')" class="p-2.5 rounded-xl border-2 border-purple-200 dark:border-purple-800 hover:border-purple-500 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all text-center">
+                <div class="font-bold text-purple-700 dark:text-purple-300 text-xs">Moderado</div>
+                <div class="text-[10px] text-gray-500 mt-0.5">12% a.a.</div>
+              </button>
+              <button @click="usarCenario('agressivo')" class="p-2.5 rounded-xl border-2 border-rose-200 dark:border-rose-800 hover:border-rose-500 dark:hover:border-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-all text-center">
+                <div class="font-bold text-rose-700 dark:text-rose-300 text-xs">Agressivo</div>
+                <div class="text-[10px] text-gray-500 mt-0.5">15% a.a.</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Reinvestir dividendos -->
+          <label class="checkbox-aurora">
+            <input v-model="reinvestirDividendos" type="checkbox" />
+            <span>Reinvestir dividendos automaticamente</span>
+          </label>
+
+          <div class="flex gap-3">
+            <BaseButton variant="success" icon="fa-calculator" @click="calcular" class="flex-1">Simular</BaseButton>
+            <BaseButton variant="outline" icon="fa-eraser" @click="resultado = null">Limpar</BaseButton>
+          </div>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Simulador de Investimento em Ações</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule retornos com valorização e dividendos</p>
       </div>
 
-      <div class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <BaseInput v-model="valorInicial" label="Valor Inicial (R$)" type="number" :min="0" step="100" icon="fa-solid fa-coins" />
-          <BaseInput v-model="aportesMensais" label="Aportes Mensais (R$)" type="number" :min="0" step="100" icon="fa-solid fa-calendar-plus" />
-          <BaseInput v-model="valorizacaoAnual" label="Valorização Anual (%)" type="number" step="0.5" icon="fa-solid fa-arrow-trend-up" />
-          <BaseInput v-model="dividendYield" label="Dividend Yield (% a.a.)" type="number" step="0.1" icon="fa-solid fa-hand-holding-dollar" />
-          <BaseInput v-model="prazoAnos" label="Prazo (anos)" type="number" :min="1" :max="30" icon="fa-solid fa-hourglass-half" />
-          <BaseInput v-model="taxaCorretagem" label="Taxa de Corretagem (%)" type="number" step="0.1" icon="fa-solid fa-percentage" />
-        </div>
-
-        <div class="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-4">
-          <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">Cenários de retorno histórico (Ibovespa):</div>
-          <div class="flex flex-wrap gap-2">
-            <button @click="usarCenario('conservador')" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm">Conservador: 8% a.a.</button>
-            <button @click="usarCenario('moderado')" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm">Moderado: 12% a.a.</button>
-            <button @click="usarCenario('agressivo')" class="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-sm">Agressivo: 15% a.a.</button>
-          </div>
-        </div>
-
-        <div>
-          <label class="flex items-center space-x-2 cursor-pointer">
-            <input v-model="reinvestirDividendos" type="checkbox" class="w-4 h-4 text-rose-600 border-gray-300 rounded focus:ring-rose-500" />
-            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Reinvestir dividendos automaticamente</span>
-          </label>
-        </div>
-
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>
-          Simular Investimento
-        </BaseButton>
-
-        <div v-if="resultado" class="space-y-4">
-          <div class="bg-gradient-to-br from-rose-500 to-rose-600 rounded-2xl p-8 text-center text-white">
-            <div class="text-sm font-medium mb-2">Patrimônio Final</div>
-            <div class="text-5xl font-bold mb-2">R$ {{ resultado.patrimonioFinal }}</div>
-            <div class="text-rose-100">Em {{ prazoAnos }} anos</div>
-          </div>
-
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-rose-600 dark:text-rose-400">R$ {{ resultado.totalInvestido }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Total Investido</div>
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="resultado" class="space-y-4">
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">Patrimônio Final em {{ prazoAnos }} anos</p>
+              <p class="text-5xl font-black text-white mb-2">{{ fmtBRL(resultado.patrimonioFinal) }}</p>
+              <p class="text-rose-300 text-sm font-semibold">
+                <i class="fas fa-arrow-up mr-1"></i>+{{ resultado.rentabilidade }}% de rentabilidade
+              </p>
             </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-green-600 dark:text-green-400">R$ {{ resultado.ganhosCapital }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Ganhos de Capital</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-green-600 dark:text-green-400">R$ {{ resultado.dividendosRecebidos }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Dividendos</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 text-center">
-              <div class="text-2xl font-bold text-rose-600 dark:text-rose-400">{{ resultado.rentabilidade }}%</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">Rentabilidade</div>
-            </div>
-          </div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Taxa Anual Composta</div>
-              <div class="text-2xl font-bold text-rose-600 dark:text-rose-400">{{ resultado.cagr }}% a.a.</div>
-            </div>
-            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Custos de Corretagem</div>
-              <div class="text-2xl font-bold text-red-600 dark:text-red-400">R$ {{ resultado.custoTotal }}</div>
-            </div>
-          </div>
-
-          <div class="bg-rose-50 dark:bg-rose-900/20 border-l-4 border-rose-500 p-4">
-            <div class="flex">
-              <i class="fas fa-info-circle text-rose-600 dark:text-rose-400 mt-1 mr-3"></i>
-              <div class="text-sm text-rose-800 dark:text-rose-300">
-                <p class="font-semibold mb-2">Informações sobre investimento em ações:</p>
-                <ul class="list-disc list-inside space-y-1 text-xs">
-                  <li><strong>Dividendos:</strong> Isentos de IR até R$ 20.000/mês para pessoa física</li>
-                  <li><strong>Ganho de Capital:</strong> IR de 15% sobre lucros acima de R$ 20.000/mês</li>
-                  <li><strong>Day Trade:</strong> IR de 20% sobre lucros</li>
-                  <li><strong>Diversificação:</strong> Invista em pelo menos 8-10 empresas diferentes</li>
-                  <li><strong>Longo Prazo:</strong> Bolsa historicamente rende mais no longo prazo</li>
-                  <li><strong>Volatilidade:</strong> Prepare-se para oscilações de curto prazo</li>
-                  <li><strong>Disclaimer:</strong> Rentabilidade passada não garante retorno futuro</li>
-                </ul>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+                <div class="metric-glass-value text-blue-600 dark:text-blue-400">{{ fmtBRL(resultado.totalInvestido) }}</div>
+                <div class="metric-glass-label">Total Investido</div>
+              </div>
+              <div class="metric-glass ring-1 ring-emerald-100 dark:ring-emerald-900">
+                <div class="metric-glass-value text-emerald-600 dark:text-emerald-400">{{ fmtBRL(resultado.ganhosCapital) }}</div>
+                <div class="metric-glass-label">Ganhos de Capital</div>
+              </div>
+              <div class="metric-glass ring-1 ring-teal-100 dark:ring-teal-900">
+                <div class="metric-glass-value text-teal-600 dark:text-teal-400">{{ fmtBRL(resultado.dividendosRecebidos) }}</div>
+                <div class="metric-glass-label">Dividendos</div>
+              </div>
+              <div class="metric-glass ring-1 ring-rose-100 dark:ring-rose-900">
+                <div class="metric-glass-value text-rose-600 dark:text-rose-400">{{ resultado.cagr }}% a.a.</div>
+                <div class="metric-glass-label">CAGR</div>
               </div>
             </div>
+
+            <div class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+                <i class="fas fa-list-check text-rose-500"></i>Detalhamento
+              </h4>
+              <div class="space-y-2 text-sm">
+                <div v-for="item in breakdown" :key="item.label"
+                  class="flex justify-between py-1.5 border-b border-gray-100 dark:border-slate-700 last:border-0">
+                  <span class="text-gray-600 dark:text-slate-300">{{ item.label }}</span>
+                  <span :class="['font-bold', item.cls || 'text-gray-900 dark:text-white']">{{ item.value }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="tip-card-warning">
+              <i class="fas fa-exclamation-triangle text-amber-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">Simulação baseada em retorno constante. Ações oscilam — resultados reais variam. Dividendos isentos de IR até R$ 20k/mês.</span>
+            </div>
           </div>
+        </Transition>
+
+        <div v-if="!resultado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-chart-line text-4xl mb-3 opacity-30 block text-rose-400"></i>
+          <p class="text-sm">Configure o investimento e clique em Simular</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+<script setup lang="ts">
+// @ts-nocheck
+import { ref, computed } from 'vue'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
-const { trackToolUsage } = useAnalytics()
+interface ResultadoAcoes {
+  patrimonioFinal:    number
+  totalInvestido:     number
+  ganhosCapital:      number
+  dividendosRecebidos:number
+  rentabilidade:      string
+  cagr:               string
+  custoTotal:         number
+}
 
-const valorInicial = ref(10000)
-const aportesMensais = ref(1000)
-const valorizacaoAnual = ref(12)
-const dividendYield = ref(5)
-const prazoAnos = ref(10)
-const taxaCorretagem = ref(0.5)
+const valorInicial     = ref<number | ''>(10000)
+const aportesMensais   = ref<number | ''>(1000)
+const valorizacaoAnual = ref<number | ''>(12)
+const dividendYield    = ref<number | ''>(5)
+const prazoAnos        = ref<number | ''>(10)
+const taxaCorretagem   = ref<number | ''>(0.5)
 const reinvestirDividendos = ref(true)
-const resultado = ref(null)
+const resultado        = ref<ResultadoAcoes | null>(null)
 
-const usarCenario = (tipo) => {
-  if (tipo === 'conservador') {
-    valorizacaoAnual.value = 8
-    dividendYield.value = 6
-  } else if (tipo === 'moderado') {
-    valorizacaoAnual.value = 12
-    dividendYield.value = 5
-  } else if (tipo === 'agressivo') {
-    valorizacaoAnual.value = 15
-    dividendYield.value = 3
-  }
+const fmtBRL = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+
+const breakdown = computed(() => {
+  if (!resultado.value) return []
+  const r = resultado.value
+  return [
+    { label: 'Capital inicial',  value: fmtBRL(Number(valorInicial.value) || 0) },
+    { label: 'Aportes totais',   value: fmtBRL(r.totalInvestido - (Number(valorInicial.value) || 0)) },
+    { label: 'Total investido',  value: fmtBRL(r.totalInvestido) },
+    { label: 'Ganhos de capital',value: fmtBRL(r.ganhosCapital),          cls: 'text-emerald-600 dark:text-emerald-400' },
+    { label: 'Dividendos',       value: fmtBRL(r.dividendosRecebidos),     cls: 'text-teal-600 dark:text-teal-400' },
+    { label: 'Custos (corretagem)',value: fmtBRL(r.custoTotal),            cls: 'text-red-600 dark:text-red-400' },
+    { label: 'Patrimônio final', value: fmtBRL(r.patrimonioFinal),         cls: 'text-primary-600 dark:text-primary-400' },
+  ]
+})
+
+const usarCenario = (tipo: string) => {
+  if (tipo === 'conservador') { valorizacaoAnual.value = 8;  dividendYield.value = 6 }
+  if (tipo === 'moderado')    { valorizacaoAnual.value = 12; dividendYield.value = 5 }
+  if (tipo === 'agressivo')   { valorizacaoAnual.value = 15; dividendYield.value = 3 }
 }
 
 const calcular = () => {
-  const valorInicio = Number(valorInicial.value)
-  const aporteMensal = Number(aportesMensais.value)
-  const taxaValorizacao = Number(valorizacaoAnual.value) / 100
-  const taxaDividendos = Number(dividendYield.value) / 100
-  const anos = Number(prazoAnos.value)
-  const taxaCorret = Number(taxaCorretagem.value) / 100
-  
-  let patrimonio = valorInicio
-  let totalInvestido = valorInicio
-  let dividendosAcumulados = 0
-  let custosAcumulados = valorInicio * taxaCorret
-  
-  for (let ano = 1; ano <= anos; ano++) {
-    for (let mes = 1; mes <= 12; mes++) {
-      // Aporte mensal
-      patrimonio += aporteMensal
-      totalInvestido += aporteMensal
-      custosAcumulados += aporteMensal * taxaCorret
-      
-      // Valorização mensal
-      const taxaMensal = Math.pow(1 + taxaValorizacao, 1/12) - 1
-      patrimonio *= (1 + taxaMensal)
-    }
-    
-    // Dividendos anuais
-    const dividendosAno = patrimonio * taxaDividendos
-    dividendosAcumulados += dividendosAno
-    
-    if (reinvestirDividendos.value) {
-      patrimonio += dividendosAno
-      custosAcumulados += dividendosAno * taxaCorret
-    }
-  }
-  
-  const ganhosCapital = patrimonio - totalInvestido - (reinvestirDividendos.value ? dividendosAcumulados : 0)
-  const rentabilidadeTotal = ((patrimonio / totalInvestido - 1) * 100)
-  const cagr = (Math.pow(patrimonio / totalInvestido, 1/anos) - 1) * 100
+  const valInit   = Number(valorInicial.value) || 0
+  const aporteMes = Number(aportesMensais.value) || 0
+  const taxaVal   = Number(valorizacaoAnual.value) / 100
+  const taxaDiv   = Number(dividendYield.value) / 100
+  const anos      = Number(prazoAnos.value) || 1
+  const corret    = Number(taxaCorretagem.value) / 100
 
-  resultado.value = {
-    patrimonioFinal: patrimonio.toFixed(2),
-    totalInvestido: totalInvestido.toFixed(2),
-    ganhosCapital: ganhosCapital.toFixed(2),
-    dividendosRecebidos: dividendosAcumulados.toFixed(2),
-    rentabilidade: rentabilidadeTotal.toFixed(2),
-    cagr: cagr.toFixed(2),
-    custoTotal: custosAcumulados.toFixed(2)
+  let patrimonio = valInit
+  let totalInvest = valInit
+  let dividAccum  = 0
+  let custos      = valInit * corret
+
+  for (let ano = 0; ano < anos; ano++) {
+    for (let mes = 0; mes < 12; mes++) {
+      patrimonio += aporteMes; totalInvest += aporteMes; custos += aporteMes * corret
+      const taxaMes = Math.pow(1 + taxaVal, 1/12) - 1
+      patrimonio *= (1 + taxaMes)
+    }
+    const divAno = patrimonio * taxaDiv
+    dividAccum += divAno
+    if (reinvestirDividendos.value) { patrimonio += divAno; custos += divAno * corret }
   }
 
-  trackToolUsage('Simulador Ações', 'calculate')
+  const ganhosK = patrimonio - totalInvest - (reinvestirDividendos.value ? dividAccum : 0)
+  const rent    = ((patrimonio / totalInvest - 1) * 100).toFixed(2)
+  const cagr    = ((Math.pow(patrimonio / totalInvest, 1/anos) - 1) * 100).toFixed(2)
+
+  resultado.value = { patrimonioFinal: patrimonio, totalInvestido: totalInvest, ganhosCapital: ganhosK, dividendosRecebidos: dividAccum, rentabilidade: rent, cagr, custoTotal: custos }
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

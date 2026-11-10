@@ -1,321 +1,240 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
-          <i class="fas fa-i-cursor text-teal-600 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Gerador de Prefixo e Sufixo</h1>
-        <p class="text-gray-600">Adicione texto antes e/ou depois de cada linha</p>
-      </div>
-
-      <div class="space-y-6">
-        <!-- Texto de Entrada -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Texto (uma linha por item)
-          </label>
-          <textarea
-            v-model="textoEntrada"
-            @input="gerar"
-            placeholder="Digite ou cole seu texto aqui..."
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
-            rows="8"
-          ></textarea>
-          <p class="text-sm text-gray-500 mt-2">
-            {{ linhas.length }} linha(s)
-          </p>
-        </div>
-
-        <!-- Prefixo e Sufixo -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <ToolShell
+    title="Gerador de Prefixo e Sufixo"
+    description="Adicione prefixos e sufixos em massa a listas de texto — ideal para SQL, arrays, HTML e Markdown."
+    icon="fa-text-width"
+    icon-gradient="from-indigo-500 to-blue-700"
+    orb-color="indigo"
+    :quick-tips="['Processa centenas de linhas', 'Templates prontos', 'Baixe o resultado em .txt']"
+    :tips="[
+      { title: 'SQL INSERT', text: 'Use Prefixo: (\' e Sufixo: \'), para gerar VALUES de INSERT rapidamente em lote.', type: 'info' },
+      { title: 'Array JS/Python', text: 'Prefixo: \'  e Sufixo: \',  cria arrays de strings com um clique.', type: 'info' },
+      { title: 'HTML List', text: 'Prefixo: <li>  e Sufixo: </li>  converte uma lista de texto simples em HTML semântico.', type: 'success' },
+    ]"
+    :examples="[
+      { title: 'Array JavaScript', desc: 'Prefixo: \' | Sufixo: \',', result: '\'maçã\',  \'banana\',' },
+      { title: 'SQL INSERT', desc: 'Prefixo: (\' | Sufixo: \'),', result: '(\'João\'),  (\'Maria\'),' },
+      { title: 'Markdown Checklist', desc: 'Prefixo: - [ ] | Sem sufixo', result: '- [ ] Tarefa 1  - [ ] Tarefa 2' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="tool-body !mb-0 space-y-4">
+          <!-- Texto de entrada -->
           <div>
+            <label class="input-aurora-label">
+              <i class="fas fa-align-left mr-1.5 text-indigo-500"></i>
+              Texto (uma linha por item)
+            </label>
+            <textarea
+              v-model="textoEntrada"
+              @input="gerar"
+              placeholder="Digite ou cole seu texto aqui..."
+              class="input-aurora resize-none"
+              rows="8"
+            ></textarea>
+            <p class="input-aurora-hint">{{ linhas.length }} linha(s)</p>
+          </div>
+
+          <!-- Prefixo e Sufixo -->
+          <div class="grid grid-cols-2 gap-3">
             <BaseInput
               v-model="prefixo"
               @input="gerar"
-              label="Prefixo (antes de cada linha)"
-              placeholder="Ex: - "
-              icon="fa-solid fa-arrow-right"
+              label="Prefixo"
+              placeholder="Ex: ' ou <li>"
+              icon="fa-arrow-right"
+              tooltip="Texto inserido ANTES de cada linha do resultado."
             />
-          </div>
-          <div>
             <BaseInput
               v-model="sufixo"
               @input="gerar"
-              label="Sufixo (depois de cada linha)"
-              placeholder="Ex: ;"
-              icon="fa-solid fa-arrow-left"
+              label="Sufixo"
+              placeholder="Ex: ', ou </li>"
+              icon="fa-arrow-left"
+              tooltip="Texto inserido DEPOIS de cada linha do resultado."
             />
           </div>
-        </div>
 
-        <!-- Templates Rápidos -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-3">
-            Templates Rápidos
-          </label>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <button
-              v-for="template in templates"
-              :key="template.nome"
-              @click="aplicarTemplate(template)"
-              class="p-3 rounded-lg border-2 border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition-all text-left"
-            >
-              <div class="font-medium text-gray-900 text-sm mb-1">{{ template.nome }}</div>
-              <code class="text-xs text-teal-600">{{ template.exemplo }}</code>
-            </button>
-          </div>
-        </div>
-
-        <!-- Opções -->
-        <div class="bg-gray-50 rounded-lg p-4 space-y-3">
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Opções
-          </label>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <label class="flex items-center cursor-pointer">
-              <input
-                v-model="opcoes.ignorarVazias"
-                @change="gerar"
-                type="checkbox"
-                class="w-5 h-5 text-teal-600 rounded focus:ring-teal-500"
-              />
-              <span class="ml-3 text-gray-700 text-sm">Ignorar linhas vazias</span>
+          <!-- Templates Rápidos -->
+          <div>
+            <label class="input-aurora-label mb-2">
+              <i class="fas fa-bolt mr-1.5 text-amber-500"></i>
+              Templates Rápidos
             </label>
-            
-            <label class="flex items-center cursor-pointer">
-              <input
-                v-model="opcoes.numerar"
-                @change="gerar"
-                type="checkbox"
-                class="w-5 h-5 text-teal-600 rounded focus:ring-teal-500"
-              />
-              <span class="ml-3 text-gray-700 text-sm">Numerar linhas</span>
-            </label>
-            
-            <label class="flex items-center cursor-pointer">
-              <input
-                v-model="opcoes.aspasSimples"
-                @change="gerar"
-                type="checkbox"
-                class="w-5 h-5 text-teal-600 rounded focus:ring-teal-500"
-              />
-              <span class="ml-3 text-gray-700 text-sm">Envolver em aspas simples</span>
-            </label>
-            
-            <label class="flex items-center cursor-pointer">
-              <input
-                v-model="opcoes.aspasDuplas"
-                @change="gerar"
-                type="checkbox"
-                class="w-5 h-5 text-teal-600 rounded focus:ring-teal-500"
-              />
-              <span class="ml-3 text-gray-700 text-sm">Envolver em aspas duplas</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Resultado -->
-        <div v-if="textoResultado && textoEntrada" class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-gray-900">Resultado</h3>
-            <div class="flex gap-2">
+            <div class="grid grid-cols-2 gap-2">
               <button
-                @click="copiar"
-                class="flex items-center gap-2 px-4 py-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
+                v-for="template in templates"
+                :key="template.nome"
+                @click="aplicarTemplate(template)"
+                class="p-2.5 rounded-xl border-2 border-gray-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all text-left"
               >
-                <i class="fas fa-copy"></i>
-                <span>Copiar</span>
-              </button>
-              <button
-                @click="baixarArquivo"
-                class="flex items-center gap-2 px-4 py-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
-              >
-                <i class="fas fa-download"></i>
-                <span>Baixar</span>
+                <div class="font-semibold text-gray-900 dark:text-white text-xs mb-0.5">{{ template.nome }}</div>
+                <code class="text-[10px] text-indigo-600 dark:text-indigo-400">{{ template.exemplo }}</code>
               </button>
             </div>
           </div>
-          
-          <div class="bg-gray-50 rounded-lg p-6 max-h-96 overflow-y-auto">
-            <pre class="text-gray-700 whitespace-pre-wrap font-mono text-sm">{{ textoResultado }}</pre>
+
+          <!-- Opções -->
+          <div class="glass-panel p-3 space-y-2">
+            <label class="input-aurora-label !mb-0">Opções de transformação</label>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <label v-for="opt in opcoesList" :key="opt.key" class="checkbox-aurora">
+                <input v-model="opcoes[opt.key]" @change="gerar" type="checkbox" />
+                <span>{{ opt.label }}</span>
+              </label>
+            </div>
           </div>
 
-          <!-- Estatísticas -->
-          <div class="grid grid-cols-3 gap-4 pt-4 border-t">
-            <div class="text-center">
-              <div class="text-2xl font-bold text-teal-600">{{ linhas.length }}</div>
-              <div class="text-sm text-gray-600">Linhas</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-bold text-teal-600">{{ textoResultado.length }}</div>
-              <div class="text-sm text-gray-600">Caracteres</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-bold text-teal-600">
-                {{ ((textoResultado.length / textoEntrada.length) * 100).toFixed(0) }}%
-              </div>
-              <div class="text-sm text-gray-600">Aumento</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Botão Limpar -->
-        <BaseButton @click="limpar" variant="outline" class="w-full">
-          <i class="fas fa-eraser mr-2"></i>
-          Limpar Tudo
-        </BaseButton>
-
-        <!-- Dica -->
-        <div class="bg-teal-50 border border-teal-200 rounded-lg p-4">
-          <div class="flex items-start gap-3">
-            <i class="fas fa-lightbulb text-teal-600 mt-1"></i>
-            <div class="text-sm text-teal-900 space-y-2">
-              <p><strong>Exemplos de Uso:</strong></p>
-              <ul class="list-disc list-inside space-y-1 ml-2">
-                <li><strong>SQL:</strong> Prefixo: "INSERT INTO tabela VALUES ('" | Sufixo: "');"</li>
-                <li><strong>Array JS:</strong> Prefixo: "'" | Sufixo: "',"</li>
-                <li><strong>Lista HTML:</strong> Prefixo: "&lt;li&gt;" | Sufixo: "&lt;/li&gt;"</li>
-                <li><strong>Markdown:</strong> Prefixo: "- [ ] "</li>
-              </ul>
-            </div>
+          <div class="flex gap-3">
+            <BaseButton variant="success" icon="fa-wand-magic-sparkles" @click="gerar" class="flex-1">Gerar</BaseButton>
+            <BaseButton variant="outline" icon="fa-eraser" @click="limpar">Limpar</BaseButton>
           </div>
         </div>
       </div>
+
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="textoResultado && textoEntrada" class="space-y-4">
+            <!-- Destaque principal -->
+            <div class="tool-header text-center py-5">
+              <p class="text-sm text-blue-200 mb-1">Resultado gerado</p>
+              <p class="text-4xl font-black text-white mb-2">{{ linhas.length }}</p>
+              <p class="text-indigo-300 text-sm font-semibold">
+                <i class="fas fa-check-circle mr-1"></i>linhas processadas
+              </p>
+            </div>
+
+            <!-- Métricas -->
+            <div class="grid grid-cols-3 gap-3">
+              <div class="metric-glass ring-1 ring-indigo-100 dark:ring-indigo-900">
+                <div class="metric-glass-value text-indigo-600 dark:text-indigo-400">{{ linhas.length }}</div>
+                <div class="metric-glass-label">Linhas</div>
+              </div>
+              <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+                <div class="metric-glass-value text-blue-600 dark:text-blue-400">{{ textoResultado.length }}</div>
+                <div class="metric-glass-label">Caracteres</div>
+              </div>
+              <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+                <div class="metric-glass-value text-purple-600 dark:text-purple-400">
+                  {{ textoEntrada ? ((textoResultado.length / textoEntrada.length) * 100).toFixed(0) : 0 }}%
+                </div>
+                <div class="metric-glass-label">Aumento</div>
+              </div>
+            </div>
+
+            <!-- Saída -->
+            <div class="glass-panel p-4">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+                  <i class="fas fa-code text-indigo-500"></i>Saída
+                </h4>
+                <div class="flex gap-2">
+                  <button @click="copiar" class="copy-btn">
+                    <i class="fas fa-copy mr-1"></i>Copiar
+                  </button>
+                  <button @click="baixarArquivo" class="copy-btn">
+                    <i class="fas fa-download mr-1"></i>Baixar
+                  </button>
+                </div>
+              </div>
+              <pre class="text-gray-700 dark:text-slate-200 whitespace-pre-wrap font-mono text-xs max-h-72 overflow-y-auto select-all">{{ textoResultado }}</pre>
+            </div>
+
+            <div class="tip-card-success">
+              <i class="fas fa-check-circle text-emerald-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">Resultado pronto! Copie ou baixe o arquivo .txt com um clique.</span>
+            </div>
+          </div>
+        </Transition>
+
+        <div v-if="!textoResultado || !textoEntrada" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-text-width text-4xl mb-3 opacity-30 block text-indigo-400"></i>
+          <p class="text-sm">Cole seu texto e defina prefixo/sufixo para ver o resultado</p>
+        </div>
+      </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
 import { ref, computed } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
 import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
 const templates = [
-  { nome: 'Array JS', prefixo: "'", sufixo: "',", exemplo: "'item'," },
-  { nome: 'SQL INSERT', prefixo: "('", sufixo: "'),", exemplo: "('valor')," },
-  { nome: 'HTML List', prefixo: '<li>', sufixo: '</li>', exemplo: '<li>item</li>' },
-  { nome: 'Markdown', prefixo: '- [ ] ', sufixo: '', exemplo: '- [ ] item' },
-  { nome: 'JSON Array', prefixo: '"', sufixo: '",', exemplo: '"item",' },
-  { nome: 'CSV', prefixo: '', sufixo: ',', exemplo: 'item,' },
-  { nome: 'Python List', prefixo: "'", sufixo: "',", exemplo: "'item'," },
-  { nome: 'Bullet', prefixo: '• ', sufixo: '', exemplo: '• item' }
+  { nome: "Array JS",    prefixo: "'",     sufixo: "',",    exemplo: "'item'," },
+  { nome: "SQL INSERT",  prefixo: "('",    sufixo: "'),",   exemplo: "('val')," },
+  { nome: "HTML List",   prefixo: '<li>',  sufixo: '</li>', exemplo: '<li>item</li>' },
+  { nome: "Markdown",    prefixo: '- [ ] ',sufixo: '',      exemplo: '- [ ] item' },
+  { nome: "JSON Array",  prefixo: '"',     sufixo: '",',    exemplo: '"item",' },
+  { nome: "CSV",         prefixo: '',      sufixo: ',',     exemplo: 'item,' },
+  { nome: "Python",      prefixo: "'",     sufixo: "',",    exemplo: "'item'," },
+  { nome: "Bullet •",    prefixo: '• ',    sufixo: '',      exemplo: '• item' },
 ]
 
-const textoEntrada = ref('')
-const prefixo = ref('')
-const sufixo = ref('')
+const opcoesList = [
+  { key: 'ignorarVazias', label: 'Ignorar vazias' },
+  { key: 'numerar',       label: 'Numerar linhas' },
+  { key: 'aspasSimples',  label: "Aspas simples ''" },
+  { key: 'aspasDuplas',   label: 'Aspas duplas ""' },
+]
+
+const textoEntrada   = ref('')
+const prefixo        = ref('')
+const sufixo         = ref('')
 const textoResultado = ref('')
+const opcoes         = ref({ ignorarVazias: true, numerar: false, aspasSimples: false, aspasDuplas: false })
 
-const opcoes = ref({
-  ignorarVazias: true,
-  numerar: false,
-  aspasSimples: false,
-  aspasDuplas: false
-})
-
-// Computados
 const linhas = computed(() => {
   let items = textoEntrada.value.split('\n')
-  if (opcoes.value.ignorarVazias) {
-    items = items.filter(linha => linha.trim().length > 0)
-  }
+  if (opcoes.value.ignorarVazias) items = items.filter(l => l.trim().length > 0)
   return items
 })
 
-// Aplicar template
-const aplicarTemplate = (template) => {
-  prefixo.value = template.prefixo
-  sufixo.value = template.sufixo
-  gerar()
-}
+const aplicarTemplate = (t) => { prefixo.value = t.prefixo; sufixo.value = t.sufixo; gerar() }
 
-// Gerar resultado
 const gerar = () => {
-  if (!textoEntrada.value) {
-    textoResultado.value = ''
-    return
-  }
-
-  const resultado = linhas.value.map((linha, index) => {
-    let texto = linha
-
-    // Adicionar aspas
-    if (opcoes.value.aspasSimples) {
-      texto = `'${texto}'`
-    }
-    if (opcoes.value.aspasDuplas) {
-      texto = `"${texto}"`
-    }
-
-    // Adicionar prefixo e sufixo
-    texto = `${prefixo.value}${texto}${sufixo.value}`
-
-    // Numerar
-    if (opcoes.value.numerar) {
-      texto = `${index + 1}. ${texto}`
-    }
-
-    return texto
-  })
-
-  textoResultado.value = resultado.join('\n')
+  if (!textoEntrada.value) { textoResultado.value = ''; return }
+  textoResultado.value = linhas.value.map((linha, i) => {
+    let txt = opcoes.value.aspasSimples ? `'${linha}'` : opcoes.value.aspasDuplas ? `"${linha}"` : linha
+    txt = `${prefixo.value}${txt}${sufixo.value}`
+    return opcoes.value.numerar ? `${i + 1}. ${txt}` : txt
+  }).join('\n')
 }
 
-// Copiar
 const copiar = async () => {
   try {
     await navigator.clipboard.writeText(textoResultado.value)
-    Swal.fire({
-      icon: 'success',
-      title: 'Copiado!',
-      text: 'Texto copiado para a área de transferência',
-      timer: 1500,
-      showConfirmButton: false
-    })
-  } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Erro',
-      text: 'Não foi possível copiar'
-    })
+    Swal.fire({ icon: 'success', title: 'Copiado!', timer: 1500, showConfirmButton: false })
+  } catch {
+    Swal.fire({ icon: 'error', title: 'Erro ao copiar' })
   }
 }
 
-// Baixar arquivo
 const baixarArquivo = () => {
   const blob = new Blob([textoResultado.value], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'resultado.txt'
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
-  
-  Swal.fire({
-    icon: 'success',
-    title: 'Download Iniciado!',
-    text: 'Arquivo baixado com sucesso',
-    timer: 1500,
-    showConfirmButton: false
-  })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href = url; a.download = 'resultado.txt'
+  document.body.appendChild(a); a.click()
+  document.body.removeChild(a); URL.revokeObjectURL(url)
+  Swal.fire({ icon: 'success', title: 'Download iniciado!', timer: 1500, showConfirmButton: false })
 }
 
-// Limpar
 const limpar = () => {
-  textoEntrada.value = ''
-  prefixo.value = ''
-  sufixo.value = ''
-  textoResultado.value = ''
-  opcoes.value = {
-    ignorarVazias: true,
-    numerar: false,
-    aspasSimples: false,
-    aspasDuplas: false
-  }
+  textoEntrada.value = ''; prefixo.value = ''; sufixo.value = ''; textoResultado.value = ''
+  opcoes.value = { ignorarVazias: true, numerar: false, aspasSimples: false, aspasDuplas: false }
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>
