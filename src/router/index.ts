@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useSeo } from '@/composables/useSeo'
 import { toolsRoutes } from './tools'
+import { solucoesRoutes } from './solucoes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -96,7 +97,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/ferramentas',
     name: 'Tools',
-    component: () => import('@/views/Tools.vue'),
+    component: () => import('@/views/ferramentas/Tools.vue'),
     meta: {
       title: 'Ferramentas Digitais Gratuitas | 3W Online',
       description: 'Ferramentas digitais gratuitas para seu negócio. Calculadoras, geradores e utilitários de marketing digital da 3W Online.',
@@ -117,7 +118,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/anuncios',
     name: 'LandingAds',
-    component: () => import('@/views/LandingAds.vue'),
+    component: () => import('@/views/lp/LandingAds.vue'),
     meta: {
       title: 'Gestão de Anúncios Online em Curitiba | Google Ads e Meta Ads | 3W Online',
       description: 'Gestão profissional de anúncios no Google Ads e Meta Ads em Curitiba. Aumente suas vendas com campanhas otimizadas. ROI comprovado e relatórios detalhados.',
@@ -127,7 +128,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/landing-prd',
     name: 'LandingPRD',
-    component: () => import('@/views/LandingPRD.vue'),
+    component: () => import('@/views/lp/LandingPRD.vue'),
     meta: {
       title: 'Marketing Digital e Desenvolvimento Web | 3W Online Curitiba',
       description: 'Soluções completas de marketing digital e desenvolvimento web em Curitiba. Sites, sistemas, apps e estratégias digitais que geram resultados.',
@@ -137,7 +138,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/lp-mkt',
     name: 'LandingMarketing',
-    component: () => import('@/views/LandingMarketing.vue'),
+    component: () => import('@/views/lp/LandingMarketing.vue'),
     meta: {
       title: 'Marketing Digital Completo em Curitiba | 3W Online',
       description: 'Pacote completo de marketing digital: redes sociais, anúncios, conteúdo e relatórios. Agência especializada em Curitiba com resultados comprovados.',
@@ -147,7 +148,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/lp-sites-sistemas',
     name: 'LandingSitesSistemas',
-    component: () => import('@/views/LandingSitesSistemas.vue'),
+    component: () => import('@/views/lp/LandingSitesSistemas.vue'),
     meta: {
       title: 'Criação de Sites e Sistemas Web em Curitiba | 3W Online',
       description: 'Criação de sites profissionais e sistemas web sob medida em Curitiba. Design responsivo, SEO otimizado e tecnologia de ponta.',
@@ -310,6 +311,9 @@ const routes: RouteRecordRaw[] = [
 
   // Ferramentas (todas as 126+ ferramentas integradas)
   ...toolsRoutes,
+
+  // Soluções (62 aplicações independentes)
+  ...solucoesRoutes,
 
   // Error Pages
   {

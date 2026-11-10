@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+
+    <!-- ============ Consent Mode v2 (default: negado até o usuário decidir) ============ -->
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500
+      })
+    </script>
+
+    <!-- ============ Google Tag Manager ============ -->
+    <script>
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : ''
+        j.async = true
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, 'script', 'dataLayer', 'GTM-WVMJV7G6')
+    </script>
+
+    <!-- ============ Google Analytics 4 ============ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J06THXX0MW"></script>
+    <script>
+      gtag('js', new Date())
+      gtag('config', 'G-J06THXX0MW', { anonymize_ip: true })
+    </script>
+
+    <!-- ============ SEO Meta Tags ============ -->
+    <title>Analisador de Texto · Análise e Comparação Online Grátis</title>
+    <meta
+      name="description"
+      content="Ferramenta online gratuita para analisar e comparar textos: conte caracteres, palavras, sentenças, parágrafos e linhas. 100% local, privado e sem cadastro."
+    />
+    <meta
+      name="keywords"
+      content="analisador de texto, contador de palavras, contador de caracteres, comparador de textos, análise textual, contar palavras online, contar caracteres, SEO texto, contador de linhas, contador de parágrafos"
+    />
+    <meta name="author" content="willfrombrasil | hotwyl" />
+    <meta name="copyright" content="© 2026 Grupo 3W Online — Todos os direitos reservados" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="image" content="https://www.3wonline.com.br/analisador_texto/og-image.jpg" />
+    <meta name="generator" content="Vue 3 + Vite 5 + TypeScript + Tailwind CSS 3" />
+    <meta name="rating" content="general" />
+    <link rel="canonical" href="https://www.3wonline.com.br/analisador_texto/" />
+
+    <!-- ============ GEO / Local (geomarketing) ============ -->
+    <meta name="geo.region" content="BR-PR" />
+    <meta name="geo.placename" content="Curitiba, Paraná, Brasil" />
+    <meta name="ICBM" content="-25.4284, -49.2733" />
+    <meta name="language" content="Portuguese" />
+    <link rel="alternate" hreflang="pt-BR" href="https://www.3wonline.com.br/analisador_texto/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.3wonline.com.br/analisador_texto/" />
+
+    <!-- ============ Open Graph ============ -->
+    <meta property="og:title" content="Analisador de Texto · Análise e Comparação Online Grátis" />
+    <meta
+      property="og:description"
+      content="Ferramenta gratuita para analisar e comparar textos. Conte caracteres, palavras, sentenças e compare lado a lado — 100% no navegador."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.3wonline.com.br/analisador_texto/" />
+    <meta property="og:site_name" content="Analisador de Texto" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:image" content="https://www.3wonline.com.br/analisador_texto/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Analisador de Texto — ferramenta de análise e comparação de textos" />
+
+    <!-- ============ Twitter Card ============ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Analisador de Texto · Análise e Comparação Online" />
+    <meta
+      name="twitter:description"
+      content="Ferramenta gratuita para análise e comparação de textos. Conte caracteres, palavras e compare textos."
+    />
+    <meta name="twitter:image" content="https://www.3wonline.com.br/analisador_texto/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Analisador de Texto — Ferramenta Online Gratuita" />
+
+    <!-- ============ Favicon / PWA ============ -->
+    <link rel="icon" type="image/svg+xml" href="/analisador_texto/favicon.svg" />
+    <link rel="alternate icon" href="/analisador_texto/favicon.ico" />
+    <link rel="manifest" href="/analisador_texto/manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/analisador_texto/apple-touch-icon.svg" />
+
+    <!-- ============ Performance ============ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+    <!-- ============ Theme Color ============ -->
+    <meta name="theme-color" content="#4263eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="msapplication-TileColor" content="#4263eb" />
+
+    <!-- ============ iOS / Mobile Web App ============ -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Analisador de Texto" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Analisador de Texto" />
+
+    <!-- ============ Security Headers (reforçados no .htaccess em produção) ============ -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- ============ Structured Data: WebApplication ============ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Analisador de Texto",
+        "description": "Ferramenta online gratuita para análise e comparação de textos. Conte caracteres, palavras, sentenças, parágrafos e linhas, e compare dois textos lado a lado.",
+        "url": "https://www.3wonline.com.br/analisador_texto/",
+        "applicationCategory": "UtilityApplication",
+        "operatingSystem": "Web Browser",
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+        "author": {
+          "@type": "Organization",
+          "name": "Grupo 3W Online",
+          "url": "https://www.3wonline.com.br"
+        },
+        "creator": { "@type": "Person", "name": "HOTWYL | WILLFROMBRASIL" },
+        "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "2500" },
+        "featureList": [
+          "Contagem de caracteres, palavras, sentenças, parágrafos e linhas",
+          "Comparação de textos lado a lado com diferença percentual",
+          "Filtros para ignorar espaços, pontuação e números",
+          "Upload de arquivos .txt",
+          "Tempo de leitura estimado",
+          "Tema claro e escuro",
+          "100% processamento local"
+        ],
+        "screenshot": "https://www.3wonline.com.br/analisador_texto/og-image.jpg",
+        "softwareVersion": "3.0.0",
+        "inLanguage": "pt-BR"
+      }
+    </script>
+
+    <!-- ============ Structured Data: Organization ============ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Grupo 3W Online",
+        "url": "https://www.3wonline.com.br",
+        "description": "Desenvolvimento de sites e sistemas personalizados sob demanda.",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+55-41-99692-4829",
+          "contactType": "customer service",
+          "email": "contato@3wonline.com.br",
+          "areaServed": "BR",
+          "availableLanguage": "Portuguese"
+        }
+      }
+    </script>
+
+    <!-- ============ Structured Data: FAQPage (AEO / respostas em buscadores) ============ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "O Analisador de Texto é gratuito?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim. É 100% gratuito, sem cadastro e sem limites de uso."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Meus textos são enviados para algum servidor?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Não. Todo o processamento acontece localmente no seu navegador. Nenhum texto é enviado para servidores externos, em conformidade com LGPD, GDPR, CCPA e POPIA."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "O que a ferramenta consegue contar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Caracteres, palavras, sentenças, parágrafos, linhas e tempo estimado de leitura. Também compara dois textos lado a lado."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Funciona offline?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sim. Após o primeiro carregamento, a ferramenta funciona mesmo sem conexão com a internet."
+            }
+          }
+        ]
+      }
+    </script>
+
+    <!-- ============ Google Fonts ============ -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ============ Font Awesome ============ -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body class="antialiased">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WVMJV7G6"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+        title="gtm"
+      ></iframe>
+    </noscript>
+
+    <noscript>
+      <div style="padding: 2rem; text-align: center; font-family: sans-serif">
+        Este aplicativo precisa de JavaScript habilitado para funcionar. Ative o JavaScript no seu navegador.
+      </div>
+    </noscript>
+
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

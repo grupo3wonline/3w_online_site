@@ -1,0 +1,43 @@
+{
+  "name": "Calculadora de Pontos Elétricos",
+  "short_name": "Calc Elétrica",
+  "description": "Calculadora profissional de pontos elétricos baseada na NBR 5410. Ferramenta gratuita para eletricistas, engenheiros e arquitetos.",
+  "start_url": "/calculadora_ponto_eletrico/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/calculadora_ponto_eletrico/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/calculadora_ponto_eletrico/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/calculadora_ponto_eletrico/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity", "business"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "scope": "/calculadora_ponto_eletrico/",
+  "shortcuts": [
+    {
+      "name": "Calculadora",
+      "short_name": "Calcular",
+      "description": "Abrir calculadora de pontos elétricos",
+      "url": "/calculadora_ponto_eletrico/#calculadora"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

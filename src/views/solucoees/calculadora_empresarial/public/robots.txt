@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /calculadora_empresarial/404
+
+Sitemap: https://www.3wonline.com.br/calculadora_empresarial/sitemap.xml

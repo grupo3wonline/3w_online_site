@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design system - Calculadora de Programadores (Grupo 3w Online)
+  Todas as cores em HSL. Tema claro (padrao) e escuro (.dark).
+  Identidade: violeta (primaria) + ciano (acento), superficies suaves.
+*/
+
+@layer base {
+  :root {
+    --background: 240 20% 99%;
+    --foreground: 240 25% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 25% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 25% 12%;
+
+    --primary: 263 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 263 90% 72%;
+
+    --secondary: 240 12% 96%;
+    --secondary-foreground: 240 25% 12%;
+
+    --muted: 240 12% 96%;
+    --muted-foreground: 240 6% 44%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 69% 40%;
+    --warning: 38 92% 50%;
+
+    --border: 240 10% 90%;
+    --input: 240 10% 90%;
+    --ring: 263 83% 58%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(263 83% 58%), hsl(280 85% 62%) 55%, hsl(199 89% 52%));
+    --gradient-subtle: linear-gradient(180deg, hsl(240 20% 99%), hsl(240 14% 96%));
+    --gradient-hero: radial-gradient(120% 120% at 100% 0%, hsl(263 83% 96%) 0%, hsl(240 20% 99%) 45%);
+    --gradient-mesh:
+      radial-gradient(40% 40% at 15% 20%, hsl(263 83% 90% / 0.7) 0%, transparent 60%),
+      radial-gradient(35% 35% at 85% 10%, hsl(199 89% 85% / 0.6) 0%, transparent 60%),
+      radial-gradient(45% 45% at 70% 90%, hsl(280 85% 90% / 0.5) 0%, transparent 60%);
+
+    --shadow-elegant: 0 20px 50px -20px hsl(263 83% 58% / 0.28);
+    --shadow-glow: 0 0 48px hsl(263 90% 72% / 0.4);
+    --shadow-card: 0 1px 2px hsl(240 25% 12% / 0.04), 0 8px 24px -12px hsl(240 25% 12% / 0.12);
+
+    --radius: 0.9rem;
+  }
+
+  .dark {
+    --background: 240 24% 6%;
+    --foreground: 240 20% 96%;
+
+    --card: 240 22% 9%;
+    --card-foreground: 240 20% 96%;
+
+    --popover: 240 22% 9%;
+    --popover-foreground: 240 20% 96%;
+
+    --primary: 263 90% 70%;
+    --primary-foreground: 240 24% 6%;
+    --primary-glow: 263 95% 80%;
+
+    --secondary: 240 14% 15%;
+    --secondary-foreground: 240 20% 96%;
+
+    --muted: 240 14% 15%;
+    --muted-foreground: 240 10% 65%;
+
+    --accent: 199 89% 55%;
+    --accent-foreground: 240 24% 6%;
+
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 60% 45%;
+    --warning: 38 92% 55%;
+
+    --border: 240 14% 18%;
+    --input: 240 14% 18%;
+    --ring: 263 90% 70%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(263 90% 68%), hsl(280 85% 64%) 55%, hsl(199 89% 55%));
+    --gradient-subtle: linear-gradient(180deg, hsl(240 24% 6%), hsl(240 20% 9%));
+    --gradient-hero: radial-gradient(120% 120% at 100% 0%, hsl(263 60% 16%) 0%, hsl(240 24% 6%) 45%);
+    --gradient-mesh:
+      radial-gradient(40% 40% at 15% 20%, hsl(263 83% 40% / 0.35) 0%, transparent 60%),
+      radial-gradient(35% 35% at 85% 10%, hsl(199 89% 40% / 0.3) 0%, transparent 60%),
+      radial-gradient(45% 45% at 70% 90%, hsl(280 85% 40% / 0.28) 0%, transparent 60%);
+
+    --shadow-elegant: 0 20px 50px -20px hsl(263 90% 60% / 0.4);
+    --shadow-glow: 0 0 48px hsl(263 95% 78% / 0.4);
+    --shadow-card: 0 1px 2px hsl(0 0% 0% / 0.4), 0 8px 24px -12px hsl(0 0% 0% / 0.5);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+  }
+}
+
+@layer components {
+  .container-app {
+    @apply container mx-auto px-4 md:px-6;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-border bg-card shadow-card;
+  }
+
+  .btn-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Cabecalho de secao padronizado */
+  .eyebrow {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

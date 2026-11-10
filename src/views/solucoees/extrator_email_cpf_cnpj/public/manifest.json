@@ -1,0 +1,30 @@
+{
+    "name": "Extrator de Email, CPF e CNPJ",
+    "short_name": "Extrator",
+    "description": "Extraia e valide emails, CPF e CNPJ de textos gratuitamente",
+    "start_url": "/extrator_email_cpf_cnpj/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#7c3aed",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/extrator_email_cpf_cnpj/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/extrator_email_cpf_cnpj/apple-touch-icon.svg",
+            "sizes": "180x180",
+            "type": "image/svg+xml"
+        }
+    ],
+    "categories": [
+        "utilities",
+        "productivity",
+        "business"
+    ],
+    "lang": "pt-BR",
+    "dir": "ltr"
+}

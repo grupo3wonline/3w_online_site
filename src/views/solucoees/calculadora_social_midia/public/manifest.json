@@ -1,0 +1,25 @@
+{
+    "name": "Calculadora de Redes Sociais - 3W Online",
+    "short_name": "Calculadora Social",
+    "description": "Calculadora profissional e gratuita de redes sociais. Calcule alcance, engajamento e valor de serviços.",
+    "start_url": "/calculadora_social_midia/",
+    "scope": "/calculadora_social_midia/",
+    "display": "standalone",
+    "theme_color": "#7c3aed",
+    "background_color": "#f8fafc",
+    "orientation": "any",
+    "lang": "pt-BR",
+    "categories": [
+        "business",
+        "productivity",
+        "utilities"
+    ],
+    "icons": [
+        {
+            "src": "/calculadora_social_midia/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design System — Calculadora de Preços (Grupo 3w Online)
+  Paleta da marca: violet/purple/pink. Todas as cores em HSL.
+  Cor primária alinhada ao theme-color #7c3aed => hsl(262 83% 58%).
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+
+    --accent: 262 83% 96%;
+    --accent-foreground: 262 83% 40%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 262 83% 58%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 48 96% 12%;
+    --info: 221 83% 53%;
+    --info-foreground: 210 40% 98%;
+
+    /* Gradientes e sombras da marca */
+    --gradient-hero: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(291 64% 42%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(330 81% 60%) 100%);
+
+    --shadow-elegant: 0 10px 30px -10px hsl(262 83% 58% / 0.35);
+    --shadow-card: 0 4px 12px -4px hsl(0 0% 0% / 0.1);
+    --shadow-button: 0 2px 8px -2px hsl(262 83% 58% / 0.4);
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 44% 9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 44% 9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 262 83% 66%;
+    --primary-foreground: 222 47% 8%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 262 40% 22%;
+    --accent-foreground: 262 83% 88%;
+
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 262 83% 66%;
+
+    --success: 142 60% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 55%;
+    --warning-foreground: 48 96% 12%;
+    --info: 221 83% 60%;
+    --info-foreground: 210 40% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Foco visível para acessibilidade */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-violet-600 via-purple-600 to-pink-600 bg-clip-text text-transparent;
+  }
+
+  .bg-app-gradient {
+    background:
+      radial-gradient(1200px 600px at 100% -10%, hsl(262 83% 58% / 0.08), transparent),
+      radial-gradient(1000px 500px at -10% 10%, hsl(330 81% 60% / 0.06), transparent);
+  }
+}

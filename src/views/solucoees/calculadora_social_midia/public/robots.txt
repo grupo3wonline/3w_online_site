@@ -1,0 +1,19 @@
+# Calculadora de Redes Sociais - 3W Online
+# https://app.3wonline.com.br/calculadora_social_midia/
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://app.3wonline.com.br/calculadora_social_midia/sitemap.xml

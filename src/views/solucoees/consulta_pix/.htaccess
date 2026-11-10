@@ -1,0 +1,69 @@
+# CâmbioPro v2.0 - Apache Configuration
+# Security + Performance + SEO
+
+# ============================================
+# SEGURANÇA
+# ============================================
+
+# Desabilitar listagem de diretórios
+Options -Indexes
+
+# Proteger arquivos sensíveis
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak|config|dist|fla|inc|psd|env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Headers de segurança
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# ============================================
+# PERFORMANCE
+# ============================================
+
+# Compressão GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Cache de navegador
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+</IfModule>
+
+# ============================================
+# URL REWRITE / SEO
+# ============================================
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Redirecionar index.html para index.php
+    RewriteRule ^index\.html$ index.php [R=301,L]
+    
+    # Remover extensão .php (opcional)
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteCond %{REQUEST_FILENAME}.php -f
+    # RewriteRule ^(.*)$ $1.php [L]
+</IfModule>
+
+# Página padrão
+DirectoryIndex index.php index.html

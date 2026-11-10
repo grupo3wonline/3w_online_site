@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="WordCraft PRO — Gerador profissional de Caça-Palavras e Palavras Cruzadas. Crie passatempos otimizados para impressão e exportação.">
+    <meta name="keywords" content="caça-palavras, palavras cruzadas, gerador, passatempos, puzzle, educação">
+    <meta name="author" content="HOTWYL | WILLFROMBRASIL">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#2563eb">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>WordCraft PRO | Gerador de Passatempos Profissional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a' },
+                        secondary: { 50:'#ecfdf5',100:'#d1fae5',200:'#a7f3d0',300:'#6ee7b7',400:'#34d399',500:'#10b981',600:'#059669',700:'#047857',800:'#065f46',900:'#064e3b' },
+                        dark: '#111827',
+                        darker: '#030712'
+                    },
+                    animation: { 'fade-in':'fadeIn 0.4s ease-out','slide-up':'slideUp 0.5s ease-out' },
+                    keyframes: {
+                        fadeIn: { '0%':{opacity:'0',transform:'translateY(12px)'},'100%':{opacity:'1',transform:'translateY(0)'} },
+                        slideUp: { '0%':{opacity:'0',transform:'translateY(24px)'},'100%':{opacity:'1',transform:'translateY(0)'} }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root { scroll-behavior: smooth; }
+        [data-tooltip] { position:relative; }
+        [data-tooltip]::after { content:attr(data-tooltip); position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%); background:#1e293b; color:#fff; padding:6px 12px; border-radius:8px; font-size:0.7rem; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity 0.2s; z-index:100; box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+        [data-tooltip]::before { content:''; position:absolute; bottom:calc(100% + 2px); left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:#1e293b; opacity:0; pointer-events:none; transition:opacity 0.2s; z-index:100; }
+        [data-tooltip]:hover::after, [data-tooltip]:hover::before { opacity:1; }
+        @media print {
+            .no-print { display:none !important; }
+            body { background:white !important; color:black !important; font-size:11pt; }
+            .print-area { width:100% !important; margin:0 auto; page-break-inside:avoid; }
+            .print-aluno .cell-letter { color:transparent !important; }
+            .print-gabarito .cell-letter { color:#000 !important; font-weight:bold; }
+            .print-gabarito .cell-highlight { background:#fef08a !important; }
+        }
+        .grid-cell { width:1.75rem; height:1.75rem; display:flex; align-items:center; justify-content:center; font-weight:700; text-transform:uppercase; font-family:ui-monospace,SFMono-Regular,monospace; transition:transform 0.15s,box-shadow 0.15s; font-size:0.75rem; }
+        @media(min-width:640px) { .grid-cell { width:2.25rem; height:2.25rem; font-size:0.875rem; } }
+        @media(min-width:768px) { .grid-cell { width:2.5rem; height:2.5rem; font-size:1rem; } }
+        .grid-cell:hover { transform:scale(1.1); box-shadow:0 2px 8px rgba(59,130,246,0.25); z-index:2; }
+        .cell-crossword { border:1.5px solid #374151; background:#fff; color:#111; position:relative; }
+        .dark .cell-crossword { background:#374151; color:#f3f4f6; border-color:#6b7280; }
+        .cell-crossword-black { background:#0f172a; border:1.5px solid #0f172a; }
+        .dark .cell-crossword-black { background:#020617; border-color:#020617; }
+        .clue-number { position:absolute; top:1px; left:2px; font-size:0.5rem; line-height:1; font-weight:800; color:#2563eb; font-family:system-ui,sans-serif; }
+        .dark .clue-number { color:#93c5fd; }
+        ::-webkit-scrollbar { width:6px; height:6px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:#94a3b8; border-radius:3px; }
+        .dark ::-webkit-scrollbar-thumb { background:#475569; }
+        .highlight-word { background:rgba(59,130,246,0.15); border-radius:2px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-darker dark:text-gray-200 transition-colors duration-300 min-h-screen flex flex-col font-sans">
+
+    <!-- Loader -->
+    <div id="loader" class="fixed inset-0 bg-black/70 z-[9999] hidden items-center justify-center backdrop-blur-sm" role="alert" aria-live="assertive">
+        <div class="flex flex-col items-center gap-4">
+            <div class="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            <p class="text-white text-lg font-semibold tracking-wide">Processando...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white/80 dark:bg-dark/90 backdrop-blur-md shadow-sm sticky top-0 z-50 no-print border-b border-gray-200/50 dark:border-gray-700/50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer select-none" onclick="App.navigate('home')" role="button" tabindex="0" aria-label="Ir para a página inicial">
+                <div class="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-2.5 rounded-xl shadow-lg shadow-blue-500/30">
+                    <i class="fas fa-puzzle-piece text-lg"></i>
+                </div>
+                <h1 class="text-xl sm:text-2xl font-black tracking-tight">
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-500">WordCraft</span>
+                    <span class="text-gray-400 font-light ml-1">PRO</span>
+                </h1>
+            </div>
+
+            <nav class="hidden md:flex gap-1" aria-label="Navegação principal">
+                <button onclick="App.navigate('search')" class="px-4 py-2 rounded-lg font-semibold text-sm hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200" aria-label="Caça-Palavras">
+                    <i class="fas fa-search mr-2"></i>Caça-Palavras
+                </button>
+                <button onclick="App.navigate('crossword')" class="px-4 py-2 rounded-lg font-semibold text-sm hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200" aria-label="Palavras Cruzadas">
+                    <i class="fas fa-border-all mr-2"></i>Cruzadinhas
+                </button>
+            </nav>
+
+            <div class="flex gap-2 items-center">
+                <button data-tooltip="Ajuda e dicas" onclick="App.showHelp()" class="p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-500 hover:text-blue-500" aria-label="Ajuda">
+                    <i class="fas fa-question-circle text-lg"></i>
+                </button>
+                <button id="darkModeToggle" class="p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Alternar tema claro/escuro">
+                    <i class="fas fa-moon text-lg" id="themeIcon"></i>
+                </button>
+                <button class="md:hidden p-2.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" onclick="document.getElementById('mobileMenu').classList.toggle('hidden')" aria-label="Menu" aria-expanded="false">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <nav id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 p-3 space-y-1" aria-label="Menu mobile">
+            <button onclick="App.navigate('search'); document.getElementById('mobileMenu').classList.add('hidden')" class="block w-full text-left py-3 px-4 rounded-lg font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors">
+                <i class="fas fa-search mr-3 text-blue-500"></i>Caça-Palavras
+            </button>
+            <button onclick="App.navigate('crossword'); document.getElementById('mobileMenu').classList.add('hidden')" class="block w-full text-left py-3 px-4 rounded-lg font-semibold hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors">
+                <i class="fas fa-border-all mr-3 text-emerald-500"></i>Cruzadinhas
+            </button>
+        </nav>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="bg-gray-100/80 dark:bg-gray-800/50 text-sm py-2.5 no-print border-b border-gray-200/50 dark:border-gray-700/50">
+        <div class="container mx-auto px-4 flex items-center gap-2 text-gray-500 dark:text-gray-400" id="breadcrumb" aria-label="Breadcrumb">
+            <i class="fas fa-home text-xs"></i>
+            <span class="text-blue-600 dark:text-blue-400 cursor-pointer hover:underline font-medium" onclick="App.navigate('home')">Início</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-6 sm:py-8" id="main-content" role="main">
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-dark border-t border-gray-200 dark:border-gray-800 py-8 mt-auto no-print">
+        <div class="container mx-auto px-4 text-center space-y-3">
+            <div class="flex items-center justify-center gap-2 text-gray-400">
+                <div class="h-px w-12 bg-gradient-to-r from-transparent to-gray-300 dark:to-gray-600"></div>
+                <i class="fas fa-puzzle-piece text-blue-500/50"></i>
+                <div class="h-px w-12 bg-gradient-to-l from-transparent to-gray-300 dark:to-gray-600"></div>
+            </div>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
+                &copy; <span id="year"></span> WordCraft PRO — Todos os direitos reservados.
+            </p>
+            <p class="text-xs font-bold text-gray-400 dark:text-gray-500 tracking-widest uppercase">
+                Sistema desenvolvido pelo desenvolvedor HOTWYL | WILLFROMBRASIL
+            </p>
+        </div>
+    </footer>
+
+    <!-- LGPD Banner -->
+    <div id="lgpd-banner" class="fixed bottom-0 left-0 w-full bg-gradient-to-r from-blue-900 to-blue-800 text-white p-4 sm:p-5 shadow-2xl transform translate-y-full transition-transform duration-500 z-[60] no-print" role="dialog" aria-label="Aviso de privacidade">
+        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-sm leading-relaxed">
+                <i class="fas fa-shield-alt mr-2 text-blue-300"></i>
+                <strong>Privacidade:</strong> Utilizamos apenas armazenamento local (localStorage) para salvar preferências de tema. Nenhum dado pessoal é coletado ou transmitido. <span class="opacity-75">(Conformidade LGPD)</span>
+            </div>
+            <button onclick="App.acceptLGPD()" class="bg-white/20 hover:bg-white/30 backdrop-blur text-white px-6 py-2.5 rounded-full font-bold transition-all whitespace-nowrap border border-white/30 hover:border-white/50">
+                <i class="fas fa-check mr-2"></i>Entendi e Aceito
+            </button>
+        </div>
+    </div>
+
+    <script>
+    // ==========================================
+    // UTILS - Helpers e Segurança (SRP)
+    // ==========================================
+    const Utils = {
+        sanitizeHTML(str) {
+            const el = document.createElement('div');
+            el.textContent = str;
+            return el.innerHTML;
+        },
+        showLoading() {
+            const loader = document.getElementById('loader');
+            loader.classList.remove('hidden');
+            loader.classList.add('flex');
+        },
+        hideLoading() {
+            const loader = document.getElementById('loader');
+            loader.classList.add('hidden');
+            loader.classList.remove('flex');
+        },
+        delay: (ms) => new Promise(r => setTimeout(r, ms)),
+        generateId: () => '_' + Math.random().toString(36).substr(2, 9),
+        getRandomInt: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
+        debounce(fn, ms = 300) {
+            let timer;
+            return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+        }
+    };
+
+    // ==========================================
+    // WORD SEARCH ENGINE (SRP - Geração de Caça-Palavras)
+    // ==========================================
+    class WordSearchEngine {
+        constructor(words, size, options = {}) {
+            this.words = words.map(w => w.toUpperCase().replace(/[^A-Z\u00C0-\u00FF]/g, ''));
+            this.size = Math.max(10, Math.min(30, size));
+            this.grid = Array.from({length: this.size}, () => Array(this.size).fill(''));
+            this.options = { diagonals: true, inverted: true, ...options };
+            this.placedWords = [];
+            this.wordPositions = [];
+        }
+
+        async generate() {
+            const sorted = [...this.words].sort((a, b) => b.length - a.length);
+
+            for (const word of sorted) {
+                if (word.length < 3 || word.length > this.size) continue;
+                let placed = false;
+                let attempts = 0;
+                const maxAttempts = Math.min(300, this.size * this.size);
+                while (!placed && attempts < maxAttempts) {
+                    placed = this._tryPlaceWord(word);
+                    attempts++;
+                }
+                if (placed) this.placedWords.push(word);
+            }
+
+            this._fillEmptySpaces();
+            return { grid: this.grid, words: this.placedWords, positions: this.wordPositions };
+        }
+
+        _tryPlaceWord(word) {
+            const dirs = [{x:1,y:0},{x:0,y:1}];
+            if (this.options.diagonals) { dirs.push({x:1,y:1},{x:-1,y:1},{x:1,y:-1},{x:-1,y:-1}); }
+
+            let wordToPlace = word;
+            if (this.options.inverted && Math.random() > 0.5) {
+                wordToPlace = word.split('').reverse().join('');
+            }
+
+            const dir = dirs[Utils.getRandomInt(0, dirs.length - 1)];
+            const startX = Utils.getRandomInt(0, this.size - 1);
+            const startY = Utils.getRandomInt(0, this.size - 1);
+            const endX = startX + dir.x * (wordToPlace.length - 1);
+            const endY = startY + dir.y * (wordToPlace.length - 1);
+
+            if (endX < 0 || endX >= this.size || endY < 0 || endY >= this.size) return false;
+
+            const positions = [];
+            for (let i = 0; i < wordToPlace.length; i++) {
+                const cx = startX + dir.x * i;
+                const cy = startY + dir.y * i;
+                if (this.grid[cy][cx] !== '' && this.grid[cy][cx] !== wordToPlace[i]) return false;
+                positions.push({x: cx, y: cy});
+            }
+
+            for (let i = 0; i < wordToPlace.length; i++) {
+                this.grid[positions[i].y][positions[i].x] = wordToPlace[i];
+            }
+            this.wordPositions.push({ word, positions });
+            return true;
+        }
+
+        _fillEmptySpaces() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            for (let y = 0; y < this.size; y++) {
+                for (let x = 0; x < this.size; x++) {
+                    if (this.grid[y][x] === '') {
+                        this.grid[y][x] = chars[Math.floor(Math.random() * chars.length)];
+                    }
+                }
+            }
+        }
+    }
+
+    // ==========================================
+    // CROSSWORD ENGINE (SRP - Geração de Cruzadinhas)
+    // ==========================================
+    class CrosswordEngine {
+        constructor(items) {
+            this.items = items
+                .map(i => ({...i, word: i.word.toUpperCase().replace(/[^A-Z\u00C0-\u00FF]/g, '')}))
+                .filter(i => i.word.length >= 2)
+                .sort((a, b) => b.word.length - a.word.length);
+            this.gridSize = 30;
+            this.grid = Array.from({length: this.gridSize}, () => Array(this.gridSize).fill(null));
+            this.placedItems = [];
+        }
+
+        async generate() {
+            if (this.items.length === 0) return { grid: [], clues: [] };
+
+            const first = this.items[0];
+            const startX = Math.floor((this.gridSize - first.word.length) / 2);
+            const startY = Math.floor(this.gridSize / 2);
+            this._placeWord(first, startX, startY, 'H', 1);
+
+            let clueNum = 2;
+            for (let i = 1; i < this.items.length; i++) {
+                const item = this.items[i];
+                const placement = this._findBestPlacement(item);
+                if (placement) {
+                    this._placeWord(item, placement.x, placement.y, placement.dir, clueNum++);
+                }
+            }
+
+            return { grid: this._trimGrid(), clues: this.placedItems };
+        }
+
+        _findBestPlacement(item) {
+            let best = null;
+            let bestScore = -1;
+
+            for (const placed of this.placedItems) {
+                for (let pIdx = 0; pIdx < placed.word.length; pIdx++) {
+                    const pChar = placed.word[pIdx];
+                    const pX = placed.startX + (placed.dir === 'H' ? pIdx : 0);
+                    const pY = placed.startY + (placed.dir === 'V' ? pIdx : 0);
+
+                    for (let nIdx = 0; nIdx < item.word.length; nIdx++) {
+                        if (item.word[nIdx] !== pChar) continue;
+                        const newDir = placed.dir === 'H' ? 'V' : 'H';
+                        const testX = pX - (newDir === 'H' ? nIdx : 0);
+                        const testY = pY - (newDir === 'V' ? nIdx : 0);
+
+                        if (this._isValidPlacement(item.word, testX, testY, newDir)) {
+                            const score = this._scorePlacement(item.word, testX, testY, newDir);
+                            if (score > bestScore) {
+                                bestScore = score;
+                                best = { x: testX, y: testY, dir: newDir };
+                            }
+                        }
+                    }
+                }
+                if (best) break;
+            }
+            return best;
+        }
+
+        _scorePlacement(word, x, y, dir) {
+            let score = 0;
+            for (let i = 0; i < word.length; i++) {
+                const cx = x + (dir === 'H' ? i : 0);
+                const cy = y + (dir === 'V' ? i : 0);
+                if (this.grid[cy][cx] !== null && this.grid[cy][cx].char === word[i]) score += 10;
+            }
+            const centerDist = Math.abs(x - this.gridSize/2) + Math.abs(y - this.gridSize/2);
+            score -= centerDist * 0.1;
+            return score;
+        }
+
+        _isValidPlacement(word, x, y, dir) {
+            if (x < 0 || y < 0) return false;
+            if (dir === 'H' && x + word.length > this.gridSize) return false;
+            if (dir === 'V' && y + word.length > this.gridSize) return false;
+
+            for (let i = 0; i < word.length; i++) {
+                const cx = x + (dir === 'H' ? i : 0);
+                const cy = y + (dir === 'V' ? i : 0);
+                const cell = this.grid[cy][cx];
+
+                if (cell !== null && cell.char !== word[i]) return false;
+
+                if (cell === null) {
+                    if (dir === 'H') {
+                        if (cy > 0 && this.grid[cy-1][cx] !== null) return false;
+                        if (cy < this.gridSize-1 && this.grid[cy+1][cx] !== null) return false;
+                    } else {
+                        if (cx > 0 && this.grid[cy][cx-1] !== null) return false;
+                        if (cx < this.gridSize-1 && this.grid[cy][cx+1] !== null) return false;
+                    }
+                }
+            }
+
+            if (dir === 'H') {
+                if (x > 0 && this.grid[y][x-1] !== null) return false;
+                if (x + word.length < this.gridSize && this.grid[y][x+word.length] !== null) return false;
+            } else {
+                if (y > 0 && this.grid[y-1][x] !== null) return false;
+                if (y + word.length < this.gridSize && this.grid[y+word.length][x] !== null) return false;
+            }
+            return true;
+        }
+
+        _placeWord(item, x, y, dir, num) {
+            this.placedItems.push({ ...item, startX: x, startY: y, dir, number: num });
+            for (let i = 0; i < item.word.length; i++) {
+                const cx = x + (dir === 'H' ? i : 0);
+                const cy = y + (dir === 'V' ? i : 0);
+                if (this.grid[cy][cx] === null) {
+                    this.grid[cy][cx] = { char: item.word[i], number: i === 0 ? num : null };
+                } else if (i === 0 && this.grid[cy][cx].number === null) {
+                    this.grid[cy][cx].number = num;
+                }
+            }
+        }
+
+        _trimGrid() {
+            let minX = this.gridSize, maxX = 0, minY = this.gridSize, maxY = 0;
+            for (let y = 0; y < this.gridSize; y++) {
+                for (let x = 0; x < this.gridSize; x++) {
+                    if (this.grid[y][x] !== null) {
+                        minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+                        minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+                    }
+                }
+            }
+            if (minX > maxX) return [];
+            const trimmed = [];
+            for (let y = minY; y <= maxY; y++) {
+                trimmed.push(this.grid[y].slice(minX, maxX + 1));
+            }
+            return trimmed;
+        }
+    }
+
+    // ==========================================
+    // DIFFICULTY ENGINE (Pontuação de dificuldade)
+    // ==========================================
+    const DifficultyEngine = {
+        score(gridSize, wordCount, words, options) {
+            let score = 0;
+            const avgLen = words.reduce((s, w) => s + w.length, 0) / (words.length || 1);
+            const density = (words.join('').length) / (gridSize * gridSize);
+
+            score += density * 40;
+            score += (avgLen / gridSize) * 20;
+            score += options.diagonals ? 15 : 0;
+            score += options.inverted ? 15 : 0;
+            score += Math.min(wordCount / 20, 1) * 10;
+
+            return Math.min(100, Math.round(score));
+        },
+        label(score) {
+            if (score < 25) return { text: 'F\u00e1cil', color: 'text-green-500', icon: 'fa-smile' };
+            if (score < 50) return { text: 'M\u00e9dio', color: 'text-yellow-500', icon: 'fa-meh' };
+            if (score < 75) return { text: 'Dif\u00edcil', color: 'text-orange-500', icon: 'fa-frown' };
+            return { text: 'Expert', color: 'text-red-500', icon: 'fa-skull' };
+        }
+    };
+
+    // ==========================================
+    // VIEWS - Templates HTML (SRP - Apresentação)
+    // ==========================================
+    const Views = {
+        home:  `
+            <div class="animate-fade-in">
+                <!-- Hero -->
+                <section class="text-center py-8 sm:py-16 max-w-4xl mx-auto">
+                    <div class="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+                        <i class="fas fa-bolt"></i> Motor Algorítmico v2.0
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl md:text-5xl font-black mb-6 text-gray-900 dark:text-white leading-tight">
+                        Crie Passatempos de<br>
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-emerald-500">Alto Nível</span>
+                    </h2>
+                    <p class="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        Gerador profissional de caça-palavras e palavras cruzadas. Otimizado para professores, editores e criadores de conteúdo. Exporte para impressão ou PNG em alta resolução.
+                    </p>
+
+                    <!-- Cards -->
+                    <div class="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                        <button onclick="App.navigate('search')" class="group bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 text-left hover:-translate-y-1">
+                            <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Caça-Palavras</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Grade multi-direcional com controle de dificuldade, diagonais e inversão. Gere grades perfeitas.</p>
+                            <span class="inline-flex items-center gap-1 mt-4 text-blue-600 dark:text-blue-400 text-sm font-semibold group-hover:gap-2 transition-all">
+                                Criar agora <i class="fas fa-arrow-right text-xs"></i>
+                            </span>
+                        </button>
+                        <button onclick="App.navigate('crossword')" class="group bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 dark:border-gray-700 text-left hover:-translate-y-1">
+                            <div class="w-14 h-14 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-border-all"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Cruzadinhas</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Algoritmo de interseção inteligente. Insira palavras e pistas para montar o layout ideal.</p>
+                            <span class="inline-flex items-center gap-1 mt-4 text-emerald-600 dark:text-emerald-400 text-sm font-semibold group-hover:gap-2 transition-all">
+                                Criar agora <i class="fas fa-arrow-right text-xs"></i>
+                            </span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Features -->
+                <section class="py-8 border-t border-gray-200 dark:border-gray-700 mt-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-center">
+                        <div class="p-4">
+                            <i class="fas fa-print text-2xl text-blue-500 mb-2"></i>
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">Impressão A4</p>
+                        </div>
+                        <div class="p-4">
+                            <i class="fas fa-image text-2xl text-emerald-500 mb-2"></i>
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">Export PNG HD</p>
+                        </div>
+                        <div class="p-4">
+                            <i class="fas fa-moon text-2xl text-purple-500 mb-2"></i>
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">Tema Escuro</p>
+                        </div>
+                        <div class="p-4">
+                            <i class="fas fa-shield-alt text-2xl text-red-500 mb-2"></i>
+                            <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">LGPD Compliant</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dicas -->
+                <section class="py-6 max-w-3xl mx-auto">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-5">
+                        <h4 class="font-bold text-blue-700 dark:text-blue-300 mb-2"><i class="fas fa-lightbulb mr-2"></i>Dicas de Uso</h4>
+                        <ul class="text-sm text-blue-600 dark:text-blue-400 space-y-1 list-disc list-inside">
+                            <li>Use grades maiores (20x20+) para mais palavras e maior dificuldade</li>
+                            <li>Ative diagonais e inversão para desafios avançados</li>
+                            <li>Nas cruzadinhas, palavras com letras em comum geram melhores encaixes</li>
+                            <li>Exporte em PNG para compartilhar digitalmente ou imprima em PDF</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>`
+        ,
+        search:  `
+            <div class="animate-fade-in flex flex-col lg:flex-row gap-6">
+                <!-- Painel de Configuração -->
+                <aside class="w-full lg:w-80 xl:w-96 space-y-4 no-print flex-shrink-0">
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
+                        <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+                            <span class="w-8 h-8 bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-cogs"></i></span>
+                            Configurações
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold mb-1.5 text-gray-700 dark:text-gray-300">
+                                    Tamanho da Grade
+                                    <span data-tooltip="Define a dimensão NxN da grade (10 a 30)" class="ml-1 text-gray-400 cursor-help"><i class="fas fa-info-circle text-xs"></i></span>
+                                </label>
+                                <input type="number" id="ws-size" min="10" max="30" value="15" class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all" autocomplete="off">
+                                <p class="text-xs text-gray-400 mt-1">Mínimo 10, máximo 30</p>
+                            </div>
+
+                            <div class="space-y-2">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Direções</label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                    <input type="checkbox" id="ws-diag" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Permitir diagonais</span>
+                                </label>
+                                <label class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                    <input type="checkbox" id="ws-inv" checked class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                    <span class="text-sm text-gray-600 dark:text-gray-400">Permitir palavras invertidas</span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold mb-1.5 text-gray-700 dark:text-gray-300">
+                                    Banco de Palavras
+                                    <span data-tooltip="Uma palavra por linha ou separadas por vírgula. Mínimo 3 letras cada." class="ml-1 text-gray-400 cursor-help"><i class="fas fa-info-circle text-xs"></i></span>
+                                </label>
+                                <textarea id="ws-words" rows="7" class="w-full p-3 border border-gray-200 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none font-mono text-sm" autocomplete="off" placeholder="TECNOLOGIA&#10;INOVACAO&#10;ARQUITETURA&#10;SISTEMAS&#10;PERFORMANCE&#10;ALGORITMO"></textarea>
+                                <p class="text-xs text-gray-400 mt-1">Exemplo: uma palavra por linha</p>
+                            </div>
+
+                            <div id="ws-difficulty" class="hidden p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-200 dark:border-gray-600">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Dificuldade Estimada</span>
+                                    <span id="ws-diff-label" class="text-sm font-bold"></span>
+                                </div>
+                                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mt-2">
+                                    <div id="ws-diff-bar" class="h-2 rounded-full transition-all duration-500" style="width:0%"></div>
+                                </div>
+                            </div>
+
+                            <button onclick="App.generateWordSearch()" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3.5 px-5 rounded-xl transition-all duration-200 shadow-lg shadow-blue-500/25 hover:shadow-xl flex items-center justify-center gap-2">
+                                <i class="fas fa-bolt"></i> Compilar Grade
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Templates rápidos -->
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700">
+                        <h4 class="text-sm font-bold mb-3 text-gray-700 dark:text-gray-300"><i class="fas fa-magic mr-2 text-purple-500"></i>Templates Rápidos</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="App.loadTemplate('animais')" class="text-xs p-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors font-medium">Animais</button>
+                            <button onclick="App.loadTemplate('frutas')" class="text-xs p-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors font-medium">Frutas</button>
+                            <button onclick="App.loadTemplate('tecnologia')" class="text-xs p-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors font-medium">Tecnologia</button>
+                            <button onclick="App.loadTemplate('esportes')" class="text-xs p-2 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 transition-colors font-medium">Esportes</button>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Área de Renderização -->
+                <div class="flex-grow bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-3 no-print">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Resultado</h3>
+                        <div class="flex gap-2">
+                            <button onclick="App.printView()" data-tooltip="Imprimir / PDF" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-3 py-2 rounded-lg text-sm transition-colors font-medium">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button onclick="App.exportImage('ws-render-area')" data-tooltip="Exportar PNG" class="bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 px-3 py-2 rounded-lg text-sm transition-colors font-medium">
+                                <i class="fas fa-image"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Modo impressão -->
+                    <div class="mb-4 no-print flex flex-wrap gap-4 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-xl border border-amber-200 dark:border-amber-800 text-sm">
+                        <label class="flex items-center gap-2 cursor-pointer font-semibold text-amber-700 dark:text-amber-400">
+                            <input type="radio" name="print-mode" value="aluno" checked onchange="App.toggleGabarito(false)" class="text-blue-600 focus:ring-blue-500">
+                            <span><i class="fas fa-user-graduate mr-1"></i>Modo Aluno</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer font-semibold text-amber-700 dark:text-amber-400">
+                            <input type="radio" name="print-mode" value="gabarito" onchange="App.toggleGabarito(true)" class="text-blue-600 focus:ring-blue-500">
+                            <span><i class="fas fa-key mr-1"></i>Gabarito</span>
+                        </label>
+                    </div>
+
+                    <div id="ws-render-area" class="flex-grow flex flex-col items-center justify-center p-4 bg-white text-black min-h-[350px] sm:min-h-[450px] rounded-xl print-area print-aluno overflow-auto">
+                        <div class="text-center text-gray-400 no-print">
+                            <i class="fas fa-puzzle-piece text-4xl mb-3 opacity-30"></i>
+                            <p class="text-sm">Configure os parâmetros e clique em <strong>"Compilar Grade"</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        ,
+        crossword:  `
+            <div class="animate-fade-in flex flex-col lg:flex-row gap-6">
+                <!-- Painel -->
+                <aside class="w-full lg:w-80 xl:w-96 no-print flex-shrink-0">
+                    <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col" style="max-height:calc(100vh - 200px)">
+                        <h3 class="text-lg font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+                            <span class="w-8 h-8 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 rounded-lg flex items-center justify-center text-sm"><i class="fas fa-database"></i></span>
+                            Palavras e Pistas
+                        </h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Adicione palavras e suas pistas/perguntas. Mínimo 2 pares para gerar.</p>
+
+                        <div class="flex-grow overflow-y-auto pr-1 space-y-2 mb-4" id="cw-word-list">
+                        </div>
+
+                        <button onclick="App.addCrosswordRow()" class="w-full border-2 border-dashed border-gray-200 dark:border-gray-600 text-gray-400 dark:text-gray-500 hover:border-emerald-400 hover:text-emerald-500 p-2.5 rounded-xl mb-3 transition-all font-semibold text-sm">
+                            <i class="fas fa-plus mr-1"></i> Adicionar Par
+                        </button>
+
+                        <button onclick="App.generateCrossword()" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-3.5 px-5 rounded-xl transition-all duration-200 shadow-lg shadow-emerald-500/25 hover:shadow-xl flex items-center justify-center gap-2">
+                            <i class="fas fa-brain"></i> Processar Interseções
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Render -->
+                <div class="flex-grow bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-3 no-print">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Estrutura Compilada</h3>
+                        <div class="flex gap-2">
+                            <button onclick="App.printView()" data-tooltip="Imprimir / PDF" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-white px-3 py-2 rounded-lg text-sm transition-colors font-medium">
+                                <i class="fas fa-print"></i>
+                            </button>
+                            <button onclick="App.exportImage('cw-render-area')" data-tooltip="Exportar PNG" class="bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:hover:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 px-3 py-2 rounded-lg text-sm transition-colors font-medium">
+                                <i class="fas fa-image"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 no-print flex flex-wrap gap-4 bg-amber-50 dark:bg-amber-900/20 p-3 rounded-xl border border-amber-200 dark:border-amber-800 text-sm">
+                        <label class="flex items-center gap-2 cursor-pointer font-semibold text-amber-700 dark:text-amber-400">
+                            <input type="radio" name="print-mode-cw" value="aluno" checked onchange="App.toggleGabaritoCW(false)" class="text-emerald-600 focus:ring-emerald-500">
+                            <span><i class="fas fa-user-graduate mr-1"></i>Modo Aluno</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer font-semibold text-amber-700 dark:text-amber-400">
+                            <input type="radio" name="print-mode-cw" value="gabarito" onchange="App.toggleGabaritoCW(true)" class="text-emerald-600 focus:ring-emerald-500">
+                            <span><i class="fas fa-key mr-1"></i>Gabarito</span>
+                        </label>
+                    </div>
+
+                    <div id="cw-render-area" class="flex-grow flex flex-col items-center justify-center p-4 bg-white text-black min-h-[350px] sm:min-h-[450px] rounded-xl print-area print-aluno overflow-auto">
+                        <div class="text-center text-gray-400 no-print">
+                            <i class="fas fa-border-all text-4xl mb-3 opacity-30"></i>
+                            <p class="text-sm">Adicione palavras e pistas, depois clique em <strong>"Processar"</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+        ,
+
+        error:  `
+            <div class="animate-fade-in text-center py-16 max-w-lg mx-auto">
+                <div class="w-24 h-24 bg-red-100 dark:bg-red-900/30 text-red-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">Página não encontrada</h2>
+                <p class="text-gray-500 dark:text-gray-400 mb-6">A página que você procura não existe ou foi movida.</p>
+                <button onclick="App.navigate('home')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-colors">
+                    <i class="fas fa-home mr-2"></i>Voltar ao Início
+                </button>
+            </div>
+        `
+    };
+
+    // ==========================================
+    // APP CONTROLLER (Orquestração)
+    // ==========================================
+    const App = {
+        state: {
+            currentView: 'home',
+            isDarkMode: false,
+            wsCurrentData: null,
+            cwCurrentData: null,
+            isGabaritoWS: false,
+            isGabaritoCW: false,
+            undoStack: [],
+            redoStack: []
+        },
+
+        templates: {
+            animais: 'CACHORRO\nGATO\nELEFANTE\nGIRAFA\nLEAO\nTIGRE\nZEBRA\nMACACO\nPAPAGAIO\nTARTARUGA',
+            frutas: 'BANANA\nMACA\nLARANJA\nMORANGO\nABACATI\nMELANCIA\nUVA\nPESSEGO\nMANGA\nABACATI',
+            tecnologia: 'JAVASCRIPT\nPYTHON\nALGORITMO\nBANCODADOS\nINTERNET\nSERVIDOR\nFRONTEND\nBACKEND\nCLOUD\nSEGURANCA',
+            esportes: 'FUTEBOL\nBASQUETE\nVOLEI\nNATACAO\nTENIS\nCICLISMO\nBOXE\nJUDO\nSURFE\nXADREZ'
+        },
+
+        init() {
+            this.setupTheme();
+            this.checkLGPD();
+            this.navigate('home');
+            document.getElementById('year').textContent = new Date().getFullYear();
+        },
+
+        setupTheme() {
+            const saved = localStorage.getItem('theme');
+            const osDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (saved === 'dark' || (!saved && osDark)) {
+                document.documentElement.classList.add('dark');
+                this.state.isDarkMode = true;
+                document.getElementById('themeIcon').classList.replace('fa-moon', 'fa-sun');
+            }
+
+            document.getElementById('darkModeToggle').addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                this.state.isDarkMode = !this.state.isDarkMode;
+                const icon = document.getElementById('themeIcon');
+                if (this.state.isDarkMode) {
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        },
+
+        checkLGPD() {
+            if (!localStorage.getItem('lgpd_accepted')) {
+                setTimeout(() => {
+                    document.getElementById('lgpd-banner').classList.remove('translate-y-full');
+                }, 1200);
+            }
+        },
+
+        acceptLGPD() {
+            localStorage.setItem('lgpd_accepted', 'true');
+            document.getElementById('lgpd-banner').classList.add('translate-y-full');
+        },
+
+        showHelp() {
+            Swal.fire({
+                title: '<i class="fas fa-question-circle text-blue-500"></i> Ajuda',
+                html: `
+                    <div class="text-left text-sm space-y-3">
+                        <p><strong>Ca\u00e7a-Palavras:</strong> Insira palavras (uma por linha), configure tamanho e dire\u00e7\u00f5es, e clique em Compilar.</p>
+                        <p><strong>Cruzadinhas:</strong> Adicione pares palavra/pista. O algoritmo encontra interse\u00e7\u00f5es automaticamente.</p>
+                        <p><strong>Exportar:</strong> Use os bot\u00f5es de imprimir (PDF) ou exportar (PNG HD).</p>
+                        <p><strong>Gabarito:</strong> Alterne entre modo aluno (em branco) e gabarito (respostas vis\u00edveis).</p>
+                        <p><strong>Tema:</strong> Clique no \u00edcone lua/sol para alternar claro/escuro.</p>
+                    </div>
+                `,
+                confirmButtonText: 'Entendi',
+                confirmButtonColor: '#2563eb',
+                customClass: { popup: 'rounded-2xl' }
+            });
+        },
+
+        navigate(view) {
+            const main = document.getElementById('main-content');
+            const bc = document.getElementById('breadcrumb');
+
+            if (!Views[view]) { view = 'error'; }
+
+            this.state.currentView = view;
+            main.innerHTML = Views[view];
+
+            let bcHtml = '<i class="fas fa-home text-xs"></i> <span class="text-blue-600 dark:text-blue-400 cursor-pointer hover:underline font-medium" onclick="App.navigate(\x27home\x27)">In\u00edcio</span>';
+            if (view === 'search') {
+                bcHtml += ' <i class="fas fa-chevron-right text-[10px] mx-2 text-gray-400"></i> <span class="font-bold text-gray-600 dark:text-gray-300">Ca\u00e7a-Palavras</span>';
+            } else if (view === 'crossword') {
+                bcHtml += ' <i class="fas fa-chevron-right text-[10px] mx-2 text-gray-400"></i> <span class="font-bold text-gray-600 dark:text-gray-300">Cruzadinhas</span>';
+                this.addCrosswordRow('JAVASCRIPT', 'Linguagem base da web moderna');
+                this.addCrosswordRow('TAILWIND', 'Framework CSS utilit\u00e1rio');
+                this.addCrosswordRow('SOLID', 'Princ\u00edpios de design de c\u00f3digo');
+            }
+            bc.innerHTML = bcHtml;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+
+        loadTemplate(name) {
+            const data = this.templates[name];
+            if (!data) return;
+            const textarea = document.getElementById('ws-words');
+            if (textarea) {
+                textarea.value = data;
+                Swal.fire({ title: 'Template carregado', text: 'Palavras de "' + name + '" inseridas.', icon: 'success', toast: true, position: 'top-end', timer: 2000, showConfirmButton: false });
+            }
+        },
+
+        // ===== WORD SEARCH =====
+        async generateWordSearch() {
+            Utils.showLoading();
+            await Utils.delay(200);
+
+            const size = parseInt(document.getElementById('ws-size').value);
+            const rawWords = document.getElementById('ws-words').value;
+            const diag = document.getElementById('ws-diag').checked;
+            const inv = document.getElementById('ws-inv').checked;
+
+            if (isNaN(size) || size < 10 || size > 30) {
+                Utils.hideLoading();
+                return Swal.fire({ title: 'Par\u00e2metro inv\u00e1lido', text: 'O tamanho deve estar entre 10 e 30.', icon: 'error', confirmButtonColor: '#2563eb' });
+            }
+
+            const wordList = rawWords.split(/[\n,]+/).map(w => w.trim()).filter(w => w.length >= 3);
+
+            if (wordList.length === 0) {
+                Utils.hideLoading();
+                return Swal.fire({ title: 'Lista vazia', text: 'Forne\u00e7a ao menos uma palavra com 3+ letras.', icon: 'warning', confirmButtonColor: '#2563eb' });
+            }
+
+            const engine = new WordSearchEngine(wordList, size, { diagonals: diag, inverted: inv });
+            const result = await engine.generate();
+
+            this.state.wsCurrentData = result;
+            this.renderWordSearch(result.grid, result.words, result.positions);
+
+            // Difficulty
+            const diffScore = DifficultyEngine.score(size, wordList.length, wordList, { diagonals: diag, inverted: inv });
+            const diffInfo = DifficultyEngine.label(diffScore);
+            const diffEl = document.getElementById('ws-difficulty');
+            if (diffEl) {
+                diffEl.classList.remove('hidden');
+                document.getElementById('ws-diff-label').innerHTML = '<i class="fas ' + diffInfo.icon + ' mr-1"></i>' + diffInfo.text;
+                document.getElementById('ws-diff-label').className = 'text-sm font-bold ' + diffInfo.color;
+                const bar = document.getElementById('ws-diff-bar');
+                bar.style.width = diffScore + '%';
+                bar.className = 'h-2 rounded-full transition-all duration-500 ' + (diffScore < 25 ? 'bg-green-500' : diffScore < 50 ? 'bg-yellow-500' : diffScore < 75 ? 'bg-orange-500' : 'bg-red-500');
+            }
+
+            Utils.hideLoading();
+
+            if (result.words.length < wordList.length) {
+                Swal.fire({ title: 'Aviso de Densidade', text: (wordList.length - result.words.length) + ' palavra(s) n\u00e3o couberam. Aumente a grade ou reduza palavras.', icon: 'info', toast: true, position: 'top-end', timer: 4000, showConfirmButton: false });
+            }
+        },
+
+        renderWordSearch(grid, words, positions) {
+            const area = document.getElementById('ws-render-area');
+            if (!area) return;
+            area.innerHTML = '';
+            area.className = 'flex-grow flex flex-col items-center justify-start p-4 sm:p-6 bg-white text-black min-h-[350px] sm:min-h-[450px] rounded-xl print-area ' + (this.state.isGabaritoWS ? 'print-gabarito' : 'print-aluno');
+
+            // Print header
+            const printH = document.createElement('div');
+            printH.className = 'hidden print:block w-full mb-6 text-center border-b-2 border-black pb-4';
+            printH.innerHTML = '<h1 class="text-2xl font-black uppercase mb-3">Ca\u00e7a-Palavras</h1><div class="flex justify-between text-sm font-bold"><span>NOME: ________________________________________</span><span>DATA: ___/___/____</span></div>';
+            area.appendChild(printH);
+
+            // Build position set for highlighting
+            const posSet = new Set();
+            if (this.state.isGabaritoWS && positions) {
+                positions.forEach(wp => wp.positions.forEach(p => posSet.add(p.y + ',' + p.x)));
+            }
+
+            // Grid
+            const gridEl = document.createElement('div');
+            gridEl.style.display = 'grid';
+            gridEl.style.gridTemplateColumns = 'repeat(' + grid.length + ', 1fr)';
+            gridEl.style.gap = '1px';
+            gridEl.className = 'bg-gray-200 p-0.5 border-2 border-gray-700 rounded shadow-sm';
+
+            const fragment = document.createDocumentFragment();
+            for (let y = 0; y < grid.length; y++) {
+                for (let x = 0; x < grid[y].length; x++) {
+                    const cell = document.createElement('div');
+                    const isAnswer = posSet.has(y + ',' + x);
+                    cell.className = 'grid-cell bg-white ' + (isAnswer ? 'cell-highlight highlight-word' : '');
+                    cell.textContent = grid[y][x];
+                    fragment.appendChild(cell);
+                }
+            }
+            gridEl.appendChild(fragment);
+            area.appendChild(gridEl);
+
+            // Word list
+            const wordBox = document.createElement('div');
+            wordBox.className = 'mt-6 w-full max-w-2xl grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-center text-xs sm:text-sm font-semibold uppercase';
+            words.forEach(w => {
+                const span = document.createElement('span');
+                span.textContent = w;
+                span.className = 'bg-gray-100 py-1.5 px-2 rounded-lg border border-gray-200 print:border-none print:bg-transparent';
+                wordBox.appendChild(span);
+            });
+            area.appendChild(wordBox);
+        },
+
+        toggleGabarito(isGab) {
+            this.state.isGabaritoWS = isGab;
+            if (this.state.wsCurrentData) {
+                this.renderWordSearch(this.state.wsCurrentData.grid, this.state.wsCurrentData.words, this.state.wsCurrentData.positions);
+            }
+            if (isGab) {
+                Swal.fire({ title: 'Gabarito ativo', icon: 'success', toast: true, position: 'bottom-end', timer: 1500, showConfirmButton: false });
+            }
+        },
+
+        // ===== CROSSWORD =====
+        addCrosswordRow(word = '', clue = '') {
+            const list = document.getElementById('cw-word-list');
+            if (!list) return;
+            const id = Utils.generateId();
+            const row = document.createElement('div');
+            row.className = 'flex gap-2 items-center animate-fade-in';
+            row.id = 'cw-row-' + id;
+            row.innerHTML = '<input type="text" placeholder="Palavra" value="' + Utils.sanitizeHTML(word) + '" class="w-2/5 p-2.5 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white uppercase text-sm font-mono cw-word outline-none focus:ring-1 focus:ring-emerald-500 transition-all" autocomplete="off">' +
+                '<input type="text" placeholder="Pista / Pergunta" value="' + Utils.sanitizeHTML(clue) + '" class="flex-grow p-2.5 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm cw-clue outline-none focus:ring-1 focus:ring-emerald-500 transition-all" autocomplete="off">' +
+                '<button onclick="document.getElementById(\x27cw-row-' + id + '\x27).remove()" class="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors flex-shrink-0" title="Remover" aria-label="Remover palavra"><i class="fas fa-times"></i></button>';
+            list.appendChild(row);
+            list.scrollTop = list.scrollHeight;
+        },
+
+        async generateCrossword() {
+            const items = Array.from(document.querySelectorAll('.cw-word')).map((el, i) => {
+                const clueEl = document.querySelectorAll('.cw-clue')[i];
+                return { word: el.value.trim(), clue: clueEl ? clueEl.value.trim() : '' };
+            }).filter(i => i.word.length >= 2 && i.clue.length > 0);
+
+            if (items.length < 2) {
+                return Swal.fire({ title: 'M\u00ednimo 2 pares', text: 'Adicione pelo menos 2 palavras com pistas v\u00e1lidas.', icon: 'warning', confirmButtonColor: '#059669' });
+            }
+
+            Utils.showLoading();
+            await Utils.delay(200);
+
+            const engine = new CrosswordEngine(items);
+            const result = await engine.generate();
+
+            this.state.cwCurrentData = result;
+            this.renderCrossword(result.grid, result.clues);
+
+            Utils.hideLoading();
+
+            if (result.clues.length < items.length) {
+                Swal.fire({ title: 'Encaixe parcial', text: (items.length - result.clues.length) + ' palavra(s) sem interse\u00e7\u00e3o compat\u00edvel.', icon: 'warning', toast: true, position: 'top-end', timer: 4000, showConfirmButton: false });
+            }
+        },
+
+        renderCrossword(grid, clues) {
+            const area = document.getElementById('cw-render-area');
+            if (!area) return;
+            area.innerHTML = '';
+            area.className = 'flex-grow flex flex-col items-center justify-start p-4 sm:p-6 bg-white text-black min-h-[350px] sm:min-h-[450px] rounded-xl print-area overflow-auto ' + (this.state.isGabaritoCW ? 'print-gabarito' : 'print-aluno');
+
+            if (!grid || grid.length === 0) {
+                area.innerHTML = '<div class="text-center"><i class="fas fa-exclamation-circle text-3xl text-red-400 mb-3"></i><p class="text-red-500 font-bold">N\u00e3o foi poss\u00edvel cruzar as palavras. Tente palavras com letras em comum.</p></div>';
+                return;
+            }
+
+            // Print header
+            const printH = document.createElement('div');
+            printH.className = 'hidden print:block w-full mb-6 text-center border-b-2 border-black pb-4';
+            printH.innerHTML = '<h1 class="text-2xl font-black uppercase mb-3">Palavras Cruzadas</h1><div class="flex justify-between text-sm font-bold"><span>NOME: ________________________________________</span><span>DATA: ___/___/____</span></div>';
+            area.appendChild(printH);
+
+            // Grid
+            const cols = grid[0].length;
+            const gridEl = document.createElement('div');
+            gridEl.style.display = 'grid';
+            gridEl.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+            gridEl.className = 'gap-0';
+
+            const showLetters = this.state.isGabaritoCW;
+            const fragment = document.createDocumentFragment();
+
+            grid.forEach(row => {
+                row.forEach(cellObj => {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell ';
+                    if (cellObj === null) {
+                        cell.classList.add('cell-crossword-black');
+                    } else {
+                        cell.classList.add('cell-crossword');
+                        if (cellObj.number !== null) {
+                            const numEl = document.createElement('span');
+                            numEl.className = 'clue-number';
+                            numEl.textContent = cellObj.number;
+                            cell.appendChild(numEl);
+                        }
+                        const txt = document.createElement('span');
+                        txt.className = 'cell-letter';
+                        txt.textContent = cellObj.char;
+                        if (showLetters) {
+                            txt.style.color = '#111';
+                            txt.style.fontWeight = 'bold';
+                        } else {
+                            txt.style.color = 'transparent';
+                        }
+                        cell.appendChild(txt);
+                    }
+                    fragment.appendChild(cell);
+                });
+            });
+            gridEl.appendChild(fragment);
+            area.appendChild(gridEl);
+
+            // Clues
+            const cluesEl = document.createElement('div');
+            cluesEl.className = 'mt-6 w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6 text-sm border-t border-gray-200 pt-5';
+
+            const horizontals = clues.filter(c => c.dir === 'H').sort((a, b) => a.number - b.number);
+            const verticals = clues.filter(c => c.dir === 'V').sort((a, b) => a.number - b.number);
+
+            const makeList = (title, icon, list) => {
+                const block = document.createElement('div');
+                block.innerHTML = '<h4 class="font-bold text-base mb-3 flex items-center gap-2"><i class="fas ' + icon + ' text-blue-500"></i>' + title + '</h4>';
+                const ul = document.createElement('ul');
+                ul.className = 'space-y-2';
+                list.forEach(c => {
+                    const li = document.createElement('li');
+                    li.className = 'flex gap-2';
+                    li.innerHTML = '<span class="inline-flex items-center justify-center w-6 h-6 bg-blue-100 text-blue-700 rounded text-xs font-bold flex-shrink-0">' + c.number + '</span><span>' + Utils.sanitizeHTML(c.clue) + '</span>';
+                    ul.appendChild(li);
+                });
+                block.appendChild(ul);
+                return block;
+            };
+
+            cluesEl.appendChild(makeList('Horizontais', 'fa-arrows-alt-h', horizontals));
+            cluesEl.appendChild(makeList('Verticais', 'fa-arrows-alt-v', verticals));
+            area.appendChild(cluesEl);
+        },
+
+        toggleGabaritoCW(isGab) {
+            this.state.isGabaritoCW = isGab;
+            if (this.state.cwCurrentData) {
+                this.renderCrossword(this.state.cwCurrentData.grid, this.state.cwCurrentData.clues);
+            }
+        },
+
+        // ===== EXPORT & PRINT =====
+        printView() {
+            window.print();
+        },
+
+        async exportImage(containerId) {
+            const element = document.getElementById(containerId);
+            if (!element || element.querySelector('.no-print')) {
+                return Swal.fire({ title: 'Nada a exportar', text: 'Gere o puzzle primeiro.', icon: 'info', confirmButtonColor: '#2563eb' });
+            }
+
+            Utils.showLoading();
+            try {
+                const canvas = await html2canvas(element, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    logging: false,
+                    useCORS: true,
+                    ignoreElements: (el) => el.classList.contains('no-print')
+                });
+
+                const link = document.createElement('a');
+                link.download = 'WordCraft_' + (containerId.includes('ws') ? 'CacaPalavras' : 'Cruzadinha') + '_' + Date.now() + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+
+                Swal.fire({ title: 'Exportado com sucesso', icon: 'success', toast: true, position: 'top-end', timer: 2500, showConfirmButton: false });
+            } catch (err) {
+                console.error('Export error:', err);
+                Swal.fire({ title: 'Erro na exporta\u00e7\u00e3o', text: 'Tente usar a fun\u00e7\u00e3o imprimir (PDF).', icon: 'error', confirmButtonColor: '#2563eb' });
+            } finally {
+                Utils.hideLoading();
+            }
+        }
+    };
+
+    // Bootstrap
+    document.addEventListener('DOMContentLoaded', () => App.init());
+    </script>
+</body>
+</html>

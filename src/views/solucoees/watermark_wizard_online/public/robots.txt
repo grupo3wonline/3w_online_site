@@ -1,0 +1,11 @@
+# Robots.txt para Watermark Wizard
+# https://app.3wonline.com/watermark_wizard_online
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://app.3wonline.com/watermark_wizard_online/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

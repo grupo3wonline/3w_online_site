@@ -1,0 +1,31 @@
+{
+    "name": "Meu Bolso Mensal - Controle Financeiro",
+    "short_name": "Meu Bolso",
+    "description": "Controle financeiro pessoal gratuito e profissional",
+    "start_url": "/meu_bolso_mensal/",
+    "scope": "/meu_bolso_mensal/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#10b981",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/meu_bolso_mensal/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/meu_bolso_mensal/apple-touch-icon.svg",
+            "sizes": "180x180",
+            "type": "image/svg+xml"
+        }
+    ],
+    "categories": [
+        "finance",
+        "productivity",
+        "utilities"
+    ],
+    "lang": "pt-BR",
+    "dir": "ltr"
+}

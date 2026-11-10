@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Calculadora de Campanha de Tráfego Pago">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4f46e5"/>
+      <stop offset="0.55" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fde047"/>
+      <stop offset="0.5" stop-color="#fb923c"/>
+      <stop offset="1" stop-color="#f472b6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="120" cy="120" r="180" fill="#ffffff" opacity="0.05"/>
+  <circle cx="1080" cy="520" r="220" fill="#ffffff" opacity="0.05"/>
+
+  <!-- Ícone calculadora -->
+  <g transform="translate(96 190)">
+    <rect width="110" height="140" rx="20" fill="#ffffff"/>
+    <rect x="16" y="16" width="78" height="30" rx="6" fill="#312e81"/>
+    <g fill="#4f46e5">
+      <circle cx="30" cy="76" r="8"/>
+      <circle cx="55" cy="76" r="8"/>
+      <circle cx="80" cy="76" r="8"/>
+      <circle cx="30" cy="104" r="8"/>
+      <circle cx="55" cy="104" r="8"/>
+      <circle cx="80" cy="104" r="8"/>
+    </g>
+  </g>
+
+  <!-- Badge -->
+  <g transform="translate(250 150)">
+    <rect width="260" height="44" rx="22" fill="#ffffff" opacity="0.15"/>
+    <text x="130" y="29" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="700" fill="#ffffff" text-anchor="middle">100% GRATUITA</text>
+  </g>
+
+  <!-- Título -->
+  <text x="250" y="270" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="800" fill="#ffffff">Calculadora de</text>
+  <text x="250" y="345" font-family="Inter, Arial, sans-serif" font-size="66" font-weight="800" fill="url(#accent)">Campanha de Tráfego</text>
+
+  <!-- Subtítulo -->
+  <text x="250" y="410" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="500" fill="#ffffff" opacity="0.9">Calcule ROI, CPC, CTR e conversões e gere</text>
+  <text x="250" y="450" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="500" fill="#ffffff" opacity="0.9">orçamentos profissionais em PDF.</text>
+
+  <!-- Rodapé marca -->
+  <text x="96" y="580" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#ffffff">Grupo 3W Online</text>
+  <text x="1104" y="580" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="500" fill="#ffffff" opacity="0.8" text-anchor="end">www.3wonline.com.br</text>
+</svg>

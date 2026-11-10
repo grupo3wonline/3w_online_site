@@ -1,0 +1,44 @@
+# Robots.txt para Marca D'água Pro
+# https://marcadagua.3wonline.com.br
+
+# Permitir acesso a todos os crawlers
+User-agent: *
+Allow: /
+
+# Desabilitar crawl de diretórios desnecessários
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_vite/
+Disallow: /.git/
+
+# Sitemap
+Sitemap: https://marcadagua.3wonline.com.br/sitemap.xml
+
+# Crawl-delay para ser amigável com os servidores
+Crawl-delay: 1
+
+# Específico para bots mais importantes
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+# Bloquear bots maliciosos conhecidos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /

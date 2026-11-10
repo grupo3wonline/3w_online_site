@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 export const toolsRoutes: RouteRecordRaw[] = [
   {
     path: '/ferramentas',
-    component: () => import('@/views/ToolWrapper.vue'),
+    component: () => import('@/views/ferramentas/ToolWrapper.vue'),
     children: [
       { path: 'calculadora-freelancer', name: 'CalculadoraFreelancer', component: () => import('@/components/tools/CalculadoraFreelancer.vue'), meta: { title: 'Calculadora de Custos para Freelancers | 3W Online', description: 'Calcule o valor da sua hora de trabalho como freelancer' } },
       { path: 'calculadora-anuncios', name: 'CalculadoraAnuncios', component: () => import('@/components/tools/CalculadoraAnuncios.vue'), meta: { title: 'Calculadora de Custos de Anúncios | 3W Online', description: 'Calcule ROI e custos de campanhas' } },

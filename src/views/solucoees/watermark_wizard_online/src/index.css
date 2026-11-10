@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Watermark Wizard Design System - Elegant Cyan Water Theme */
+
+@layer base {
+  :root {
+    --background: 220 20% 98%;
+    --foreground: 220 15% 15%;
+
+    --card: 220 25% 99%;
+    --card-foreground: 220 15% 15%;
+
+    --popover: 220 25% 99%;
+    --popover-foreground: 220 15% 15%;
+
+    --primary: 192 91% 36%;
+    --primary-foreground: 220 25% 99%;
+    --primary-glow: 187 100% 42%;
+
+    --secondary: 195 15% 92%;
+    --secondary-foreground: 220 15% 25%;
+
+    --muted: 200 15% 95%;
+    --muted-foreground: 220 10% 50%;
+
+    --accent: 187 86% 53%;
+    --accent-foreground: 220 25% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 25% 99%;
+
+    --border: 200 20% 88%;
+    --input: 200 20% 94%;
+    --ring: 192 91% 36%;
+
+    --radius: 0.75rem;
+
+    /* Cyan-themed gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(192 91% 36%), hsl(187 86% 53%));
+    --gradient-hero: linear-gradient(135deg, hsl(192 91% 36%) 0%, hsl(187 86% 53%) 50%, hsl(187 100% 42%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(220 25% 99%) 0%, hsl(200 15% 96%) 100%);
+    
+    /* Elegant shadows */
+    --shadow-elegant: 0 10px 30px -5px hsl(192 91% 36% / 0.1);
+    --shadow-glow: 0 0 40px hsl(187 100% 42% / 0.2);
+    --shadow-card: 0 4px 20px -2px hsl(192 50% 50% / 0.08);
+
+    /* Smooth transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 25% 8%;
+    --foreground: 220 15% 90%;
+
+    --card: 220 20% 12%;
+    --card-foreground: 220 15% 90%;
+
+    --popover: 220 20% 12%;
+    --popover-foreground: 220 15% 90%;
+
+    --primary: 187 100% 42%;
+    --primary-foreground: 220 25% 8%;
+    --primary-glow: 187 100% 52%;
+
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 220 15% 85%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 220 10% 65%;
+
+    --accent: 187 86% 53%;
+    --accent-foreground: 220 25% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 220 25% 8%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 18%;
+    --ring: 187 100% 42%;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(187 100% 42%), hsl(187 86% 53%));
+    --gradient-hero: linear-gradient(135deg, hsl(187 100% 42%) 0%, hsl(187 86% 53%) 50%, hsl(192 91% 36%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(220 20% 12%) 0%, hsl(220 15% 15%) 100%);
+    
+    /* Dark mode shadows */
+    --shadow-elegant: 0 10px 30px -5px hsl(187 100% 42% / 0.15);
+    --shadow-glow: 0 0 40px hsl(187 100% 52% / 0.25);
+    --shadow-card: 0 4px 20px -2px hsl(220 50% 5% / 0.3);
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Custom scrollbar */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted-foreground) / 0.3);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-background/80 backdrop-blur-md border border-border/50;
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-cyan-500 to-cyan-600 bg-clip-text text-transparent;
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-1;
+  }
+
+  /* Glow effect */
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-all duration-300 hover:border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/5;
+  }
+
+  /* Button gradient */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700 text-white shadow-lg hover:shadow-cyan-500/25 transition-all duration-300;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Gradient backgrounds */
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+
+  /* Text shadow for hero text */
+  .text-shadow {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Selection color */
+  ::selection {
+    background-color: hsl(192 91% 36% / 0.2);
+    color: inherit;
+  }
+}
+
+/* SweetAlert2 Dark Mode Support */
+.swal-dark {
+  background-color: hsl(220 20% 12%) !important;
+  color: hsl(220 15% 90%) !important;
+}
+
+.swal-dark .swal2-title,
+.swal-dark .swal2-html-container {
+  color: hsl(220 15% 90%) !important;
+}
+
+.swal-dark .swal2-input {
+  background-color: hsl(220 15% 18%) !important;
+  border-color: hsl(220 15% 20%) !important;
+  color: hsl(220 15% 90%) !important;
+}
+
+/* Font Awesome icon sizing consistency */
+.fas, .fab, .far, .fal, .fad {
+  font-style: normal;
+}
+
+/* Prose dark mode adjustments */
+.dark .prose {
+  --tw-prose-body: hsl(220 15% 80%);
+  --tw-prose-headings: hsl(220 15% 90%);
+  --tw-prose-links: hsl(187 100% 42%);
+  --tw-prose-bold: hsl(220 15% 90%);
+  --tw-prose-counters: hsl(220 10% 65%);
+  --tw-prose-bullets: hsl(220 10% 65%);
+  --tw-prose-hr: hsl(220 15% 20%);
+}

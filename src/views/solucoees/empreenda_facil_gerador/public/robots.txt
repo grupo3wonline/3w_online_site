@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://app.3wonline.com/empreenda_facil_gerador/sitemap.xml

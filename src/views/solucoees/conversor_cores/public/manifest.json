@@ -1,0 +1,35 @@
+{
+    "name": "Conversor de Cores",
+    "short_name": "Conversor Cores",
+    "description": "Conversor de cores online gratuito e profissional. Converta entre RGB, HEX, HSL, CMYK, LAB instantaneamente.",
+    "start_url": "/conversor_cores/",
+    "display": "standalone",
+    "background_color": "#0a0a0f",
+    "theme_color": "#3B82F6",
+    "orientation": "portrait-primary",
+    "scope": "/conversor_cores/",
+    "lang": "pt-BR",
+    "icons": [
+        {
+            "src": "/conversor_cores/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/conversor_cores/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/conversor_cores/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "categories": [
+        "utilities",
+        "design",
+        "productivity"
+    ]
+}

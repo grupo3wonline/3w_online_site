@@ -1,0 +1,60 @@
+# ============================================================
+#  Simuladores Empresariais Pro — configuração Apache (HostGator)
+#  Coloque o conteúdo de dist/ dentro de /simuladores_empresariais/
+# ============================================================
+
+Options -Indexes
+DirectoryIndex index.html
+
+# ---------- SPA: reescreve rotas para o index.html ----------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /simuladores_empresariais/
+
+  # Não reescreve arquivos e diretórios existentes
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Tudo o mais volta para o index.html (Vue Router - history mode)
+  RewriteRule . /simuladores_empresariais/index.html [L]
+</IfModule>
+
+# ---------- Cabeçalhos de segurança ----------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+
+  # Content-Security-Policy — libera Google (GA4/GTM/Fonts), Font Awesome (cdnjs) e Iconify API
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com https://*.ingest.sentry.io; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self' https://wa.me mailto:; object-src 'none'"
+
+  # Não cacheia o HTML (garante deploy sempre atualizado)
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ---------- Compressão ----------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml application/xml
+</IfModule>
+
+# ---------- Cache de assets estáticos (hash no nome) ----------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# ---------- Bloqueia acesso a arquivos sensíveis ----------
+<FilesMatch "(^\.|package\.json|package-lock\.json|tsconfig|\.map$)">
+  Require all denied
+</FilesMatch>

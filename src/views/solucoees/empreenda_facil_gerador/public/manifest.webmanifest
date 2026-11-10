@@ -1,0 +1,14 @@
+{
+  "name": "Empreenda Fácil — Geradores para Empreendedores",
+  "short_name": "Empreenda Fácil",
+  "description": "Geradores gratuitos de orçamentos, ordens de serviço e recibos profissionais.",
+  "start_url": "/empreenda_facil_gerador/",
+  "scope": "/empreenda_facil_gerador/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/empreenda_facil_gerador/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

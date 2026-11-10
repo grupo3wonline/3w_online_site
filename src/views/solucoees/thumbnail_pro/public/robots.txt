@@ -1,0 +1,34 @@
+# Robots.txt for ThumbnailPro
+# https://app.3wonline.com/thumbnailpro/
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /*.json$
+
+# Sitemaps
+Sitemap: https://app.3wonline.com/thumbnailpro/sitemap.xml
+
+# Principais bots de busca
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Crawl-delay para evitar sobrecarga
+Crawl-delay: 1
+
+Sitemap: https://thumbnailpro.com/sitemap.xml
+
+# Otimização para crawlers
+Crawl-delay: 1
+
+# Bloquear arquivos desnecessários
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /*.json
+Disallow: /*.md

@@ -1,0 +1,57 @@
+# =====================================================================
+# Empreenda Fácil — .htaccess para HostGator (hospedagem compartilhada)
+# Copiado para dist/ no build (fica em public/). Faça upload junto ao site.
+# App servido no subdiretório /empreenda_facil_gerador/
+# =====================================================================
+
+# --- Roteamento SPA (Vue Router history mode) ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /empreenda_facil_gerador/
+
+  # Não reescrever arquivos/pastas existentes (assets, imagens, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Todas as demais rotas vão para o index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# --- Cabeçalhos de segurança ---
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # Remove header que expõe a versão do servidor
+  Header unset X-Powered-By
+</IfModule>
+
+# --- Compressão GZIP ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# --- Cache de assets estáticos com hash (imutáveis) ---
+<IfModule mod_expires.c>
+  ExpiresActive On
+  <FilesMatch "\.(js|css|woff2|jpg|jpeg|png|gif|svg|webp)$">
+    ExpiresDefault "access plus 1 year"
+    Header append Cache-Control "public, immutable"
+  </FilesMatch>
+  # HTML nunca em cache longo (para pegar novas versões)
+  <FilesMatch "\.html$">
+    ExpiresDefault "access plus 0 seconds"
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# --- Bloqueia acesso a arquivos sensíveis ---
+<FilesMatch "(^\.|package\.json|package-lock\.json|\.map$)">
+  Require all denied
+</FilesMatch>
+
+# Página de erro personalizada (SPA cuida do 404 no client)
+ErrorDocument 404 /empreenda_facil_gerador/index.html

@@ -1,0 +1,45 @@
+{
+  "name": "SRT Converter Pro",
+  "short_name": "SRT Pro",
+  "description": "Conversor profissional de roteiros para legendas SRT",
+  "theme_color": "#7c3aed",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "lang": "pt-BR",
+  "categories": ["multimedia", "productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Conversor",
+      "short_name": "Converter",
+      "description": "Abrir conversor de roteiros",
+      "url": "/converter",
+      "icons": [
+        {
+          "src": "/favicon.svg",
+          "sizes": "32x32"
+        }
+      ]
+    }
+  ],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

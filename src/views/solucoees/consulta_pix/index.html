@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Pix Decode Pro | Decodificador e Analisador de QR Code Pix</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="Decodificador profissional de códigos Pix. Analise payloads, extraia chaves e verifique a integridade do QR Code. 100% Seguro, Gratuito e em conformidade com a LGPD.">
+    <meta name="keywords"
+        content="pix, decodificador pix, qr code pix, br code, payload pix, analisar pix, consulta pix, hotwyl, willfrombrasil">
+    <meta name="author" content="HOTWYL | WILLFROMBRASIL">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0d9488">
+    <meta name="color-scheme" content="light dark">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seusite.com.br/consulta_pix/">
+    <meta property="og:title" content="Pix Decode Pro | Analisador de Payload Pix">
+    <meta property="og:description"
+        content="Descubra o que há por trás de um código Pix. Extraia chaves, nomes e valores com total segurança.">
+    <meta property="og:image" content="https://seusite.com.br/consulta_pix/og-image.jpg">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pix Decode Pro | Analisador de Payload Pix">
+    <meta name="twitter:description" content="Decodificador profissional de códigos Pix. 100% Seguro e Gratuito.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://seusite.com.br/consulta_pix/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/pix.png">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/180/pix.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Custom Config -->
+    <script src="tailwind.js"></script>
+    <link rel="stylesheet" href="app.css">
+
+    <!-- Structured Data (SEO) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Pix Decode Pro",
+        "description": "Decodificador profissional de códigos Pix. Analise payloads, extraia chaves e verifique a integridade do QR Code.",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "BRL"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "HOTWYL | WILLFROMBRASIL"
+        }
+    }
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col bg-grid transition-colors duration-300">
+
+    <!-- Skip Navigation (Accessibility) -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-brand-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-xl focus:font-bold">
+        Pular para o conteúdo principal
+    </a>
+
+    <!-- LGPD Consent Banner -->
+    <div id="lgpd-banner"
+        class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-4 sm:p-6 z-[100] transform translate-y-full transition-transform duration-500 shadow-2xl"
+        aria-label="Aviso de Privacidade LGPD">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-start gap-4 text-sm text-slate-600">
+                <div class="bg-brand-100 p-2.5 rounded-full text-brand-600 shrink-0">
+                    <i class="fa-solid fa-shield-halved text-lg"></i>
+                </div>
+                <div>
+                    <p class="font-bold text-slate-800 mb-1">Conformidade LGPD - Lei Geral de Proteção de Dados</p>
+                    <p>
+                        Esta ferramenta processa dados exclusivamente em tempo real, sem armazenamento permanente.
+                        Nenhuma chave Pix, valor ou dado pessoal é salvo em nossos servidores.
+                        Ao continuar, você concorda com nossa
+                        <button type="button" onclick="showPrivacyPolicy()" class="text-brand-600 hover:underline font-semibold bg-transparent border-none p-0 cursor-pointer">Política de Privacidade</button>.
+                    </p>
+                </div>
+            </div>
+            <div class="flex gap-3 shrink-0">
+                <button onclick="rejectLGPD()"
+                    class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-5 py-2.5 rounded-full font-semibold transition-all text-sm">
+                    Recusar
+                </button>
+                <button onclick="acceptLGPD()"
+                    class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-lg hover:shadow-brand-500/20 text-sm">
+                    <i class="fa-solid fa-check mr-1"></i> Concordar e Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 glass-effect border-b border-slate-200/50 shadow-sm" role="navigation" aria-label="Navegação principal">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 sm:h-20 items-center">
+                <!-- Logo -->
+                <button type="button" class="flex items-center gap-2.5 sm:gap-3 group cursor-pointer bg-transparent border-none p-0" onclick="window.location.reload()" aria-label="Recarregar página">
+                    <div class="bg-brand-600 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl shadow-lg ring-4 ring-brand-500/10 group-hover:scale-110 transition-transform">
+                        <i class="fa-brands fa-pix text-white text-lg sm:text-2xl"></i>
+                    </div>
+                    <div class="flex flex-col text-left">
+                        <span class="font-bold text-xl sm:text-2xl tracking-tight text-slate-900 leading-none">Pix<span class="text-brand-600">Decode</span></span>
+                        <span class="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-[0.15em] sm:tracking-[0.2em]">Professional Edition</span>
+                    </div>
+                </button>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                    <a href="#como-usar" class="hover:text-brand-600 transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-play text-xs"></i> Como usar
+                    </a>
+                    <a href="#dicas" class="hover:text-brand-600 transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-check text-xs"></i> Segurança
+                    </a>
+                    <a href="#faq" class="hover:text-brand-600 transition-colors flex items-center gap-1.5">
+                        <i class="fa-solid fa-comments text-xs"></i> FAQ
+                    </a>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <!-- Dark Mode Toggle -->
+                    <button class="theme-toggle" onclick="toggleDarkMode()" aria-label="Alternar modo escuro" title="Alternar entre Dark/Light Mode">
+                        <span class="theme-toggle-knob">
+                            <i class="fa-solid fa-sun"></i>
+                        </span>
+                    </button>
+
+                    <!-- Help Button -->
+                    <button onclick="showHelp()"
+                        class="bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 sm:p-3 rounded-xl transition-all relative group"
+                        aria-label="Ajuda e guia de uso" title="Ajuda">
+                        <i class="fa-regular fa-circle-question text-base sm:text-lg"></i>
+                        <span class="absolute -top-1 -right-1 w-4 h-4 bg-brand-500 rounded-full flex items-center justify-center text-[8px] text-white font-bold animate-pulse">?</span>
+                    </button>
+
+                    <!-- Mobile Menu -->
+                    <button onclick="toggleMobileMenu()"
+                        class="lg:hidden bg-slate-100 hover:bg-slate-200 text-slate-600 p-2.5 rounded-xl transition-all"
+                        aria-label="Menu de navegação" id="mobileMenuBtn">
+                        <i class="fa-solid fa-bars text-base"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobileMenu" class="hidden lg:hidden border-t border-slate-100 bg-white/95 backdrop-blur-md">
+            <div class="px-4 py-4 space-y-2">
+                <a href="#como-usar" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 text-slate-700 font-semibold transition-colors">
+                    <i class="fa-solid fa-circle-play text-brand-500 w-5 text-center"></i> Como usar
+                </a>
+                <a href="#dicas" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 text-slate-700 font-semibold transition-colors">
+                    <i class="fa-solid fa-shield-check text-brand-500 w-5 text-center"></i> Dicas de Segurança
+                </a>
+                <a href="#faq" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 text-slate-700 font-semibold transition-colors">
+                    <i class="fa-solid fa-comments text-brand-500 w-5 text-center"></i> Perguntas Frequentes
+                </a>
+                <div class="border-t border-slate-100 pt-2 mt-2">
+                    <button onclick="showShortcuts(); closeMobileMenu();" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-50 text-slate-700 font-semibold transition-colors w-full text-left">
+                        <i class="fa-regular fa-keyboard text-brand-500 w-5 text-center"></i> Atalhos do Teclado
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-10 sm:pt-16 pb-8 sm:pb-12 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-4 py-1.5 rounded-full text-xs font-bold mb-6 border border-brand-100 animate-bounce">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-500"></span>
+                </span>
+                TECNOLOGIA EMVCo 2.0
+            </div>
+            <h1 class="text-3xl sm:text-4xl md:text-6xl font-extrabold text-slate-900 mb-4 sm:mb-6 leading-tight">
+                Analise e Valide qualquer <br class="hidden sm:block">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-emerald-500">Código Pix Instantaneamente</span>
+            </h1>
+            <p class="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed px-2">
+                A ferramenta mais completa e segura para desenvolvedores e usuários finais. Extraia metadados, valide
+                chaves e identifique recebedores em segundos.
+            </p>
+
+            <!-- Quick Info Badges -->
+            <div class="flex flex-wrap justify-center gap-3 mb-8">
+                <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 border border-slate-100 shadow-sm">
+                    <i class="fa-solid fa-lock text-emerald-500"></i> 100% Seguro
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 border border-slate-100 shadow-sm">
+                    <i class="fa-solid fa-bolt text-yellow-500"></i> Tempo Real
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 border border-slate-100 shadow-sm">
+                    <i class="fa-solid fa-shield-halved text-brand-500"></i> LGPD Compliant
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 border border-slate-100 shadow-sm">
+                    <i class="fa-solid fa-gift text-purple-500"></i> Gratuito
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow container mx-auto px-4 pb-20 max-w-6xl" role="main">
+
+        <!-- Input Section -->
+        <div class="relative max-w-4xl mx-auto mb-12 sm:mb-16">
+            <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 to-emerald-500 rounded-3xl blur opacity-20"></div>
+            <div class="relative bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-5 sm:p-8 overflow-hidden">
+                <!-- Watermark Background -->
+                <i class="fa-brands fa-pix absolute -bottom-10 -right-10 text-[150px] sm:text-[200px] text-slate-50 rotate-12 pointer-events-none select-none" aria-hidden="true"></i>
+
+                <div class="relative">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 sm:mb-6">
+                        <label for="pixInput" class="flex items-center gap-2 text-sm font-bold text-slate-700 uppercase tracking-widest">
+                            <i class="fa-solid fa-keyboard text-brand-500"></i> Code Payload
+                            <span class="tooltip-container">
+                                <span class="tooltip-trigger"><i class="fa-solid fa-question"></i></span>
+                                <span class="tooltip-content">Cole aqui o código "Pix Copia e Cola" do seu app bancário</span>
+                            </span>
+                        </label>
+                        <div class="flex items-center gap-3">
+                            <span class="hidden sm:flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100">
+                                <i class="fa-solid fa-lock"></i> SSL SECURE
+                            </span>
+                            <span class="hidden md:flex items-center gap-1.5 text-[10px] font-bold text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
+                                <kbd class="kbd-badge">Ctrl</kbd>+<kbd class="kbd-badge">Enter</kbd> Analisar
+                            </span>
+                        </div>
+                    </div>
+
+                    <textarea id="pixInput" rows="4" autocomplete="off" spellcheck="false"
+                        class="w-full px-4 sm:px-6 py-4 sm:py-5 rounded-xl sm:rounded-2xl border-2 border-slate-100 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all mono-font text-sm leading-relaxed resize-none bg-slate-50/50 focus:bg-white placeholder:text-slate-400"
+                        placeholder="Cole aqui seu código Pix Copia e Cola. Ex: 00020126580014BR.GOV.BCB.PIX0136..."
+                        aria-label="Campo para colar o código Pix Copia e Cola"
+                        aria-describedby="pixInputHelp"></textarea>
+
+                    <p id="pixInputHelp" class="mt-2 text-xs text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-brand-400"></i>
+                        <span><strong>Dica:</strong> Copie o código no seu app bancário em <em>Pix &gt; Copia e Cola</em> ou escaneie um QR Code e copie o texto.</span>
+                    </p>
+
+                    <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                        <button onclick="decodePix()" id="btnAnalyze"
+                            class="flex-[2] bg-slate-900 hover:bg-black text-white font-bold py-4 sm:py-5 px-6 sm:px-8 rounded-xl sm:rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 transition-all duration-300 flex justify-center items-center gap-3 group active:scale-[0.98]"
+                            aria-label="Analisar código Pix">
+                            <i class="fa-solid fa-microchip text-brand-400 group-hover:rotate-90 transition-transform duration-500"></i>
+                            <span>Analisar Código Pix</span>
+                        </button>
+                        <button onclick="pasteFromClipboard()"
+                            class="flex-1 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold py-4 sm:py-5 px-6 sm:px-8 rounded-xl sm:rounded-2xl border-2 border-brand-100 transition-all active:scale-[0.98] flex justify-center items-center gap-2"
+                            aria-label="Colar do clipboard">
+                            <i class="fa-solid fa-paste"></i> <span class="hidden sm:inline">Colar</span>
+                        </button>
+                        <button onclick="clearField()"
+                            class="flex-1 bg-white hover:bg-slate-50 text-slate-600 font-bold py-4 sm:py-5 px-6 sm:px-8 rounded-xl sm:rounded-2xl border-2 border-slate-100 transition-all active:scale-[0.98] flex justify-center items-center gap-2"
+                            aria-label="Limpar campo">
+                            <i class="fa-solid fa-eraser"></i> <span class="hidden sm:inline">Limpar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Example Payload Section -->
+        <div class="max-w-4xl mx-auto mb-12 sm:mb-16">
+            <details class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden group">
+                <summary class="flex items-center justify-between p-5 sm:p-6 cursor-pointer list-none font-bold text-slate-700 hover:bg-slate-50 transition-colors">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-flask text-brand-500"></i> Exemplo de Código Pix para Teste
+                    </span>
+                    <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform text-slate-400"></i>
+                </summary>
+                <div class="px-5 sm:px-6 pb-5 sm:pb-6 border-t border-slate-100">
+                    <p class="text-sm text-slate-500 mb-4 mt-4">
+                        Use o payload de exemplo abaixo para testar a ferramenta. Este é um QR Code estático de demonstração:
+                    </p>
+                    <div class="relative bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <code id="examplePayload" class="mono-font text-xs text-slate-600 break-all leading-relaxed block">00020126580014BR.GOV.BCB.PIX0136123e4567-e12b-12d1-a456-4266141740005204000053039865802BR5913FULANO DE TAL6008BRASILIA62070503***63041D3D</code>
+                        <button onclick="useExample()"
+                            class="mt-4 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-play"></i> Usar este exemplo
+                        </button>
+                    </div>
+                    <div class="mt-4 p-3 bg-amber-50 rounded-xl border border-amber-100">
+                        <p class="text-xs text-amber-700 flex items-start gap-2">
+                            <i class="fa-solid fa-triangle-exclamation mt-0.5 shrink-0"></i>
+                            <span><strong>Atenção:</strong> Este é apenas um exemplo ilustrativo. Nunca compartilhe códigos Pix reais publicamente, pois podem conter informações sensíveis como chave Pix e nome do recebedor.</span>
+                        </p>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="hidden py-20 text-center fade-in" aria-live="polite">
+            <div class="relative inline-block">
+                <div class="w-16 h-16 border-4 border-slate-100 border-t-brand-600 rounded-full animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <i class="fa-brands fa-pix text-brand-600 text-xl"></i>
+                </div>
+            </div>
+            <p class="mt-6 text-slate-600 font-semibold text-lg tracking-tight">Decodificando camadas do Payload...</p>
+            <p class="text-slate-400 text-sm mt-1">Extraindo tags e validando checksum CRC16</p>
+        </div>
+
+        <!-- Result Section (Hidden by default) -->
+        <div id="resultArea" class="hidden space-y-6 sm:space-y-8 fade-in scroll-mt-24" aria-live="polite">
+
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- Main Result Card -->
+                <div class="flex-[2] bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 p-6 sm:p-8 text-white relative">
+                        <i class="fa-solid fa-receipt absolute top-1/2 right-6 sm:right-10 -translate-y-1/2 text-white/5 text-6xl sm:text-8xl" aria-hidden="true"></i>
+                        <div class="relative z-10">
+                            <p class="text-brand-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check"></i> Informações de Pagamento
+                            </p>
+                            <h2 id="displayReceiver" class="text-xl sm:text-3xl font-extrabold mb-4 truncate text-white">Carregando...</h2>
+                            <div class="flex flex-wrap gap-3 sm:gap-4">
+                                <div class="bg-white/10 backdrop-blur-md px-3 sm:px-4 py-2 rounded-xl flex items-center gap-2 sm:gap-3">
+                                    <i class="fa-solid fa-money-bill-transfer text-brand-400"></i>
+                                    <div>
+                                        <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase">Valor Estimado</p>
+                                        <p id="displayAmount" class="font-bold text-sm sm:text-base">R$ 0,00</p>
+                                    </div>
+                                </div>
+                                <div id="crcStatusBadge" class="bg-white/10 backdrop-blur-md px-3 sm:px-4 py-2 rounded-xl flex items-center gap-2 sm:gap-3">
+                                    <i id="crcIcon" class="fa-solid fa-shield-check text-emerald-400"></i>
+                                    <div>
+                                        <p class="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase">Status Integridade</p>
+                                        <p id="crcLabel" class="font-bold text-sm sm:text-base">Verificado</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 sm:p-8">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+                            <h3 class="font-extrabold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-tags text-brand-600"></i> Metadados Extraídos
+                                <span class="tooltip-container">
+                                    <span class="tooltip-trigger"><i class="fa-solid fa-question"></i></span>
+                                    <span class="tooltip-content">Dados extraídos do payload EMVCo do código Pix</span>
+                                </span>
+                            </h3>
+                            <button onclick="copyResultsAsJSON()"
+                                class="text-xs font-bold text-brand-600 hover:text-brand-800 flex items-center gap-1.5 transition-colors bg-brand-50 px-3 py-1.5 rounded-lg">
+                                <i class="fa-regular fa-copy"></i> Copiar Dados Brutos
+                            </button>
+                        </div>
+                        <div id="detailsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Sidebar -->
+                <div class="flex-1 space-y-4 sm:space-y-6">
+                    <div class="bg-brand-600 rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-brand-500/20">
+                        <h4 class="font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-bolt"></i> Ação Rápida
+                        </h4>
+                        <p class="text-brand-100 text-sm mb-4 sm:mb-6 leading-relaxed">
+                            Copie a chave Pix limpa para realizar transferências manuais no seu app bancário.
+                        </p>
+                        <button id="copyKeyBtn" onclick="copyCleanKey()"
+                            class="w-full bg-white text-brand-700 font-bold py-3 sm:py-4 rounded-xl sm:rounded-2xl flex items-center justify-center gap-2 hover:bg-brand-50 transition-colors shadow-lg active:scale-[0.98]"
+                            aria-label="Copiar chave Pix">
+                            <i class="fa-regular fa-copy"></i> Copiar Chave Pix
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-slate-100 shadow-lg">
+                        <h4 class="font-bold text-slate-800 mb-3 sm:mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-info text-blue-500"></i> Nota Técnica
+                        </h4>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                            Payload versão <span id="pixVersion" class="font-bold text-slate-700">--</span> do protocolo EMVCo. Transação originada em <span id="pixCountry" class="font-bold text-slate-700">--</span>.
+                        </p>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                            <p id="pixTxId" class="text-[10px] mono-font text-slate-400 break-all">ID: --</p>
+                        </div>
+                    </div>
+
+                    <!-- New Analysis Button -->
+                    <button onclick="newAnalysis()"
+                        class="w-full bg-white hover:bg-slate-50 text-slate-700 font-bold py-4 rounded-2xl border-2 border-slate-100 transition-all flex items-center justify-center gap-2 active:scale-[0.98]">
+                        <i class="fa-solid fa-rotate-right text-brand-500"></i> Nova Análise
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- How to Use Section -->
+        <section id="como-usar" class="mt-20 sm:mt-32 scroll-mt-24">
+            <div class="text-center mb-10 sm:mb-16">
+                <span class="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-4 py-1 rounded-full text-xs font-bold mb-4 border border-brand-100">
+                    <i class="fa-solid fa-graduation-cap"></i> GUIA RÁPIDO
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4">Como utilizar o Pix Decode?</h2>
+                <p class="text-slate-500 max-w-xl mx-auto text-sm sm:text-base">Siga os 3 passos simples para decodificar qualquer código Pix em segundos.</p>
+                <div class="w-20 h-1 bg-brand-500 mx-auto rounded-full mt-4"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                <div class="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="w-12 sm:w-14 h-12 sm:h-14 bg-brand-50 text-brand-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold mb-4 sm:mb-6 group-hover:scale-110 transition-transform">1</div>
+                    <h3 class="font-bold text-lg sm:text-xl mb-3">Copie o Código</h3>
+                    <p class="text-slate-500 leading-relaxed text-sm sm:text-base">No seu aplicativo bancário, escolha a opção <strong>"Pix Copia e Cola"</strong> ou escaneie um QR Code e copie o texto gerado.</p>
+                    <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb text-yellow-500"></i>
+                            <span>Procure por "Pix Copia e Cola" no menu Pix do seu banco</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="w-12 sm:w-14 h-12 sm:h-14 bg-brand-50 text-brand-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold mb-4 sm:mb-6 group-hover:scale-110 transition-transform">2</div>
+                    <h3 class="font-bold text-lg sm:text-xl mb-3">Cole na Ferramenta</h3>
+                    <p class="text-slate-500 leading-relaxed text-sm sm:text-base">Insira o código alfanumérico no campo de análise acima. Você pode usar <strong>Ctrl+V</strong> ou o botão "Colar".</p>
+                    <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb text-yellow-500"></i>
+                            <span>O código começa com "0002..." e tem dezenas de caracteres</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow group">
+                    <div class="w-12 sm:w-14 h-12 sm:h-14 bg-brand-50 text-brand-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-bold mb-4 sm:mb-6 group-hover:scale-110 transition-transform">3</div>
+                    <h3 class="font-bold text-lg sm:text-xl mb-3">Veja os Detalhes</h3>
+                    <p class="text-slate-500 leading-relaxed text-sm sm:text-base">Confira o <strong>nome do beneficiário</strong>, o valor, a cidade, o ID da transação e verifique se o código é autêntico.</p>
+                    <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <p class="text-xs text-slate-400 flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb text-yellow-500"></i>
+                            <span>Compare o nome do recebedor antes de confirmar pagamentos</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Safety Section -->
+        <section id="dicas" class="mt-20 sm:mt-32 bg-slate-900 rounded-[24px] sm:rounded-[40px] p-8 sm:p-12 overflow-hidden relative scroll-mt-24">
+            <i class="fa-solid fa-shield-virus absolute -top-10 -right-10 text-[200px] sm:text-[300px] text-white/5 -rotate-12 pointer-events-none" aria-hidden="true"></i>
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+                <div>
+                    <span class="inline-flex items-center gap-2 bg-white/10 text-brand-400 px-3 py-1 rounded-full text-xs font-bold mb-4 border border-white/10">
+                        <i class="fa-solid fa-shield-check"></i> SEGURANÇA
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-6">Sua segurança financeira é <span class="text-brand-400">prioridade</span></h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-400 mt-1 shrink-0"></i>
+                            <p class="text-slate-300 text-sm sm:text-base"><strong class="text-white">Nunca compartilhe senhas:</strong> Nenhum código Pix solicita sua senha bancária. Desconfie se pedirem.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-400 mt-1 shrink-0"></i>
+                            <p class="text-slate-300 text-sm sm:text-base"><strong class="text-white">Confira o Recebedor:</strong> Use nossa ferramenta para confirmar se o nome condiz com quem deve receber o pagamento.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-400 mt-1 shrink-0"></i>
+                            <p class="text-slate-300 text-sm sm:text-base"><strong class="text-white">Cuidado com QR Codes:</strong> Hackers podem alterar o QR Code para desviar pagamentos. O Pix Decode detecta alterações no CRC.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-brand-400 mt-1 shrink-0"></i>
+                            <p class="text-slate-300 text-sm sm:text-base"><strong class="text-white">Verifique o valor:</strong> Sempre confira se o valor no código Pix corresponde ao valor esperado antes de confirmar.</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white/5 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10">
+                    <h5 class="text-brand-400 font-bold uppercase tracking-widest text-xs mb-4 sm:mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb"></i> Dica do Desenvolvedor
+                    </h5>
+                    <p class="text-slate-200 text-base sm:text-lg italic leading-relaxed">
+                        "O Pix é o sistema mais seguro do mundo, mas o elo mais fraco é sempre o humano. Antes de
+                        confirmar qualquer pagamento em seu App, verifique os dados aqui para ter certeza absoluta do
+                        destino do seu dinheiro."
+                    </p>
+                    <div class="mt-6 sm:mt-8 flex items-center gap-4">
+                        <div class="w-10 sm:w-12 h-10 sm:h-12 bg-brand-500 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">W</div>
+                        <div>
+                            <p class="text-white font-bold">Willfrombrasil</p>
+                            <p class="text-slate-400 text-xs uppercase font-semibold">Lead Developer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LGPD Compliance Info Section -->
+        <section id="lgpd-info" class="mt-20 sm:mt-32 scroll-mt-24">
+            <div class="bg-gradient-to-br from-brand-50 to-emerald-50 rounded-[24px] sm:rounded-[40px] p-8 sm:p-12 border border-brand-100 relative overflow-hidden">
+                <i class="fa-solid fa-scale-balanced absolute -bottom-8 -right-8 text-[150px] text-brand-100 rotate-12 pointer-events-none" aria-hidden="true"></i>
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-flex items-center gap-2 bg-white text-brand-700 px-3 py-1 rounded-full text-xs font-bold mb-4 border border-brand-100">
+                        <i class="fa-solid fa-scale-balanced"></i> CONFORMIDADE LEGAL
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4">Conformidade com a LGPD</h2>
+                    <p class="text-slate-600 mb-6 leading-relaxed text-sm sm:text-base">
+                        O Pix Decode Pro opera em total conformidade com a <strong>Lei Geral de Proteção de Dados (Lei nº 13.709/2018)</strong>. Entenda como tratamos seus dados:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-brand-100/50 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="fa-solid fa-database text-brand-600"></i>
+                                <h4 class="font-bold text-slate-800 text-sm">Zero Armazenamento</h4>
+                            </div>
+                            <p class="text-slate-500 text-xs leading-relaxed">Nenhum dado de transação, chave Pix ou informação pessoal é armazenado em nossos servidores.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-brand-100/50 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="fa-solid fa-clock-rotate-left text-brand-600"></i>
+                                <h4 class="font-bold text-slate-800 text-sm">Processamento Volátil</h4>
+                            </div>
+                            <p class="text-slate-500 text-xs leading-relaxed">Os dados são processados exclusivamente em memória (RAM) e descartados imediatamente após a análise.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-brand-100/50 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="fa-solid fa-user-shield text-brand-600"></i>
+                                <h4 class="font-bold text-slate-800 text-sm">Sem Rastreamento</h4>
+                            </div>
+                            <p class="text-slate-500 text-xs leading-relaxed">Não utilizamos cookies de rastreamento, analytics invasivos ou scripts de terceiros para monitoramento.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-brand-100/50 shadow-sm">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="fa-solid fa-lock text-brand-600"></i>
+                                <h4 class="font-bold text-slate-800 text-sm">Criptografia SSL/TLS</h4>
+                            </div>
+                            <p class="text-slate-500 text-xs leading-relaxed">Toda comunicação entre seu navegador e nosso servidor é protegida por criptografia de ponta a ponta.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" class="mt-20 sm:mt-32 max-w-3xl mx-auto scroll-mt-24">
+            <div class="text-center mb-10 sm:mb-16">
+                <span class="inline-flex items-center gap-2 bg-brand-50 text-brand-700 px-4 py-1 rounded-full text-xs font-bold mb-4 border border-brand-100">
+                    <i class="fa-solid fa-comments"></i> DÚVIDAS
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4">Perguntas Frequentes</h2>
+                <p class="text-slate-500 max-w-md mx-auto text-sm sm:text-base">Tire suas dúvidas sobre o funcionamento e segurança da ferramenta.</p>
+                <div class="w-16 h-1 bg-brand-500 mx-auto rounded-full mt-4"></div>
+            </div>
+            <div class="space-y-3 sm:space-y-4">
+                <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                    <details class="group p-5 sm:p-6">
+                        <summary class="flex justify-between items-center font-bold text-slate-800 cursor-pointer list-none text-sm sm:text-base">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-database text-brand-500 text-sm"></i> Minhas informações são salvas?</span>
+                            <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform text-slate-400"></i>
+                        </summary>
+                        <p class="mt-4 text-slate-500 leading-relaxed text-sm">Não. O processamento é feito inteiramente em memória e os dados são descartados assim que você fecha ou atualiza a página. Estamos 100% em conformidade com a LGPD (Lei nº 13.709/2018). Nenhum log, cookie ou rastro é gerado.</p>
+                    </details>
+                </div>
+                <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                    <details class="group p-5 sm:p-6">
+                        <summary class="flex justify-between items-center font-bold text-slate-800 cursor-pointer list-none text-sm sm:text-base">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-brand-500 text-sm"></i> O que é o erro de CRC?</span>
+                            <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform text-slate-400"></i>
+                        </summary>
+                        <p class="mt-4 text-slate-500 leading-relaxed text-sm">O CRC (Cyclic Redundancy Check) é um código de verificação de integridade que garante que o payload não foi alterado. Se um único caractere for modificado, o CRC se torna inválido, indicando possível corrupção ou adulteração maliciosa do código. É como uma "assinatura digital" do payload.</p>
+                    </details>
+                </div>
+                <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                    <details class="group p-5 sm:p-6">
+                        <summary class="flex justify-between items-center font-bold text-slate-800 cursor-pointer list-none text-sm sm:text-base">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-briefcase text-brand-500 text-sm"></i> Posso usar a ferramenta comercialmente?</span>
+                            <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform text-slate-400"></i>
+                        </summary>
+                        <p class="mt-4 text-slate-500 leading-relaxed text-sm">Sim, a ferramenta é disponibilizada gratuitamente para desenvolvedores e empresas integrarem e validarem seus fluxos de pagamento Pix. Ideal para e-commerces, fintechs e sistemas de cobrança.</p>
+                    </details>
+                </div>
+                <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                    <details class="group p-5 sm:p-6">
+                        <summary class="flex justify-between items-center font-bold text-slate-800 cursor-pointer list-none text-sm sm:text-base">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-key text-brand-500 text-sm"></i> Quais tipos de chave Pix são suportados?</span>
+                            <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform text-slate-400"></i>
+                        </summary>
+                        <p class="mt-4 text-slate-500 leading-relaxed text-sm">O Pix Decode Pro suporta todos os tipos de chave Pix definidos pelo Banco Central: CPF/CNPJ, e-mail, número de telefone e chave aleatória (EVP). Os QR Codes estáticos e dinâmicos também são compatíveis.</p>
+                    </details>
+                </div>
+                <div class="bg-white rounded-xl sm:rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                    <details class="group p-5 sm:p-6">
+                        <summary class="flex justify-between items-center font-bold text-slate-800 cursor-pointer list-none text-sm sm:text-base">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-globe text-brand-500 text-sm"></i> Funciona em dispositivos móveis?</span>
+                            <i class="fa-solid fa-chevron-down group-open:rotate-180 transition-transform text-slate-400"></i>
+                        </summary>
+                        <p class="mt-4 text-slate-500 leading-relaxed text-sm">Sim! O Pix Decode Pro foi desenvolvido com a abordagem Mobile First, garantindo uma experiência perfeita em smartphones, tablets e desktops. Basta copiar o código Pix no app do banco e colar diretamente na ferramenta pelo navegador.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 pt-12 sm:pt-20 pb-8 sm:pb-10" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-8 sm:gap-12 mb-10 sm:mb-16">
+                <div class="max-w-sm">
+                    <div class="flex items-center gap-3 mb-4 sm:mb-6">
+                        <div class="bg-brand-600 p-2 rounded-xl">
+                            <i class="fa-brands fa-pix text-white text-xl"></i>
+                        </div>
+                        <span class="font-bold text-2xl tracking-tight text-slate-900">Pix<span class="text-brand-600">Decode</span></span>
+                    </div>
+                    <p class="text-slate-500 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base">
+                        A solução definitiva para análise de códigos Pix. Desenvolvida com foco em segurança,
+                        performance e transparência de dados.
+                    </p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all" aria-label="GitHub" title="GitHub">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all" aria-label="LinkedIn" title="LinkedIn">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center hover:bg-brand-600 hover:text-white transition-all" aria-label="WhatsApp" title="WhatsApp">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8 sm:gap-12">
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 uppercase tracking-widest text-xs mb-4 sm:mb-6">Links Rápidos</h4>
+                        <ul class="space-y-3 sm:space-y-4 text-slate-500 text-sm font-medium">
+                            <li><a href="#como-usar" class="hover:text-brand-600 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[8px] text-brand-400"></i> Como usar</a></li>
+                            <li><a href="#dicas" class="hover:text-brand-600 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[8px] text-brand-400"></i> Segurança</a></li>
+                            <li><a href="#faq" class="hover:text-brand-600 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[8px] text-brand-400"></i> FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 uppercase tracking-widest text-xs mb-4 sm:mb-6">Legal</h4>
+                        <ul class="space-y-3 sm:space-y-4 text-slate-500 text-sm font-medium">
+                            <li><button type="button" onclick="showPrivacyPolicy()" class="hover:text-brand-600 transition-colors flex items-center gap-1.5 bg-transparent border-none p-0 cursor-pointer text-sm font-medium text-slate-500"><i class="fa-solid fa-chevron-right text-[8px] text-brand-400"></i> Privacidade</button></li>
+                            <li><button type="button" onclick="showTermsOfUse()" class="hover:text-brand-600 transition-colors flex items-center gap-1.5 bg-transparent border-none p-0 cursor-pointer text-sm font-medium text-slate-500"><i class="fa-solid fa-chevron-right text-[8px] text-brand-400"></i> Termos de Uso</button></li>
+                            <li><a href="#lgpd-info" class="hover:text-brand-600 transition-colors flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[8px] text-brand-400"></i> LGPD</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-100 pt-8 sm:pt-10 flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-6 text-center md:text-left">
+                <div class="flex items-center gap-3">
+                    <img src="https://ui-avatars.com/api/?name=HW&background=0d9488&color=fff&bold=true" alt="HOTWYL Developer Avatar"
+                        class="w-10 h-10 rounded-full border-2 border-slate-100 shadow-sm" loading="lazy">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">
+                            <span class="inline-flex items-center gap-1"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Status: Online</span>
+                        </p>
+                        <p class="text-sm font-bold text-slate-800">Sistema desenvolvido pelo desenvolvedor HOTWYL | WILLFROMBRASIL</p>
+                    </div>
+                </div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    &copy; 2024-2026 Todos os direitos reservados.
+                </div>
+                <div class="flex items-center gap-3 sm:gap-4 text-[10px] font-bold text-slate-400">
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-code text-brand-500"></i> PHP 8</span>
+                    <span class="flex items-center gap-1"><i class="fa-brands fa-js text-yellow-500"></i> ES6+</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-bolt text-blue-500"></i> Tailwind</span>
+                    <span class="flex items-center gap-1"><i class="fa-solid fa-shield-halved text-emerald-500"></i> LGPD</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Logic -->
+    <script src="app.js"></script>
+</body>
+
+</html>

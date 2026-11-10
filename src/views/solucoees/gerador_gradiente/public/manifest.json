@@ -1,0 +1,40 @@
+{
+    "name": "Gerador de Gradiente CSS - 3w Online",
+    "short_name": "Gerador Gradiente",
+    "description": "Crie gradientes CSS perfeitos gratuitamente com visualização em tempo real",
+    "start_url": "/gerador_gradiente/",
+    "scope": "/gerador_gradiente/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#6366f1",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/gerador_gradiente/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/gerador_gradiente/apple-touch-icon.svg",
+            "sizes": "180x180",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "categories": [
+        "design",
+        "tools",
+        "productivity"
+    ],
+    "lang": "pt-BR",
+    "dir": "ltr",
+    "screenshots": [
+        {
+            "src": "/gerador_gradiente/screenshot.jpg",
+            "sizes": "1280x720",
+            "type": "image/jpeg",
+            "label": "Gerador de Gradiente em ação"
+        }
+    ]
+}

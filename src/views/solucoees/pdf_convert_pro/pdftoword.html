@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Converta arquivos PDF para Word (DOCX) de forma rápida, segura e gratuita. Alta precisão com foco na privacidade dos seus dados.">
+  <meta name="keywords" content="pdf para word, converter pdf, pdf to docx, ferramentas pdf">
+  <title>PDF para Word | Conversor de Alta Precisão</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#e53e3e', // Red base for PDF vibe
+              600: '#c53030',
+              900: '#742a2a'
+            },
+            word: {
+              500: '#2b579a', // Word Blue
+              600: '#1e3f6f'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    /* Custom Animations */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Hide scrollbar for clean UI */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #1f2937;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 min-h-screen flex flex-col relative">
+
+<!-- Header -->
+<header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-40 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-file-pdf text-brand-500 text-3xl"></i>
+      <i class="fa-solid fa-arrow-right-arrow-left text-gray-400 text-sm mx-1"></i>
+      <i class="fa-solid fa-file-word text-word-500 text-3xl"></i>
+      <span class="ml-3 font-bold text-xl tracking-tight hidden sm:block">PDF<span class="text-brand-500">2</span>Word Pro</span>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <!-- Tooltip + Help Button -->
+      <div class="relative group">
+        <button onclick="showHelp()" class="p-2 text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-white transition-colors" aria-label="Ajuda">
+          <i class="fa-solid fa-circle-question text-xl"></i>
+        </button>
+        <div class="absolute right-0 top-full mt-2 w-64 p-3 bg-gray-800 text-white text-sm rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+          <p class="font-bold mb-1"><i class="fa-solid fa-lightbulb text-yellow-400 mr-1"></i> Dica do Dev Cria:</p>
+          Basta arrastar seu arquivo PDF para a área pontilhada para iniciar a conversão instantaneamente.
+        </div>
+      </div>
+
+      <!-- Dark Mode Toggle -->
+      <button id="themeToggle" class="p-2 bg-gray-100 dark:bg-gray-700 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors focus:outline-none" aria-label="Alternar Tema">
+        <i class="fa-solid fa-moon dark:hidden"></i>
+        <i class="fa-solid fa-sun hidden dark:block"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center pt-10 pb-20 px-4">
+
+  <!-- Hero Section -->
+  <div class="text-center max-w-3xl mb-10">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-word-500">
+      Converta PDF para Word com Precisão
+    </h1>
+    <p class="text-lg text-gray-600 dark:text-gray-400">
+      A ferramenta definitiva projetada para manter a formatação original do seu documento. 100% focado em privacidade e velocidade.
+    </p>
+  </div>
+
+  <!-- Upload Interface (The Core App) -->
+  <div class="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 md:p-12 relative overflow-hidden transition-colors duration-300">
+
+    <form id="uploadForm" autocomplete="off" class="w-full">
+      <!-- Dropzone -->
+      <div id="dropzone" class="border-4 border-dashed border-gray-300 dark:border-gray-600 hover:border-brand-500 dark:hover:border-brand-500 rounded-xl bg-gray-50 dark:bg-gray-900 transition-all duration-300 flex flex-col items-center justify-center p-12 md:p-20 cursor-pointer group">
+
+        <div class="mb-6 relative">
+          <i class="fa-regular fa-file-pdf text-7xl text-gray-400 group-hover:text-brand-500 transition-colors animate-float"></i>
+          <i class="fa-solid fa-cloud-arrow-up absolute -bottom-2 -right-2 text-3xl text-word-500 bg-white dark:bg-gray-900 rounded-full p-1"></i>
+        </div>
+
+        <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-2 text-center">
+          Arraste e solte o PDF aqui
+        </h2>
+        <p class="text-gray-500 dark:text-gray-400 text-center mb-6">
+          ou clique para selecionar o arquivo no seu dispositivo
+        </p>
+
+        <label for="fileInput" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform group-hover:scale-105 transition-all cursor-pointer inline-flex items-center gap-2">
+          <i class="fa-solid fa-folder-open"></i> Escolher Arquivo
+        </label>
+        <input type="file" id="fileInput" accept="application/pdf" class="hidden" autocomplete="off">
+      </div>
+
+      <!-- Processing UI (Hidden by default) -->
+      <div id="processingUI" class="hidden flex-col items-center justify-center p-12">
+        <i class="fa-solid fa-cog fa-spin text-5xl text-brand-500 mb-6"></i>
+        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-100 mb-2" id="processStatus">Processando Documento...</h3>
+
+        <!-- Progress Bar -->
+        <div class="w-full max-w-md bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4 overflow-hidden">
+          <div id="progressBar" class="bg-gradient-to-r from-brand-500 to-word-500 h-4 rounded-full w-0 transition-all duration-300 ease-out"></div>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400" id="processPercentage">0%</p>
+      </div>
+
+      <!-- Success UI (Hidden by default) -->
+      <div id="successUI" class="hidden flex-col items-center justify-center p-12 text-center">
+        <div class="w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-6">
+          <i class="fa-solid fa-check text-4xl text-green-500"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">Conversão Concluída!</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-8" id="successFileName">documento.docx</p>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button type="button" onclick="downloadWord()" class="bg-word-500 hover:bg-word-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg flex items-center gap-2 transition-colors">
+            <i class="fa-solid fa-download"></i> Baixar Word
+          </button>
+          <button type="button" onclick="resetApp()" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold py-3 px-8 rounded-lg transition-colors flex items-center gap-2">
+            <i class="fa-solid fa-rotate-right"></i> Converter Outro
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- SEO Content & Features -->
+  <section class="max-w-6xl w-full mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+      <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 rounded-lg flex items-center justify-center text-xl mb-4">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+      </div>
+      <h4 class="font-bold text-lg mb-2 dark:text-white">Alta Fidelidade</h4>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">Nossa engine preserva layouts complexos, tabelas e tipografia. O que você vê no PDF, você edita no Word.</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+      <div class="w-12 h-12 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 rounded-lg flex items-center justify-center text-xl mb-4">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h4 class="font-bold text-lg mb-2 dark:text-white">Segurança Nível Bancário</h4>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">Arquivos são criptografados durante a transferência e destruídos automaticamente de nossos servidores após 1 hora. 100% de acordo com a LGPD.</p>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+      <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 rounded-lg flex items-center justify-center text-xl mb-4">
+        <i class="fa-solid fa-bolt"></i>
+      </div>
+      <h4 class="font-bold text-lg mb-2 dark:text-white">Processamento PHP 8</h4>
+      <p class="text-gray-600 dark:text-gray-400 text-sm">Arquitetura de backend de alto desempenho utilizando a última geração do PHP, garantindo conversões ultra-rápidas.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-400 py-8 text-center text-sm border-t border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 flex flex-col items-center">
+    <p class="mb-2">&copy; 2026 PDF2Word Pro. Todos os direitos reservados.</p>
+    <p class="text-gray-500 text-xs max-w-2xl mb-4">
+      Em conformidade com a Lei Geral de Proteção de Dados (LGPD). Não compartilhamos suas informações com terceiros.
+    </p>
+    <!-- Required Footer Text -->
+    <div class="mt-4 pt-4 border-t border-gray-800 w-full flex justify-center">
+                <span class="bg-gray-800 px-4 py-2 rounded-full text-xs font-mono text-gray-300 flex items-center gap-2">
+                    <i class="fa-solid fa-code text-brand-500"></i>
+                    sistema desenvolvido pelo desenvolvedor HOTWYL | WILLFROMBRASIL
+                </span>
+    </div>
+  </div>
+</footer>
+
+<!-- LGPD Cookie Banner -->
+<div id="lgpdBanner" class="fixed bottom-0 left-0 w-full bg-gray-900/95 backdrop-blur-sm border-t border-gray-700 text-white p-4 z-50 transform translate-y-0 transition-transform duration-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+  <div class="flex items-start gap-3 max-w-4xl mx-auto">
+    <i class="fa-solid fa-cookie-bite text-brand-500 text-2xl mt-1"></i>
+    <div>
+      <p class="text-sm">
+        <strong>Privacidade e LGPD:</strong> Utilizamos cookies e tecnologias semelhantes para melhorar sua experiência.
+        Os arquivos PDF enviados são estritamente processados para conversão e apagados em seguida, garantindo sigilo total dos seus dados.
+      </p>
+    </div>
+  </div>
+  <div class="flex-shrink-0 mx-auto sm:mx-0">
+    <button onclick="acceptCookies()" class="bg-brand-500 hover:bg-brand-600 text-white font-bold py-2 px-6 rounded-lg transition-colors whitespace-nowrap">
+      Entendi e Aceito
+    </button>
+  </div>
+</div>
+
+<!-- Core Logic Scripts -->
+<script>
+  /**
+   * Dev Cria - Arquitetura Frontend
+   * Manipulação de DOM, Eventos, e Mockup de Conexão com API (PHP 8)
+   */
+
+          // --- Theme Management (Dark Mode) ---
+  const themeToggle = document.getElementById('themeToggle');
+  const htmlElement = document.documentElement;
+
+  // Single session state for theme (adhering strictly to constraints)
+  let isDarkMode = false;
+
+  themeToggle.addEventListener('click', () => {
+    isDarkMode = !isDarkMode;
+    if (isDarkMode) {
+      htmlElement.classList.add('dark');
+    } else {
+      htmlElement.classList.remove('dark');
+    }
+  });
+
+  // --- LGPD Banner Management ---
+  function acceptCookies() {
+    const banner = document.getElementById('lgpdBanner');
+    banner.style.transform = 'translateY(100%)';
+    setTimeout(() => banner.remove(), 500); // Remove from DOM after animation
+  }
+
+  // --- Help & Tooltips System ---
+  function showHelp() {
+    Swal.fire({
+      title: 'Como Funciona?',
+      html: `
+                    <div class="text-left text-sm mt-4">
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li><strong>Selecione o PDF:</strong> Arraste o arquivo ou clique para selecionar.</li>
+                            <li><strong>Upload Seguro:</strong> Seu arquivo é enviado via conexão criptografada (SSL).</li>
+                            <li><strong>Conversão (PHP 8):</strong> Nosso motor processa o documento preservando a estrutura original.</li>
+                            <li><strong>Download:</strong> Salve seu novo arquivo <code>.docx</code> e edite no Word!</li>
+                        </ol>
+                        <hr class="my-4 border-gray-200 dark:border-gray-700">
+                        <p class="text-xs text-gray-500"><i class="fa-solid fa-lock"></i> Conformidade LGPD: Seus dados estão seguros e são deletados automaticamente.</p>
+                    </div>
+                `,
+      icon: 'info',
+      confirmButtonColor: '#e53e3e',
+      confirmButtonText: 'Entendido, vamos lá!',
+      background: isDarkMode ? '#1f2937' : '#ffffff',
+      color: isDarkMode ? '#f3f4f6' : '#1f2937',
+    });
+  }
+
+  // --- Drag and Drop & File Processing Logic ---
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('fileInput');
+
+  const processingUI = document.getElementById('processingUI');
+  const successUI = document.getElementById('successUI');
+
+  const progressBar = document.getElementById('progressBar');
+  const processPercentage = document.getElementById('processPercentage');
+  const processStatus = document.getElementById('processStatus');
+
+  let currentFile = null;
+
+  // Prevent default drag behaviors
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, preventDefaults, false);
+    document.body.addEventListener(eventName, preventDefaults, false);
+  });
+
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  // Highlight dropzone
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropzone.addEventListener(eventName, highlight, false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, unhighlight, false);
+  });
+
+  function highlight(e) {
+    dropzone.classList.add('border-brand-500', 'bg-blue-50', 'dark:bg-gray-800');
+  }
+
+  function unhighlight(e) {
+    dropzone.classList.remove('border-brand-500', 'bg-blue-50', 'dark:bg-gray-800');
+  }
+
+  // Handle Drop
+  dropzone.addEventListener('drop', handleDrop, false);
+
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    handleFiles(files);
+  }
+
+  // Handle Click Input
+  fileInput.addEventListener('change', function(e) {
+    handleFiles(this.files);
+  });
+
+  function handleFiles(files) {
+    if (files.length === 0) return;
+
+    const file = files[0];
+
+    // Validation
+    if (file.type !== "application/pdf") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Formato Inválido',
+        text: 'Por favor, selecione apenas arquivos no formato PDF.',
+        confirmButtonColor: '#e53e3e',
+        background: isDarkMode ? '#1f2937' : '#ffffff',
+        color: isDarkMode ? '#f3f4f6' : '#1f2937',
+      });
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) { // 50MB limit
+      Swal.fire({
+        icon: 'warning',
+        title: 'Arquivo muito grande',
+        text: 'O tamanho máximo suportado é de 50MB.',
+        confirmButtonColor: '#e53e3e',
+        background: isDarkMode ? '#1f2937' : '#ffffff',
+        color: isDarkMode ? '#f3f4f6' : '#1f2937',
+      });
+      return;
+    }
+
+    currentFile = file;
+    startConversionProcess(file);
+  }
+
+  /**
+   * Core Engine Simulation
+   * In a real environment, this is where we build FormData and send via fetch() to PHP 8 backend.
+   */
+  function startConversionProcess(file) {
+    // UI Transition
+    dropzone.classList.add('hidden');
+    processingUI.classList.remove('hidden');
+    processingUI.classList.add('flex');
+
+    // Reset Progress
+    progressBar.style.width = '0%';
+    processPercentage.innerText = '0%';
+
+    /* * DEV CRIA ARCHITECTURE NOTE:
+     * Aqui é onde a mágica real aconteceria com a API PHP 8.
+     * Exemplo de implementação real:
+     * * const formData = new FormData();
+     * formData.append('pdf_document', file);
+     * * fetch('https://api.seusistema.com/v1/convert/pdf-to-docx', {
+     * method: 'POST',
+     * body: formData,
+     * // Headers para JWT e afins
+     * })
+     * .then(response => response.blob())
+     * .then(blob => { ... })
+     * * Abaixo, simulamos esse comportamento para a interface do usuário.
+     */
+
+    let progress = 0;
+    processStatus.innerText = "Fazendo upload seguro...";
+
+    const interval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress > 100) progress = 100;
+
+      progressBar.style.width = `${progress}%`;
+      processPercentage.innerText = `${Math.floor(progress)}%`;
+
+      // Update status text based on progress
+      if (progress > 30 && progress < 70) {
+        processStatus.innerText = "Motor PHP 8 convertendo documento...";
+      } else if (progress >= 70 && progress < 99) {
+        processStatus.innerText = "Aplicando formatação final...";
+      }
+
+      if (progress === 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          showSuccessScreen(file.name);
+        }, 500);
+      }
+    }, 400); // Animation speed
+  }
+
+  function showSuccessScreen(originalName) {
+    processingUI.classList.add('hidden');
+    processingUI.classList.remove('flex');
+
+    successUI.classList.remove('hidden');
+    successUI.classList.add('flex');
+
+    // Generate output name
+    const wordName = originalName.replace(/\.pdf$/i, '') + '.docx';
+    document.getElementById('successFileName').innerText = wordName;
+
+    // Microinteraction Feedback
+    Swal.fire({
+      icon: 'success',
+      title: 'Sucesso Absoluto!',
+      text: 'Seu documento foi convertido com alta fidelidade.',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      background: isDarkMode ? '#1f2937' : '#ffffff',
+      color: isDarkMode ? '#f3f4f6' : '#1f2937',
+    });
+  }
+
+  function downloadWord() {
+    // Simulated Download
+    // Na vida real, criaríamos uma URL objeto com o Blob retornado do PHP
+
+    const link = document.createElement('a');
+    link.href = '#'; // URL dummy
+    link.download = document.getElementById('successFileName').innerText;
+
+    Swal.fire({
+      title: 'Iniciando Download',
+      text: 'Seu arquivo Word está pronto. (Simulação de download via Frontend)',
+      icon: 'info',
+      confirmButtonColor: '#2b579a',
+      background: isDarkMode ? '#1f2937' : '#ffffff',
+      color: isDarkMode ? '#f3f4f6' : '#1f2937',
+    });
+  }
+
+  function resetApp() {
+    // Reset UI States
+    currentFile = null;
+    fileInput.value = '';
+
+    successUI.classList.add('hidden');
+    successUI.classList.remove('flex');
+
+    dropzone.classList.remove('hidden');
+    dropzone.classList.add('flex');
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.3wonline.com.br/analisador_texto/sitemap.xml

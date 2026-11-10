@@ -1,0 +1,71 @@
+# ==========================================================================
+# Calculadora de Orçamento de Marketing Digital - HostGator (Apache)
+# SPA fallback + segurança + performance
+# Este arquivo é copiado para dist/ no build e deve ficar no subdiretório
+# /calculadora_orcamento_marketing_digital/ no servidor.
+# ==========================================================================
+
+# ---- HTTPS obrigatório ----
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---- SPA fallback (Vue Router em history mode) ----
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /calculadora_orcamento_marketing_digital/
+  # Não reescreve arquivos/pastas existentes
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  # Todo o resto vai para o index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# ---- Headers de segurança ----
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+
+  # Content Security Policy (permite GA4, GTM, Google Fonts e imagens/dados inline)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://*.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.googletagmanager.com https://*.sentry.io; frame-src https://www.googletagmanager.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://wa.me mailto:; object-src 'none'"
+
+  # Remove header que expõe tecnologia
+  Header unset X-Powered-By
+</IfModule>
+
+# ---- Compressão ----
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ---- Cache de assets estáticos (hash no nome garante invalidação) ----
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 6 months"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/png "access plus 6 months"
+  ExpiresByType image/webp "access plus 6 months"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  # HTML nunca deve ser cacheado agressivamente (SPA)
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# ---- Bloqueia acesso a arquivos sensíveis ----
+<FilesMatch "(^\.|\.(env|json|lock|md|ts|map)$)">
+  Require all denied
+</FilesMatch>
+<Files "manifest.json">
+  Require all granted
+</Files>
+
+# ---- Páginas de erro apontam para a SPA ----
+ErrorDocument 404 /calculadora_orcamento_marketing_digital/index.html

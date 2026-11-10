@@ -1,0 +1,55 @@
+# ===== HostGator / Apache - SPA em subdiretório =====
+# App servido em https://SEU-DOMINIO/calculadora_produto_servico/
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /calculadora_produto_servico/
+
+  # Força HTTPS (ignora se já estiver em HTTPS)
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Se o arquivo ou diretório existir, serve normalmente (assets, favicon, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Fallback SPA: qualquer outra rota (contato, termos-de-uso, etc.)
+  # é entregue pelo index.html usando o caminho ABSOLUTO do subdiretório.
+  RewriteRule . /calculadora_produto_servico/index.html [L]
+</IfModule>
+
+# Fallback para 404 do Apache também cair no SPA (reforço)
+ErrorDocument 404 /calculadora_produto_servico/index.html
+
+# ===== Cabeçalhos de segurança =====
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+  # Content-Security-Policy permite GTM/GA4, Google Fonts e Iconify
+  Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://api.iconify.design https://api.simplesvg.com https://api.unisvg.com; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'"
+</IfModule>
+
+# ===== Compressão =====
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# ===== Cache de assets estáticos =====
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/png "access plus 6 months"
+  ExpiresByType font/woff2 "access plus 1 year"
+  # HTML não é cacheado agressivamente (para novas versões)
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Impede listagem de diretórios
+Options -Indexes

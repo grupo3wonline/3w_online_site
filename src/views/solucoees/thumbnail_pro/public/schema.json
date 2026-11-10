@@ -1,0 +1,30 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ThumbnailPro",
+  "description": "Extraia thumbnails de alta qualidade de qualquer vídeo do YouTube instantaneamente. Ferramenta gratuita, rápida e segura.",
+  "url": "https://thumbnailpro.com",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "ThumbnailPro"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "1250"
+  },
+  "features": [
+    "Extração ultra rápida em menos de 3 segundos",
+    "Múltiplas resoluções até 4K",
+    "100% gratuito e sem limites",
+    "Interface moderna e responsiva",
+    "Seguro e privado"
+  ]
+}

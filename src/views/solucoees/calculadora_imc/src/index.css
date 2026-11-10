@@ -1,0 +1,242 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Fontes de fallback com métricas ajustadas para reduzir layout shift (CLS)
+ * enquanto Inter/Poppins (Google Fonts) carregam de forma assíncrona.
+ */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Poppins Fallback';
+  src: local('Arial');
+  size-adjust: 112%;
+  ascent-override: 92%;
+  descent-override: 30%;
+  line-gap-override: 0%;
+}
+
+/* Design System — Calculadora de IMC (Grupo 3W Online) */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71% 4%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+
+    --primary: 270 95% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 330 90% 58%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 20% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 270 95% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 62% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 224 71% 4%;
+
+    --info: 214 90% 55%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 220 16% 90%;
+    --input: 220 16% 90%;
+    --ring: 270 95% 58%;
+
+    /* Tokens de marca */
+    --gradient-primary: linear-gradient(135deg, hsl(270 95% 58%), hsl(330 90% 58%));
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(268 90% 48%),
+      hsl(292 85% 54%),
+      hsl(330 90% 58%)
+    );
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(220 30% 98%));
+    --shadow-glow: 0 0 40px hsl(270 95% 58% / 0.25);
+    --shadow-card: 0 4px 24px -6px hsl(224 71% 4% / 0.1);
+    --shadow-elevated: 0 12px 40px -12px hsl(224 71% 4% / 0.18);
+
+    --radius: 0.85rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 224 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 224 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 270 95% 68%;
+    --primary-foreground: 224 71% 4%;
+
+    --secondary: 330 90% 66%;
+    --secondary-foreground: 224 71% 4%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 270 95% 68%;
+    --accent-foreground: 224 71% 4%;
+
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 152 55% 48%;
+    --success-foreground: 224 71% 4%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 224 71% 4%;
+
+    --info: 214 90% 62%;
+    --info-foreground: 224 71% 4%;
+
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 270 95% 68%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(270 95% 68%), hsl(330 90% 66%));
+    --gradient-hero: linear-gradient(
+      135deg,
+      hsl(268 85% 56%),
+      hsl(292 80% 60%),
+      hsl(330 90% 66%)
+    );
+    --gradient-card: linear-gradient(145deg, hsl(224 47% 9%), hsl(224 47% 12%));
+    --shadow-glow: 0 0 40px hsl(270 95% 68% / 0.3);
+    --shadow-card: 0 4px 24px -6px hsl(0 0% 0% / 0.5);
+    --shadow-elevated: 0 12px 40px -12px hsl(0 0% 0% / 0.6);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', 'Inter Fallback', system-ui, -apple-system, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Poppins', 'Poppins Fallback', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    @apply bg-primary/20 text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Fundo com malha sutil de brilho */
+  .bg-mesh {
+    background-image:
+      radial-gradient(40rem 40rem at 10% -10%, hsl(var(--primary) / 0.08), transparent 60%),
+      radial-gradient(35rem 35rem at 100% 0%, hsl(var(--secondary) / 0.08), transparent 55%);
+  }
+
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* SweetAlert2 — alinhar às fontes do projeto */
+.swal2-popup {
+  font-family: 'Inter', system-ui, sans-serif !important;
+  border-radius: var(--radius) !important;
+}
+
+.swal2-title {
+  font-family: 'Poppins', 'Inter', system-ui, sans-serif !important;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-muted-foreground/30;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Respeitar preferência por menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

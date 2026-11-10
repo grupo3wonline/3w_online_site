@@ -1,0 +1,45 @@
+{
+    "name": "EventCalc - Calculadora de Eventos",
+    "short_name": "EventCalc",
+    "description": "Calculadora profissional para custos de eventos corporativos",
+    "start_url": "/calculadora_evento/",
+    "scope": "/calculadora_evento/",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#3b82f6",
+    "orientation": "portrait-primary",
+    "lang": "pt-BR",
+    "icons": [
+        {
+            "src": "/calculadora_evento/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/calculadora_evento/apple-touch-icon.svg",
+            "sizes": "180x180",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "categories": [
+        "business",
+        "productivity",
+        "utilities"
+    ],
+    "shortcuts": [
+        {
+            "name": "Calculadora",
+            "short_name": "Calcular",
+            "description": "Abrir calculadora de eventos",
+            "url": "/calculadora_evento/#calculadora",
+            "icons": [
+                {
+                    "src": "/calculadora_evento/favicon.svg",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ]
+}

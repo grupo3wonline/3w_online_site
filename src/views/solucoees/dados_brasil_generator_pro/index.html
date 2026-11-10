@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- SEO Meta Tags -->
+    <title>Dados Brasil Generator Pro — Gerar e Validar Documentos Brasileiros</title>
+    <meta
+      name="description"
+      content="Gere e valide CPF, CNPJ, RG, CNH e mais de 40 documentos brasileiros. Dados sintéticos para testes de software, 100% gratuito, sem cadastro e direto no navegador."
+    />
+    <meta
+      name="keywords"
+      content="gerador de cpf, gerador de cnpj, validador de cpf, validador de cnpj, gerar rg, gerar cnh, dados de teste, dados fake brasil, gerador de documentos, qr code, uuid, senha segura"
+    />
+    <meta name="author" content="willfrombrasil | hotwyl" />
+    <meta name="copyright" content="© 2026 Grupo 3w Online" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="image" content="https://www.3wonline.com.br/dados_brasil_generator_pro/og-image.jpg" />
+    <meta name="generator" content="Vue 3 + Vite" />
+    <meta name="rating" content="general" />
+    <link rel="canonical" href="https://www.3wonline.com.br/dados_brasil_generator_pro/" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Dados Brasil Generator Pro — Gerar e Validar Documentos Brasileiros" />
+    <meta
+      property="og:description"
+      content="Mais de 40 ferramentas gratuitas para gerar e validar documentos brasileiros. Sem cadastro, direto no navegador."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.3wonline.com.br/dados_brasil_generator_pro/" />
+    <meta property="og:site_name" content="Dados Brasil Generator Pro" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:image" content="https://www.3wonline.com.br/dados_brasil_generator_pro/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dados Brasil Generator Pro" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dados Brasil Generator Pro" />
+    <meta
+      name="twitter:description"
+      content="Mais de 40 ferramentas gratuitas para gerar e validar documentos brasileiros."
+    />
+    <meta name="twitter:image" content="https://www.3wonline.com.br/dados_brasil_generator_pro/og-image.jpg" />
+    <meta name="twitter:image:alt" content="Dados Brasil Generator Pro" />
+
+    <!-- Favicon / PWA -->
+    <link rel="icon" type="image/svg+xml" href="/dados_brasil_generator_pro/favicon.svg" />
+    <link rel="alternate icon" href="/dados_brasil_generator_pro/favicon.ico" />
+    <link rel="manifest" href="/dados_brasil_generator_pro/manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/dados_brasil_generator_pro/apple-touch-icon.png" />
+
+    <!-- Preconnect / fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#7c3aed" />
+    <meta name="msapplication-TileColor" content="#7c3aed" />
+
+    <!-- iOS / mobile web app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Gerador Brasil" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="application-name" content="Dados Brasil Generator Pro" />
+
+    <!-- Evita "flash" de tema errado: aplica classe .dark antes do CSS -->
+    <script>
+      ;(function () {
+        try {
+          var t = localStorage.getItem('dbg-theme')
+          if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+          }
+        } catch (e) {}
+      })()
+    </script>
+
+    <!-- Google Consent Mode v2 — padrão negado (LGPD/GDPR opt-in) -->
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        wait_for_update: 500,
+      })
+      // Reaplica consentimento salvo previamente
+      try {
+        var c = JSON.parse(localStorage.getItem('dbg-consent') || 'null')
+        if (c) {
+          gtag('consent', 'update', {
+            analytics_storage: c.analytics ? 'granted' : 'denied',
+            ad_storage: c.marketing ? 'granted' : 'denied',
+            ad_user_data: c.marketing ? 'granted' : 'denied',
+            ad_personalization: c.marketing ? 'granted' : 'denied',
+          })
+        }
+      } catch (e) {}
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : ''
+        j.async = true
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, 'script', 'dataLayer', 'GTM-WVMJV7G6')
+    </script>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J06THXX0MW"></script>
+    <script>
+      gtag('js', new Date())
+      gtag('config', 'G-J06THXX0MW', { anonymize_ip: true })
+    </script>
+
+    <!-- Structured Data: WebApplication + Organization -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Dados Brasil Generator Pro",
+        "description": "Ferramentas gratuitas para gerar e validar documentos brasileiros (CPF, CNPJ, RG, CNH e mais) para testes de software.",
+        "url": "https://www.3wonline.com.br/dados_brasil_generator_pro/",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "browserRequirements": "Requer JavaScript. Compatível com navegadores modernos.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+        "author": {
+          "@type": "Organization",
+          "name": "Grupo 3w Online",
+          "url": "https://www.3wonline.com.br"
+        },
+        "inLanguage": "pt-BR",
+        "isAccessibleForFree": true,
+        "softwareVersion": "1.0.0"
+      }
+    </script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-WVMJV7G6"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+        title="gtm"
+      ></iframe>
+    </noscript>
+
+    <div id="app"></div>
+    <noscript>
+      <div style="padding: 2rem; text-align: center; font-family: sans-serif">
+        Este aplicativo requer JavaScript habilitado para funcionar. Por favor, ative o JavaScript no seu navegador.
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

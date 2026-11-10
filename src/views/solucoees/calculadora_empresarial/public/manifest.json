@@ -1,0 +1,19 @@
+{
+  "name": "Calculadora Empresarial",
+  "short_name": "Calc Empresarial",
+  "description": "Calculadoras profissionais gratuitas para empreendedores, freelancers e gestores.",
+  "start_url": "/calculadora_empresarial/",
+  "scope": "/calculadora_empresarial/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/calculadora_empresarial/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

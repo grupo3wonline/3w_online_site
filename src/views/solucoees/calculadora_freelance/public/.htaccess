@@ -1,0 +1,68 @@
+# ==========================================================================
+# Calculadora Freelancer — configuração Apache (HostGator / hospedagem compartilhada)
+# App servido no subdiretório /calculadora_freelance/
+# ==========================================================================
+
+Options -Indexes
+
+# --------------------------------------------------------------------------
+# SPA fallback: redireciona rotas do Vue Router para o index.html
+# --------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /calculadora_freelance/
+
+  # Não reescrever arquivos ou diretórios existentes
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Todo o resto vai para o index.html (client-side routing)
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# --------------------------------------------------------------------------
+# Cabeçalhos de segurança
+# --------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+
+  # Content Security Policy — permite Google (GTM/GA4), fontes e Font Awesome CDN
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://www.google-analytics.com https://*.ingest.sentry.io; frame-src https://www.googletagmanager.com; object-src 'none'; base-uri 'self'; form-action 'self'"
+
+  # Remove header que expõe tecnologia
+  Header unset X-Powered-By
+</IfModule>
+
+# --------------------------------------------------------------------------
+# Compressão GZIP
+# --------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# --------------------------------------------------------------------------
+# Cache de assets estáticos (hash no nome garante invalidação)
+# --------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# --------------------------------------------------------------------------
+# Bloqueia acesso a arquivos sensíveis
+# --------------------------------------------------------------------------
+<FilesMatch "(\.env|\.gitignore|package\.json|package-lock\.json|tsconfig.*\.json)$">
+  Require all denied
+</FilesMatch>

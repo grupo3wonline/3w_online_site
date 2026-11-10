@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://app.3wonline.com.br/ipsum_generator_plus/sitemap.xml
+
+# Disallow admin areas
+User-agent: *
+Disallow: /admin/
+Disallow: /private/

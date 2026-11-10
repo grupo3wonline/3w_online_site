@@ -1,0 +1,22 @@
+{
+  "name": "Calculadora Freelancer — 3W Online",
+  "short_name": "Freelance Calc",
+  "description": "Ferramenta profissional gratuita para freelancers calcularem valor/hora, orçamentos e prazos de projetos",
+  "start_url": "/calculadora_freelance/",
+  "scope": "/calculadora_freelance/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/calculadora_freelance/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "finance"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}

@@ -1,0 +1,31 @@
+{
+    "name": "Calculadora de Orçamento para Social Mídia",
+    "short_name": "Orçamento Social Mídia",
+    "description": "Crie orçamentos profissionais para social mídia em minutos. Ferramenta gratuita, rápida e segura.",
+    "start_url": "/orcamento_social_midia/",
+    "scope": "/orcamento_social_midia/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#7c3aed",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/orcamento_social_midia/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/orcamento_social_midia/apple-touch-icon.svg",
+            "sizes": "180x180",
+            "type": "image/svg+xml"
+        }
+    ],
+    "categories": [
+        "business",
+        "productivity",
+        "finance"
+    ],
+    "lang": "pt-BR",
+    "dir": "ltr"
+}

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Table Extractor Pro | Dev Cria</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config for Dark Mode & Custom Colors -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    
+    <!-- SheetJS (XLSX) -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+
+    <style>
+        /* Custom Tooltip Styling */
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            max-width: 250px;
+            background-color: #1f2937;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 50;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .tooltip .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1f2937 transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .dark .tooltip .tooltip-text {
+            background-color: #374151;
+        }
+        .dark .tooltip .tooltip-text::after {
+            border-color: #374151 transparent transparent transparent;
+        }
+        
+        /* Smooth transitions */
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 min-h-screen flex flex-col font-sans">
+
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-40 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="ph ph-file-pdf text-3xl text-brand-600 dark:text-brand-500"></i>
+                <h1 class="text-xl font-bold tracking-tight">Data<span class="text-brand-600 dark:text-brand-500">Extract</span> Pro</h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Help Button with Tooltip -->
+                <div class="tooltip relative flex items-center cursor-help">
+                    <i class="ph ph-question text-2xl text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"></i>
+                    <span class="tooltip-text">Dúvidas? O sistema processa os arquivos localmente. Nenhuma informação é enviada à nuvem.</span>
+                </div>
+                
+                <!-- Dark Mode Toggle -->
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" aria-label="Alternar Tema" autocomplete="off">
+                    <i class="ph ph-moon text-2xl dark:hidden"></i>
+                    <i class="ph ph-sun text-2xl hidden dark:block text-yellow-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col gap-8">
+        
+        <!-- Info & Tips Panel -->
+        <section class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl p-6 shadow-sm">
+            <div class="flex items-start gap-4">
+                <i class="ph-fill ph-info text-3xl text-blue-500 mt-1"></i>
+                <div>
+                    <h2 class="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-2">Engenharia de Alta Performance & Regex</h2>
+                    <p class="text-sm text-blue-700 dark:text-blue-200 mb-4">
+                        Motor atualizado para extração de relatórios estruturados (VI/VF/PF/PV).
+                        Desenvolvido para máxima <strong>lucratividade e velocidade</strong>. 
+                        Toda a decodificação ocorre no seu navegador. <strong>Conformidade instantânea com a LGPD</strong>.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800/80 dark:text-blue-200/80">
+                        <ul class="list-disc list-inside space-y-1">
+                            <li><strong>Passo 1:</strong> Selecione um ou múltiplos PDFs de relatório.</li>
+                            <li><strong>Passo 2:</strong> Clique em "Processar & Extrair".</li>
+                            <li><strong>Passo 3:</strong> Baixe o arquivo <code>.xlsx</code> consolidado (20 colunas).</li>
+                        </ul>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li class="tooltip relative inline-block cursor-help border-b border-dashed border-blue-400">
+                                <strong>Dica Técnica:</strong> Motor Regex
+                                <span class="tooltip-text">O algoritmo usa expressões regulares para identificar padrões complexos de clientes, datas de pagamento, serviços e comissões diretamente do texto bruto do PDF.</span>
+                            </li>
+                            <li>As abas do Excel serão nomeadas com os nomes dos PDFs.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upload Interface -->
+        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 p-6 sm:p-10 transition-colors">
+            
+            <form id="extractForm" autocomplete="off" class="space-y-6">
+                
+                <!-- Drag and Drop Zone -->
+                <div id="dropZone" class="relative border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 text-center hover:border-brand-500 dark:hover:border-brand-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all cursor-pointer group">
+                    <input type="file" id="pdfInput" accept="application/pdf,.pdf" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" autocomplete="off">
+                    <div class="flex flex-col items-center gap-3">
+                        <i class="ph ph-upload-simple text-5xl text-gray-400 group-hover:text-brand-500 transition-colors"></i>
+                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-200">Arraste seus PDFs ou clique para selecionar</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Suporta múltiplos arquivos simultâneos</p>
+                    </div>
+                </div>
+
+                <!-- File List Preview -->
+                <div id="fileListContainer" class="hidden">
+                    <h4 class="text-sm font-semibold mb-3 flex items-center gap-2">
+                        <i class="ph ph-files text-brand-500"></i> Arquivos na Fila:
+                    </h4>
+                    <ul id="fileList" class="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Items will be injected via JS -->
+                    </ul>
+                </div>
+
+                <!-- Action Button -->
+                <div class="flex flex-col sm:flex-row justify-end gap-4 mt-8">
+                    <button type="button" id="clearBtn" class="hidden px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition-colors" autocomplete="off">
+                        Limpar Fila
+                    </button>
+                    <button type="button" id="processBtn" disabled class="px-8 py-3 rounded-lg bg-brand-600 text-white font-semibold shadow-md hover:bg-brand-700 focus:ring-4 focus:ring-brand-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2" autocomplete="off">
+                        <i class="ph ph-magic-wand text-xl"></i>
+                        Processar e Extrair Tabelas
+                    </button>
+                </div>
+            </form>
+
+        </section>
+
+        <!-- Progress/Log area (Hidden by default) -->
+        <section id="logSection" class="hidden bg-gray-900 rounded-xl p-4 shadow-inner text-green-400 font-mono text-sm h-32 overflow-y-auto custom-scrollbar">
+            <div id="logContent" class="space-y-1">
+                <!-- Logs injected here -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center sm:text-left">
+                &copy; <span id="currentYear"></span> DataExtract Pro. Arquitetura 100% Client-Side. Todos os direitos reservados.
+            </p>
+            <div class="text-sm font-bold text-gray-700 dark:text-gray-300 tracking-wide text-center sm:text-right bg-gray-100 dark:bg-gray-700 py-2 px-4 rounded-lg">
+                Sistema desenvolvido pelo desenvolvedor HOTWYL | WILLFROMBRASIL
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        /* Custom Scrollbar for inner lists */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+    </style>
+
+    <script>
+        /**
+         * Arquitetura JavaScript Vanilla por Dev Cria.
+         * Foco: Alta performance, manipulação do DOM direta, Heurística Regex Avançada.
+         */
+
+        // 1. Setup & LGPD Compliance
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            initTheme();
+            checkLGPD();
+            
+            // Set PDF.js Worker Src
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        });
+
+        function checkLGPD() {
+            if (!localStorage.getItem('lgpd_consent')) {
+                Swal.fire({
+                    title: 'Política de Privacidade & LGPD',
+                    html: `
+                        <p class="text-sm text-gray-600 dark:text-gray-300 text-left mb-3">
+                            Este sistema opera sob um paradigma de <strong>Arquitetura Serverless Client-Side</strong>.
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 text-left">
+                            Isso significa que <strong>nenhum dado, arquivo ou informação lida sai do seu dispositivo</strong>. Todo o processamento ocorre na memória do seu navegador. Concorda em continuar?
+                        </p>
+                    `,
+                    icon: 'info',
+                    confirmButtonText: 'Concordo e Entendo',
+                    confirmButtonColor: '#2563eb',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    background: document.documentElement.classList.contains('dark') ? '#1f2937' : '#fff',
+                    color: document.documentElement.classList.contains('dark') ? '#f3f4f6' : '#111827'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.setItem('lgpd_consent', 'true');
+                    }
+                });
+            }
+        }
+
+        // 2. Dark Mode Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            const isDark = htmlElement.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // 3. File Handling Logic
+        const pdfInput = document.getElementById('pdfInput');
+        const dropZone = document.getElementById('dropZone');
+        const fileListContainer = document.getElementById('fileListContainer');
+        const fileList = document.getElementById('fileList');
+        const processBtn = document.getElementById('processBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const logSection = document.getElementById('logSection');
+        const logContent = document.getElementById('logContent');
+        
+        let selectedFiles = [];
+
+        // Drag and Drop Visuals
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('border-brand-500', 'bg-gray-50', 'dark:bg-gray-800'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('border-brand-500', 'bg-gray-50', 'dark:bg-gray-800'), false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            handleFiles(e.dataTransfer.files);
+        });
+
+        pdfInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            const newFiles = Array.from(files).filter(file =>
+                file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
+            );
+            
+            if (newFiles.length !== Array.from(files).length) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Atenção',
+                    text: 'Apenas arquivos PDF são permitidos.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+
+            selectedFiles = [...selectedFiles, ...newFiles];
+            updateUI();
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateUI();
+        }
+
+        clearBtn.addEventListener('click', () => {
+            selectedFiles = [];
+            pdfInput.value = ''; // Reset input
+            updateUI();
+            logSection.classList.add('hidden');
+            logContent.innerHTML = '';
+        });
+
+        function updateUI() {
+            fileList.innerHTML = '';
+            
+            if (selectedFiles.length > 0) {
+                fileListContainer.classList.remove('hidden');
+                clearBtn.classList.remove('hidden');
+                processBtn.disabled = false;
+                
+                selectedFiles.forEach((file, index) => {
+                    const li = document.createElement('li');
+                    li.className = 'flex justify-between items-center bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-sm';
+                    li.innerHTML = `
+                        <div class="flex items-center gap-2 truncate">
+                            <i class="ph ph-file-pdf text-red-500 text-lg"></i>
+                            <span class="truncate font-medium">${file.name}</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">(${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                        </div>
+                        <button type="button" onclick="removeFile(${index})" class="text-gray-400 hover:text-red-500 transition-colors">
+                            <i class="ph ph-trash text-lg"></i>
+                        </button>
+                    `;
+                    fileList.appendChild(li);
+                });
+            } else {
+                fileListContainer.classList.add('hidden');
+                clearBtn.classList.add('hidden');
+                processBtn.disabled = true;
+            }
+        }
+
+        function logMsg(msg) {
+            const time = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.innerHTML = `<span class="text-gray-500">[${time}]</span> ${msg}`;
+            logContent.appendChild(div);
+            logSection.scrollTop = logSection.scrollHeight;
+        }
+
+        // ============================================================================
+        // 4. CORE ENGINE DEV CRIA: REGEX EXTRACTOR (VI/VF/PF/PV)
+        // ============================================================================
+        
+        const EXCEL_HEADERS = ['P/F','COD CLI','CLIENTE','Tipo','UF','DT CADASTRO','DT VCTO PROD','DT PGTO PROD','VLR PGTO PROD','DT VCTO SERV','DT PGTO SERV','VLR PGTO SERV','VLR COM','S1','S2','G','D','SC','GR','EMPRESA'];
+        const EXCEL_KEYS = ['pf','cod','cliente','tipo','uf','cadastro','vctoProd','pgtoProd','vlrPgtoProd','vctoServ','pgtoServ','vlrPgtoServ','vlrCom','s1','s2','g','d','sc','gr','empresa'];
+
+        function norm(s){return String(s||'').replace(/\u00a0/g,' ').replace(/\s+/g,' ').trim()}
+        function toNum(s){return parseFloat(String(s||'0').replace(/\./g,'').replace(',','.'))||0}
+        function br(n){return Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+        function money(s){return br(toNum(s))}
+        
+        function pushLine(items, lines, page) {
+            if (!items.length) return;
+            items.sort((a, b) => a.x - b.x);
+            let text = '', lastRight = null;
+            for (const it of items) {
+                const w = it.width || it.str.length * 4.5;
+                if (lastRight !== null && it.x - lastRight > 4) text += ' ';
+                text += it.str;
+                lastRight = it.x + w;
+            }
+            text = norm(text);
+            if (text) lines.push({ page, text });
+        }
+
+        async function extractLines(pdf) {
+            const lines = [];
+            const rawParts = [];
+            for (let p = 1; p <= pdf.numPages; p++) {
+                const page = await pdf.getPage(p);
+                const content = await page.getTextContent({ normalizeWhitespace: true, disableCombineTextItems: false });
+                
+                for (const it of content.items) { 
+                    const t = norm(it.str); 
+                    if (t) rawParts.push(t); 
+                }
+                
+                const items = content.items
+                    .map(it => ({ str: it.str, x: it.transform[4], y: Math.round(it.transform[5]), width: it.width || 0 }))
+                    .filter(it => norm(it.str));
+                
+                items.sort((a, b) => b.y - a.y || a.x - b.x);
+                
+                let group = [], y = null;
+                for (const it of items) {
+                    if (y === null || Math.abs(it.y - y) <= 3) { 
+                        group.push(it); 
+                        y = y === null ? it.y : Math.round((y + it.y) / 2); 
+                    } else { 
+                        pushLine(group, lines, p); 
+                        group = [it]; 
+                        y = it.y; 
+                    }
+                }
+                pushLine(group, lines, p);
+            }
+            return { lines: lines.map(l => l.text), raw: rawParts.join(' ') };
+        }
+
+        function cleanAll(txt) {
+            let all = ' ' + norm(txt) + ' ';
+            all = all.replace(/&eacute;|at&eacute;/gi, 'até');
+            all = all.replace(/\bV\s+I\b/g, 'VI').replace(/\bV\s+F\b/g, 'VF').replace(/\bP\s+F\b/g, 'PF').replace(/\bP\s+V\b/g, 'PV');
+            all = all.replace(/S1\.\s*\/\s*S2\.\s*\/\s*G\.\s*\/\s*D\.\s*\/\s*SC\s*\/\s*GR/gi, ' S1S2GDSCGR ');
+            all = all.replace(/23\/04\/2026,\s*14:15\s*\.\.:\s*Econet Financeiro\s*:\.\./g, ' ');
+            all = all.replace(/https?:\/\/\S+/g, ' ');
+            return norm(all);
+        }
+
+        function parseOneText(txt) {
+            const out = []; 
+            const all = cleanAll(txt);
+            const rowMark = /(?:VI|VF|PF|PV)\s*\d{3,6}\b/g;
+            const starts = []; 
+            let m; 
+            
+            while ((m = rowMark.exec(all)) !== null) starts.push(m.index);
+            
+            for (let n = 0; n < starts.length; n++) {
+                const block = norm(all.slice(starts[n], starts[n + 1] || all.length));
+                const sm = block.match(/^(VI|VF|PF|PV)\s*(\d{3,6})\b/); 
+                if (!sm) continue;
+                
+                let rest = norm(block.slice(sm[0].length));
+                rest = rest.replace(/\b\d+\/\d+\s*$/, '').replace(/ECONET EDITORA.*$/i, '');
+                
+                const tm = rest.match(/\b(VEN|REN|CAN|SER|OUT)\s+([A-Z]{2})\s+(\d{2}\/\d{2}\/\d{4})\b/);
+                if (!tm) continue;
+                
+                const cliente = norm(rest.slice(0, tm.index)).replace(/^(?:S1S2GDSCGR|PAG|SUP|EMPRESA|UPGRADE|CLIENTE|Tipo|UF)\s+/i, '');
+                let after = norm(rest.slice(tm.index + tm[0].length));
+                
+                const dates = (after.match(/\d{2}\/\d{2}\/\d{4}/g) || []);
+                const monies = (after.match(/\d{1,3}(?:\.\d{3})*,\d{2}/g) || []);
+                if (monies.length < 2) continue;
+                
+                let vctoProd = '', pgtoProd = '', vctoServ = '', pgtoServ = '', vlrPgtoProd = '', vlrPgtoServ = '', vlrCom = '';
+                
+                if (monies.length >= 3) {
+                    vctoProd = dates[0] || ''; 
+                    pgtoProd = dates[1] || dates[0] || ''; 
+                    vlrPgtoProd = money(monies[0]); 
+                    vlrPgtoServ = money(monies[1]); 
+                    vlrCom = money(monies[2]);
+                } else {
+                    pgtoProd = dates[0] || ''; 
+                    pgtoServ = dates[1] || ''; 
+                    vlrPgtoProd = money(monies[0]); 
+                    vlrCom = money(monies[1]);
+                }
+                
+                let nums = [];
+                const pipeMatch = after.match(/(?:\d+\s*\|\s*){1,5}\d+/g);
+                if (pipeMatch) {
+                    let best = pipeMatch.sort((a, b) => (b.match(/\|/g) || []).length - (a.match(/\|/g) || []).length)[0];
+                    nums = (best.match(/\d+/g) || []).slice(0, 6);
+                }
+                if (nums.length < 6) {
+                    const lastMoney = monies[monies.length >= 3 ? 2 : 1];
+                    const idx = after.indexOf(lastMoney);
+                    const tail = idx >= 0 ? after.slice(idx + lastMoney.length) : after;
+                    nums = (tail.match(/\b\d+\b/g) || []).slice(0, 6);
+                }
+                while (nums.length < 6) nums.push('');
+                
+                let empresa = (/\bBoletim\b/i.test(after) || /\bBoletim\b/i.test(rest)) ? 'Boletim' : '';
+                
+                out.push({
+                    pf: sm[1], cod: sm[2], cliente, tipo: tm[1], uf: tm[2], cadastro: tm[3], 
+                    vctoProd, pgtoProd, vlrPgtoProd, vctoServ, pgtoServ, vlrPgtoServ, vlrCom, 
+                    s1: nums[0], s2: nums[1], g: nums[2], d: nums[3], sc: nums[4], gr: nums[5], empresa
+                });
+            }
+            return out;
+        }
+
+        function parseRows(extracted) {
+            const texts = [];
+            if (typeof extracted === 'string') texts.push(extracted);
+            else { 
+                texts.push(extracted.raw || ''); 
+                texts.push((extracted.lines || []).join(' ')); 
+            }
+            
+            for (const t of texts) {
+                const r = parseOneText(t);
+                if (r.length) return r;
+            }
+            logMsg('<span class="text-yellow-400">Nenhum padrão estruturado (VI/VF/PF/PV) encontrado neste documento.</span>');
+            return [];
+        }
+
+        // ============================================================================
+        // Execução Principal
+        // ============================================================================
+        processBtn.addEventListener('click', async () => {
+            if (selectedFiles.length === 0) return;
+
+            logSection.classList.remove('hidden');
+            logContent.innerHTML = '';
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<i class="ph ph-spinner animate-spin text-xl"></i> Processando...';
+
+            try {
+                const workbook = XLSX.utils.book_new();
+                let filesProcessed = 0;
+                let totalRecords = 0;
+
+                for (let file of selectedFiles) {
+                    logMsg(`Iniciando leitura: <strong>${file.name}</strong>`);
+                    
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    
+                    logMsg(`Decodificando texto e agrupando linhas (${pdf.numPages} páginas)...`);
+                    const extracted = await extractLines(pdf);
+                    
+                    logMsg(`Aplicando heurística Regex avançada (Dev Cria Motor v5)...`);
+                    const rowsObj = parseRows(extracted);
+
+                    if (rowsObj.length > 0) {
+                        // Converte o Array de Objetos para Array de Arrays (formato exigido pelo SheetJS)
+                        const excelSheetData = [EXCEL_HEADERS, ...rowsObj.map(r => EXCEL_KEYS.map(k => r[k] ?? ''))];
+                        
+                        let sheetName = file.name.replace(/\.pdf$/i, '').substring(0, 31);
+                        if (workbook.SheetNames.includes(sheetName)) sheetName += `_${filesProcessed}`;
+                        
+                        const worksheet = XLSX.utils.aoa_to_sheet(excelSheetData);
+                        
+                        // Ajustar largura das colunas
+                        worksheet['!cols'] = EXCEL_HEADERS.map((_, i) => ({
+                            wch: Math.min(Math.max(...excelSheetData.map(r => String(r[i] || '').length), EXCEL_HEADERS[i].length) + 2, 50)
+                        }));
+
+                        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+                        
+                        logMsg(`<span class="text-green-300">Sucesso: ${rowsObj.length} registros extraídos do arquivo ${file.name}.</span>`);
+                        totalRecords += rowsObj.length;
+                        filesProcessed++;
+                    }
+                }
+
+                if (filesProcessed > 0) {
+                    logMsg(`Gerando arquivo Excel final com ${totalRecords} registros...`);
+                    XLSX.writeFile(workbook, "Tabelas_Extraidas_DevCria.xlsx");
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Extração Concluída!',
+                        html: `Processados <strong>${filesProcessed}</strong> arquivo(s).<br>Total de <strong>${totalRecords}</strong> registros convertidos para Excel.`,
+                        confirmButtonColor: '#2563eb'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Nenhum Dado Localizado',
+                        text: 'O motor Regex não identificou o padrão do relatório (linhas iniciando em VI/VF/PF/PV) nos PDFs fornecidos.',
+                        confirmButtonColor: '#2563eb'
+                    });
+                }
+
+            } catch (error) {
+                console.error(error);
+                logMsg(`<span class="text-red-500">Erro Crítico: ${error.message}</span>`);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Falha na Engenharia',
+                    text: 'Ocorreu um erro durante a extração. Verifique os logs.',
+                    confirmButtonColor: '#2563eb'
+                });
+            } finally {
+                processBtn.disabled = false;
+                processBtn.innerHTML = '<i class="ph ph-magic-wand text-xl"></i> Processar e Extrair Tabelas';
+                logMsg('Processamento concluído.');
+            }
+        });
+
+    </script>
+</body>
+</html>

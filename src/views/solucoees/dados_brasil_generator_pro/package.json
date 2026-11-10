@@ -1,0 +1,72 @@
+{
+  "name": "dados_brasil_generator_pro",
+  "private": true,
+  "version": "1.0.0",
+  "homepage": "/dados_brasil_generator_pro/",
+  "type": "module",
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "sitemap": "node scripts/generate-sitemap.mjs",
+    "prebuild": "node scripts/generate-sitemap.mjs",
+    "build": "vue-tsc -b && vite build",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.ts,.cjs,.mjs --fix",
+    "lint:check": "eslint . --ext .vue,.js,.ts,.cjs,.mjs",
+    "format": "prettier --write \"src/**/*.{vue,ts,js,css,json}\"",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@iconify/vue": "^4.3.0",
+    "@sentry/vue": "^8.47.0",
+    "@vueuse/core": "^11.3.0",
+    "@vueuse/motion": "^2.2.6",
+    "date-fns": "^3.6.0",
+    "fuse.js": "^7.0.0",
+    "maska": "^3.0.4",
+    "pinia": "^2.2.6",
+    "qrcode": "^1.5.4",
+    "sweetalert2": "^11.14.5",
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.4.12",
+    "vue-router": "^4.4.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.1",
+    "@types/qrcode": "^1.5.6",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/eslint-config-prettier": "^10.1.0",
+    "@vue/eslint-config-typescript": "^14.1.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.16.0",
+    "eslint-plugin-vue": "^9.32.0",
+    "husky": "^9.1.7",
+    "jsdom": "^25.0.1",
+    "lint-staged": "^15.2.11",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8",
+    "vue-tsc": "^2.1.10"
+  },
+  "lint-staged": {
+    "*.{vue,ts,js,cjs,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,json,md}": [
+      "prettier --write"
+    ]
+  }
+}

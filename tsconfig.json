@@ -23,5 +23,11 @@
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "env.d.ts", "vite.config.ts"],
-  "exclude": ["src/tests/**/*", "src/**/*.test.ts", "src/**/*.spec.ts", "node_modules"]
+  "exclude": [
+    "src/tests/**/*",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "node_modules",
+    "src/views/solucoees/**"
+  ]
 }

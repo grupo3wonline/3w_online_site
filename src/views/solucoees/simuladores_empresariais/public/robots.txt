@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://app.3wonline.com.br/simuladores_empresariais/sitemap.xml

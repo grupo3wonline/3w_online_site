@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://app.3wonline.com.br/dev_toolkit_suite_essentials/sitemap.xml

@@ -1,0 +1,12 @@
+# robots.txt - Calculadora de Pontos Elétricos
+# https://app.3wonline.com.br/calculadora_ponto_eletrico/
+
+User-agent: *
+Allow: /
+
+Sitemap: https://app.3wonline.com.br/calculadora_ponto_eletrico/sitemap.xml
+
+Disallow: /api/
+Disallow: /admin/
+
+Allow: /assets/

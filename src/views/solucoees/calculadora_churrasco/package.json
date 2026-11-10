@@ -1,0 +1,60 @@
+{
+  "name": "calculadora_churrasco",
+  "private": true,
+  "version": "2.1.0",
+  "type": "module",
+  "homepage": "/calculadora_churrasco/",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint . --ext .vue,.js,.ts,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write \"src/**/*.{vue,ts,js,css}\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@vee-validate/zod": "^4.15.1",
+    "@vueuse/core": "^11.0.3",
+    "@vueuse/motion": "^2.2.6",
+    "maska": "^3.0.4",
+    "pinia": "^2.2.2",
+    "sweetalert2": "^11.17.2",
+    "vee-validate": "^4.13.2",
+    "vue": "^3.4.38",
+    "vue-i18n": "^10.0.4",
+    "vue-router": "^4.4.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.47.2",
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@vitejs/plugin-vue": "^5.1.3",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.28.0",
+    "husky": "^9.1.6",
+    "jsdom": "^25.0.1",
+    "lint-staged": "^15.2.10",
+    "postcss": "^8.5.6",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "terser": "^5.37.0",
+    "typescript": "^5.8.3",
+    "vite": "^5.4.19",
+    "vitest": "^2.1.1",
+    "vue-tsc": "^2.1.2"
+  },
+  "lint-staged": {
+    "*.{vue,ts,js,cjs,mjs}": "eslint --fix",
+    "*.{vue,ts,js,css,json,md}": "prettier --write"
+  }
+}

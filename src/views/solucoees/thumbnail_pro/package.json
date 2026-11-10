@@ -1,0 +1,28 @@
+{
+  "name": "thumbnail_pro",
+  "version": "1.0.0",
+  "description": "Ferramenta moderna para extração de thumbnails do YouTube",
+  "homepage": "/thumbnail_pro/",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Tests not yet implemented\""
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
+    "@vueuse/core": "^10.7.2",
+    "lucide-vue-next": "^0.358.0",
+    "sweetalert2": "^11.26.17",
+    "vue": "^3.4.21",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "terser": "^5.43.1",
+    "vite": "^5.1.6"
+  }
+}

@@ -1,0 +1,335 @@
+/* =====================================================
+   ExtratorPro - Estilos Personalizados
+   Desenvolvido por HOTWYL | WILLFROMBRASIL
+   ===================================================== */
+
+/* ---- Base ---- */
+body {
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* ---- Scrollbar Personalizada ---- */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 100px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+.dark * {
+    scrollbar-color: #475569 transparent;
+}
+
+/* ---- Transições suaves para Dark Mode ---- */
+.transition-colors-all {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ---- Animações ---- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes pulse-soft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+}
+
+.animate-pulse-soft {
+    animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* ---- LGPD Banner ---- */
+#lgpdBanner.show {
+    transform: translateY(0);
+}
+
+/* ---- Selection ---- */
+::selection {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.dark ::selection {
+    background-color: #2563eb;
+    color: white;
+}
+
+/* ---- Focus Styles (Acessibilidade) ---- */
+*:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ---- Textarea ---- */
+textarea {
+    line-height: 1.6;
+    tab-size: 4;
+}
+
+textarea::placeholder {
+    line-height: 1.8;
+}
+
+/* ---- Tooltip Button ---- */
+.tooltip-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: help;
+}
+.tooltip-btn:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+    transform: scale(1.1);
+}
+
+/* ---- Cards Hover Effect ---- */
+article:hover,
+details:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+/* ---- FAQ Details/Summary ---- */
+details summary {
+    -webkit-tap-highlight-color: transparent;
+}
+
+details summary::-webkit-details-marker {
+    display: none;
+}
+
+details[open] summary {
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+    padding-bottom: 12px;
+}
+
+.dark details[open] summary {
+    border-bottom-color: rgba(55, 65, 81, 0.5);
+}
+
+details > div {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* ---- Stats Badge Animation ---- */
+#statsBadge {
+    transition: all 0.3s ease;
+}
+
+#statsBadge:not(.hidden) {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* ---- Domain Stats Tags ---- */
+.domain-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    transition: all 0.2s ease;
+    cursor: default;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.domain-tag:hover {
+    transform: scale(1.05);
+}
+
+/* ---- Button States ---- */
+button:not(:disabled):active {
+    transform: scale(0.97);
+}
+
+/* Extract button shimmer */
+#btnExtract {
+    position: relative;
+    overflow: hidden;
+}
+
+#btnExtract::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transition: 0.6s;
+}
+
+#btnExtract:hover::after {
+    left: 100%;
+}
+
+/* ---- Kbd Styles ---- */
+kbd {
+    font-family: 'Inter', ui-monospace, monospace;
+    user-select: none;
+}
+
+/* ---- Loading Spinner ---- */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---- Print Styles ---- */
+@media print {
+    header, footer, #lgpdBanner, .tooltip-btn, button {
+        display: none !important;
+    }
+    main {
+        padding: 0 !important;
+    }
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* ---- Reduced Motion (Acessibilidade) ---- */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ---- Mobile Specific Tweaks ---- */
+@media (max-width: 640px) {
+    textarea {
+        font-size: 14px !important;
+    }
+    
+    select, input[type="number"], input[type="text"] {
+        font-size: 16px !important; /* Prevents iOS zoom */
+    }
+    
+    .grid.grid-cols-2 > button {
+        font-size: 13px;
+    }
+}
+
+/* ---- SweetAlert2 Custom Overrides ---- */
+.swal2-popup {
+    border-radius: 16px !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+.swal2-title {
+    font-weight: 700 !important;
+}
+
+.swal2-html-container {
+    line-height: 1.7 !important;
+}
+
+.dark .swal2-popup {
+    background: #1e293b !important;
+    color: #f1f5f9 !important;
+}
+
+.dark .swal2-title {
+    color: #ffffff !important;
+}
+
+.dark .swal2-html-container {
+    color: #cbd5e1 !important;
+}
+
+/* ---- High Contrast Mode ---- */
+@media (forced-colors: active) {
+    .tooltip-btn,
+    button {
+        border: 1px solid ButtonText;
+    }
+}

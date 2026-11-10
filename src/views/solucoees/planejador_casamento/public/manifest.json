@@ -1,0 +1,29 @@
+{
+    "name": "Planejador de Casamento",
+    "short_name": "Planejador",
+    "description": "Ferramenta completa e gratuita para planejar casamentos",
+    "start_url": "/planejador_casamento/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#a855f7",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/planejador_casamento/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/planejador_casamento/apple-touch-icon.svg",
+            "sizes": "180x180",
+            "type": "image/svg+xml"
+        }
+    ],
+    "categories": [
+        "lifestyle",
+        "utilities"
+    ],
+    "lang": "pt-BR",
+    "dir": "ltr"
+}

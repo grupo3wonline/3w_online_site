@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#ffedd5"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f97316"/>
+      <stop offset="1" stop-color="#dc2626"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="12" fill="url(#brand)"/>
+
+  <!-- Ícone -->
+  <g transform="translate(90 210)">
+    <rect width="180" height="180" rx="40" fill="url(#brand)"/>
+    <path fill="#fff" d="M90 34c8 17-6 25-6 36 0 8 6 14 6 14s-11-3-16-14c-3 11 3 19 3 19-11-6-17-16-17-30 0-19 19-25 30-25z"/>
+    <g stroke="#fff" stroke-width="7" stroke-linecap="round">
+      <line x1="50" y1="128" x2="130" y2="128"/>
+      <line x1="50" y1="142" x2="130" y2="142"/>
+      <line x1="64" y1="122" x2="64" y2="148"/>
+      <line x1="90" y1="122" x2="90" y2="148"/>
+      <line x1="116" y1="122" x2="116" y2="148"/>
+    </g>
+  </g>
+
+  <!-- Texto -->
+  <text x="320" y="270" font-family="Inter, Arial, sans-serif" font-size="70" font-weight="800" fill="#1f2937">Calculadora de</text>
+  <text x="320" y="350" font-family="Inter, Arial, sans-serif" font-size="70" font-weight="800" fill="#ea580c">Churrasco</text>
+  <text x="322" y="415" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500" fill="#6b7280">Carnes, bebidas e acompanhamentos na medida certa</text>
+
+  <g transform="translate(322 460)">
+    <rect width="360" height="64" rx="32" fill="url(#brand)"/>
+    <text x="180" y="42" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="700" fill="#fff">100% Gratuito &#8226; Sem cadastro</text>
+  </g>
+
+  <text x="1110" y="600" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="26" fill="#9ca3af">Grupo 3W Online</text>
+</svg>

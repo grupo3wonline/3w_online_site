@@ -1,0 +1,50 @@
+{
+  "name": "Entity Converter Pro",
+  "short_name": "EntityConv",
+  "description": "Conversor profissional de caracteres especiais para HTML Entities. 100% gratuito, seguro e em conformidade com a LGPD.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "categories": ["developer tools", "utilities", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Entity Converter Pro - Ferramenta de conversão"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Converter Texto",
+      "short_name": "Converter",
+      "description": "Acessar a ferramenta de conversão",
+      "url": "/#ferramenta",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Tabela de Referência",
+      "short_name": "Tabela",
+      "description": "Ver tabela de caracteres",
+      "url": "/#tabela",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ]
+}

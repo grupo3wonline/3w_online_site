@@ -1,0 +1,25 @@
+{
+  "name": "Calculadora de IMC",
+  "short_name": "IMC",
+  "description": "Calculadora de IMC online e gratuita com metas de saúde, hidratação e nutrição.",
+  "start_url": "/calculadora_imc/",
+  "scope": "/calculadora_imc/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/calculadora_imc/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/calculadora_imc/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

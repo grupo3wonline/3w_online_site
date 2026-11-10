@@ -1,0 +1,85 @@
+# ============================================================
+# EventCalc — configuração Apache para HostGator (hospedagem compartilhada)
+# App servido sob o subdiretório /calculadora_evento/
+# ============================================================
+
+# ---- HTTPS forçado ----
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---- SPA fallback (Vue Router em modo history) ----
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /calculadora_evento/
+  # Não reescreve arquivos ou diretórios existentes
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  # Todo o resto cai no index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# ---- Cabeçalhos de segurança ----
+<IfModule mod_headers.c>
+  # Anti-clickjacking
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Anti-MIME-sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  # Política de referrer
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Restringe APIs sensíveis do navegador
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+  # HSTS (2 anos) — só terá efeito sob HTTPS
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+  # Content Security Policy
+  # Permite GTM/GA (analytics), Google Fonts e Font Awesome (cdnjs).
+  # 'unsafe-inline' em script-src é necessário para os snippets inline de GTM/GA e Consent Mode.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src https://www.googletagmanager.com; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+
+  # Remove header que expõe o servidor
+  Header unset X-Powered-By
+</IfModule>
+
+# ---- Compressão ----
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# ---- Cache de assets estáticos (hash no nome garante invalidação) ----
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+  # HTML não deve ser cacheado agressivamente (SPA shell)
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|woff2|svg|png|jpg|jpeg|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ---- Proteção de arquivos sensíveis ----
+<FilesMatch "(^\.|\.(env|json|lock|md|map)$)">
+  Require all denied
+</FilesMatch>
+# Exceção: o manifest precisa ser acessível
+<Files "manifest.json">
+  Require all granted
+</Files>
+
+# ---- Páginas de erro do servidor caem no SPA ----
+ErrorDocument 404 /calculadora_evento/index.html

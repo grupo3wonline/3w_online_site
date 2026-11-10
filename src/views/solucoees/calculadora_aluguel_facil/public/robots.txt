@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Bloqueia rota de erro do indexador
+Disallow: /calculadora_aluguel_facil/erro
+
+Sitemap: https://app.3wonline.com/calculadora_aluguel_facil/sitemap.xml

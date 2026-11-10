@@ -1,0 +1,26 @@
+{
+  "name": "Simuladores Empresariais Pro",
+  "short_name": "SimuladorPro",
+  "description": "Simuladores empresariais gratuitos: orçamento, marketing e saúde financeira. ROI, CAC, LTV, EBITDA e +40 indicadores.",
+  "start_url": "/simuladores_empresariais/",
+  "scope": "/simuladores_empresariais/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e40af",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "/simuladores_empresariais/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/simuladores_empresariais/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "name": "calculadora_freelance",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "/calculadora_freelance/",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.ts,.tsx,.js --fix",
+    "format": "prettier --write \"src/**/*.{vue,ts,js,css}\"",
+    "test": "vitest run --config vitest.config.ts",
+    "test:watch": "vitest --config vitest.config.ts",
+    "test:e2e": "playwright test",
+    "prepare": "husky || true"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@sentry/vue": "^8.42.0",
+    "@vueuse/core": "^11.3.0",
+    "@vueuse/motion": "^2.2.6",
+    "dompurify": "^3.2.3",
+    "maska": "^3.0.4",
+    "pinia": "^2.2.8",
+    "sweetalert2": "^11.14.5",
+    "vue": "^3.5.13",
+    "vue-i18n": "^10.0.5",
+    "vue-router": "^4.5.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@tsconfig/node22": "^22.0.0",
+    "@types/node": "^22.10.2",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitest/coverage-v8": "^2.1.8",
+    "@vue/eslint-config-prettier": "^10.1.0",
+    "@vue/eslint-config-typescript": "^14.1.4",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.7.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-plugin-vue": "^9.32.0",
+    "husky": "^9.1.7",
+    "jsdom": "^25.0.1",
+    "lint-staged": "^15.2.11",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "tailwindcss": "^3.4.17",
+    "@tailwindcss/typography": "^0.5.15",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5",
+    "vitest": "^2.1.8",
+    "vue-tsc": "^2.2.0"
+  },
+  "lint-staged": {
+    "*.{vue,ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}

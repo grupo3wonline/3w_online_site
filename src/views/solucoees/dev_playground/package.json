@@ -1,0 +1,63 @@
+{
+  "name": "dev_playground",
+  "private": true,
+  "version": "2.0.0",
+  "homepage": "/dev_playground/",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:php": "php -S localhost:8000 -t public",
+    "build": "vue-tsc -b && vite build",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
+    "lint": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{vue,ts,js,css,md}\"",
+    "type-check": "vue-tsc --noEmit",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "playwright test",
+    "prepare": "husky || true"
+  },
+  "dependencies": {
+    "@iconify/vue": "^4.3.0",
+    "@sentry/vue": "^8.47.0",
+    "@vueuse/core": "^12.5.0",
+    "@vueuse/motion": "^2.2.6",
+    "clsx": "^2.1.1",
+    "fuse.js": "^7.0.0",
+    "pinia": "^2.3.1",
+    "sweetalert2": "^11.15.10",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "vue": "^3.5.13",
+    "vue-i18n": "^11.1.1",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@tsconfig/node20": "^20.1.4",
+    "@types/node": "^22.13.1",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.3.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.7.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.20.1",
+    "eslint-plugin-vue": "^9.32.0",
+    "husky": "^9.1.7",
+    "jsdom": "^26.0.0",
+    "lint-staged": "^15.4.3",
+    "postcss": "^8.5.2",
+    "prettier": "^3.5.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.7.3",
+    "vite": "^6.1.0",
+    "vitest": "^3.0.5",
+    "vue-tsc": "^2.2.0"
+  },
+  "lint-staged": {
+    "*.{vue,js,ts,cjs,mjs}": "eslint --fix",
+    "*.{vue,ts,js,css,md,json}": "prettier --write"
+  }
+}

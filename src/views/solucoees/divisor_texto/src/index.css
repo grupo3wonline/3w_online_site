@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system - Divisor de Texto
+Modern color palette with professional blue-green theme
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 15% 98%;
+    --foreground: 220 13% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 15%;
+
+    --primary: 210 85% 45%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 210 85% 60%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 13% 15%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 165 85% 45%;
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 165 85% 60%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 43 96% 56%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 210 85% 45%;
+
+    /* Custom gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-glow)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)), hsl(var(--secondary)));
+
+    /* Shadows */
+    --shadow-soft: 0 2px 8px -2px hsl(var(--primary) / 0.1);
+    --shadow-medium: 0 8px 24px -4px hsl(var(--primary) / 0.15);
+    --shadow-strong: 0 16px 40px -8px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 0 32px hsl(var(--primary) / 0.3);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 220 13% 8%;
+    --foreground: 220 15% 98%;
+
+    --card: 220 13% 10%;
+    --card-foreground: 220 15% 98%;
+
+    --popover: 220 13% 10%;
+    --popover-foreground: 220 15% 98%;
+
+    --primary: 210 85% 60%;
+    --primary-foreground: 220 13% 8%;
+    --primary-glow: 210 85% 75%;
+
+    --secondary: 220 13% 15%;
+    --secondary-foreground: 220 15% 98%;
+
+    --muted: 220 13% 15%;
+    --muted-foreground: 220 9% 65%;
+
+    --accent: 165 85% 60%;
+    --accent-foreground: 220 13% 8%;
+    --accent-glow: 165 85% 75%;
+
+    --success: 142 76% 45%;
+    --success-foreground: 220 13% 8%;
+
+    --warning: 43 96% 65%;
+    --warning-foreground: 220 13% 8%;
+
+    --destructive: 0 84% 70%;
+    --destructive-foreground: 220 13% 8%;
+
+    --border: 220 13% 20%;
+    --input: 220 13% 20%;
+    --ring: 210 85% 60%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

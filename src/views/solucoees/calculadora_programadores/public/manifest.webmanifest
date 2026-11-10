@@ -1,0 +1,25 @@
+{
+  "name": "Calculadora de Projetos para Programadores",
+  "short_name": "Calc Programadores",
+  "description": "Calcule orçamentos de projetos de software com precisão. Desenvolvido pelo Grupo 3w Online.",
+  "start_url": "/calculadora_programadores/",
+  "scope": "/calculadora_programadores/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7c3aed",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "/calculadora_programadores/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/calculadora_programadores/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
