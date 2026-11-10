@@ -1,239 +1,197 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
-          <i class="fas fa-at text-blue-600 dark:text-blue-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Extrator de E-mails</h1>
-        <p class="text-gray-600 dark:text-gray-400">Extraia endereços de e-mail de qualquer texto</p>
+  <ToolShell
+    title="Extrator de E-mails"
+    description="Extraia todos os endereços de e-mail de qualquer bloco de texto — 100% offline e privado."
+    icon="fa-envelope-open-text"
+    icon-gradient="from-purple-500 to-violet-700"
+    orb-color="purple"
+    :quick-tips="['Regex RFC 5322', 'Deduplicação automática', '100% offline']"
+    :tips="[
+      { text: 'O texto processado permanece 100% no seu navegador. Nenhum dado é enviado a servidores.' },
+      { text: 'Useful para limpar listas de e-mail, extrair contatos de PDFs copiados ou logs.', type: 'info' },
+    ]"
+  >
+    <div class="tool-body">
+      <div>
+        <label class="input-aurora-label">
+          <i class="fas fa-paste mr-1.5 text-purple-500"></i>
+          Cole o texto com e-mails
+        </label>
+        <textarea
+          v-model="entrada"
+          rows="8"
+          class="input-aurora resize-y"
+          placeholder="Cole aqui qualquer texto contendo endereços de e-mail...&#10;&#10;Funciona com: texto de páginas web, PDFs copiados, planilhas, listas, HTML etc."
+        ></textarea>
+        <p class="input-aurora-hint">{{ entrada.length }} caracteres</p>
       </div>
 
-      <div class="space-y-6">
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
-          <label for="textoEntrada" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Cole o texto para extrair e-mails
-          </label>
-          <textarea
-            id="textoEntrada"
-            v-model="textoEntrada"
-            rows="10"
-            placeholder="Cole aqui o texto que contém e-mails... Exemplo: Entre em contato pelo email contato@exemplo.com ou suporte@empresa.com.br"
-            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none"
-            @input="extrairEmails"
-          ></textarea>
-          <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            <i class="fas fa-info-circle mr-1"></i>
-            {{ textoEntrada.length }} caracteres
-          </div>
-        </div>
-
-        <div class="flex gap-3">
-          <BaseButton @click="extrairEmails" variant="primary" class="flex-1">
-            <i class="fas fa-search mr-2"></i>Extrair E-mails
-          </BaseButton>
-          <BaseButton @click="limpar" variant="secondary" class="flex-1">
-            <i class="fas fa-eraser mr-2"></i>Limpar
-          </BaseButton>
-        </div>
-
-        <div v-if="emailsEncontrados.length > 0" class="space-y-4">
-          <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-6">
-            <div class="flex justify-between items-center mb-4">
-              <div>
-                <h3 class="text-lg font-bold text-gray-900 dark:text-white">
-                  E-mails Encontrados
-                </h3>
-                <p class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ emailsEncontrados.length }} e-mail(s) único(s)
-                </p>
-              </div>
-              <div class="flex gap-2">
-                <button @click="copiarLista" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm">
-                  <i class="fas fa-copy mr-2"></i>Copiar Lista
-                </button>
-                <button @click="exportarCSV" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm">
-                  <i class="fas fa-file-csv mr-2"></i>Exportar CSV
-                </button>
-              </div>
-            </div>
-
-            <div class="space-y-2 max-h-96 overflow-y-auto">
-              <div
-                v-for="(email, index) in emailsEncontrados"
-                :key="index"
-                class="flex items-center justify-between bg-white dark:bg-gray-700 p-3 rounded-lg group hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
-              >
-                <div class="flex items-center gap-3">
-                  <span class="text-sm font-mono text-gray-500 dark:text-gray-400">{{ index + 1 }}.</span>
-                  <a :href="`mailto:${email}`" class="text-blue-600 dark:text-blue-400 hover:underline font-mono">
-                    {{ email }}
-                  </a>
-                </div>
-                <button
-                  @click="copiarEmail(email)"
-                  class="opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded text-sm"
-                >
-                  <i class="fas fa-copy"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Estatísticas</h4>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="bg-white dark:bg-gray-600 rounded-lg p-3 text-center">
-                <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ emailsEncontrados.length }}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">E-mails Únicos</div>
-              </div>
-              <div class="bg-white dark:bg-gray-600 rounded-lg p-3 text-center">
-                <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ dominiosUnicos }}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">Domínios</div>
-              </div>
-              <div class="bg-white dark:bg-gray-600 rounded-lg p-3 text-center">
-                <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ emailsComBR }}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">.com.br</div>
-              </div>
-              <div class="bg-white dark:bg-gray-600 rounded-lg p-3 text-center">
-                <div class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ emailsGmail }}</div>
-                <div class="text-xs text-gray-600 dark:text-gray-400">Gmail</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div v-else-if="textoEntrada.length > 0" class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4">
-          <div class="flex">
-            <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-400 mt-1 mr-3"></i>
-            <div class="text-sm text-yellow-800 dark:text-yellow-300">
-              <p class="font-semibold">Nenhum e-mail encontrado</p>
-              <p>Verifique se o texto contém endereços de e-mail válidos.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-blue-600 dark:text-blue-400 mt-1 mr-3"></i>
-            <div class="text-sm text-blue-800 dark:text-blue-300">
-              <p class="font-semibold mb-2">Como usar:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li>Cole qualquer texto que contenha e-mails</li>
-                <li>Os e-mails serão extraídos automaticamente</li>
-                <li>Duplicados são removidos automaticamente</li>
-                <li>Clique em um e-mail para copiar individualmente</li>
-                <li>Use "Copiar Lista" para copiar todos de uma vez</li>
-                <li>Exporte para CSV para usar em planilhas</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      <div class="grid grid-cols-2 gap-3 mt-3">
+        <label class="checkbox-aurora">
+          <input v-model="deduplicar" type="checkbox" class="w-4 h-4 accent-purple-600" />
+          <span class="text-sm font-medium">Remover duplicatas</span>
+        </label>
+        <label class="checkbox-aurora">
+          <input v-model="minusculas" type="checkbox" class="w-4 h-4 accent-purple-600" />
+          <span class="text-sm font-medium">Converter p/ minúsculas</span>
+        </label>
       </div>
+
+      <BaseButton variant="primary" icon="fa-search" @click="extrair" class="w-full mt-4">
+        Extrair E-mails
+      </BaseButton>
     </div>
-  </div>
+
+    <!-- Resultado -->
+    <Transition name="fade-in-up">
+      <div v-if="executado" class="mt-4 space-y-4">
+        <div v-if="emails.length > 0">
+          <!-- Métricas -->
+          <div class="grid grid-cols-3 gap-2.5 mb-4">
+            <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+              <div class="metric-glass-value text-purple-600 dark:text-purple-400">{{ emails.length }}</div>
+              <div class="metric-glass-label">E-mails {{ deduplicar ? 'únicos' : 'encontrados' }}</div>
+            </div>
+            <div class="metric-glass">
+              <div class="metric-glass-value text-blue-600 dark:text-blue-400">{{ dominios.length }}</div>
+              <div class="metric-glass-label">Domínios únicos</div>
+            </div>
+            <div class="metric-glass">
+              <div class="metric-glass-value text-teal-600 dark:text-teal-400">{{ duplicatasRemovidas }}</div>
+              <div class="metric-glass-label">Duplicatas removidas</div>
+            </div>
+          </div>
+
+          <!-- Lista de e-mails -->
+          <div class="glass-panel p-4">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200">E-mails Extraídos</h4>
+              <div class="flex gap-2">
+                <button @click="copiarTodos" class="copy-btn">
+                  <i :class="['fas', copiado ? 'fa-check text-emerald-500' : 'fa-copy']"></i>
+                  {{ copiado ? 'Copiado!' : 'Copiar todos' }}
+                </button>
+                <button @click="baixarTxt" class="copy-btn">
+                  <i class="fas fa-download"></i>
+                  .txt
+                </button>
+              </div>
+            </div>
+
+            <!-- Filtro por domínio -->
+            <div class="flex flex-wrap gap-1.5 mb-3">
+              <button
+                :class="['px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all border',
+                  filtroDominio === '' ? 'bg-purple-600 text-white border-purple-600' : 'bg-white dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:border-purple-400']"
+                @click="filtroDominio = ''"
+              >
+                Todos ({{ emails.length }})
+              </button>
+              <button
+                v-for="d in dominios.slice(0, 10)"
+                :key="d.dominio"
+                :class="['px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all border',
+                  filtroDominio === d.dominio ? 'bg-purple-600 text-white border-purple-600' : 'bg-white dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:border-purple-400']"
+                @click="filtroDominio = d.dominio"
+              >
+                @{{ d.dominio }} ({{ d.count }})
+              </button>
+            </div>
+
+            <div class="max-h-64 overflow-y-auto space-y-1 divide-y divide-gray-100 dark:divide-slate-700">
+              <div
+                v-for="email in emailsFiltrados"
+                :key="email"
+                class="flex items-center justify-between py-1.5 px-2 hover:bg-primary-50/40 dark:hover:bg-primary-900/10 group transition-colors"
+              >
+                <code class="text-xs text-purple-700 dark:text-purple-300 font-mono">{{ email }}</code>
+                <button @click="copiarUm(email)" class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-purple-600 dark:hover:text-purple-400">
+                  <i class="fas fa-copy text-xs"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="glass-panel p-6 text-center">
+          <i class="fas fa-search text-3xl mb-3 opacity-30 block text-purple-400"></i>
+          <p class="text-sm text-gray-500 dark:text-slate-400">Nenhum e-mail válido encontrado no texto.</p>
+        </div>
+      </div>
+    </Transition>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
 import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 
-const { trackToolUsage } = useAnalytics()
+const entrada          = ref('')
+const deduplicar       = ref(true)
+const minusculas       = ref(true)
+const emails           = ref<string[]>([])
+const duplicatasRemovidas = ref(0)
+const executado        = ref(false)
+const copiado          = ref(false)
+const filtroDominio    = ref('')
 
-const textoEntrada = ref('')
-const emailsEncontrados = ref([])
+const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g
 
-const dominiosUnicos = computed(() => {
-  const dominios = new Set(emailsEncontrados.value.map(email => email.split('@')[1]))
-  return dominios.size
-})
-
-const emailsComBR = computed(() => {
-  return emailsEncontrados.value.filter(email => email.endsWith('.br')).length
-})
-
-const emailsGmail = computed(() => {
-  return emailsEncontrados.value.filter(email => email.includes('@gmail.com')).length
-})
-
-const extrairEmails = () => {
-  // Regex para validar e-mails
-  const regexEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g
-  const emails = textoEntrada.value.match(regexEmail) || []
-  
-  // Remove duplicados e converte para minúsculas
-  emailsEncontrados.value = [...new Set(emails.map(email => email.toLowerCase()))]
-  
-  if (emailsEncontrados.value.length > 0) {
-    trackToolUsage('Extrator Emails', 'extract', { count: emailsEncontrados.value.length })
-    
-    Swal.fire({
-      icon: 'success',
-      title: 'E-mails Extraídos!',
-      text: `${emailsEncontrados.value.length} e-mail(s) único(s) encontrado(s)`,
-      confirmButtonColor: '#3b82f6'
-    })
+const dominios = computed(() => {
+  const map: Record<string, number> = {}
+  for (const e of emails.value) {
+    const d = e.split('@')[1] ?? ''
+    map[d] = (map[d] ?? 0) + 1
   }
+  return Object.entries(map).map(([dominio, count]) => ({ dominio, count })).sort((a,b) => b.count - a.count)
+})
+
+const emailsFiltrados = computed(() => {
+  if (!filtroDominio.value) return emails.value
+  return emails.value.filter(e => e.endsWith('@' + filtroDominio.value))
+})
+
+function extrair() {
+  if (!entrada.value.trim()) return
+
+  let found = [...(entrada.value.match(EMAIL_REGEX) ?? [])]
+  if (minusculas.value) found = found.map(e => e.toLowerCase())
+
+  const original = found.length
+  if (deduplicar.value) found = [...new Set(found)]
+  duplicatasRemovidas.value = original - found.length
+
+  emails.value  = found
+  executado.value = true
 }
 
-const copiarEmail = (email) => {
-  navigator.clipboard.writeText(email)
-  Swal.fire({
-    icon: 'success',
-    title: 'Copiado!',
-    text: `E-mail ${email} copiado`,
-    timer: 1500,
-    showConfirmButton: false
-  })
+async function copiarUm(email: string) {
+  await navigator.clipboard.writeText(email)
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Copiado!', showConfirmButton: false, timer: 1200 })
 }
 
-const copiarLista = () => {
-  const lista = emailsEncontrados.value.join('\n')
-  navigator.clipboard.writeText(lista)
-  
-  trackToolUsage('Extrator Emails', 'copy')
-  
-  Swal.fire({
-    icon: 'success',
-    title: 'Lista Copiada!',
-    text: `${emailsEncontrados.value.length} e-mails copiados`,
-    timer: 2000,
-    showConfirmButton: false
-  })
+async function copiarTodos() {
+  await navigator.clipboard.writeText(emailsFiltrados.value.join('\n'))
+  copiado.value = true
+  setTimeout(() => (copiado.value = false), 2000)
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `${emailsFiltrados.value.length} e-mails copiados!`, showConfirmButton: false, timer: 1800 })
 }
 
-const exportarCSV = () => {
-  let csv = 'Email,Dominio\n'
-  
-  for (const email of emailsEncontrados.value) {
-    const dominio = email.split('@')[1]
-    csv += `${email},${dominio}\n`
-  }
-  
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = `emails_${Date.now()}.csv`
-  document.body.appendChild(link)
-  link.click()
-  link.remove()
+function baixarTxt() {
+  const blob = new Blob([emailsFiltrados.value.join('\n')], { type: 'text/plain' })
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement('a')
+  a.href = url; a.download = `emails-${Date.now()}.txt`; a.click()
   URL.revokeObjectURL(url)
-  
-  trackToolUsage('Extrator Emails', 'export')
-  
-  Swal.fire({
-    icon: 'success',
-    title: 'CSV Exportado!',
-    timer: 2000,
-    showConfirmButton: false
-  })
-}
-
-const limpar = () => {
-  textoEntrada.value = ''
-  emailsEncontrados.value = []
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Download iniciado!', showConfirmButton: false, timer: 1500 })
 }
 </script>
+
+<style scoped>
+.btn-aurora-purple { background: linear-gradient(135deg, #7c3aed, #5b21b6); @apply btn-aurora; }
+.fade-in-up-enter-active, .fade-in-up-leave-active { transition: all 0.25s ease; }
+.fade-in-up-enter-from { transform: translateY(8px); opacity: 0; }
+.fade-in-up-leave-to   { opacity: 0; }
+</style>

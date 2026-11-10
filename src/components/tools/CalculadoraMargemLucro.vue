@@ -1,188 +1,154 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
-          <i class="fas fa-chart-line text-green-600 dark:text-green-400 text-2xl"></i>
+  <ToolShell
+    title="Calculadora de Margem de Lucro"
+    description="Calcule margem bruta, margem líquida, markup e ponto de equilíbrio para precificação."
+    icon="fa-chart-bar"
+    icon-gradient="from-amber-500 to-orange-700"
+    orb-color="orange"
+    :quick-tips="['Margem bruta e líquida', 'Markup sobre custo', 'Análise de viabilidade']"
+    :tips="[
+      { title: 'Margem vs Markup', text: 'Margem é calculada sobre o preço de venda. Markup é calculado sobre o custo. Markup 100% = Margem 50%.', type: 'warning' },
+      { title: 'Margem saudável', text: 'Varejo: 20–40%. Serviços: 40–60%. SaaS: 60–80%. Abaixo de 15% é arriscado para a maioria dos negócios.', type: 'info' },
+      { title: 'Despesas operacionais', text: 'Inclua aluguel, salários, marketing e tributos para calcular a margem líquida real do negócio.', type: 'info' },
+    ]"
+    :examples="[
+      { title: 'Produto de varejo', desc: 'Custo: R$ 50, Venda: R$ 90, Despesas: R$ 15', result: 'Margem bruta: 44,4% | Margem líquida: 27,8% | Markup: 80%' },
+      { title: 'Serviço de TI', desc: 'Custo hora: R$ 80, Cobrança: R$ 200, Despesas: R$ 30', result: 'Margem bruta: 60% | Markup: 150%' },
+      { title: 'Restaurante', desc: 'Custo prato: R$ 12, Venda: R$ 35, Despesas: R$ 8', result: 'Margem bruta: 65,7% | Margem líquida: 42,9%' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="tool-body !mb-0 space-y-3">
+        <BaseInput v-model="custoTotal" label="Custo Total (R$)" type="number" step="0.01" icon="fa-tags" tooltip="Custo direto do produto ou serviço." />
+        <BaseInput v-model="precoVenda" label="Preço de Venda (R$)" type="number" step="0.01" icon="fa-dollar-sign" tooltip="Preço que você cobra do cliente." />
+        <BaseInput v-model="despesasOperacionais" label="Despesas Operacionais (R$)" type="number" step="0.01" icon="fa-building" hint="Opcional: aluguel, salários, marketing, tributos" tooltip="Despesas fixas e variáveis para calcular margem líquida." />
+
+        <div class="flex gap-3">
+          <BaseButton variant="primary" icon="fa-calculator" @click="calcular" class="flex-1">
+            Calcular Margens
+          </BaseButton>
+          <BaseButton variant="outline" icon="fa-eraser" @click="limpar" />
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de Margem de Lucro</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule margem bruta, líquida e markup</p>
       </div>
 
-      <div class="space-y-6">
-        <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-6 space-y-4">
-          <div class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="custoTotal" label="Custo Total (R$)" type="number" step="0.01" />
-            <BaseInput v-model="precoVenda" label="Preço de Venda (R$)" type="number" step="0.01" />
-          </div>
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="calculado" class="space-y-4">
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">Margem Bruta</p>
+              <p class="text-5xl font-black text-white mb-2">{{ resultado.margemBruta.toFixed(2) }}%</p>
+              <p class="text-amber-300 text-sm font-semibold">
+                Lucro bruto: {{ formatarMoeda(resultado.lucroBruto) }}
+              </p>
+            </div>
 
-          <div>
-            <BaseInput v-model="despesasOperacionais" label="Despesas Operacionais (R$)" type="number" step="0.01" />
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Opcional: aluguel, salários, etc.</p>
-          </div>
-        </div>
-
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>Calcular Margens
-        </BaseButton>
-
-        <div v-if="calculado" class="space-y-4">
-          <!-- Lucro e Markup -->
-          <div class="grid md:grid-cols-2 gap-4">
-            <div class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-6">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Lucro Bruto</span>
-                <i class="fas fa-dollar-sign text-blue-600 dark:text-blue-400"></i>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+                <span class="metric-glass-value text-blue-600 dark:text-blue-400">{{ formatarMoeda(resultado.lucroBruto) }}</span>
+                <span class="metric-glass-label">Lucro Bruto</span>
               </div>
-              <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">
-                {{ formatarMoeda(resultado.lucroBruto) }}
+              <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+                <span class="metric-glass-value text-purple-600 dark:text-purple-400">{{ resultado.markup.toFixed(2) }}%</span>
+                <span class="metric-glass-label">Markup</span>
+              </div>
+              <div v-if="Number(despesasOperacionais) > 0" class="metric-glass ring-1 ring-emerald-100 dark:ring-emerald-900">
+                <span class="metric-glass-value" :class="resultado.margemLiquida >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'">
+                  {{ resultado.margemLiquida.toFixed(2) }}%
+                </span>
+                <span class="metric-glass-label">Margem Líquida</span>
+              </div>
+              <div v-if="Number(despesasOperacionais) > 0" class="metric-glass ring-1 ring-teal-100 dark:ring-teal-900">
+                <span class="metric-glass-value" :class="resultado.lucroLiquido >= 0 ? 'text-teal-600 dark:text-teal-400' : 'text-red-600 dark:text-red-400'">
+                  {{ formatarMoeda(resultado.lucroLiquido) }}
+                </span>
+                <span class="metric-glass-label">Lucro Líquido</span>
               </div>
             </div>
 
-            <div class="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-6">
-              <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Markup</span>
-                <i class="fas fa-tag text-purple-600 dark:text-purple-400"></i>
-              </div>
-              <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                {{ resultado.markup.toFixed(2) }}%
-              </div>
-            </div>
-          </div>
-
-          <!-- Margens -->
-          <div class="bg-white dark:bg-gray-700 rounded-lg p-6">
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Margens de Lucro</h3>
-            
-            <div class="space-y-4">
-              <!-- Margem Bruta -->
-              <div>
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Margem Bruta</span>
-                  <span class="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {{ resultado.margemBruta.toFixed(2) }}%
-                  </span>
+            <!-- Barra de margem bruta -->
+            <div class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+                <i class="fas fa-chart-bar text-amber-500"></i>
+                Análise Visual
+              </h4>
+              <div class="space-y-3">
+                <div>
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-gray-600 dark:text-slate-300">Margem Bruta</span>
+                    <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ resultado.margemBruta.toFixed(2) }}%</span>
+                  </div>
+                  <div class="strength-track">
+                    <div
+                      class="strength-bar"
+                      :class="resultado.margemBruta >= 30 ? 'bg-emerald-500' : resultado.margemBruta >= 15 ? 'bg-amber-500' : 'bg-red-500'"
+                      :style="{ width: `${Math.min(resultado.margemBruta, 100)}%` }"
+                    ></div>
+                  </div>
                 </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
-                  <div 
-                    class="bg-green-600 h-3 rounded-full transition-all"
-                    :style="{ width: `${Math.min(resultado.margemBruta, 100)}%` }"
-                  ></div>
-                </div>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  (Preço - Custo) / Preço × 100
-                </p>
-              </div>
-
-              <!-- Margem Líquida -->
-              <div v-if="despesasOperacionais > 0">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Margem Líquida</span>
-                  <span class="text-2xl font-bold" :class="resultado.margemLiquida >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
-                    {{ resultado.margemLiquida.toFixed(2) }}%
-                  </span>
-                </div>
-                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
-                  <div 
-                    :class="resultado.margemLiquida >= 0 ? 'bg-green-600' : 'bg-red-600'"
-                    class="h-3 rounded-full transition-all"
-                    :style="{ width: `${Math.min(Math.abs(resultado.margemLiquida), 100)}%` }"
-                  ></div>
-                </div>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  (Lucro - Despesas) / Preço × 100
-                </p>
-                
-                <div class="mt-3 bg-blue-50 dark:bg-blue-900/20 rounded p-3">
-                  <div class="text-sm text-gray-700 dark:text-gray-300">
-                    Lucro Líquido: <span class="font-bold">{{ formatarMoeda(resultado.lucroLiquido) }}</span>
+                <div v-if="Number(despesasOperacionais) > 0">
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-gray-600 dark:text-slate-300">Margem Líquida</span>
+                    <span class="text-xs font-bold" :class="resultado.margemLiquida >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'">{{ resultado.margemLiquida.toFixed(2) }}%</span>
+                  </div>
+                  <div class="strength-track">
+                    <div
+                      class="strength-bar"
+                      :class="resultado.margemLiquida >= 0 ? 'bg-emerald-500' : 'bg-red-500'"
+                      :style="{ width: `${Math.min(Math.abs(resultado.margemLiquida), 100)}%` }"
+                    ></div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Análise -->
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
-              <i class="fas fa-chart-bar text-green-600 mr-2"></i>
-              Análise Detalhada
-            </h4>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-                <span class="text-gray-600 dark:text-gray-400">Custo Total:</span>
-                <span class="font-semibold text-gray-900 dark:text-white">{{ formatarMoeda(custoTotal) }}</span>
+            <div class="glass-panel p-4">
+              <div class="space-y-1.5 text-sm">
+                <div class="flex justify-between py-1.5 border-b border-gray-100 dark:border-slate-700">
+                  <span class="text-gray-600 dark:text-slate-300">Custo Total</span>
+                  <span class="font-bold text-gray-900 dark:text-white">{{ formatarMoeda(custoTotal) }}</span>
+                </div>
+                <div class="flex justify-between py-1.5 border-b border-gray-100 dark:border-slate-700">
+                  <span class="text-gray-600 dark:text-slate-300">Preço de Venda</span>
+                  <span class="font-bold text-gray-900 dark:text-white">{{ formatarMoeda(precoVenda) }}</span>
+                </div>
+                <div v-if="Number(despesasOperacionais) > 0" class="flex justify-between py-1.5 border-b border-gray-100 dark:border-slate-700">
+                  <span class="text-gray-600 dark:text-slate-300">Despesas Operacionais</span>
+                  <span class="font-bold text-gray-900 dark:text-white">{{ formatarMoeda(despesasOperacionais) }}</span>
+                </div>
+                <div class="flex justify-between py-1.5">
+                  <span class="text-gray-600 dark:text-slate-300">Lucro Bruto</span>
+                  <span class="font-bold text-emerald-600 dark:text-emerald-400">{{ formatarMoeda(resultado.lucroBruto) }}</span>
+                </div>
               </div>
-              <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-                <span class="text-gray-600 dark:text-gray-400">Preço de Venda:</span>
-                <span class="font-semibold text-gray-900 dark:text-white">{{ formatarMoeda(precoVenda) }}</span>
-              </div>
-              <div v-if="despesasOperacionais > 0" class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-                <span class="text-gray-600 dark:text-gray-400">Despesas Operacionais:</span>
-                <span class="font-semibold text-gray-900 dark:text-white">{{ formatarMoeda(despesasOperacionais) }}</span>
-              </div>
-              <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-                <span class="text-gray-600 dark:text-gray-400">Lucro Bruto:</span>
-                <span class="font-semibold text-green-600 dark:text-green-400">{{ formatarMoeda(resultado.lucroBruto) }}</span>
-              </div>
-              <div v-if="despesasOperacionais > 0" class="flex justify-between py-2">
-                <span class="text-gray-600 dark:text-gray-400">Lucro Líquido:</span>
-                <span class="font-semibold" :class="resultado.lucroLiquido >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
-                  {{ formatarMoeda(resultado.lucroLiquido) }}
-                </span>
+            </div>
+
+            <div :class="resultado.margemBruta >= 30 ? 'tip-card-success' : resultado.margemBruta >= 15 ? 'tip-card' : 'tip-card-warning'">
+              <i :class="['fas flex-shrink-0 mt-0.5', resultado.margemBruta >= 30 ? 'fa-check-circle text-emerald-500' : resultado.margemBruta >= 15 ? 'fa-exclamation-triangle text-amber-500' : 'fa-times-circle text-red-500']"></i>
+              <div>
+                <strong class="block text-xs mb-0.5">{{ obterTituloAnalise() }}</strong>
+                <span class="text-xs">{{ obterDescricaoAnalise() }}</span>
               </div>
             </div>
           </div>
+        </Transition>
 
-          <!-- Recomendações -->
-          <div :class="[
-            'border-l-4 p-4 rounded',
-            resultado.margemBruta >= 30 ? 'bg-green-50 dark:bg-green-900/20 border-green-500' :
-            resultado.margemBruta >= 15 ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500' :
-            'bg-red-50 dark:bg-red-900/20 border-red-500'
-          ]">
-            <div class="flex">
-              <i :class="[
-                'mt-1 mr-3',
-                resultado.margemBruta >= 30 ? 'fas fa-check-circle text-green-600' :
-                resultado.margemBruta >= 15 ? 'fas fa-exclamation-triangle text-yellow-600' :
-                'fas fa-times-circle text-red-600'
-              ]"></i>
-              <div class="text-sm">
-                <p class="font-semibold mb-2">{{ obterTituloAnalise() }}</p>
-                <p class="text-xs">{{ obterDescricaoAnalise() }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-green-600 dark:text-green-400 mt-1 mr-3"></i>
-            <div class="text-sm text-green-800 dark:text-green-300">
-              <p class="font-semibold mb-2">Entenda os conceitos:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>Margem Bruta:</strong> Lucro antes das despesas operacionais</li>
-                <li><strong>Margem Líquida:</strong> Lucro real após todas as despesas</li>
-                <li><strong>Markup:</strong> Percentual sobre o custo para chegar ao preço</li>
-                <li><strong>Lucro Bruto:</strong> Preço de venda menos custo</li>
-                <li><strong>Lucro Líquido:</strong> Lucro bruto menos despesas operacionais</li>
-              </ul>
-            </div>
-          </div>
+        <div v-if="!calculado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-chart-bar text-4xl mb-3 opacity-30 block text-amber-400"></i>
+          <p class="text-sm">Informe o custo e o preço de venda para calcular as margens</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
-
-const { trackToolUsage } = useAnalytics()
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
 const custoTotal = ref(100)
 const precoVenda = ref(150)
@@ -193,15 +159,11 @@ const resultado = ref({
   lucroLiquido: 0,
   margemBruta: 0,
   margemLiquida: 0,
-  markup: 0
+  markup: 0,
 })
 
-const formatarMoeda = (valor) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(valor)
-}
+const formatarMoeda = (valor) =>
+  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor)
 
 const calcular = () => {
   const custo = Number(custoTotal.value)
@@ -214,29 +176,34 @@ const calcular = () => {
   const margemLiquida = (lucroLiquido / preco) * 100
   const markup = ((preco - custo) / custo) * 100
 
-  resultado.value = {
-    lucroBruto,
-    lucroLiquido,
-    margemBruta,
-    margemLiquida,
-    markup
-  }
-
+  resultado.value = { lucroBruto, lucroLiquido, margemBruta, margemLiquida, markup }
   calculado.value = true
-  trackToolUsage('Calculadora Margem Lucro', 'calculate')
+}
+
+const limpar = () => {
+  custoTotal.value = 100
+  precoVenda.value = 150
+  despesasOperacionais.value = 0
+  calculado.value = false
 }
 
 const obterTituloAnalise = () => {
-  const margem = resultado.value.margemBruta
-  if (margem >= 30) return 'Excelente margem de lucro!'
-  if (margem >= 15) return 'Margem aceitável, mas pode melhorar'
-  return 'Margem baixa - atenção necessária'
+  const m = resultado.value.margemBruta
+  if (m >= 30) return 'Excelente margem de lucro!'
+  if (m >= 15) return 'Margem aceitável, mas pode melhorar'
+  return 'Margem baixa — atenção necessária'
 }
 
 const obterDescricaoAnalise = () => {
-  const margem = resultado.value.margemBruta
-  if (margem >= 30) return 'Sua margem está acima da média. Continue monitorando custos e mantenha a qualidade.'
-  if (margem >= 15) return 'Margem próxima à média do mercado. Considere reduzir custos ou aumentar valor percebido.'
+  const m = resultado.value.margemBruta
+  if (m >= 30) return 'Sua margem está acima da média. Continue monitorando custos e mantendo a qualidade.'
+  if (m >= 15) return 'Próxima à média do mercado. Considere reduzir custos ou aumentar o valor percebido.'
   return 'Margem abaixo do ideal. Revise custos, fornecedores e estratégia de precificação urgentemente.'
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

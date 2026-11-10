@@ -1,117 +1,143 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-pink-100 dark:bg-pink-900/30 rounded-full mb-4">
-          <i class="fas fa-divide text-pink-600 dark:text-pink-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de Frações</h1>
-        <p class="text-gray-600 dark:text-gray-400">Operações com frações: soma, subtração, multiplicação e divisão</p>
-      </div>
-
-      <div class="space-y-6">
-        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Operação</label>
-          <div class="grid grid-cols-4 gap-3">
-            <button v-for="op in operacoes" :key="op.id" @click="operacao = op.id"
-              :class="['p-4 rounded-lg border-2', operacao === op.id ? 'border-pink-600 bg-pink-50 dark:bg-pink-900/30' : 'border-gray-200 dark:border-gray-600']">
-              <i :class="[op.icon, 'text-3xl', operacao === op.id ? 'text-pink-600' : 'text-gray-400']"></i>
+  <ToolShell
+    title="Calculadora de Frações"
+    description="Some, subtraia, multiplique e divida frações com passo a passo e forma simplificada."
+    icon="fa-divide"
+    icon-gradient="from-pink-500 to-rose-700"
+    orb-color="purple"
+    :quick-tips="['Soma, subtração, multiplicação, divisão', 'Simplificação pelo MDC', 'Passo a passo explicado']"
+    :tips="[
+      { title: 'Soma e Subtração', text: 'É necessário igualar os denominadores usando o MMC antes de operar os numeradores.', type: 'info' },
+      { title: 'Multiplicação', text: 'Multiplique numeradores entre si e denominadores entre si diretamente, sem igualar.', type: 'info' },
+      { title: 'Divisão', text: 'Mantenha a primeira fração e multiplique pelo inverso da segunda (troca numerador e denominador).', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Soma simples', desc: '1/2 + 1/3', result: 'MMC(2,3)=6 → 3/6 + 2/6 = 5/6 ≈ 0,8333' },
+      { title: 'Divisão', desc: '3/4 ÷ 2/5', result: '3/4 × 5/2 = 15/8 = 1,875' },
+      { title: 'Multiplicação com simplificação', desc: '4/6 × 3/8', result: '12/48 → simplificado: 1/4 = 0,25' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <!-- Operação -->
+        <div class="glass-panel p-4">
+          <label class="input-aurora-label mb-3">
+            <i class="fas fa-calculator mr-1.5 text-pink-500"></i>
+            Operação
+          </label>
+          <div class="grid grid-cols-4 gap-2">
+            <button
+              v-for="op in operacoes"
+              :key="op.id"
+              @click="operacao = op.id"
+              :class="['p-4 rounded-xl border-2 transition-all text-center', operacao === op.id ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20' : 'border-gray-200 dark:border-slate-600 hover:border-pink-300']"
+            >
+              <i :class="[op.icon, 'text-2xl', operacao === op.id ? 'text-pink-600' : 'text-gray-400']"></i>
+              <span :class="['text-xs block mt-1 font-semibold', operacao === op.id ? 'text-pink-700 dark:text-pink-300' : 'text-gray-500']">{{ op.label }}</span>
             </button>
           </div>
         </div>
 
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-          <div class="grid md:grid-cols-2 gap-6">
-            <div class="space-y-4">
-              <h3 class="font-bold text-gray-900 dark:text-white">Primeira Fração</h3>
-              <div class="flex items-center gap-3">
-                <BaseInput v-model="num1" label="Numerador" type="number" />
-                <div class="text-3xl text-gray-400 mt-6">—</div>
-                <BaseInput v-model="den1" label="Denominador" type="number" />
+        <!-- Frações -->
+        <div class="tool-body !mb-0 space-y-4">
+          <div class="grid grid-cols-2 gap-6">
+            <div class="space-y-2">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200">1ª Fração</h4>
+              <div class="flex items-center gap-2">
+                <BaseInput v-model="num1" label="Num." type="number" />
+                <span class="text-2xl text-gray-400 mt-5 font-bold">—</span>
+                <BaseInput v-model="den1" label="Den." type="number" />
               </div>
             </div>
-
-            <div class="space-y-4">
-              <h3 class="font-bold text-gray-900 dark:text-white">Segunda Fração</h3>
-              <div class="flex items-center gap-3">
-                <BaseInput v-model="num2" label="Numerador" type="number" />
-                <div class="text-3xl text-gray-400 mt-6">—</div>
-                <BaseInput v-model="den2" label="Denominador" type="number" />
+            <div class="space-y-2">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200">2ª Fração</h4>
+              <div class="flex items-center gap-2">
+                <BaseInput v-model="num2" label="Num." type="number" />
+                <span class="text-2xl text-gray-400 mt-5 font-bold">—</span>
+                <BaseInput v-model="den2" label="Den." type="number" />
               </div>
             </div>
           </div>
+
+          <BaseButton variant="primary" icon="fa-calculator" @click="calcular" fullWidth>
+            Calcular {{ operacoes.find(o => o.id === operacao)?.label }}
+          </BaseButton>
         </div>
+      </div>
 
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>Calcular
-        </BaseButton>
-
-        <div v-if="calculado" class="space-y-4">
-          <div class="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-900/30 dark:to-purple-900/30 rounded-lg p-8">
-            <div class="text-center">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">Resultado</div>
-              <div class="flex items-center justify-center gap-4 text-4xl font-bold text-pink-600 dark:text-pink-400">
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="calculado" class="space-y-4">
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-2">
+                {{ num1 }}/{{ den1 }} {{ getOperacaoSimbolo() }} {{ num2 }}/{{ den2 }}
+              </p>
+              <div class="flex items-center justify-center gap-4 text-5xl font-black text-white mb-2">
                 <span>{{ resultado.numerador }}</span>
-                <span class="text-gray-400">—</span>
+                <span class="text-white/50">—</span>
                 <span>{{ resultado.denominador }}</span>
               </div>
-              <div class="mt-4 text-lg text-gray-700 dark:text-gray-300">
-                = {{ resultado.decimal.toFixed(4) }}
-              </div>
-              <div v-if="resultado.simplificado" class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
-                <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">Forma Simplificada</div>
-                <div class="flex items-center justify-center gap-3 text-2xl font-bold text-purple-600 dark:text-purple-400">
-                  <span>{{ resultado.numSimplificado }}</span>
-                  <span class="text-gray-400">—</span>
-                  <span>{{ resultado.denSimplificado }}</span>
-                </div>
-              </div>
+              <p class="text-pink-300 text-sm font-semibold">= {{ resultado.decimal.toFixed(4) }}</p>
             </div>
-          </div>
 
-          <div class="bg-white dark:bg-gray-700 rounded-lg p-6">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Passo a Passo</h4>
-            <div class="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-              <p><strong>Operação:</strong> {{ num1 }}/{{ den1 }} {{ getOperacaoSimbolo() }} {{ num2 }}/{{ den2 }}</p>
-              <p><strong>MMC:</strong> {{ resultado.mmc }}</p>
-              <p v-html="resultado.explicacao"></p>
+            <div v-if="resultado.simplificado" class="glass-panel p-4 text-center">
+              <p class="text-xs text-gray-500 dark:text-slate-400 mb-2">Forma Simplificada</p>
+              <div class="flex items-center justify-center gap-4 text-3xl font-black text-purple-600 dark:text-purple-400">
+                <span>{{ resultado.numSimplificado }}</span>
+                <span class="text-gray-400">—</span>
+                <span>{{ resultado.denSimplificado }}</span>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class="bg-pink-50 dark:bg-pink-900/20 border-l-4 border-pink-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-pink-600 dark:text-pink-400 mt-1 mr-3"></i>
-            <div class="text-sm text-pink-800 dark:text-pink-300">
-              <p class="font-semibold mb-2">Regras das Frações:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>Soma/Subtração:</strong> Iguale os denominadores (MMC), depois opere os numeradores</li>
-                <li><strong>Multiplicação:</strong> Multiplique numeradores e denominadores diretamente</li>
-                <li><strong>Divisão:</strong> Multiplique pela fração invertida (mantém × inverte)</li>
-                <li>Sempre simplifique o resultado dividindo pelo MDC</li>
-              </ul>
+            <div class="metric-glass">
+              <span class="metric-glass-value text-pink-600 dark:text-pink-400">{{ resultado.decimal.toFixed(6) }}</span>
+              <span class="metric-glass-label">Valor decimal</span>
+            </div>
+
+            <div class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+                <i class="fas fa-list-ol text-pink-500"></i>
+                Passo a Passo
+              </h4>
+              <div class="space-y-1 text-xs text-gray-700 dark:text-slate-200 font-mono">
+                <p><strong>MMC dos denominadores:</strong> {{ resultado.mmc }}</p>
+                <div v-html="resultado.explicacao"></div>
+              </div>
+            </div>
+
+            <div class="tip-card">
+              <i class="fas fa-info-circle text-blue-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">
+                Simplificação pelo MDC: divide numerador e denominador pelo maior divisor comum.
+              </span>
             </div>
           </div>
+        </Transition>
+
+        <div v-if="!calculado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-divide text-4xl mb-3 opacity-30 block text-pink-400"></i>
+          <p class="text-sm">Insira as duas frações e selecione a operação para calcular</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref } from 'vue'
 import DOMPurify from 'dompurify'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
-
-const { trackToolUsage } = useAnalytics()
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
 const operacoes = [
-  { id: 'soma', icon: 'fas fa-plus' },
-  { id: 'subtracao', icon: 'fas fa-minus' },
-  { id: 'multiplicacao', icon: 'fas fa-times' },
-  { id: 'divisao', icon: 'fas fa-divide' }
+  { id: 'soma',           icon: 'fas fa-plus',   label: 'Soma' },
+  { id: 'subtracao',      icon: 'fas fa-minus',  label: 'Subtração' },
+  { id: 'multiplicacao',  icon: 'fas fa-times',  label: 'Multiplicação' },
+  { id: 'divisao',        icon: 'fas fa-divide', label: 'Divisão' },
 ]
 
 const operacao = ref('soma')
@@ -123,26 +149,16 @@ const calculado = ref(false)
 const resultado = ref({})
 
 const mdc = (a, b) => {
-  a = Math.abs(a)
-  b = Math.abs(b)
-  while (b) {
-    const t = b
-    b = a % b
-    a = t
-  }
+  a = Math.abs(a); b = Math.abs(b)
+  while (b) { const t = b; b = a % b; a = t }
   return a
 }
 
-const mmc = (a, b) => {
-  return Math.abs(a * b) / mdc(a, b)
-}
+const mmc = (a, b) => Math.abs(a * b) / mdc(a, b)
 
 const simplificar = (num, den) => {
   const divisor = mdc(num, den)
-  return {
-    numerador: num / divisor,
-    denominador: den / divisor
-  }
+  return { numerador: num / divisor, denominador: den / divisor }
 }
 
 const calcular = () => {
@@ -155,34 +171,22 @@ const calcular = () => {
     case 'soma':
       numResultado = (Number(num1.value) * mmcDen / Number(den1.value)) + (Number(num2.value) * mmcDen / Number(den2.value))
       denResultado = mmcDen
-      explicacao = `MMC(${den1.value}, ${den2.value}) = ${mmcDen}<br>
-                    ${num1.value}×${mmcDen / Number(den1.value)} + ${num2.value}×${mmcDen / Number(den2.value)} = ${numResultado}<br>
-                    Resultado: ${numResultado}/${denResultado}`
+      explicacao = `${num1.value}×${mmcDen / Number(den1.value)} + ${num2.value}×${mmcDen / Number(den2.value)} = ${numResultado}<br>Resultado: ${numResultado}/${denResultado}`
       break
-
     case 'subtracao':
       numResultado = (Number(num1.value) * mmcDen / Number(den1.value)) - (Number(num2.value) * mmcDen / Number(den2.value))
       denResultado = mmcDen
-      explicacao = `MMC(${den1.value}, ${den2.value}) = ${mmcDen}<br>
-                    ${num1.value}×${mmcDen / Number(den1.value)} - ${num2.value}×${mmcDen / Number(den2.value)} = ${numResultado}<br>
-                    Resultado: ${numResultado}/${denResultado}`
+      explicacao = `${num1.value}×${mmcDen / Number(den1.value)} - ${num2.value}×${mmcDen / Number(den2.value)} = ${numResultado}<br>Resultado: ${numResultado}/${denResultado}`
       break
-
     case 'multiplicacao':
       numResultado = Number(num1.value) * Number(num2.value)
       denResultado = Number(den1.value) * Number(den2.value)
-      explicacao = `${num1.value} × ${num2.value} = ${numResultado}<br>
-                    ${den1.value} × ${den2.value} = ${denResultado}<br>
-                    Resultado: ${numResultado}/${denResultado}`
+      explicacao = `${num1.value} × ${num2.value} = ${numResultado}<br>${den1.value} × ${den2.value} = ${denResultado}`
       break
-
     case 'divisao':
       numResultado = Number(num1.value) * Number(den2.value)
       denResultado = Number(den1.value) * Number(num2.value)
-      explicacao = `Mantém a primeira e multiplica pelo inverso da segunda<br>
-                    ${num1.value} × ${den2.value} = ${numResultado}<br>
-                    ${den1.value} × ${num2.value} = ${denResultado}<br>
-                    Resultado: ${numResultado}/${denResultado}`
+      explicacao = `${num1.value} × ${den2.value} = ${numResultado}<br>${den1.value} × ${num2.value} = ${denResultado}`
       break
   }
 
@@ -197,15 +201,20 @@ const calcular = () => {
     explicacao: DOMPurify.sanitize(explicacao),
     simplificado: precisaSimplificar,
     numSimplificado: simplificado.numerador,
-    denSimplificado: simplificado.denominador
+    denSimplificado: simplificado.denominador,
   }
 
   calculado.value = true
-  trackToolUsage('Calculadora Fracao', 'calculate', { operation: operacao.value })
 }
 
 const getOperacaoSimbolo = () => {
-  const simbolos = { soma: '+', subtracao: '-', multiplicacao: '×', divisao: '÷' }
+  const simbolos = { soma: '+', subtracao: '−', multiplicacao: '×', divisao: '÷' }
   return simbolos[operacao.value]
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

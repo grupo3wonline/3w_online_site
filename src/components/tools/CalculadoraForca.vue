@@ -1,116 +1,131 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full mb-4">
-          <i class="fas fa-arrows-alt text-red-600 dark:text-red-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de Força</h1>
-        <p class="text-gray-600 dark:text-gray-400">2ª Lei de Newton: F = m × a</p>
-      </div>
-
-      <div class="space-y-6">
-        <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">O que deseja calcular?</label>
-          <div class="grid grid-cols-3 gap-3">
-            <button v-for="modo in modos" :key="modo.id" @click="modoCalculo = modo.id"
-              :class="['p-4 rounded-lg border-2', modoCalculo === modo.id ? 'border-red-600 bg-red-50 dark:bg-red-900/30' : 'border-gray-200 dark:border-gray-600']">
-              <i :class="[modo.icon, 'text-2xl mb-2', modoCalculo === modo.id ? 'text-red-600' : 'text-gray-400']"></i>
-              <div :class="['text-xs font-medium', modoCalculo === modo.id ? 'text-red-900 dark:text-red-300' : 'text-gray-600']">
-                {{ modo.nome }}
-              </div>
+  <ToolShell
+    title="Calculadora de Força"
+    description="Calcule força (F), massa (m) ou aceleração (a) usando a 2ª Lei de Newton: F = m × a."
+    icon="fa-dumbbell"
+    icon-gradient="from-red-500 to-rose-700"
+    orb-color="blue"
+    :quick-tips="['F = m × a', '3 modos de cálculo', 'Unidade: Newton (N)']"
+    :tips="[
+      { title: '2ª Lei de Newton', text: 'A força resultante é proporcional à massa e à aceleração. 1 Newton = força para acelerar 1 kg a 1 m/s².', type: 'info' },
+      { title: 'Peso vs Força', text: 'Peso (P) é a força gravitacional: P = m × g, onde g ≈ 9,81 m/s². Um objeto de 1 kg pesa ~9,81 N.', type: 'info' },
+      { title: 'Aceleração gravitacional', text: 'Na superfície terrestre, g = 9,81 m/s². Na Lua, g ≈ 1,62 m/s². Em queda livre, a = g.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Força de um carro', desc: 'Massa: 1.500 kg, Aceleração: 2 m/s²', result: 'F = 3.000 N = 3 kN' },
+      { title: 'Massa de um objeto', desc: 'Força: 50 N, Aceleração: 9,81 m/s² (queda livre)', result: 'm ≈ 5,1 kg' },
+      { title: 'Aceleração de um foguete', desc: 'Força: 100.000 N, Massa: 5.000 kg', result: 'a = 20 m/s²' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="glass-panel p-4">
+          <label class="input-aurora-label mb-3">
+            <i class="fas fa-question-circle mr-1.5 text-red-500"></i>
+            O que deseja calcular?
+          </label>
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              v-for="modo in modos"
+              :key="modo.id"
+              @click="modoCalculo = modo.id"
+              :class="['p-3 rounded-xl border-2 transition-all text-center', modoCalculo === modo.id ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : 'border-gray-200 dark:border-slate-600 hover:border-red-300']"
+            >
+              <i :class="[modo.icon, 'text-xl block mb-1', modoCalculo === modo.id ? 'text-red-600' : 'text-gray-400']"></i>
+              <span :class="['text-xs font-semibold', modoCalculo === modo.id ? 'text-red-700 dark:text-red-300' : 'text-gray-600']">{{ modo.nome }}</span>
             </button>
           </div>
         </div>
 
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-          <div v-if="modoCalculo === 'forca'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="massa" label="Massa (kg)" type="number" step="0.01" />
-            <BaseInput v-model="aceleracao" label="Aceleração (m/s²)" type="number" step="0.01" />
+        <div class="tool-body !mb-0 space-y-3">
+          <div v-if="modoCalculo === 'forca'" class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="massa" label="Massa (kg)" type="number" step="0.01" icon="fa-weight-hanging" tooltip="Massa do objeto em quilogramas." />
+            <BaseInput v-model="aceleracao" label="Aceleração (m/s²)" type="number" step="0.01" icon="fa-gauge-high" tooltip="Aceleração em metros por segundo ao quadrado." />
+          </div>
+          <div v-if="modoCalculo === 'massa'" class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="forca" label="Força (N)" type="number" step="0.01" icon="fa-bolt" tooltip="Força resultante em Newtons." />
+            <BaseInput v-model="aceleracao" label="Aceleração (m/s²)" type="number" step="0.01" icon="fa-gauge-high" />
+          </div>
+          <div v-if="modoCalculo === 'aceleracao'" class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="forca" label="Força (N)" type="number" step="0.01" icon="fa-bolt" />
+            <BaseInput v-model="massa" label="Massa (kg)" type="number" step="0.01" icon="fa-weight-hanging" />
           </div>
 
-          <div v-if="modoCalculo === 'massa'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="forca" label="Força (N)" type="number" step="0.01" />
-            <BaseInput v-model="aceleracao" label="Aceleração (m/s²)" type="number" step="0.01" />
-          </div>
-
-          <div v-if="modoCalculo === 'aceleracao'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="forca" label="Força (N)" type="number" step="0.01" />
-            <BaseInput v-model="massa" label="Massa (kg)" type="number" step="0.01" />
-          </div>
+          <BaseButton variant="primary" icon="fa-calculator" @click="calcular" fullWidth>
+            Calcular {{ modos.find(m => m.id === modoCalculo)?.nome }}
+          </BaseButton>
         </div>
+      </div>
 
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>Calcular
-        </BaseButton>
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="calculado" class="space-y-4">
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">{{ getTitulo() }}</p>
+              <p class="text-5xl font-black text-white mb-2">{{ resultado.toFixed(2) }} {{ getUnidade() }}</p>
+              <p class="text-red-300 text-sm font-semibold">F = m × a</p>
+            </div>
 
-        <div v-if="calculado" class="space-y-4">
-          <div class="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/30 dark:to-orange-900/30 rounded-lg p-8">
-            <div class="text-center">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">{{ getTitulo() }}</div>
-              <div class="text-5xl font-bold text-red-600 dark:text-red-400 mb-4">
-                {{ resultado.toFixed(2) }} {{ getUnidade() }}
+            <div class="grid grid-cols-3 gap-3">
+              <div class="metric-glass ring-1 ring-red-100 dark:ring-red-900">
+                <span class="metric-glass-value text-red-600 dark:text-red-400">
+                  {{ (modoCalculo === 'forca' ? resultado : Number(forca)).toFixed(2) }}
+                </span>
+                <span class="metric-glass-label">F (N)</span>
               </div>
-              
-              <div class="grid md:grid-cols-3 gap-4 mt-6">
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Força (F)</div>
-                  <div class="text-2xl font-bold text-red-600 dark:text-red-400">
-                    {{ (modoCalculo === 'forca' ? resultado : Number(forca)).toFixed(2) }} N
-                  </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Massa (m)</div>
-                  <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {{ (modoCalculo === 'massa' ? resultado : Number(massa)).toFixed(2) }} kg
-                  </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Aceleração (a)</div>
-                  <div class="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {{ (modoCalculo === 'aceleracao' ? resultado : Number(aceleracao)).toFixed(2) }} m/s²
-                  </div>
-                </div>
+              <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+                <span class="metric-glass-value text-blue-600 dark:text-blue-400">
+                  {{ (modoCalculo === 'massa' ? resultado : Number(massa)).toFixed(2) }}
+                </span>
+                <span class="metric-glass-label">m (kg)</span>
+              </div>
+              <div class="metric-glass ring-1 ring-emerald-100 dark:ring-emerald-900">
+                <span class="metric-glass-value text-emerald-600 dark:text-emerald-400">
+                  {{ (modoCalculo === 'aceleracao' ? resultado : Number(aceleracao)).toFixed(2) }}
+                </span>
+                <span class="metric-glass-label">a (m/s²)</span>
               </div>
             </div>
-          </div>
 
-          <div class="bg-white dark:bg-gray-700 rounded-lg p-6">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Cálculo Detalhado</h4>
-            <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-              <p><strong>Fórmula:</strong> F = m × a</p>
-              <p><strong>Cálculo:</strong> {{ explicacao }}</p>
+            <div class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-2 flex items-center gap-2">
+                <i class="fas fa-calculator text-red-500"></i>
+                Cálculo Detalhado
+              </h4>
+              <p class="text-xs font-mono text-gray-600 dark:text-slate-300">{{ explicacao }}</p>
+            </div>
+
+            <div class="tip-card">
+              <i class="fas fa-info-circle text-blue-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">
+                <strong>2ª Lei de Newton:</strong> A força resultante é igual ao produto da massa pela aceleração. 1 N = 1 kg⋅m/s².
+              </span>
             </div>
           </div>
-        </div>
+        </Transition>
 
-        <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-red-600 dark:text-red-400 mt-1 mr-3"></i>
-            <div class="text-sm text-red-800 dark:text-red-300">
-              <p class="font-semibold mb-2">2ª Lei de Newton</p>
-              <p class="text-xs">A força resultante sobre um objeto é igual ao produto da sua massa pela aceleração. 
-              A unidade de força no SI é o Newton (N), onde 1 N = 1 kg⋅m/s².</p>
-            </div>
-          </div>
+        <div v-if="!calculado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-dumbbell text-4xl mb-3 opacity-30 block text-red-400"></i>
+          <p class="text-sm">Selecione o que calcular, insira os valores e clique em Calcular</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
-
-const { trackToolUsage } = useAnalytics()
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
 const modos = [
-  { id: 'forca', nome: 'Força (F)', icon: 'fas fa-arrow-right' },
-  { id: 'massa', nome: 'Massa (m)', icon: 'fas fa-weight' },
-  { id: 'aceleracao', nome: 'Aceleração (a)', icon: 'fas fa-tachometer-alt' }
+  { id: 'forca',      nome: 'Força (F)',       icon: 'fas fa-bolt' },
+  { id: 'massa',      nome: 'Massa (m)',        icon: 'fas fa-weight-hanging' },
+  { id: 'aceleracao', nome: 'Aceleração (a)',   icon: 'fas fa-gauge-high' },
 ]
 
 const modoCalculo = ref('forca')
@@ -128,24 +143,21 @@ const calcular = () => {
   switch (modoCalculo.value) {
     case 'forca':
       valor = Number(massa.value) * Number(aceleracao.value)
-      exp = `${massa.value} kg × ${aceleracao.value} m/s² = ${valor.toFixed(2)} N`
+      exp = `F = ${massa.value} kg × ${aceleracao.value} m/s² = ${valor.toFixed(2)} N`
       break
-
     case 'massa':
       valor = Number(forca.value) / Number(aceleracao.value)
-      exp = `${forca.value} N ÷ ${aceleracao.value} m/s² = ${valor.toFixed(2)} kg`
+      exp = `m = ${forca.value} N ÷ ${aceleracao.value} m/s² = ${valor.toFixed(2)} kg`
       break
-
     case 'aceleracao':
       valor = Number(forca.value) / Number(massa.value)
-      exp = `${forca.value} N ÷ ${massa.value} kg = ${valor.toFixed(2)} m/s²`
+      exp = `a = ${forca.value} N ÷ ${massa.value} kg = ${valor.toFixed(2)} m/s²`
       break
   }
 
   resultado.value = valor
   explicacao.value = exp
   calculado.value = true
-  trackToolUsage('Calculadora Forca', 'calculate', { mode: modoCalculo.value })
 }
 
 const getTitulo = () => {
@@ -154,7 +166,13 @@ const getTitulo = () => {
 }
 
 const getUnidade = () => {
-  const unidades = { forca: 'N', massa: 'kg', aceleracao: 'm/s²' }
-  return unidades[modoCalculo.value]
+  const unids = { forca: 'N', massa: 'kg', aceleracao: 'm/s²' }
+  return unids[modoCalculo.value]
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

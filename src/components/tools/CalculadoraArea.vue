@@ -1,149 +1,150 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-cyan-100 dark:bg-cyan-900/30 rounded-full mb-4">
-          <i class="fas fa-shapes text-cyan-600 dark:text-cyan-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de Área</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule áreas de figuras geométricas</p>
-      </div>
-
-      <div class="space-y-6">
-        <div class="bg-cyan-50 dark:bg-cyan-900/20 rounded-lg p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Figura Geométrica</label>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <button v-for="fig in figuras" :key="fig.id" @click="figuraSelecionada = fig.id"
-              :class="['p-4 rounded-lg border-2 transition-all', figuraSelecionada === fig.id ? 'border-cyan-600 bg-cyan-50 dark:bg-cyan-900/30' : 'border-gray-200 dark:border-gray-600']">
-              <i :class="[fig.icon, 'text-2xl mb-2', figuraSelecionada === fig.id ? 'text-cyan-600' : 'text-gray-400']"></i>
-              <div class="text-xs font-semibold text-gray-900 dark:text-white">{{ fig.nome }}</div>
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-          <!-- Quadrado -->
-          <div v-if="figuraSelecionada === 'quadrado'">
-            <BaseInput v-model="lado" label="Lado (cm)" type="number" step="0.01" />
-            <p class="text-xs text-gray-500 mt-1">Fórmula: Área = lado²</p>
-          </div>
-
-          <!-- Retângulo -->
-          <div v-if="figuraSelecionada === 'retangulo'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="base" label="Base (cm)" type="number" step="0.01" />
-            <BaseInput v-model="altura" label="Altura (cm)" type="number" step="0.01" />
-            <p class="text-xs text-gray-500 col-span-2">Fórmula: Área = base × altura</p>
-          </div>
-
-          <!-- Triângulo -->
-          <div v-if="figuraSelecionada === 'triangulo'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="base" label="Base (cm)" type="number" step="0.01" />
-            <BaseInput v-model="altura" label="Altura (cm)" type="number" step="0.01" />
-            <p class="text-xs text-gray-500 col-span-2">Fórmula: Área = (base × altura) / 2</p>
-          </div>
-
-          <!-- Círculo -->
-          <div v-if="figuraSelecionada === 'circulo'">
-            <BaseInput v-model="raio" label="Raio (cm)" type="number" step="0.01" />
-            <p class="text-xs text-gray-500 mt-1">Fórmula: Área = π × raio²</p>
-          </div>
-
-          <!-- Trapézio -->
-          <div v-if="figuraSelecionada === 'trapezio'" class="grid md:grid-cols-3 gap-4">
-            <BaseInput v-model="baseMaior" label="Base Maior (cm)" type="number" step="0.01" />
-            <BaseInput v-model="baseMenor" label="Base Menor (cm)" type="number" step="0.01" />
-            <BaseInput v-model="altura" label="Altura (cm)" type="number" step="0.01" />
-            <p class="text-xs text-gray-500 col-span-3">Fórmula: Área = ((B + b) × h) / 2</p>
-          </div>
-
-          <!-- Losango -->
-          <div v-if="figuraSelecionada === 'losango'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="diagonalMaior" label="Diagonal Maior (cm)" type="number" step="0.01" />
-            <BaseInput v-model="diagonalMenor" label="Diagonal Menor (cm)" type="number" step="0.01" />
-            <p class="text-xs text-gray-500 col-span-2">Fórmula: Área = (D × d) / 2</p>
-          </div>
-        </div>
-
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>Calcular Área
-        </BaseButton>
-
-        <div v-if="calculado" class="bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 rounded-lg p-8">
-          <div class="text-center">
-            <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">Área do {{ figuras.find(f => f.id === figuraSelecionada)?.nome }}</div>
-            <div class="text-5xl font-bold text-cyan-600 dark:text-cyan-400 mb-2">
-              {{ resultado.toFixed(2) }}
-            </div>
-            <div class="text-lg text-gray-700 dark:text-gray-300">
-              cm² (centímetros quadrados)
-            </div>
-            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
-              <div class="grid grid-cols-3 gap-4 text-sm">
-                <div>
-                  <div class="text-gray-500 dark:text-gray-400">em m²</div>
-                  <div class="font-bold">{{ (resultado / 10000).toFixed(4) }}</div>
-                </div>
-                <div>
-                  <div class="text-gray-500 dark:text-gray-400">em mm²</div>
-                  <div class="font-bold">{{ (resultado * 100).toFixed(0) }}</div>
-                </div>
-                <div>
-                  <div class="text-gray-500 dark:text-gray-400">em km²</div>
-                  <div class="font-bold">{{ (resultado / 10000000000).toFixed(10) }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-cyan-50 dark:bg-cyan-900/20 border-l-4 border-cyan-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-cyan-600 dark:text-cyan-400 mt-1 mr-3"></i>
-            <div class="text-sm text-cyan-800 dark:text-cyan-300">
-              <p class="font-semibold mb-2">Dicas:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li>Use sempre a mesma unidade de medida</li>
-                <li>1 m² = 10.000 cm²</li>
-                <li>π (Pi) ≈ 3,14159</li>
-                <li>Para figuras irregulares, divida em partes regulares</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+  <ToolShell
+    title="Calculadora de Área"
+    description="Calcule a área de figuras geométricas com fórmulas explicadas e conversão de unidades."
+    icon="fa-shapes"
+    icon-gradient="from-blue-500 to-indigo-700"
+    orb-color="blue"
+    :quick-tips="['6 figuras geométricas', 'Fórmulas explicadas', 'Conversão cm²/m²/mm²']"
+    :tips="[
+      { title: 'Mesma unidade', text: 'Todas as medidas devem estar na mesma unidade de entrada. O resultado será nessa unidade ao quadrado.', type: 'warning' },
+      { title: 'Pi (π)', text: 'π = 3,14159265… Usado no cálculo do círculo. A calculadora usa o valor preciso de Math.PI.', type: 'info' },
+      { title: 'Figuras irregulares', text: 'Para figuras irregulares, divida-as em figuras simples (retângulos + triângulos) e some as áreas.', type: 'info' },
+    ]"
+    :examples="[
+      { title: 'Piso de um quarto', desc: 'Retângulo 4m × 3,5m', result: 'Área = 14 m²' },
+      { title: 'Tampa circular', desc: 'Círculo com raio 5 cm', result: 'Área ≈ 78,54 cm²' },
+      { title: 'Lote trapezoidal', desc: 'Base maior 20m, base menor 15m, altura 10m', result: 'Área = 175 m²' },
+    ]"
+  >
+    <!-- Seletor de figura -->
+    <div class="glass-panel p-5 mb-4">
+      <label class="input-aurora-label mb-3">
+        <i class="fas fa-shapes mr-1.5 text-blue-500"></i>
+        Figura Geométrica
+      </label>
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+        <button
+          v-for="fig in figuras"
+          :key="fig.id"
+          @click="figuraSelecionada = fig.id"
+          :class="['p-3 rounded-xl border-2 transition-all text-center', figuraSelecionada === fig.id ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-200 dark:border-slate-600 hover:border-blue-300']"
+        >
+          <i :class="[fig.icon, 'text-xl mb-1 block', figuraSelecionada === fig.id ? 'text-blue-600' : 'text-gray-400']"></i>
+          <span :class="['text-xs font-semibold', figuraSelecionada === fig.id ? 'text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-slate-400']">{{ fig.nome }}</span>
+        </button>
       </div>
     </div>
-  </div>
+
+    <!-- Inputs -->
+    <div class="tool-body space-y-3">
+      <div v-if="figuraSelecionada === 'quadrado'">
+        <BaseInput v-model="lado" label="Lado (cm)" type="number" step="0.01" icon="fa-ruler" hint="Fórmula: Área = lado²" />
+      </div>
+      <div v-if="figuraSelecionada === 'retangulo'" class="grid sm:grid-cols-2 gap-3">
+        <BaseInput v-model="base" label="Base (cm)" type="number" step="0.01" icon="fa-ruler-horizontal" />
+        <BaseInput v-model="altura" label="Altura (cm)" type="number" step="0.01" icon="fa-ruler-vertical" hint="Fórmula: Área = base × altura" />
+      </div>
+      <div v-if="figuraSelecionada === 'triangulo'" class="grid sm:grid-cols-2 gap-3">
+        <BaseInput v-model="base" label="Base (cm)" type="number" step="0.01" icon="fa-ruler-horizontal" />
+        <BaseInput v-model="altura" label="Altura (cm)" type="number" step="0.01" icon="fa-ruler-vertical" hint="Fórmula: Área = (base × altura) / 2" />
+      </div>
+      <div v-if="figuraSelecionada === 'circulo'">
+        <BaseInput v-model="raio" label="Raio (cm)" type="number" step="0.01" icon="fa-circle" hint="Fórmula: Área = π × raio²" />
+      </div>
+      <div v-if="figuraSelecionada === 'trapezio'" class="grid sm:grid-cols-3 gap-3">
+        <BaseInput v-model="baseMaior" label="Base Maior (cm)" type="number" step="0.01" />
+        <BaseInput v-model="baseMenor" label="Base Menor (cm)" type="number" step="0.01" />
+        <BaseInput v-model="altura" label="Altura (cm)" type="number" step="0.01" hint="Fórmula: ((B+b)×h)/2" />
+      </div>
+      <div v-if="figuraSelecionada === 'losango'" class="grid sm:grid-cols-2 gap-3">
+        <BaseInput v-model="diagonalMaior" label="Diagonal Maior (cm)" type="number" step="0.01" />
+        <BaseInput v-model="diagonalMenor" label="Diagonal Menor (cm)" type="number" step="0.01" hint="Fórmula: (D × d) / 2" />
+      </div>
+
+      <div class="flex gap-3">
+        <BaseButton variant="primary" icon="fa-calculator" @click="calcular" class="flex-1">
+          Calcular Área
+        </BaseButton>
+        <BaseButton variant="outline" icon="fa-eraser" @click="limpar" />
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <Transition name="scale-in">
+      <div v-if="calculado" class="space-y-4">
+        <div class="tool-header text-center py-7">
+          <p class="text-sm text-blue-200 mb-1">Área do {{ figuras.find(f => f.id === figuraSelecionada)?.nome }}</p>
+          <p class="text-5xl font-black text-white mb-2">{{ resultado.toFixed(2) }} cm²</p>
+          <p class="text-blue-300 text-sm font-semibold">centímetros quadrados</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+            <span class="metric-glass-value text-blue-600 dark:text-blue-400">{{ (resultado / 10000).toFixed(4) }}</span>
+            <span class="metric-glass-label">em m²</span>
+          </div>
+          <div class="metric-glass ring-1 ring-indigo-100 dark:ring-indigo-900">
+            <span class="metric-glass-value text-indigo-600 dark:text-indigo-400">{{ (resultado * 100).toFixed(0) }}</span>
+            <span class="metric-glass-label">em mm²</span>
+          </div>
+          <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+            <span class="metric-glass-value text-purple-600 dark:text-purple-400">{{ (resultado / 10000000000).toExponential(2) }}</span>
+            <span class="metric-glass-label">em km²</span>
+          </div>
+        </div>
+
+        <div class="tip-card">
+          <i class="fas fa-info-circle text-blue-500 flex-shrink-0 mt-0.5"></i>
+          <span class="text-xs">
+            Use sempre a mesma unidade de medida. <strong>1 m² = 10.000 cm²</strong> | <strong>π ≈ 3,14159</strong>
+          </span>
+        </div>
+      </div>
+    </Transition>
+
+    <div v-if="!calculado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+      <i class="fas fa-shapes text-4xl mb-3 opacity-30 block text-blue-400"></i>
+      <p class="text-sm">Selecione a figura, insira as medidas e clique em Calcular</p>
+    </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage } = useAnalytics()
+type FiguraId = 'quadrado' | 'retangulo' | 'triangulo' | 'circulo' | 'trapezio' | 'losango'
 
-const figuras = [
+interface Figura {
+  id: FiguraId
+  nome: string
+  icon: string
+}
+
+const figuras: Figura[] = [
   { id: 'quadrado', nome: 'Quadrado', icon: 'fas fa-square' },
-  { id: 'retangulo', nome: 'Retângulo', icon: 'fas fa-rectangle-wide' },
+  { id: 'retangulo', nome: 'Retângulo', icon: 'fas fa-th-large' },
   { id: 'triangulo', nome: 'Triângulo', icon: 'fas fa-play' },
   { id: 'circulo', nome: 'Círculo', icon: 'fas fa-circle' },
-  { id: 'trapezio', nome: 'Trapézio', icon: 'fas fa-square' },
-  { id: 'losango', nome: 'Losango', icon: 'fas fa-diamond' }
+  { id: 'trapezio', nome: 'Trapézio', icon: 'fas fa-caret-up' },
+  { id: 'losango', nome: 'Losango', icon: 'fas fa-gem' },
 ]
 
-const figuraSelecionada = ref('quadrado')
+const figuraSelecionada = ref<FiguraId>('quadrado')
 const calculado = ref(false)
 const resultado = ref(0)
 
-const lado = ref(10)
-const base = ref(10)
-const altura = ref(5)
-const raio = ref(5)
-const baseMaior = ref(10)
-const baseMenor = ref(6)
-const diagonalMaior = ref(12)
-const diagonalMenor = ref(8)
+const lado = ref<number | ''>(10)
+const base = ref<number | ''>(10)
+const altura = ref<number | ''>(5)
+const raio = ref<number | ''>(5)
+const baseMaior = ref<number | ''>(10)
+const baseMenor = ref<number | ''>(6)
+const diagonalMaior = ref<number | ''>(12)
+const diagonalMenor = ref<number | ''>(8)
 
 const calcular = () => {
   switch (figuraSelecionada.value) {
@@ -166,8 +167,17 @@ const calcular = () => {
       resultado.value = (Number(diagonalMaior.value) * Number(diagonalMenor.value)) / 2
       break
   }
-  
   calculado.value = true
-  trackToolUsage('Calculadora Area', 'calculate', { figura: figuraSelecionada.value })
+}
+
+const limpar = () => {
+  calculado.value = false
+  resultado.value = 0
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

@@ -1,137 +1,155 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-teal-100 dark:bg-teal-900/30 rounded-full mb-4">
-          <i class="fas fa-cube text-teal-600 dark:text-teal-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de Densidade</h1>
-        <p class="text-gray-600 dark:text-gray-400">d = m / V</p>
-      </div>
-
-      <div class="space-y-6">
-        <div class="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">O que deseja calcular?</label>
-          <div class="grid grid-cols-3 gap-3">
-            <button v-for="modo in modos" :key="modo.id" @click="modoCalculo = modo.id"
-              :class="['p-4 rounded-lg border-2', modoCalculo === modo.id ? 'border-teal-600 bg-teal-50 dark:bg-teal-900/30' : 'border-gray-200 dark:border-gray-600']">
-              <i :class="[modo.icon, 'text-2xl mb-2', modoCalculo === modo.id ? 'text-teal-600' : 'text-gray-400']"></i>
-              <div :class="['text-xs font-medium', modoCalculo === modo.id ? 'text-teal-900 dark:text-teal-300' : 'text-gray-600']">
-                {{ modo.nome }}
-              </div>
+  <ToolShell
+    title="Calculadora de Densidade"
+    description="Calcule densidade (d = m/V), massa ou volume a partir de dois valores conhecidos."
+    icon="fa-flask"
+    icon-gradient="from-purple-500 to-violet-700"
+    orb-color="purple"
+    :quick-tips="['d = m/V', '3 modos de cálculo', 'Densidades de referência']"
+    :tips="[
+      { title: 'Fórmula fundamental', text: 'Densidade = Massa ÷ Volume (d = m/V). Escolha o que quer calcular e informe os outros dois.', type: 'info' },
+      { title: 'Densidade da água', text: 'A água pura tem densidade de 1 g/cm³ a 4°C. Materiais com d > 1 afundam; d < 1 flutuam.', type: 'info' },
+      { title: 'Unidades', text: 'Use g para massa e cm³ para volume e o resultado será g/cm³. Para SI, use kg e m³.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Ouro puro', desc: 'Massa: 193 g, Volume: 10 cm³', result: 'Densidade = 19,3 g/cm³' },
+      { title: 'Volume de água', desc: 'Massa: 500 g, Densidade: 1 g/cm³', result: 'Volume = 500 cm³ (500 ml)' },
+      { title: 'Massa do alumínio', desc: 'Densidade: 2,7 g/cm³, Volume: 50 cm³', result: 'Massa = 135 g' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Formulário -->
+      <div class="space-y-4">
+        <div class="glass-panel p-4">
+          <label class="input-aurora-label mb-3">
+            <i class="fas fa-question-circle mr-1.5 text-purple-500"></i>
+            O que deseja calcular?
+          </label>
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              v-for="modo in modos"
+              :key="modo.id"
+              @click="modoCalculo = modo.id"
+              :class="['p-3 rounded-xl border-2 transition-all text-center', modoCalculo === modo.id ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-gray-200 dark:border-slate-600 hover:border-purple-300']"
+            >
+              <i :class="[modo.icon, 'text-xl block mb-1', modoCalculo === modo.id ? 'text-purple-600' : 'text-gray-400']"></i>
+              <span :class="['text-xs font-semibold', modoCalculo === modo.id ? 'text-purple-700 dark:text-purple-300' : 'text-gray-600 dark:text-slate-400']">{{ modo.nome }}</span>
             </button>
           </div>
         </div>
 
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-          <div v-if="modoCalculo === 'densidade'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="massa" label="Massa (g)" type="number" step="0.01" />
-            <BaseInput v-model="volume" label="Volume (cm³)" type="number" step="0.01" />
+        <div class="tool-body !mb-0 space-y-3">
+          <div v-if="modoCalculo === 'densidade'" class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="massa" label="Massa (g)" type="number" step="0.01" icon="fa-weight-hanging" />
+            <BaseInput v-model="volume" label="Volume (cm³)" type="number" step="0.01" icon="fa-cube" />
+          </div>
+          <div v-if="modoCalculo === 'massa'" class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="densidade" label="Densidade (g/cm³)" type="number" step="0.001" icon="fa-flask" />
+            <BaseInput v-model="volume" label="Volume (cm³)" type="number" step="0.01" icon="fa-cube" />
+          </div>
+          <div v-if="modoCalculo === 'volume'" class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="massa" label="Massa (g)" type="number" step="0.01" icon="fa-weight-hanging" />
+            <BaseInput v-model="densidade" label="Densidade (g/cm³)" type="number" step="0.001" icon="fa-flask" />
           </div>
 
-          <div v-if="modoCalculo === 'massa'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="densidade" label="Densidade (g/cm³)" type="number" step="0.001" />
-            <BaseInput v-model="volume" label="Volume (cm³)" type="number" step="0.01" />
-          </div>
-
-          <div v-if="modoCalculo === 'volume'" class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="massa" label="Massa (g)" type="number" step="0.01" />
-            <BaseInput v-model="densidade" label="Densidade (g/cm³)" type="number" step="0.001" />
-          </div>
+          <BaseButton variant="primary" icon="fa-calculator" @click="calcular" fullWidth>
+            Calcular {{ modos.find(m => m.id === modoCalculo)?.nome }}
+          </BaseButton>
         </div>
 
-        <BaseButton @click="calcular" variant="primary" class="w-full">
-          <i class="fas fa-calculator mr-2"></i>Calcular
-        </BaseButton>
-
-        <div v-if="calculado" class="space-y-4">
-          <div class="bg-gradient-to-r from-teal-50 to-cyan-50 dark:from-teal-900/30 dark:to-cyan-900/30 rounded-lg p-8">
-            <div class="text-center">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">{{ getTitulo() }}</div>
-              <div class="text-5xl font-bold text-teal-600 dark:text-teal-400 mb-4">
-                {{ resultado.toFixed(3) }} {{ getUnidade() }}
-              </div>
-              
-              <div class="grid md:grid-cols-3 gap-4 mt-6">
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Densidade (d)</div>
-                  <div class="text-2xl font-bold text-teal-600 dark:text-teal-400">
-                    {{ (modoCalculo === 'densidade' ? resultado : Number(densidade)).toFixed(3) }} g/cm³
-                  </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Massa (m)</div>
-                  <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                    {{ (modoCalculo === 'massa' ? resultado : Number(massa)).toFixed(2) }} g
-                  </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-lg p-4">
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Volume (V)</div>
-                  <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                    {{ (modoCalculo === 'volume' ? resultado : Number(volume)).toFixed(2) }} cm³
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white dark:bg-gray-700 rounded-lg p-6">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Cálculo Detalhado</h4>
-            <div class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-              <p><strong>Fórmula:</strong> d = m / V</p>
-              <p><strong>Cálculo:</strong> {{ explicacao }}</p>
-            </div>
-          </div>
-
-          <div class="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-4">
-            <h5 class="font-semibold text-teal-900 dark:text-teal-300 mb-3 text-sm">Densidades Comuns (g/cm³)</h5>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-              <div class="bg-white dark:bg-gray-800 rounded p-2">
-                <div class="font-semibold text-gray-900 dark:text-white">Água</div>
-                <div class="text-teal-600 dark:text-teal-400">1,00</div>
-              </div>
-              <div class="bg-white dark:bg-gray-800 rounded p-2">
-                <div class="font-semibold text-gray-900 dark:text-white">Alumínio</div>
-                <div class="text-teal-600 dark:text-teal-400">2,70</div>
-              </div>
-              <div class="bg-white dark:bg-gray-800 rounded p-2">
-                <div class="font-semibold text-gray-900 dark:text-white">Ferro</div>
-                <div class="text-teal-600 dark:text-teal-400">7,87</div>
-              </div>
-              <div class="bg-white dark:bg-gray-800 rounded p-2">
-                <div class="font-semibold text-gray-900 dark:text-white">Ouro</div>
-                <div class="text-teal-600 dark:text-teal-400">19,30</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-teal-50 dark:bg-teal-900/20 border-l-4 border-teal-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-teal-600 dark:text-teal-400 mt-1 mr-3"></i>
-            <div class="text-sm text-teal-800 dark:text-teal-300">
-              <p class="font-semibold mb-1">O que é densidade?</p>
-              <p class="text-xs">Densidade é a relação entre massa e volume de um material. Quanto maior a densidade, mais "pesado" é o material para o mesmo volume.</p>
+        <!-- Densidades de referência -->
+        <div class="glass-panel p-4">
+          <h5 class="text-xs font-bold text-gray-700 dark:text-slate-200 mb-3">
+            <i class="fas fa-table text-purple-500 mr-1.5"></i>
+            Densidades Comuns (g/cm³)
+          </h5>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div v-for="ref in densidadesRef" :key="ref.nome"
+              class="flex justify-between items-center px-2.5 py-1.5 rounded-lg bg-white dark:bg-slate-700 border border-gray-100 dark:border-slate-600">
+              <span class="text-gray-600 dark:text-slate-300">{{ ref.nome }}</span>
+              <span class="font-bold text-purple-600 dark:text-purple-400">{{ ref.valor }}</span>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="calculado" class="space-y-4">
+            <div class="tool-header text-center py-7">
+              <p class="text-sm text-blue-200 mb-1">{{ getTitulo() }}</p>
+              <p class="text-5xl font-black text-white mb-2">{{ resultado.toFixed(3) }}</p>
+              <p class="text-purple-300 text-sm font-semibold">{{ getUnidade() }}</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+              <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+                <span class="metric-glass-value text-purple-600 dark:text-purple-400">
+                  {{ (modoCalculo === 'densidade' ? resultado : Number(densidade)).toFixed(3) }}
+                </span>
+                <span class="metric-glass-label">d (g/cm³)</span>
+              </div>
+              <div class="metric-glass ring-1 ring-blue-100 dark:ring-blue-900">
+                <span class="metric-glass-value text-blue-600 dark:text-blue-400">
+                  {{ (modoCalculo === 'massa' ? resultado : Number(massa)).toFixed(2) }}
+                </span>
+                <span class="metric-glass-label">m (g)</span>
+              </div>
+              <div class="metric-glass ring-1 ring-teal-100 dark:ring-teal-900">
+                <span class="metric-glass-value text-teal-600 dark:text-teal-400">
+                  {{ (modoCalculo === 'volume' ? resultado : Number(volume)).toFixed(2) }}
+                </span>
+                <span class="metric-glass-label">V (cm³)</span>
+              </div>
+            </div>
+
+            <div class="glass-panel p-4">
+              <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-2 flex items-center gap-2">
+                <i class="fas fa-calculator text-purple-500"></i>
+                Cálculo Detalhado
+              </h4>
+              <p class="text-xs text-gray-600 dark:text-slate-300 font-mono">{{ explicacao }}</p>
+            </div>
+
+            <div class="tip-card">
+              <i class="fas fa-info-circle text-blue-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">
+                Materiais com densidade menor que a água (1 g/cm³) flutuam; maior, afundam.
+              </span>
+            </div>
+          </div>
+        </Transition>
+
+        <div v-if="!calculado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-flask text-4xl mb-3 opacity-30 block text-purple-400"></i>
+          <p class="text-sm">Selecione o que calcular, insira os valores e clique em Calcular</p>
+        </div>
+      </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
-
-const { trackToolUsage } = useAnalytics()
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
 const modos = [
-  { id: 'densidade', nome: 'Densidade', icon: 'fas fa-weight-hanging' },
-  { id: 'massa', nome: 'Massa', icon: 'fas fa-balance-scale' },
-  { id: 'volume', nome: 'Volume', icon: 'fas fa-cube' }
+  { id: 'densidade', nome: 'Densidade', icon: 'fas fa-flask' },
+  { id: 'massa',     nome: 'Massa',     icon: 'fas fa-weight-hanging' },
+  { id: 'volume',    nome: 'Volume',    icon: 'fas fa-cube' },
+]
+
+const densidadesRef = [
+  { nome: 'Água',      valor: '1,00' },
+  { nome: 'Alumínio',  valor: '2,70' },
+  { nome: 'Ferro',     valor: '7,87' },
+  { nome: 'Cobre',     valor: '8,96' },
+  { nome: 'Prata',     valor: '10,49' },
+  { nome: 'Ouro',      valor: '19,30' },
 ]
 
 const modoCalculo = ref('densidade')
@@ -149,24 +167,21 @@ const calcular = () => {
   switch (modoCalculo.value) {
     case 'densidade':
       valor = Number(massa.value) / Number(volume.value)
-      exp = `${massa.value} g ÷ ${volume.value} cm³ = ${valor.toFixed(3)} g/cm³`
+      exp = `d = ${massa.value} g ÷ ${volume.value} cm³ = ${valor.toFixed(3)} g/cm³`
       break
-
     case 'massa':
       valor = Number(densidade.value) * Number(volume.value)
-      exp = `${densidade.value} g/cm³ × ${volume.value} cm³ = ${valor.toFixed(2)} g`
+      exp = `m = ${densidade.value} g/cm³ × ${volume.value} cm³ = ${valor.toFixed(2)} g`
       break
-
     case 'volume':
       valor = Number(massa.value) / Number(densidade.value)
-      exp = `${massa.value} g ÷ ${densidade.value} g/cm³ = ${valor.toFixed(2)} cm³`
+      exp = `V = ${massa.value} g ÷ ${densidade.value} g/cm³ = ${valor.toFixed(2)} cm³`
       break
   }
 
   resultado.value = valor
   explicacao.value = exp
   calculado.value = true
-  trackToolUsage('Calculadora Densidade', 'calculate', { mode: modoCalculo.value })
 }
 
 const getTitulo = () => {
@@ -175,7 +190,13 @@ const getTitulo = () => {
 }
 
 const getUnidade = () => {
-  const unidades = { densidade: 'g/cm³', massa: 'g', volume: 'cm³' }
-  return unidades[modoCalculo.value]
+  const unids = { densidade: 'g/cm³', massa: 'g', volume: 'cm³' }
+  return unids[modoCalculo.value]
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

@@ -1,179 +1,152 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mb-4">
-          <i class="fas fa-superscript text-indigo-600 dark:text-indigo-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de MMC e MDC</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule o Mínimo Múltiplo Comum e o Máximo Divisor Comum</p>
-      </div>
+  <ToolShell
+    title="Calculadora de MMC e MDC"
+    description="Calcule o Mínimo Múltiplo Comum e o Máximo Divisor Comum de dois ou mais números inteiros."
+    icon="fa-square-root-variable"
+    icon-gradient="from-purple-500 to-violet-700"
+    orb-color="purple"
+    :quick-tips="['MMC para frações', 'MDC para simplificar', 'Fatoração passo a passo']"
+    :tips="[
+      { title: 'Quando usar MMC', text: 'O MMC é usado para somar ou subtrair frações (igualar denominadores) e em problemas de múltiplos comuns.', type: 'info' },
+      { title: 'Quando usar MDC', text: 'O MDC é usado para simplificar frações e dividir quantidades em partes iguais da maior forma possível.', type: 'info' },
+      { title: 'Propriedade', text: 'MMC(a,b) × MDC(a,b) = a × b. Para dois números, você pode usar essa relação para calcular um a partir do outro.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Dois números', desc: 'MMC e MDC de 12 e 18', result: 'MMC = 36 | MDC = 6' },
+      { title: 'Três números', desc: 'MMC e MDC de 12, 18 e 24', result: 'MMC = 72 | MDC = 6' },
+      { title: 'Números primos', desc: 'MMC e MDC de 7 e 13', result: 'MMC = 91 | MDC = 1 (coprimos)' },
+    ]"
+  >
+    <!-- Input -->
+    <div class="tool-body space-y-3">
+      <label class="input-aurora-label">
+        <i class="fas fa-list mr-1.5 text-purple-500"></i>
+        Números (separados por vírgula ou espaço)
+      </label>
+      <input
+        v-model="numerosTexto"
+        type="text"
+        placeholder="Ex: 12, 18, 24"
+        class="input-aurora w-full"
+        @input="calcularAutomatico"
+      />
+      <p class="input-aurora-hint">Insira 2 ou mais números inteiros positivos</p>
+    </div>
 
-      <div class="space-y-6">
-        <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
-            <i class="fas fa-list mr-2"></i>Números (separados por vírgula ou espaço)
-          </label>
-          <input v-model="numerosTexto" type="text" placeholder="Ex: 12, 18, 24"
-            class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            @input="calcularAutomatico">
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-            Você pode inserir 2 ou mais números
-          </p>
-        </div>
-
-        <div v-if="numeros.length >= 2" class="grid md:grid-cols-2 gap-6">
-          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <i class="fas fa-arrow-up text-blue-600 dark:text-blue-400"></i>
-                <h3 class="font-bold text-gray-900 dark:text-white">MMC</h3>
-              </div>
-              <span class="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
-                Mínimo Múltiplo Comum
-              </span>
+    <!-- Resultado -->
+    <Transition name="scale-in">
+      <div v-if="numeros.length >= 2" class="space-y-4 mt-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="tool-header text-center py-6 !mb-0">
+            <div class="flex items-center justify-between mb-3 px-2">
+              <span class="text-xs text-blue-200">Mínimo Múltiplo Comum</span>
+              <span class="badge-aurora-blue text-[10px]">MMC</span>
             </div>
-            <div class="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-              {{ resultadoMMC }}
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400">
-              Menor número divisível por todos os números informados
-            </p>
+            <p class="text-5xl font-black text-white mb-1">{{ resultadoMMC }}</p>
+            <p class="text-blue-300 text-xs">{{ numeros.join(' e ') }}</p>
           </div>
-
-          <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-6">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <i class="fas fa-arrow-down text-green-600 dark:text-green-400"></i>
-                <h3 class="font-bold text-gray-900 dark:text-white">MDC</h3>
-              </div>
-              <span class="text-xs bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-2 py-1 rounded">
-                Máximo Divisor Comum
-              </span>
+          <div class="tool-header text-center py-6 !mb-0 !from-emerald-600 !via-emerald-700 !to-teal-800">
+            <div class="flex items-center justify-between mb-3 px-2">
+              <span class="text-xs text-emerald-200">Máximo Divisor Comum</span>
+              <span class="badge-aurora-green text-[10px]">MDC</span>
             </div>
-            <div class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
-              {{ resultadoMDC }}
-            </div>
-            <p class="text-xs text-gray-600 dark:text-gray-400">
-              Maior número que divide todos os números informados
-            </p>
+            <p class="text-5xl font-black text-white mb-1">{{ resultadoMDC }}</p>
+            <p class="text-emerald-300 text-xs">{{ numeros.join(' e ') }}</p>
           </div>
         </div>
 
-        <div v-if="fatoracao.length > 0" class="bg-white dark:bg-gray-700 rounded-lg p-6">
-          <h4 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <i class="fas fa-project-diagram text-indigo-600"></i>
-            Fatoração (Método da Decomposição)
+        <!-- Tabela de fatoração -->
+        <div v-if="fatoracao.length > 0" class="glass-panel p-4">
+          <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+            <i class="fas fa-project-diagram text-purple-500"></i>
+            Fatoração — Método da Decomposição
           </h4>
           <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-xs">
               <thead>
-                <tr class="border-b border-gray-200 dark:border-gray-600">
-                  <th class="text-left py-2 px-3 text-gray-700 dark:text-gray-300">Números</th>
-                  <th class="text-left py-2 px-3 text-gray-700 dark:text-gray-300">Divisor</th>
+                <tr class="border-b border-gray-200 dark:border-slate-600">
+                  <th class="text-left py-2 px-3 text-gray-700 dark:text-gray-300 font-semibold">Números</th>
+                  <th class="text-left py-2 px-3 text-gray-700 dark:text-gray-300 font-semibold">Divisor</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="(linha, index) in fatoracao" :key="index" 
-                  class="border-b border-gray-100 dark:border-gray-600">
+              <tbody class="divide-y divide-gray-100 dark:divide-slate-700">
+                <tr v-for="(linha, index) in fatoracao" :key="index" class="hover:bg-gray-50 dark:hover:bg-slate-700/50">
                   <td class="py-2 px-3 font-mono text-gray-900 dark:text-white">{{ linha.numeros.join(', ') }}</td>
-                  <td class="py-2 px-3 font-bold text-indigo-600 dark:text-indigo-400">{{ linha.divisor }}</td>
+                  <td class="py-2 px-3 font-bold text-purple-600 dark:text-purple-400">{{ linha.divisor }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="mt-4 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded">
-            <p class="text-xs text-gray-700 dark:text-gray-300">
-              <strong>MMC:</strong> Multiplicação de todos os divisores = {{ divisoresMMC.join(' × ') }} = {{ resultadoMMC }}
-            </p>
-            <p class="text-xs text-gray-700 dark:text-gray-300 mt-1">
-              <strong>MDC:</strong> Multiplicação dos divisores comuns = {{ divisoresMDC.join(' × ') }} = {{ resultadoMDC }}
-            </p>
+          <div class="mt-3 glass-panel p-3 text-xs text-gray-700 dark:text-slate-200 space-y-1">
+            <p><strong>MMC:</strong> {{ divisoresMMC.join(' × ') }} = {{ resultadoMMC }}</p>
+            <p><strong>MDC:</strong> {{ divisoresMDC.join(' × ') }} = {{ resultadoMDC }}</p>
           </div>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-4">
-          <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-            <h5 class="font-semibold text-blue-900 dark:text-blue-300 mb-2 text-sm">
-              <i class="fas fa-lightbulb mr-2"></i>Quando usar MMC?
-            </h5>
-            <ul class="text-xs text-blue-800 dark:text-blue-400 space-y-1 list-disc list-inside">
-              <li>Somar ou subtrair frações</li>
-              <li>Problemas de múltiplos comuns</li>
-              <li>Sincronização de eventos periódicos</li>
-            </ul>
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="tip-card">
+            <i class="fas fa-arrow-up text-blue-500 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <strong class="block text-xs mb-0.5">Use MMC para:</strong>
+              <ul class="text-xs space-y-0.5 list-disc list-inside">
+                <li>Somar ou subtrair frações</li>
+                <li>Problemas de múltiplos comuns</li>
+              </ul>
+            </div>
           </div>
-
-          <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4">
-            <h5 class="font-semibold text-green-900 dark:text-green-300 mb-2 text-sm">
-              <i class="fas fa-lightbulb mr-2"></i>Quando usar MDC?
-            </h5>
-            <ul class="text-xs text-green-800 dark:text-green-400 space-y-1 list-disc list-inside">
-              <li>Simplificar frações</li>
-              <li>Dividir em partes iguais</li>
-              <li>Encontrar maior medida comum</li>
-            </ul>
+          <div class="tip-card-success">
+            <i class="fas fa-arrow-down text-emerald-500 flex-shrink-0 mt-0.5"></i>
+            <div>
+              <strong class="block text-xs mb-0.5">Use MDC para:</strong>
+              <ul class="text-xs space-y-0.5 list-disc list-inside">
+                <li>Simplificar frações</li>
+                <li>Dividir em partes iguais</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
+    </Transition>
+
+    <div v-if="numeros.length < 2" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+      <i class="fas fa-square-root-variable text-4xl mb-3 opacity-30 block text-purple-400"></i>
+      <p class="text-sm">Digite ao menos 2 números para calcular o MMC e MDC</p>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref, computed } from 'vue'
-import { useAnalytics } from '../../composables/useAnalytics'
-
-const { trackToolUsage } = useAnalytics()
 
 const numerosTexto = ref('12, 18, 24')
 const fatoracao = ref([])
 const divisoresMMC = ref([])
 const divisoresMDC = ref([])
 
-const numeros = computed(() => {
-  return numerosTexto.value
+const numeros = computed(() =>
+  numerosTexto.value
     .split(/[,\s]+/)
     .map(n => parseInt(n.trim()))
     .filter(n => !isNaN(n) && n > 0)
-})
+)
 
 const mdc2 = (a, b) => {
-  while (b) {
-    const t = b
-    b = a % b
-    a = t
-  }
+  while (b) { const t = b; b = a % b; a = t }
   return a
 }
 
-const mmc2 = (a, b) => {
-  return (a * b) / mdc2(a, b)
-}
+const mmc2 = (a, b) => (a * b) / mdc2(a, b)
 
-const calcularMDC = (nums) => {
-  return nums.reduce((acc, num) => mdc2(acc, num))
-}
+const calcularMDC = (nums) => nums.reduce((acc, num) => mdc2(acc, num))
+const calcularMMC = (nums) => nums.reduce((acc, num) => mmc2(acc, num))
 
-const calcularMMC = (nums) => {
-  return nums.reduce((acc, num) => mmc2(acc, num))
-}
-
-const resultadoMMC = computed(() => {
-  if (numeros.value.length < 2) return 0
-  return calcularMMC(numeros.value)
-})
-
-const resultadoMDC = computed(() => {
-  if (numeros.value.length < 2) return 0
-  return calcularMDC(numeros.value)
-})
+const resultadoMMC = computed(() => numeros.value.length < 2 ? 0 : calcularMMC(numeros.value))
+const resultadoMDC = computed(() => numeros.value.length < 2 ? 0 : calcularMDC(numeros.value))
 
 const calcularFatoracao = () => {
-  if (numeros.value.length < 2) {
-    fatoracao.value = []
-    return
-  }
+  if (numeros.value.length < 2) { fatoracao.value = []; return }
 
   const nums = [...numeros.value]
   const passos = []
@@ -184,21 +157,14 @@ const calcularFatoracao = () => {
   while (nums.some(n => n > 1)) {
     let dividiu = false
     const novosNums = nums.map(n => {
-      if (n % divisor === 0) {
-        dividiu = true
-        return n / divisor
-      }
+      if (n % divisor === 0) { dividiu = true; return n / divisor }
       return n
     })
 
     if (dividiu) {
       passos.push({ numeros: [...nums], divisor })
       divisoresMmcTemp.push(divisor)
-      
-      if (nums.every(n => n % divisor === 0)) {
-        divisoresMdcTemp.push(divisor)
-      }
-      
+      if (nums.every(n => n % divisor === 0)) divisoresMdcTemp.push(divisor)
       nums.splice(0, nums.length, ...novosNums)
     } else {
       divisor++
@@ -213,13 +179,14 @@ const calcularFatoracao = () => {
 }
 
 const calcularAutomatico = () => {
-  if (numeros.value.length >= 2) {
-    calcularFatoracao()
-    trackToolUsage('Calculadora MMC MDC', 'calculate', { 
-      count: numeros.value.length 
-    })
-  }
+  if (numeros.value.length >= 2) calcularFatoracao()
 }
 
 calcularAutomatico()
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>
