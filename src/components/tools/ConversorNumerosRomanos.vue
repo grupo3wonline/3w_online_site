@@ -1,216 +1,209 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-violet-100 dark:bg-violet-900/30 rounded-full mb-4">
-          <i class="fas fa-sort-numeric-up text-violet-600 dark:text-violet-400 text-2xl"></i>
+  <ToolShell
+    title="Conversor de Números Romanos"
+    description="Converta números arábicos para romanos e vice-versa. Suporte de 1 a 3.999 com exemplos históricos."
+    icon="fa-landmark"
+    icon-gradient="from-amber-500 to-yellow-700"
+    orb-color="orange"
+    :quick-tips="['Arábico ↔ Romano', 'Suporte 1 – 3.999', 'Exemplos históricos']"
+    :tips="[
+      { title: 'Regra de subtração', text: 'IV = 4, IX = 9, XL = 40, XC = 90, CD = 400, CM = 900. O símbolo menor antes do maior indica subtração.', type: 'info' },
+      { title: 'Limite máximo', text: 'O sistema romano tradicional vai até 3.999 (MMMCMXCIX). Acima disso, eram usadas barras sobre as letras para multiplicar por 1.000.', type: 'warning' },
+      { title: 'Regra de repetição', text: 'Um símbolo pode aparecer no máximo 3 vezes seguidas (III = 3, não IIII). Exceto M, que pode aparecer 4+ vezes.', type: 'info' },
+    ]"
+    :examples="[
+      { title: 'Ano atual', desc: '2024 (arábico) para romano', result: 'MMXXIV' },
+      { title: 'Super Bowl', desc: 'Super Bowl LV = ?', result: 'LV = 55 | LVI = 56 | LVII = 57 | LVIII = 58' },
+      { title: 'Regra IX', desc: 'IX, XL, CD e CM são formas subtrativas', result: 'IX=9, XL=40, XC=90, CD=400, CM=900' },
+    ]"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <!-- Entrada -->
+      <div class="space-y-4">
+        <!-- Seletor de modo -->
+        <div class="flex gap-2 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl">
+          <button
+            @click="modo = 'arabico-romano'; converter()"
+            :class="[
+              'flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all',
+              modo === 'arabico-romano' ? 'bg-amber-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700',
+            ]"
+          >
+            <i class="fas fa-arrow-right mr-1.5"></i>Arábico → Romano
+          </button>
+          <button
+            @click="modo = 'romano-arabico'; converter()"
+            :class="[
+              'flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all',
+              modo === 'romano-arabico' ? 'bg-amber-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700',
+            ]"
+          >
+            <i class="fas fa-arrow-left mr-1.5"></i>Romano → Arábico
+          </button>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Conversor de Números Romanos</h1>
-        <p class="text-gray-600 dark:text-gray-400">Converta entre algarismos romanos e arábicos</p>
+
+        <div class="tool-body !mb-0">
+          <BaseInput
+            v-model="input"
+            :label="modo === 'arabico-romano' ? 'Número Arábico (1–3999)' : 'Número Romano'"
+            icon="fa-keyboard"
+            :placeholder="modo === 'arabico-romano' ? '2024' : 'MMXXIV'"
+            :tooltip="modo === 'arabico-romano' ? 'Digite um número inteiro entre 1 e 3.999.' : 'Use apenas os símbolos I, V, X, L, C, D, M.'"
+            :hint="modo === 'arabico-romano' ? 'Intervalo: 1 a 3.999' : 'Ex: XIV, MMXXIV, MCMXCIX'"
+            @input="converter"
+          />
+
+          <div class="flex gap-3 mt-4">
+            <BaseButton variant="success" icon="fa-sync-alt" @click="converter" class="flex-1">
+              Converter
+            </BaseButton>
+            <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
+              Limpar
+            </BaseButton>
+          </div>
+        </div>
+
+        <!-- Exemplos rápidos -->
+        <div class="glass-panel p-4">
+          <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+            <i class="fas fa-bookmark text-amber-500"></i>
+            Exemplos históricos
+          </h4>
+          <div class="grid grid-cols-3 gap-2">
+            <button
+              v-for="ex in exemplos"
+              :key="ex.arabico"
+              @click="usarExemplo(ex)"
+              class="p-2 rounded-xl border border-gray-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-600 hover:bg-amber-50/50 dark:hover:bg-amber-900/10 transition-all text-center"
+            >
+              <div class="text-base font-black text-amber-600 dark:text-amber-400">{{ ex.romano }}</div>
+              <div class="text-xs text-gray-500 dark:text-slate-400">= {{ ex.arabico }}</div>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="space-y-6">
-        <div class="flex gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <button @click="modo = 'arabico-romano'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'arabico-romano' ? 'bg-violet-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-arrow-right mr-2"></i>
-            Arábico → Romano
-          </button>
-          <button @click="modo = 'romano-arabico'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'romano-arabico' ? 'bg-violet-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-arrow-left mr-2"></i>
-            Romano → Arábico
-          </button>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {{ modo === 'arabico-romano' ? 'Número Arábico' : 'Número Romano' }}
-          </label>
-          <input v-model="input" @input="converter" :placeholder="modo === 'arabico-romano' ? '2024' : 'MMXXIV'" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent text-2xl text-center font-bold" />
-        </div>
-
-        <div v-if="output" class="space-y-4">
-          <div class="bg-gradient-to-br from-violet-500 to-violet-600 rounded-2xl p-8 text-center text-white">
-            <div class="text-sm font-medium mb-2">Resultado</div>
-            <div class="text-6xl font-bold mb-4">{{ output }}</div>
-            <button @click="copiar" class="px-6 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors">
-              <i class="fas fa-copy mr-2"></i>
-              Copiar
-            </button>
-          </div>
-
-          <div class="grid grid-cols-3 gap-3">
-            <button v-for="num in exemplos" :key="num.arabico" @click="usarExemplo(num)" class="p-3 bg-gray-50 dark:bg-gray-700 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg transition-colors">
-              <div class="text-lg font-bold text-gray-900 dark:text-white">{{ num.romano }}</div>
-              <div class="text-sm text-gray-600 dark:text-gray-400">{{ num.arabico }}</div>
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-violet-50 dark:bg-violet-900/20 border-l-4 border-violet-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-violet-600 dark:text-violet-400 mt-1 mr-3"></i>
-            <div class="text-sm text-violet-800 dark:text-violet-300">
-              <p class="font-semibold mb-2">Algarismos Romanos Básicos:</p>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-                <div><span class="font-bold">I</span> = 1</div>
-                <div><span class="font-bold">V</span> = 5</div>
-                <div><span class="font-bold">X</span> = 10</div>
-                <div><span class="font-bold">L</span> = 50</div>
-                <div><span class="font-bold">C</span> = 100</div>
-                <div><span class="font-bold">D</span> = 500</div>
-                <div><span class="font-bold">M</span> = 1000</div>
+      <!-- Resultado -->
+      <div>
+        <Transition name="scale-in" appear>
+          <div v-if="output" class="space-y-4">
+            <div class="tool-header text-center py-10">
+              <p class="text-sm text-blue-200 mb-3">Resultado</p>
+              <p class="text-6xl font-black text-white tracking-wider">{{ output }}</p>
+              <div class="mt-4">
+                <BaseButton variant="glass" size="sm" icon="fa-copy" @click="copiar">
+                  Copiar resultado
+                </BaseButton>
               </div>
-              <p class="mt-2 text-xs">Regra de subtração: IV = 4, IX = 9, XL = 40, XC = 90, CD = 400, CM = 900</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="metric-glass ring-1 ring-amber-100 dark:ring-amber-900">
+                <div class="metric-glass-value text-amber-600 dark:text-amber-400">{{ modo === 'arabico-romano' ? input : output }}</div>
+                <div class="metric-glass-label">Arábico</div>
+              </div>
+              <div class="metric-glass ring-1 ring-yellow-100 dark:ring-yellow-900">
+                <div class="metric-glass-value text-yellow-600 dark:text-yellow-400">{{ modo === 'romano-arabico' ? input.toUpperCase() : output }}</div>
+                <div class="metric-glass-label">Romano</div>
+              </div>
+            </div>
+
+            <div class="tip-card-success">
+              <i class="fas fa-check-circle text-emerald-500 flex-shrink-0 mt-0.5"></i>
+              <span class="text-xs">O número romano possui <strong>{{ output.length }}</strong> símbolo(s). Clique nos exemplos históricos para explorar mais conversões.</span>
             </div>
           </div>
+        </Transition>
+
+        <div v-if="!output" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
+          <i class="fas fa-landmark text-3xl mb-3 opacity-30 block text-amber-400"></i>
+          <p class="text-sm">Digite um número ou clique em um exemplo histórico para converter</p>
         </div>
       </div>
     </div>
-  </div>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 import { ref } from 'vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
 
-const { trackToolUsage } = useAnalytics()
-
-const modo = ref('arabico-romano')
-const input = ref('2024')
-const output = ref('MMXXIV')
+const modo   = ref('arabico-romano')
+const input  = ref('2024')
+const output = ref('')
 
 const exemplos = [
-  { arabico: '1', romano: 'I' },
-  { arabico: '10', romano: 'X' },
-  { arabico: '50', romano: 'L' },
-  { arabico: '100', romano: 'C' },
-  { arabico: '500', romano: 'D' },
-  { arabico: '1000', romano: 'M' },
-  { arabico: '2024', romano: 'MMXXIV' },
+  { arabico: '1',    romano: 'I'       },
+  { arabico: '10',   romano: 'X'       },
+  { arabico: '50',   romano: 'L'       },
+  { arabico: '100',  romano: 'C'       },
+  { arabico: '500',  romano: 'D'       },
+  { arabico: '1000', romano: 'M'       },
+  { arabico: '2024', romano: 'MMXXIV'  },
   { arabico: '1999', romano: 'MCMXCIX' },
-  { arabico: '444', romano: 'CDXLIV' }
+  { arabico: '444',  romano: 'CDXLIV'  },
 ]
 
 const arabicoParaRomano = (num) => {
-  const numero = parseInt(num)
-  
-  if (isNaN(numero) || numero < 1 || numero > 3999) {
-    throw new Error('Digite um número entre 1 e 3999')
-  }
-  
-  const valores = [
-    { valor: 1000, simbolo: 'M' },
-    { valor: 900, simbolo: 'CM' },
-    { valor: 500, simbolo: 'D' },
-    { valor: 400, simbolo: 'CD' },
-    { valor: 100, simbolo: 'C' },
-    { valor: 90, simbolo: 'XC' },
-    { valor: 50, simbolo: 'L' },
-    { valor: 40, simbolo: 'XL' },
-    { valor: 10, simbolo: 'X' },
-    { valor: 9, simbolo: 'IX' },
-    { valor: 5, simbolo: 'V' },
-    { valor: 4, simbolo: 'IV' },
-    { valor: 1, simbolo: 'I' }
-  ]
-  
-  let resultado = ''
-  let restante = numero
-  
-  for (const { valor, simbolo } of valores) {
-    while (restante >= valor) {
-      resultado += simbolo
-      restante -= valor
-    }
-  }
-  
-  return resultado
+  const n = parseInt(num)
+  if (isNaN(n) || n < 1 || n > 3999) throw new Error('Digite um número entre 1 e 3.999')
+  const tbl = [{v:1000,s:'M'},{v:900,s:'CM'},{v:500,s:'D'},{v:400,s:'CD'},{v:100,s:'C'},{v:90,s:'XC'},{v:50,s:'L'},{v:40,s:'XL'},{v:10,s:'X'},{v:9,s:'IX'},{v:5,s:'V'},{v:4,s:'IV'},{v:1,s:'I'}]
+  let r = '', rest = n
+  for (const { v, s } of tbl) while (rest >= v) { r += s; rest -= v }
+  return r
 }
 
 const romanoParaArabico = (romano) => {
   const str = romano.toUpperCase().trim()
-  
-  if (!/^[MDCLXVI]+$/.test(str)) {
-    throw new Error('Digite apenas algarismos romanos válidos (M, D, C, L, X, V, I)')
-  }
-  
-  const valores = {
-    'M': 1000,
-    'D': 500,
-    'C': 100,
-    'L': 50,
-    'X': 10,
-    'V': 5,
-    'I': 1
-  }
-  
-  let total = 0
-  let anterior = 0
-  
+  if (!/^[MDCLXVI]+$/.test(str)) throw new Error('Use apenas algarismos romanos: M, D, C, L, X, V, I')
+  const vals = { M:1000, D:500, C:100, L:50, X:10, V:5, I:1 }
+  let total = 0, prev = 0
   for (let i = str.length - 1; i >= 0; i--) {
-    const atual = valores[str[i]]
-    
-    if (atual < anterior) {
-      total -= atual
-    } else {
-      total += atual
-    }
-    
-    anterior = atual
+    const cur = vals[str[i]]
+    total += cur < prev ? -cur : cur
+    prev = cur
   }
-  
   return total.toString()
 }
 
 const converter = () => {
-  if (!input.value.trim()) {
-    output.value = ''
-    return
-  }
-  
+  if (!input.value.trim()) { output.value = ''; return }
   try {
-    if (modo.value === 'arabico-romano') {
-      output.value = arabicoParaRomano(input.value)
-    } else {
-      output.value = romanoParaArabico(input.value)
-    }
-    
-    trackToolUsage('Conversor Números Romanos', modo.value)
+    output.value = modo.value === 'arabico-romano'
+      ? arabicoParaRomano(input.value)
+      : romanoParaArabico(input.value)
   } catch (e) {
     output.value = ''
-    Swal.fire({
-      title: 'Erro',
-      text: e.message,
-      icon: 'error'
-    })
+    Swal.fire({ title: 'Erro', text: e.message, icon: 'error', confirmButtonColor: '#2563eb' })
   }
 }
 
-const usarExemplo = (exemplo) => {
-  if (modo.value === 'arabico-romano') {
-    input.value = exemplo.arabico
-  } else {
-    input.value = exemplo.romano
-  }
+const usarExemplo = (ex) => {
+  if (modo.value === 'arabico-romano') input.value = ex.arabico
+  else input.value = ex.romano
   converter()
 }
+
+const limpar = () => { input.value = ''; output.value = '' }
 
 const copiar = async () => {
   try {
     await navigator.clipboard.writeText(output.value)
-    Swal.fire({
-      title: 'Copiado!',
-      text: 'Número copiado para área de transferência',
-      icon: 'success',
-      timer: 1500,
-      showConfirmButton: false
-    })
+    Swal.fire({ title: 'Copiado!', icon: 'success', timer: 1500, showConfirmButton: false })
   } catch {
     Swal.fire('Erro', 'Não foi possível copiar', 'error')
   }
 }
 
-// Conversão inicial
 converter()
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

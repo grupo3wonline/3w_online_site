@@ -1,143 +1,208 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-amber-100 dark:bg-amber-900/30 rounded-full mb-4">
-          <i class="fas fa-calendar-days text-amber-600 dark:text-amber-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Conversor de Timestamp</h1>
-        <p class="text-gray-600 dark:text-gray-400">Converta timestamp Unix</p>
-      </div>
+  <ToolShell
+    title="Conversor de Timestamp Unix"
+    description="Converta timestamps Unix para datas legíveis e vice-versa. Exibe o timestamp atual em tempo real."
+    icon="fa-clock-rotate-left"
+    icon-gradient="from-purple-500 to-violet-700"
+    orb-color="purple"
+    :quick-tips="['Timestamp Unix em tempo real', 'Timestamp ↔ Data', 'Segundos e milissegundos']"
+    :tips="[
+      { title: 'O que é Unix Timestamp?', text: 'É o número de segundos decorridos desde 01/01/1970 00:00:00 UTC (Epoch). Não é afetado por fusos horários.', type: 'info' },
+      { title: 'JavaScript usa ms', text: 'JavaScript usa milissegundos: Date.now() retorna ms. Divida por 1000 para obter segundos. PHP e C usam segundos.', type: 'warning' },
+      { title: 'Bug do ano 2038', text: 'Sistemas 32-bit transbordam em 19/01/2038 às 03:14:07 UTC (máximo de int32 assinado). Sistemas 64-bit não têm esse problema.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Epoch zero', desc: '0 (timestamp Unix)', result: '01/01/1970 00:00:00 UTC — início do tempo Unix' },
+      { title: 'Exemplo recente', desc: '1700000000 (timestamp)', result: '14/11/2023 22:13:20 (horário Brasília UTC-3)' },
+      { title: 'Converter data', desc: '01/01/2025 00:00:00', result: 'Timestamp: 1735689600 | MS: 1735689600000' },
+    ]"
+  >
 
-      <div class="space-y-6">
-        <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl p-6 text-center text-white">
-          <div class="text-sm font-medium mb-2">Timestamp Atual</div>
-          <div class="text-4xl font-bold font-mono">{{ timestampAtual }}</div>
-          <button @click="copiar(timestampAtual.toString())" class="mt-3 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors text-sm">
-            <i class="fas fa-copy mr-2"></i>Copiar
-          </button>
-        </div>
-
-        <div class="flex gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <button @click="modo = 'timestamp-data'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'timestamp-data' ? 'bg-amber-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            Timestamp → Data
-          </button>
-          <button @click="modo = 'data-timestamp'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'data-timestamp' ? 'bg-amber-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            Data → Timestamp
-          </button>
-        </div>
-
-        <div v-if="modo === 'timestamp-data'" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Timestamp Unix (segundos)</label>
-            <input v-model="timestampInput" @input="converterTimestampParaData" type="number" placeholder="1698710400" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono">
-          </div>
-        </div>
-
-        <div v-else class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Data e Hora</label>
-            <input v-model="dataInput" @input="converterDataParaTimestamp" type="datetime-local" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-          </div>
-        </div>
-
-        <div v-if="resultado" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-          <div class="flex items-center justify-between p-4 bg-white dark:bg-gray-600 rounded-lg">
-            <div>
-              <div class="text-xs text-gray-500 dark:text-gray-400">Data Completa</div>
-              <div class="text-lg font-semibold text-gray-900 dark:text-white">{{ resultado.dataCompleta }}</div>
-            </div>
-            <button @click="copiar(resultado.dataCompleta)" class="px-3 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm">
-              <i class="fas fa-copy"></i>
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div class="p-3 bg-white dark:bg-gray-600 rounded-lg">
-              <div class="text-xs text-gray-500 dark:text-gray-400">Data</div>
-              <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ resultado.data }}</div>
-            </div>
-            <div class="p-3 bg-white dark:bg-gray-600 rounded-lg">
-              <div class="text-xs text-gray-500 dark:text-gray-400">Hora</div>
-              <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ resultado.hora }}</div>
-            </div>
-            <div class="p-3 bg-white dark:bg-gray-600 rounded-lg">
-              <div class="text-xs text-gray-500 dark:text-gray-400">Timestamp (s)</div>
-              <div class="text-sm font-semibold text-gray-900 dark:text-white font-mono">{{ resultado.timestamp }}</div>
-            </div>
-            <div class="p-3 bg-white dark:bg-gray-600 rounded-lg">
-              <div class="text-xs text-gray-500 dark:text-gray-400">Timestamp (ms)</div>
-              <div class="text-sm font-semibold text-gray-900 dark:text-white font-mono">{{ resultado.timestampMs }}</div>
-            </div>
-          </div>
+    <!-- Timestamp atual em tempo real -->
+    <div class="glass-panel p-5 mb-5">
+      <div class="text-center">
+        <div class="text-xs text-gray-500 dark:text-slate-400 mb-2 uppercase tracking-wide">Timestamp Unix Atual</div>
+        <div class="text-4xl font-black font-mono text-purple-600 dark:text-purple-400">{{ timestampAtual }}</div>
+        <div class="text-xs text-gray-400 dark:text-slate-500 mt-1">segundos desde 01/01/1970 UTC</div>
+        <div class="mt-3">
+          <BaseButton variant="outline" size="xs" icon="fa-copy" @click="copiar(timestampAtual.toString())">
+            Copiar timestamp
+          </BaseButton>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Seletor de modo -->
+    <div class="flex gap-2 p-1 bg-gray-100 dark:bg-slate-800 rounded-xl mb-4">
+      <button
+        @click="modo = 'timestamp-data'"
+        :class="[
+          'flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all',
+          modo === 'timestamp-data' ? 'bg-purple-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700',
+        ]"
+      >
+        <i class="fas fa-arrow-right mr-1.5"></i>Timestamp → Data
+      </button>
+      <button
+        @click="modo = 'data-timestamp'"
+        :class="[
+          'flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm transition-all',
+          modo === 'data-timestamp' ? 'bg-purple-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-700',
+        ]"
+      >
+        <i class="fas fa-arrow-left mr-1.5"></i>Data → Timestamp
+      </button>
+    </div>
+
+    <!-- Formulário -->
+    <div class="tool-body !mb-0">
+      <div v-if="modo === 'timestamp-data'">
+        <BaseInput
+          v-model="timestampInput"
+          label="Timestamp Unix (segundos)"
+          type="number"
+          icon="fa-hashtag"
+          placeholder="1700000000"
+          tooltip="Digite um timestamp Unix em segundos. Timestamps em milissegundos (13 dígitos) são divididos por 1000 automaticamente."
+          hint="Ex: 1700000000 (segundos) ou 1700000000000 (milissegundos)"
+          @input="converterTimestampParaData"
+        />
+      </div>
+      <div v-else>
+        <label class="input-aurora-label">
+          <i class="fas fa-calendar-alt mr-1.5 text-purple-500"></i>
+          Data e Hora
+        </label>
+        <input
+          v-model="dataInput"
+          @input="converterDataParaTimestamp"
+          type="datetime-local"
+          class="input-aurora"
+        />
+        <p class="input-aurora-hint">Selecione a data e hora no fuso local do seu navegador</p>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <Transition name="scale-in" appear>
+      <div v-if="resultado" class="mt-5 space-y-4">
+        <div class="tool-header text-center py-5">
+          <p class="text-sm text-blue-200 mb-1">Data Completa</p>
+          <p class="text-2xl font-black text-white">{{ resultado.dataCompleta }}</p>
+          <div class="mt-3">
+            <BaseButton variant="glass" size="sm" icon="fa-copy" @click="copiar(resultado.dataCompleta)">
+              Copiar data
+            </BaseButton>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="metric-glass ring-1 ring-purple-100 dark:ring-purple-900">
+            <div class="metric-glass-value text-purple-600 dark:text-purple-400">{{ resultado.data }}</div>
+            <div class="metric-glass-label">Data</div>
+          </div>
+          <div class="metric-glass ring-1 ring-violet-100 dark:ring-violet-900">
+            <div class="metric-glass-value text-violet-600 dark:text-violet-400">{{ resultado.hora }}</div>
+            <div class="metric-glass-label">Hora</div>
+          </div>
+        </div>
+
+        <div class="glass-panel p-4">
+          <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+            <i class="fas fa-clock text-purple-500"></i>
+            Formatos de Timestamp
+          </h4>
+          <div class="space-y-2">
+            <div
+              v-for="item in [
+                { label: 'Timestamp (s)',  value: resultado.timestamp,   hint: 'PHP, Python, Unix' },
+                { label: 'Timestamp (ms)', value: resultado.timestampMs, hint: 'JavaScript, Java' },
+                { label: 'ISO 8601',       value: resultado.iso,         hint: 'Web, APIs REST' },
+              ]"
+              :key="item.label"
+              class="flex items-center justify-between p-2.5 rounded-xl bg-gray-50 dark:bg-slate-800/50"
+            >
+              <div>
+                <div class="text-xs text-gray-500 dark:text-slate-400">{{ item.label }}</div>
+                <div class="font-mono font-bold text-sm text-purple-600 dark:text-purple-400">{{ item.value }}</div>
+                <div class="text-xs text-gray-400 dark:text-slate-500">{{ item.hint }}</div>
+              </div>
+              <BaseButton variant="ghost" size="xs" icon="fa-copy" @click="copiar(String(item.value))" tooltip="Copiar" />
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card-success">
+          <i class="fas fa-check-circle text-emerald-500 flex-shrink-0 mt-0.5"></i>
+          <span class="text-xs">Timestamps são independentes de fuso horário — representam o mesmo instante em todo o mundo.</span>
+        </div>
+      </div>
+    </Transition>
+
+    <div v-if="!resultado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500 mt-4">
+      <i class="fas fa-clock-rotate-left text-3xl mb-3 opacity-30 block text-purple-400"></i>
+      <p class="text-sm">Digite um timestamp ou selecione uma data para converter</p>
+    </div>
+
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// @ts-nocheck
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
 
-const { trackToolUsage, trackConversion } = useAnalytics()
-
-const modo = ref('timestamp-data')
-const timestampAtual = ref(Math.floor(Date.now() / 1000))
-const timestampInput = ref('')
-const dataInput = ref('')
-const resultado = ref(null)
+const modo            = ref('timestamp-data')
+const timestampAtual  = ref(Math.floor(Date.now() / 1000))
+const timestampInput  = ref('')
+const dataInput       = ref('')
+const resultado       = ref(null)
 
 let intervalo = null
 
+const buildResultado = (data, ts) => ({
+  dataCompleta: data.toLocaleString('pt-BR'),
+  data:         data.toLocaleDateString('pt-BR'),
+  hora:         data.toLocaleTimeString('pt-BR'),
+  timestamp:    ts,
+  timestampMs:  ts * 1000,
+  iso:          data.toISOString(),
+})
+
 const converterTimestampParaData = () => {
-  const ts = Number(timestampInput.value)
-  if (ts && ts > 0) {
-    const data = new Date(ts * 1000)
-    resultado.value = {
-      dataCompleta: data.toLocaleString('pt-BR'),
-      data: data.toLocaleDateString('pt-BR'),
-      hora: data.toLocaleTimeString('pt-BR'),
-      timestamp: ts,
-      timestampMs: ts * 1000
-    }
-    trackToolUsage('Conversor Timestamp', 'timestamp-to-date')
-  }
+  let ts = Number(timestampInput.value)
+  if (!ts || ts <= 0) { resultado.value = null; return }
+  if (ts > 1e12) ts = Math.floor(ts / 1000) // milissegundos → segundos
+  resultado.value = buildResultado(new Date(ts * 1000), ts)
 }
 
 const converterDataParaTimestamp = () => {
-  if (dataInput.value) {
-    const data = new Date(dataInput.value)
-    const ts = Math.floor(data.getTime() / 1000)
-    resultado.value = {
-      dataCompleta: data.toLocaleString('pt-BR'),
-      data: data.toLocaleDateString('pt-BR'),
-      hora: data.toLocaleTimeString('pt-BR'),
-      timestamp: ts,
-      timestampMs: ts * 1000
-    }
-    trackToolUsage('Conversor Timestamp', 'date-to-timestamp')
-  }
+  if (!dataInput.value) { resultado.value = null; return }
+  const data = new Date(dataInput.value)
+  const ts   = Math.floor(data.getTime() / 1000)
+  resultado.value = buildResultado(data, ts)
 }
 
 const copiar = async (texto) => {
   try {
     await navigator.clipboard.writeText(texto)
-    trackConversion('copy', 'timestamp')
     Swal.fire({ icon: 'success', title: 'Copiado!', timer: 1000, showConfirmButton: false })
-  } catch (error) {
+  } catch {
     Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível copiar' })
   }
 }
 
 onMounted(() => {
-  intervalo = setInterval(() => {
-    timestampAtual.value = Math.floor(Date.now() / 1000)
-  }, 1000)
+  intervalo = setInterval(() => { timestampAtual.value = Math.floor(Date.now() / 1000) }, 1000)
 })
-
-onUnmounted(() => {
-  if (intervalo) clearInterval(intervalo)
-})
+onUnmounted(() => { if (intervalo) clearInterval(intervalo) })
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.3s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>
