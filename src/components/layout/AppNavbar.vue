@@ -75,6 +75,53 @@
             </span>
           </RouterLink>
 
+          <!-- Soluções Dropdown -->
+          <div class="relative" @mouseenter="solucoesOpen = true" @mouseleave="solucoesOpen = false">
+            <button
+              class="nav-link"
+              :class="{ '!text-white !bg-white/10': isSolucoesActive }"
+              :aria-expanded="solucoesOpen"
+              aria-haspopup="true"
+            >
+              <Icon icon="mdi:rocket-launch-outline" class="w-4 h-4 mr-1.5 text-accent-300" />
+              Soluções
+              <span class="ml-1.5 px-1.5 py-0.5 bg-gradient-to-r from-accent-500 to-accent-600 text-white font-black text-[9px] rounded-full uppercase tracking-wider shadow-sm">
+                62
+              </span>
+              <Icon icon="mdi:chevron-down" class="w-3.5 h-3.5 ml-1 inline transition-transform duration-200" :class="{ 'rotate-180': solucoesOpen }" />
+            </button>
+            <Transition name="dropdown">
+              <div v-show="solucoesOpen" class="absolute top-full left-0 mt-1 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden">
+                <div class="px-3 py-1.5 border-b border-gray-100 bg-gray-50/70">
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500">62 Soluções Digitais</span>
+                </div>
+                <div class="py-1">
+                  <RouterLink
+                    v-for="cat in solucoesCategories"
+                    :key="cat.path"
+                    :to="cat.path"
+                    class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors"
+                    @click="solucoesOpen = false"
+                  >
+                    <div class="w-6 h-6 rounded flex items-center justify-center shrink-0" :class="cat.color">
+                      <Icon :icon="cat.icon" class="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <span>{{ cat.label }}</span>
+                  </RouterLink>
+                </div>
+                <div class="p-2 bg-gray-50 border-t border-gray-100">
+                  <RouterLink
+                    to="/solucoes"
+                    class="block text-center text-xs font-semibold text-primary-600 hover:text-primary-700 py-1"
+                    @click="solucoesOpen = false"
+                  >
+                    Ver todas as soluções →
+                  </RouterLink>
+                </div>
+              </div>
+            </Transition>
+          </div>
+
           <RouterLink to="/institucional" class="nav-link" active-class="!text-white !bg-white/10">
             Institucional
           </RouterLink>
@@ -189,16 +236,28 @@ const { isDark, toggleDark } = useDarkMode()
 const route = useRoute()
 const mobileOpen = ref(false)
 const servicesOpen = ref(false)
+const solucoesOpen = ref(false)
 
 const isServicesActive = computed(() => route.path.startsWith('/servicos'))
+const isSolucoesActive = computed(() => route.path.startsWith('/solucoes'))
 
 const mobileLinks = [
   { path: '/', label: 'Home', icon: 'mdi:home-outline' },
   { path: '/sobre', label: 'Sobre Nós', icon: 'mdi:information-outline' },
   { path: '/servicos', label: 'Todos os Serviços', icon: 'mdi:briefcase-outline' },
   { path: '/ferramentas', label: 'Ferramentas Digitais', icon: 'mdi:tools', badge: '120+ Grátis' },
+  { path: '/solucoes', label: 'Soluções Digitais', icon: 'mdi:rocket-launch-outline', badge: '62 Apps' },
   { path: '/institucional', label: 'Institucional', icon: 'mdi:domain' },
   { path: '/contato', label: 'Contato & Orçamento', icon: 'mdi:card-account-mail-outline' },
+]
+
+const solucoesCategories = [
+  { path: '/solucoes?cat=financas', label: 'Finanças & Saúde', icon: 'mdi:cash-multiple', color: 'bg-emerald-600' },
+  { path: '/solucoes?cat=marketing', label: 'Marketing', icon: 'mdi:trending-up', color: 'bg-orange-600' },
+  { path: '/solucoes?cat=dev', label: 'Dev Tools', icon: 'mdi:code-braces', color: 'bg-cyan-600' },
+  { path: '/solucoes?cat=texto', label: 'Texto & Conteúdo', icon: 'mdi:text-box-outline', color: 'bg-violet-600' },
+  { path: '/solucoes?cat=design', label: 'Design & Mídia', icon: 'mdi:palette-outline', color: 'bg-pink-600' },
+  { path: '/solucoes?cat=negocios', label: 'Negócios', icon: 'mdi:briefcase-outline', color: 'bg-yellow-600' },
 ]
 
 const serviceDropdown = [

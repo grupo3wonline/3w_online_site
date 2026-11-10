@@ -309,6 +309,9 @@ const routes: RouteRecordRaw[] = [
     },
   },
 
+  // Soluções Digitais (63 rotas: catálogo + 62 soluções individuais)
+  ...solucoesRoutes,
+
   // Ferramentas (todas as 126+ ferramentas integradas)
   ...toolsRoutes,
 
