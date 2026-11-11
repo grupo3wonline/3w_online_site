@@ -56,7 +56,7 @@
             <div class="text-xs text-slate-300">Projetos Executados</div>
           </div>
           <div class="p-2">
-            <div class="text-2xl sm:text-4xl font-black text-primary-400 mb-1">120+</div>
+            <div class="text-2xl sm:text-4xl font-black text-primary-400 mb-1">280+</div>
             <div class="text-xs text-slate-300">Ferramentas Criadas</div>
           </div>
           <div class="p-2">

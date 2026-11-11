@@ -45,7 +45,7 @@
         <div class="max-w-3xl">
           <div class="inline-flex items-center gap-2 bg-secondary-500/20 text-secondary-300 border border-secondary-500/30 px-3 py-1 rounded-full text-xs font-semibold mb-4">
             <Icon icon="mdi:lightning-bolt" class="w-3.5 h-3.5 text-secondary-400" />
-            <span>182 Ferramentas & Aplicações • 100% Gratuitas & Client-Side</span>
+            <span>287 Ferramentas & Aplicações • 100% Gratuitas & Client-Side</span>
           </div>
           <h1 class="page-hero-title">Ferramentas & Aplicações Digitais</h1>
           <p class="page-hero-subtitle mb-8 max-w-2xl leading-relaxed">
@@ -63,7 +63,7 @@
 
     <!-- ── Stats rápidos de categorias ───────────────────────────── -->
     <section class="container py-6">
-      <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2.5">
+      <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2">
         <button
           v-for="stat in categoryStats"
           :key="stat.id"
@@ -91,7 +91,7 @@
           <input
             v-model="searchQuery"
             type="search"
-            placeholder="Buscar nas 182 ferramentas e aplicações..."
+            placeholder="Buscar nas 287 ferramentas e aplicações..."
             class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all"
             aria-label="Buscar ferramentas e aplicações"
           />
@@ -345,7 +345,7 @@ let promoInterval: ReturnType<typeof setInterval> | null = null
 // ─── Metadados de categorias de ferramentas (store) ───────────────────────────
 const toolCategoryMeta: Record<string, { label: string; icon: string; color: string; bg: string }> = {
   calculadoras: { label: 'Calculadoras',         icon: 'mdi:calculator',                     color: 'text-blue-600 dark:text-blue-400',    bg: 'bg-blue-50 dark:bg-blue-900/30'    },
-  geradores:    { label: 'Geradores',             icon: 'mdi:wand-magic-sparkles',             color: 'text-purple-600 dark:text-purple-400',bg: 'bg-purple-50 dark:bg-purple-900/30'},
+  geradores:    { label: 'Geradores',             icon: 'mdi:auto-fix',             color: 'text-purple-600 dark:text-purple-400',bg: 'bg-purple-50 dark:bg-purple-900/30'},
   conversores:  { label: 'Conversores',           icon: 'mdi:swap-horizontal',                 color: 'text-cyan-600 dark:text-cyan-400',    bg: 'bg-cyan-50 dark:bg-cyan-900/30'    },
   validadores:  { label: 'Validadores',           icon: 'mdi:checkbox-marked-circle-outline',  color: 'text-green-600 dark:text-green-400',  bg: 'bg-green-50 dark:bg-green-900/30'  },
   simuladores:  { label: 'Simuladores',           icon: 'mdi:chart-timeline-variant',          color: 'text-teal-600 dark:text-teal-400',    bg: 'bg-teal-50 dark:bg-teal-900/30'    },
@@ -354,18 +354,19 @@ const toolCategoryMeta: Record<string, { label: string; icon: string; color: str
 
 // ─── Definições de categorias de aplicações ────────────────────────────────────
 const appCategoryDefs = [
-  { id: 'financas', label: 'Finanças & Saúde', icon: 'mdi:cash-multiple',    color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/30' },
-  { id: 'marketing',label: 'Marketing',        icon: 'mdi:trending-up',      color: 'text-orange-600 dark:text-orange-400',  bg: 'bg-orange-50 dark:bg-orange-900/30'   },
-  { id: 'dev',      label: 'Dev Tools',        icon: 'mdi:code-braces',      color: 'text-sky-600 dark:text-sky-400',        bg: 'bg-sky-50 dark:bg-sky-900/30'         },
-  { id: 'texto',    label: 'Texto & Conteúdo', icon: 'mdi:text-box-outline', color: 'text-violet-600 dark:text-violet-400',  bg: 'bg-violet-50 dark:bg-violet-900/30'   },
-  { id: 'design',   label: 'Design & Mídia',   icon: 'mdi:palette-outline',  color: 'text-pink-600 dark:text-pink-400',      bg: 'bg-pink-50 dark:bg-pink-900/30'       },
-  { id: 'negocios', label: 'Negócios',          icon: 'mdi:briefcase-outline',color: 'text-amber-600 dark:text-amber-400',    bg: 'bg-amber-50 dark:bg-amber-900/30'     },
+  { id: 'financas',    label: 'Finanças & Saúde',    icon: 'mdi:cash-multiple',                   color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/30' },
+  { id: 'marketing',   label: 'Marketing Digital',    icon: 'mdi:trending-up',                     color: 'text-orange-600 dark:text-orange-400',  bg: 'bg-orange-50 dark:bg-orange-900/30'   },
+  { id: 'dev',         label: 'Dev Tools',            icon: 'mdi:code-braces',                     color: 'text-sky-600 dark:text-sky-400',         bg: 'bg-sky-50 dark:bg-sky-900/30'         },
+  { id: 'texto',       label: 'Texto & Conteúdo',     icon: 'mdi:text-box-outline',                color: 'text-violet-600 dark:text-violet-400',   bg: 'bg-violet-50 dark:bg-violet-900/30'   },
+  { id: 'design',      label: 'Design & Mídia',       icon: 'mdi:palette-outline',                 color: 'text-pink-600 dark:text-pink-400',       bg: 'bg-pink-50 dark:bg-pink-900/30'       },
+  { id: 'documentos',  label: 'Documentos',           icon: 'mdi:file-document-multiple-outline',  color: 'text-blue-600 dark:text-blue-400',       bg: 'bg-blue-50 dark:bg-blue-900/30'       },
+  { id: 'dados',       label: 'Geradores de Dados',   icon: 'mdi:database-plus-outline',           color: 'text-purple-600 dark:text-purple-400',   bg: 'bg-purple-50 dark:bg-purple-900/30'   },
+  { id: 'matematica',  label: 'Matemática & Datas',   icon: 'mdi:calculator-variant-outline',      color: 'text-teal-600 dark:text-teal-400',       bg: 'bg-teal-50 dark:bg-teal-900/30'       },
 ]
 
 // ─── Dados de aplicações (62 apps) ────────────────────────────────────────────
 const apps = [
   // Finanças & Saúde
-  { slug: 'calculadora-imc',                        name: 'Calculadora de IMC',                     category: 'financas', description: 'Calcule o Índice de Massa Corporal e veja sua classificação.', icon: 'mdi:weight' },
   { slug: 'calculadora-saude',                      name: 'Calculadora de Saúde',                   category: 'financas', description: 'TMB, hidratação, calorias e plano nutricional completo.', icon: 'mdi:heart-pulse' },
   { slug: 'seu-peso',                               name: 'Seu Peso',                               category: 'financas', description: 'Monitore seu peso e acompanhe seu progresso.', icon: 'mdi:scale' },
   { slug: 'calculadora-aluguel-facil',              name: 'Calculadora de Aluguel Fácil',           category: 'financas', description: 'Calcule o aluguel ideal com base na renda e custos.', icon: 'mdi:home-city' },
@@ -389,7 +390,7 @@ const apps = [
   { slug: 'simuladores-empresariais',               name: 'Simuladores Empresariais',               category: 'marketing', description: 'Simule cenários e tome decisões estratégicas.', icon: 'mdi:domain' },
   { slug: 'empreenda-facil',                        name: 'Empreenda Fácil',                        category: 'marketing', description: 'Ferramenta completa para planejamento do negócio.', icon: 'mdi:store' },
   { slug: 'calculadora-empresarial',                name: 'Calculadora Empresarial',                category: 'marketing', description: 'Calcule indicadores essenciais da empresa.', icon: 'mdi:calculator-variant' },
-  { slug: 'calculadora-programadores',              name: 'Calculadora Programadores',              category: 'marketing', description: 'Calculadora multi-função para devs.', icon: 'mdi:code-tags' },
+  { slug: 'calculadora-programadores',              name: 'Calculadora Programadores',              category: 'dev', description: 'Calculadora multi-função para devs.', icon: 'mdi:code-tags' },
   // Dev Tools
   { slug: 'code-gen',                               name: 'CodeGen QR & Barcode',                   category: 'dev', description: 'Gere QR Codes e códigos de barras personalizados.', icon: 'mdi:qrcode' },
   { slug: 'code-logic-flow-studio',                 name: 'Code Logic Flow Studio',                 category: 'dev', description: 'Crie e visualize fluxos de lógica interativos.', icon: 'mdi:arrow-decision-outline' },
@@ -399,39 +400,160 @@ const apps = [
   { slug: 'dev-toolkit-suite-essentials',           name: 'Dev Toolkit Suite',                      category: 'dev', description: 'Suite completa de ferramentas para devs.', icon: 'mdi:toolbox-outline' },
   { slug: 'calculadora-ponto-eletrico',             name: 'Calculadora Elétrica',                   category: 'dev', description: 'Calcule carga e potência de projetos elétricos.', icon: 'mdi:lightning-bolt' },
   { slug: 'calculadora-metragem-cabo',              name: 'Calculadora de Cabos',                   category: 'dev', description: 'Calcule a quantidade de cabo para instalações.', icon: 'mdi:ethernet-cable' },
-  { slug: 'dados-brasil-generator-pro',             name: 'Dados Brasil Generator',                 category: 'dev', description: 'Gere dados fictícios brasileiros para testes.', icon: 'mdi:database-outline' },
+  { slug: 'dados-brasil-generator-pro',             name: 'Dados Brasil Generator',                 category: 'dados', description: 'Gere dados fictícios brasileiros para testes.', icon: 'mdi:database-outline' },
   { slug: 'entity-converter-pro',                   name: 'Entity Converter Pro',                   category: 'dev', description: 'Converta HTML entities e caracteres especiais.', icon: 'mdi:swap-horizontal' },
   { slug: 'excel-consolidator',                     name: 'Excel Consolidator',                     category: 'dev', description: 'Consolide planilhas Excel no browser.', icon: 'mdi:microsoft-excel' },
   { slug: 'pdf-convert-pro',                        name: 'PDF Convert Pro',                        category: 'dev', description: 'Converta e mescle arquivos PDF online.', icon: 'mdi:file-pdf-box' },
   { slug: 'srt-converter-pro',                      name: 'SRT Converter Pro',                      category: 'dev', description: 'Converta e edite legendas SRT.', icon: 'mdi:subtitles-outline' },
-  { slug: 'qr-code-pro',                            name: 'QR Code Pro',                            category: 'dev', description: 'Crie QR Codes com logo e cores.', icon: 'mdi:qrcode-scan' },
+  { slug: 'qr-code-pro',                            name: 'QR Code Pro',                            category: 'dev', description: 'Gere QR Codes com logo, cores, formatos PNG/SVG e download direto.', icon: 'mdi:qrcode-scan' },
   { slug: 'secure-secret-generator',                name: 'Gerador de Senhas Seguras',              category: 'dev', description: 'Gere senhas e segredos altamente seguros.', icon: 'mdi:key-variant' },
   { slug: 'conversor-cores',                        name: 'Conversor de Cores',                     category: 'dev', description: 'Converta cores entre HEX, RGB, HSL e outros.', icon: 'mdi:eyedropper-variant' },
   { slug: 'convert-share',                          name: 'Convert & Share',                        category: 'dev', description: 'Converta e compartilhe arquivos nos formatos populares.', icon: 'mdi:share-variant-outline' },
   // Texto & Conteúdo
-  { slug: 'analisador-texto',                       name: 'Analisador de Texto',                    category: 'texto', description: 'Analise textos: contagem, frequência e legibilidade.', icon: 'mdi:text-search' },
-  { slug: 'divisor-texto',                          name: 'Divisor de Texto',                       category: 'texto', description: 'Divida textos em partes iguais ou por delimitador.', icon: 'mdi:format-columns' },
-  { slug: 'extrator-email-cpf-cnpj',               name: 'Extrator E-mail/CPF/CNPJ',              category: 'texto', description: 'Extraia e-mails, CPFs e CNPJs de qualquer texto.', icon: 'mdi:email-search-outline' },
+  { slug: 'extrator-email-cpf-cnpj',               name: 'Extrator E-mail/CPF/CNPJ',              category: 'texto', description: 'Extraia e-mails, CPFs e CNPJs de qualquer texto � c�pia individual ou em lote.', icon: 'mdi:email-search-outline' },
   { slug: 'extrator-texto',                         name: 'Extrator de Texto',                      category: 'texto', description: 'Extraia conteúdo específico com regex.', icon: 'mdi:text-box-search-outline' },
   { slug: 'manipulador-lista',                      name: 'Manipulador de Lista',                   category: 'texto', description: 'Ordene, duplique, filtre e transforme listas.', icon: 'mdi:format-list-bulleted' },
-  { slug: 'modificador-texto',                      name: 'Modificador de Texto',                   category: 'texto', description: 'Transforme textos: maiúsculas, slug, título e mais.', icon: 'mdi:format-text' },
   { slug: 'wordcraft-pro',                          name: 'WordCraft Pro',                          category: 'texto', description: 'Editor avançado com ferramentas de formatação.', icon: 'mdi:pencil-ruler' },
-  { slug: 'ipsum-generator-plus',                   name: 'Ipsum Generator Plus',                   category: 'texto', description: 'Gere Lorem Ipsum e textos placeholder.', icon: 'mdi:format-quote-close' },
+  { slug: 'ipsum-generator-plus',                   name: 'Ipsum Generator Plus',                   category: 'texto', description: 'Gere Lorem Ipsum, Hemdal Lorem e textos placeholder em v�rios idiomas.', icon: 'mdi:format-quote-close' },
   { slug: 'extrator-email',                         name: 'Extrator de E-mails',                    category: 'texto', description: 'Extraia todos os e-mails de um texto.', icon: 'mdi:email-multiple-outline' },
   { slug: 'digitador',                              name: 'Digitador Automático',                   category: 'texto', description: 'Automatize a digitação com velocidade configurável.', icon: 'mdi:keyboard-outline' },
   { slug: 'teste-personalidade',                    name: 'Teste de Personalidade',                 category: 'texto', description: 'Descubra seu perfil com testes detalhados.', icon: 'mdi:head-cog-outline' },
   { slug: 'teste-vocacional',                       name: 'Teste Vocacional',                       category: 'texto', description: 'Descubra as carreiras alinhadas ao seu perfil.', icon: 'mdi:school-outline' },
   // Design & Mídia
   { slug: 'color-craft',                            name: 'Color Craft',                            category: 'design', description: 'Crie paletas de cores harmônicas.', icon: 'mdi:palette-outline' },
-  { slug: 'gerador-gradiente',                      name: 'Gerador de Gradiente',                   category: 'design', description: 'Crie gradientes CSS e copie o código.', icon: 'mdi:gradient-horizontal' },
   { slug: 'gerador-fatura',                         name: 'Gerador de Fatura',                      category: 'design', description: 'Crie faturas profissionais e exporte em PDF.', icon: 'mdi:receipt-text-outline' },
   { slug: 'thumbnail-pro',                          name: 'Thumbnail Pro',                          category: 'design', description: 'Crie thumbnails profissionais para vídeos.', icon: 'mdi:image-edit-outline' },
   { slug: 'thumbnail-youtube',                      name: 'Thumbnail YouTube',                      category: 'design', description: 'Design de thumbnails otimizados para YouTube.', icon: 'mdi:youtube' },
-  { slug: 'marca-dagua',                            name: "Marca d'Água",                           category: 'design', description: "Adicione marca d'água às suas imagens.", icon: 'mdi:copyright' },
   { slug: 'watermark-wizard',                       name: 'Watermark Wizard',                       category: 'design', description: "Ferramenta avançada para criar marcas d'água.", icon: 'mdi:image-lock-outline' },
-  // Negócios
-  { slug: 'sorteio-facil',                          name: 'Sorteio Fácil',                          category: 'negocios', description: 'Realize sorteios online transparentes.', icon: 'mdi:dice-5-outline' },
-  { slug: 'consulta-pix',                           name: 'Consulta PIX',                           category: 'negocios', description: 'Consulte e valide chaves PIX.', icon: 'mdi:bank-transfer' },
+  // Sorteio & PIX
+  { slug: 'sorteio-facil',                          name: 'Sorteio Fácil',                          category: 'dados', description: 'Realize sorteios online transparentes.', icon: 'mdi:dice-5-outline' },
+  { slug: 'consulta-pix',                           name: 'Consulta PIX',                           category: 'financas', description: 'Consulte e valide chaves PIX.', icon: 'mdi:bank-transfer' },
+  // Documentos
+  { slug: 'gerador-recibo-simples',                 name: 'Recibo Simples',                         category: 'documentos', description: 'Comprovante de pagamento rápido e profissional, em PDF.', icon: 'mdi:receipt-outline' },
+  { slug: 'nota-promissoria',                       name: 'Nota Promissória',                       category: 'documentos', description: 'Nota promissória válida juridicamente.', icon: 'mdi:file-document-edit-outline' },
+  { slug: 'declaracao-residencia',                  name: 'Declaração de Residência',               category: 'documentos', description: 'Comprove seu endereço residencial.', icon: 'mdi:home-account' },
+  { slug: 'recibo-servico',                         name: 'Recibo de Serviço',                      category: 'documentos', description: 'Recibo para prestação de serviços profissionais.', icon: 'mdi:receipt-text' },
+  { slug: 'recibo-aluguel',                         name: 'Recibo de Aluguel',                      category: 'documentos', description: 'Recibo de aluguel completo para locadores.', icon: 'mdi:home-city-outline' },
+  { slug: 'recibo-salario',                         name: 'Recibo de Salário',                      category: 'documentos', description: 'Comprovante de pagamento de salário.', icon: 'mdi:currency-usd' },
+  { slug: 'ordem-servico',                          name: 'Ordem de Serviço',                       category: 'documentos', description: 'Ordem de serviço completa e profissional.', icon: 'mdi:clipboard-list-outline' },
+  { slug: 'gerador-orcamento-doc',                  name: 'Gerador de Orçamento',                   category: 'documentos', description: 'Crie orçamentos detalhados para seus clientes.', icon: 'mdi:file-document-edit-outline' },
+  { slug: 'gerador-curriculo',                      name: 'Gerador de Currículo',                   category: 'documentos', description: 'Currículo profissional em minutos.', icon: 'mdi:card-account-details-outline' },
+  { slug: 'declaracao-hipossuficiencia',            name: 'Declaração de Hipossuficiência',         category: 'documentos', description: 'Declaração para solicitação de assistência jurídica.', icon: 'mdi:scale' },
+  { slug: 'declaracao-uniao-estavel-doc',           name: 'Declaração de União Estável',            category: 'documentos', description: 'Formalize sua união estável.', icon: 'mdi:heart-outline' },
+  { slug: 'declaracao-comodato',                    name: 'Declaração de Comodato',                 category: 'documentos', description: 'Cessão gratuita de imóvel com prazo e partes identificadas.', icon: 'mdi:key-outline' },
+  { slug: 'declaracao-dependencia-economica',       name: 'Declaração de Dependência Econômica',   category: 'documentos', description: 'Para INSS, IR e planos de saúde: comprova dependência.', icon: 'mdi:account-group-outline' },
+  { slug: 'declaracao-anuencia',                    name: 'Declaração de Anuência',                 category: 'documentos', description: 'Autorização de cônjuge ou sócio para venda ou locação.', icon: 'mdi:thumb-up-outline' },
+  { slug: 'declaracao-bons-antecedentes',           name: 'Declaração de Bons Antecedentes',        category: 'documentos', description: 'Autodeclaração de ausência de antecedentes criminais.', icon: 'mdi:shield-check-outline' },
+  { slug: 'autodeclaracao-etnico-racial',           name: 'Autodeclaração Étnico-Racial',           category: 'documentos', description: 'Raça/cor conforme IBGE para cotas em universidades e concursos.', icon: 'mdi:account-star-outline' },
+  { slug: 'declaracao-veracidade',                  name: 'Declaração de Veracidade',               category: 'documentos', description: 'Confirma autenticidade de informações e documentos.', icon: 'mdi:check-decagram-outline' },
+  { slug: 'procuracao-particular',                  name: 'Procuração Particular',                  category: 'documentos', description: 'Delegue poderes específicos a outra pessoa.', icon: 'mdi:stamp' },
+  { slug: 'termo-quitacao',                         name: 'Termo de Quitação',                      category: 'documentos', description: 'Declaração de quitação total ou parcial de dívida.', icon: 'mdi:check-circle-outline' },
+  { slug: 'autorizacao-uso-imagem',                 name: 'Autorização de Uso de Imagem',           category: 'documentos', description: 'Consentimento formal para uso de fotos e vídeos.', icon: 'mdi:camera-outline' },
+  { slug: 'contrato-namoro',                        name: 'Contrato de Namoro',                     category: 'documentos', description: 'Declare a independência patrimonial do relacionamento.', icon: 'mdi:heart-off-outline' },
+  { slug: 'comprovante-renda-mei',                  name: 'Comprovante de Renda MEI',               category: 'documentos', description: 'Declaração de faturamento do Microempreendedor Individual.', icon: 'mdi:store' },
+  { slug: 'declaracao-renda-informal',              name: 'Declaração de Renda Informal',           category: 'documentos', description: 'Autodeclaração de renda para autônomos sem CNPJ.', icon: 'mdi:hand-coin' },
+  { slug: 'contrato-aluguel-residencial',           name: 'Contrato de Aluguel Residencial',        category: 'documentos', description: 'Contrato de aluguel com valor, prazo, multas e reajuste.', icon: 'mdi:home-lock' },
+  { slug: 'contrato-uniao-estavel',                 name: 'Contrato de União Estável',              category: 'documentos', description: 'Formalize a convivência e escolha o regime de bens.', icon: 'mdi:ring' },
+  { slug: 'autorizacao-viagem-menor',               name: 'Autorização de Viagem para Menor',       category: 'documentos', description: 'Autorize a viagem de criança ou adolescente no formato CNJ.', icon: 'mdi:airplane-takeoff' },
+  { slug: 'contrato-prestacao-servico',             name: 'Contrato de Prestação de Serviço',       category: 'documentos', description: 'Combine por escrito o serviço, prazo e valor.', icon: 'mdi:file-document-edit-outline' },
+  { slug: 'declaracao-trabalho',                    name: 'Declaração de Trabalho',                 category: 'documentos', description: 'Empresa declara o vínculo, a função e o salário do colaborador.', icon: 'mdi:briefcase-check-outline' },
+
+  // ── Documentos: Geradores e Validadores BR (4devs-style) ──────────────────
+  { slug: 'gerador-cnh',                            name: 'Gerador de CNH',                         category: 'documentos', description: 'Gere números de CNH (Carteira Nacional de Habilitação) válidos para testes.', icon: 'mdi:card-account-details-outline' },
+  { slug: 'gerador-pis',                            name: 'Gerador de PIS/PASEP',                   category: 'documentos', description: 'Gere números de PIS/PASEP válidos para testes.', icon: 'mdi:numeric' },
+  { slug: 'gerador-renavam',                        name: 'Gerador de RENAVAM',                     category: 'documentos', description: 'Gere números de RENAVAM válidos para testes.', icon: 'mdi:car-cog' },
+  { slug: 'gerador-rg',                             name: 'Gerador de RG',                          category: 'documentos', description: 'Gere números de RG válidos para testes.', icon: 'mdi:card-account-details' },
+  { slug: 'gerador-titulo-eleitor',                 name: 'Gerador de Título de Eleitor',           category: 'documentos', description: 'Gere números de Título de Eleitor válidos para testes.', icon: 'mdi:vote-outline' },
+  { slug: 'gerador-certidao',                       name: 'Gerador de Certidões',                   category: 'documentos', description: 'Gere números de certidões de nascimento, casamento e óbito.', icon: 'mdi:certificate-outline' },
+  { slug: 'gerador-inscricao-estadual',             name: 'Gerador de Inscrição Estadual',          category: 'documentos', description: 'Gere inscrições estaduais válidas por estado.', icon: 'mdi:store' },
+  { slug: 'gerador-conta-bancaria',                 name: 'Gerador de Conta Bancária',              category: 'documentos', description: 'Gere dados de contas bancárias fictícias para testes.', icon: 'mdi:bank-outline' },
+  { slug: 'gerador-cep-br',                         name: 'Gerador de CEP',                         category: 'documentos', description: 'Gere CEPs válidos por estado brasileiro.', icon: 'mdi:map-marker-outline' },
+  { slug: 'gerador-placa-veiculo',                  name: 'Gerador de Placa de Veículo',            category: 'documentos', description: 'Gere placas nos formatos antigo (AAA-9999) e Mercosul (AAA9A99).', icon: 'mdi:card-text-outline' },
+  { slug: 'gerador-veiculo',                        name: 'Gerador de Dados de Veículo',            category: 'documentos', description: 'Gere dados completos de veículo: marca, modelo, placa, RENAVAM e chassi.', icon: 'mdi:car-outline' },
+  { slug: 'validador-cnh',                          name: 'Validador de CNH',                       category: 'documentos', description: 'Valide números de CNH usando o algoritmo oficial.', icon: 'mdi:shield-check-outline' },
+  { slug: 'validador-rg',                           name: 'Validador de RG',                        category: 'documentos', description: 'Valide números de RG do estado de São Paulo.', icon: 'mdi:shield-check' },
+  { slug: 'validador-certidao',                     name: 'Validador de Certidões',                 category: 'documentos', description: 'Valide o formato de certidões brasileiras.', icon: 'mdi:check-decagram-outline' },
+  { slug: 'validador-inscricao-estadual',           name: 'Validador de Insc. Estadual',            category: 'documentos', description: 'Valide inscrições estaduais por estado.', icon: 'mdi:check-circle-outline' },
+  { slug: 'validador-conta-bancaria',               name: 'Validador de Conta Bancária',            category: 'documentos', description: 'Valide o formato de contas bancárias brasileiras.', icon: 'mdi:bank-check' },
+
+  // ── Dados de Teste ────────────────────────────────────────────────────────
+  { slug: 'gerador-pessoas',                        name: 'Gerador de Pessoas',                     category: 'dados', description: 'Gere dados completos de pessoas fictícias: nome, CPF, endereço e e-mail.', icon: 'mdi:account-group-outline' },
+  { slug: 'gerador-empresas',                       name: 'Gerador de Empresas',                    category: 'dados', description: 'Gere dados completos de empresas fictícias com CNPJ válido.', icon: 'mdi:domain' },
+  { slug: 'gerador-nomes',                          name: 'Gerador de Nomes',                       category: 'dados', description: 'Gere nomes brasileiros aleatórios masculinos, femininos ou mistos.', icon: 'mdi:account-outline' },
+  { slug: 'gerador-nicks',                          name: 'Gerador de Nicks',                       category: 'dados', description: 'Gere nicks/apelidos criativos para games, redes sociais e usuários.', icon: 'mdi:at' },
+  { slug: 'simbolos-copiar',                        name: 'Símbolos para Copiar',                   category: 'texto', description: 'Mais de 150 símbolos especiais organizados por categoria. Clique para copiar.', icon: 'mdi:star-outline' },
+  { slug: 'gerador-imagem',                         name: 'Gerador de Imagem',                      category: 'design', description: 'Gere imagens placeholder personalizadas com tamanho, cor e texto customizáveis.', icon: 'mdi:image-edit-outline' },
+
+  // ── Texto (apps) ──────────────────────────────────────────────────────────
+  { slug: 'texto-ordem-alfabetica',                 name: 'Colocar em Ordem Alfabética',            category: 'texto', description: 'Ordene linhas de texto em ordem alfabética crescente ou decrescente.', icon: 'mdi:sort-alphabetical-ascending' },
+  { slug: 'texto-inverter',                         name: 'Inverter Texto',                         category: 'texto', description: 'Inverta a ordem dos caracteres do seu texto.', icon: 'mdi:format-text-rotation-180' },
+  { slug: 'texto-remover-acentos',                  name: 'Remover Acentos do Texto',               category: 'texto', description: 'Remova todos os acentos e caracteres especiais do texto.', icon: 'mdi:format-strikethrough' },
+  { slug: 'texto-newlines',                         name: 'Remover ou Trocar \\n',                  category: 'texto', description: 'Manipule quebras de linha: remova, substitua ou espaçe o texto.', icon: 'mdi:format-line-style' },
+  { slug: 'texto-contador-ocorrencias',             name: 'Contador de Ocorrência de Palavra',      category: 'texto', description: 'Conte quantas vezes uma palavra aparece no texto.', icon: 'mdi:counter' },
+  { slug: 'texto-cortar',                           name: 'Cortar Textos',                          category: 'texto', description: 'Corte (substring) qualquer texto pela posição inicial e final.', icon: 'mdi:content-cut' },
+  { slug: 'texto-info-caracter',                    name: 'Informações de Caractere',               category: 'texto', description: 'Obtenha código Unicode, decimal, hex, HTML e binário de qualquer caractere.', icon: 'mdi:information-outline' },
+  { slug: 'contador-caracteres',                    name: 'Contador de Caracteres',                 category: 'texto', description: 'Conte caracteres, palavras, linhas e parágrafos do seu texto.', icon: 'mdi:counter' },
+  { slug: 'letras-especiais',                       name: 'Letras Especiais / Personalizadas',      category: 'texto', description: 'Transforme texto em 14 estilos Unicode: negrito, itálico, circulado e mais.', icon: 'mdi:format-font' },
+  { slug: 'letras-diferentes',                      name: 'Gerador de Letras Diferentes',           category: 'texto', description: 'Gere letras em fontes diferentes e estilos Unicode para redes sociais.', icon: 'mdi:alphabet-latin' },
+  { slug: 'corretor-ortografico',                   name: 'Corretor Ortográfico',                   category: 'texto', description: 'Verifique e corrija erros ortográficos comuns no português brasileiro.', icon: 'mdi:spell-check' },
+
+  // ── Matemática (apps) ─────────────────────────────────────────────────────
+  { slug: 'numero-por-extenso',                     name: 'Número por Extenso',                     category: 'matematica', description: 'Converta qualquer número em texto por extenso em português.', icon: 'mdi:alphabetical' },
+  { slug: 'fatorar-numero',                         name: 'Fatorar Número',                         category: 'matematica', description: 'Encontre a fatoração prima de qualquer número inteiro.', icon: 'mdi:function-variant' },
+  { slug: 'resto-divisao',                          name: 'Resto da Divisão',                       category: 'matematica', description: 'Calcule o quociente e o resto de qualquer divisão inteira.', icon: 'mdi:division' },
+  { slug: 'numeros-aleatorios',                     name: 'Gerador de Números Aleatórios',          category: 'matematica', description: 'Sorteie números aleatórios em um intervalo com ou sem repetição.', icon: 'mdi:dice-5-outline' },
+  { slug: 'area-circulo',                           name: 'Área do Círculo',                        category: 'matematica', description: 'Calcule a área do círculo dado o raio. Fórmula: A = π × r².', icon: 'mdi:circle-outline' },
+  { slug: 'area-quadrado',                          name: 'Área do Quadrado',                       category: 'matematica', description: 'Calcule a área do quadrado dado o lado. Fórmula: A = l².', icon: 'mdi:square-outline' },
+  { slug: 'area-retangulo',                         name: 'Área do Retângulo',                      category: 'matematica', description: 'Calcule a área do retângulo. Fórmula: A = b × h.', icon: 'mdi:rectangle-outline' },
+  { slug: 'area-triangulo',                         name: 'Área do Triângulo',                      category: 'matematica', description: 'Calcule a área do triângulo. Fórmula: A = (b × h) / 2.', icon: 'mdi:triangle-outline' },
+  { slug: 'area-pentagono',                         name: 'Área do Pentágono',                      category: 'matematica', description: 'Calcule a área de um pentágono regular dado o lado.', icon: 'mdi:pentagon-outline' },
+  { slug: 'area-hexagono',                          name: 'Área do Hexágono',                       category: 'matematica', description: 'Calcule a área de um hexágono regular dado o lado.', icon: 'mdi:hexagon-outline' },
+  { slug: 'area-poligono-regular',                  name: 'Área do Polígono Regular',               category: 'matematica', description: 'Calcule a área de qualquer polígono regular: n lados e comprimento do lado.', icon: 'mdi:shape-outline' },
+  { slug: 'area-losango',                           name: 'Área do Losango',                        category: 'matematica', description: 'Calcule a área do losango pelas diagonais. Fórmula: A = (D × d) / 2.', icon: 'mdi:rhombus-outline' },
+  { slug: 'area-trapezio',                          name: 'Área do Trapézio',                       category: 'matematica', description: 'Calcule a área do trapézio pelas bases e altura.', icon: 'mdi:triangle-outline' },
+  { slug: 'area-paralelogramo',                     name: 'Área do Paralelogramo',                  category: 'matematica', description: 'Calcule a área do paralelogramo pela base e altura.', icon: 'mdi:rectangle-outline' },
+  { slug: 'area-elipse',                            name: 'Área da Elipse',                         category: 'matematica', description: 'Calcule a área da elipse pelos semi-eixos. Fórmula: A = π × a × b.', icon: 'mdi:ellipse-outline' },
+  { slug: 'area-coroa-circular',                    name: 'Área da Coroa Circular',                 category: 'matematica', description: 'Calcule a área da coroa circular (anel) pelos raios externo e interno.', icon: 'mdi:record-circle-outline' },
+  { slug: 'area-setor-circular',                    name: 'Área do Setor Circular',                 category: 'matematica', description: 'Calcule a área de um setor circular pelo raio e ângulo central.', icon: 'mdi:chart-pie' },
+  { slug: 'contador-dias',                          name: 'Contador de Dias entre Datas',           category: 'matematica', description: 'Calcule a diferença em dias, semanas, meses e anos entre duas datas.', icon: 'mdi:calendar-range-outline' },
+  { slug: 'somar-dias',                             name: 'Somar Dias em Datas',                    category: 'matematica', description: 'Adicione um número de dias a uma data e veja qual dia cairá.', icon: 'mdi:calendar-plus-outline' },
+  { slug: 'subtrair-dias',                          name: 'Subtrair Dias em Datas',                 category: 'matematica', description: 'Subtraia dias de uma data e veja qual dia resultará.', icon: 'mdi:calendar-minus-outline' },
+  { slug: 'meu-ip',                                 name: 'Meu Endereço IP',                        category: 'dev', description: 'Veja seu IP externo, localização e informações sobre sua conexão.', icon: 'mdi:ip-network-outline' },
+
+  // ── Calculadora Científica, ASCII & Loteria ───────────────────────────────
+  { slug: 'calculadora-cientifica',               name: 'Calculadora Científica & Financeira',    category: 'matematica', description: 'Calculadora científica completa, funções financeiras (juros, PMT, inflação) e gerador de tabuadas.', icon: 'mdi:calculator-variant' },
+  { slug: 'calculadora-financeira-pro',           name: 'Calculadora Financeira',                 category: 'matematica', description: 'Juros simples e compostos, financiamento, desconto comercial e correção por inflação.', icon: 'mdi:currency-usd' },
+  { slug: 'gerador-tabuada-avancado',             name: 'Gerador de Tabuada Avançado',            category: 'matematica', description: 'Gere tabuadas individuais ou múltiplas, com formato lista ou tabela, para impressão.', icon: 'mdi:table' },
+  { slug: 'conversor-ascii',                      name: 'ASCII / Encoding Converter',             category: 'texto', description: 'Converta texto para ASCII, Hex, Binário, Decimal, Base64, Unicode e Entidades HTML — bidirecional.', icon: 'mdi:terminal' },
+  { slug: 'gerador-loteria',                      name: 'Gerador de Jogos de Loteria',            category: 'dados', description: 'Gere números para Mega-Sena, Lotofácil, Quina, Lotomania e mais 7 loterias da CEF.', icon: 'mdi:ticket-confirmation-outline' },
+
+  // ── Marketing Pro (13 calculadoras) ──────────────────────────────────────────
+  { slug: 'calculadora-engajamento',               name: 'Calculadora de Engajamento',             category: 'marketing', description: 'Calcule a taxa de engajamento de posts no Instagram, TikTok e outras redes.', icon: 'mdi:heart-multiple-outline' },
+  { slug: 'calculadora-roas',                      name: 'Calculadora de ROAS',                    category: 'marketing', description: 'Return On Ad Spend: quanto você fatura para cada R$1 investido em anúncios.', icon: 'mdi:trending-up' },
+  { slug: 'calculadora-ltv',                       name: 'Calculadora de LTV',                     category: 'marketing', description: 'Lifetime Value: valor total que um cliente gera durante toda a relação com a empresa.', icon: 'mdi:account-clock-outline' },
+  { slug: 'calculadora-cac',                       name: 'Calculadora de CAC',                     category: 'marketing', description: 'Custo de Aquisição de Cliente: quanto custa, em média, conquistar cada novo cliente.', icon: 'mdi:account-plus-outline' },
+  { slug: 'simulador-funil-vendas',                name: 'Simulador de Funil de Vendas',           category: 'marketing', description: 'Simule as etapas do funil de vendas e calcule as taxas de conversão em cada etapa.', icon: 'mdi:filter-outline' },
+  { slug: 'calculadora-email-marketing',           name: 'Calculadora de E-mail Marketing',        category: 'marketing', description: 'Calcule taxa de abertura, CTR, conversão e ROI de campanhas de e-mail marketing.', icon: 'mdi:email-fast-outline' },
+  { slug: 'gerador-hashtags',                      name: 'Gerador de Hashtags',                    category: 'marketing', description: 'Gere hashtags relevantes por nicho para Instagram, TikTok, LinkedIn e X/Twitter.', icon: 'mdi:pound' },
+  { slug: 'calculadora-cpm-cpc',                   name: 'Calculadora CPM / CPC / CPA',            category: 'marketing', description: 'Calcule custo por mil impressões, por clique e por aquisição de qualquer campanha.', icon: 'mdi:currency-usd' },
+  { slug: 'calculadora-seo-organico',              name: 'Calculadora de SEO Orgânico',            category: 'marketing', description: 'Estime cliques, conversões e receita a partir do volume de buscas e posição no Google.', icon: 'mdi:magnify' },
+  { slug: 'calculadora-nps',                       name: 'Calculadora de NPS',                     category: 'marketing', description: 'Net Promoter Score: calcule a lealdade dos clientes com base em promotores e detratores.', icon: 'mdi:star-outline' },
+  { slug: 'calculadora-churn',                     name: 'Calculadora de Churn & Retenção',        category: 'marketing', description: 'Calcule taxa de churn mensal, anual, retenção e impacto no MRR.', icon: 'mdi:account-off-outline' },
+  { slug: 'calculadora-roi-marketing',             name: 'Calculadora de ROI de Marketing',        category: 'marketing', description: 'Calcule o Retorno sobre Investimento de qualquer campanha de marketing.', icon: 'mdi:chart-line' },
+  { slug: 'calculadora-influenciador',             name: 'Calculadora de Influenciadores',         category: 'marketing', description: 'Analise perfis: engajamento, tipo, alcance estimado e valor por post.', icon: 'mdi:instagram' },
+
+  // ── Design Pro (11 ferramentas) ───────────────────────────────────────────────
+  { slug: 'gerador-box-shadow',                    name: 'Gerador de Box Shadow CSS',              category: 'design', description: 'Crie sombras CSS com múltiplas camadas, preview em tempo real e código pronto.', icon: 'mdi:layers-outline' },
+  { slug: 'gerador-border-radius',                 name: 'Gerador de Border Radius CSS',           category: 'design', description: 'Gere bordas arredondadas com controle individual de cada canto e presets prontos.', icon: 'mdi:rounded-corner' },
+  { slug: 'verificador-contraste-wcag',            name: 'Verificador de Contraste WCAG',          category: 'design', description: 'Verifique acessibilidade de cores com razão de contraste e conformidade AA/AAA.', icon: 'mdi:contrast-box' },
+  { slug: 'escala-tipografica',                    name: 'Escala Tipográfica Modular',             category: 'design', description: 'Gere uma escala de tamanhos de fonte harmônica com razões como a Áurea e export CSS.', icon: 'mdi:format-font' },
+  { slug: 'calculadora-proporcao-tela',            name: 'Calculadora de Proporção',               category: 'design', description: 'Calcule dimensões mantendo proporção: 16:9, 4:3, 1:1 e qualquer proporção personalizada.', icon: 'mdi:aspect-ratio' },
+  { slug: 'paleta-harmonica',                      name: 'Paleta de Cores Harmônica',              category: 'design', description: 'Gere paletas complementares, analógicas, triádicas e tetrádicas a partir de qualquer cor.', icon: 'mdi:palette-swatch' },
+  { slug: 'sistema-espacamento',                   name: 'Sistema de Espaçamento CSS',             category: 'design', description: 'Gere um sistema de espaçamento consistente em base 4, 8, Fibonacci ou Tailwind.', icon: 'mdi:ruler-square' },
+  { slug: 'gerador-text-shadow',                   name: 'Gerador de Text Shadow CSS',             category: 'design', description: 'Crie sombras de texto com múltiplas camadas, preview e código CSS pronto para copiar.', icon: 'mdi:format-text' },
+  { slug: 'conversor-cores-avancado',              name: 'Conversor de Cores Avançado',            category: 'design', description: 'Converta cores entre HEX, RGB, RGBA, HSL, HSLA, HSV e CMYK com tons automáticos.', icon: 'mdi:eyedropper' },
+  { slug: 'gerador-gradiente-avancado',            name: 'Gerador de Gradiente Avançado',          category: 'design', description: 'Crie gradientes lineares, radiais e cônicos com múltiplas cores e presets elegantes.', icon: 'mdi:gradient-horizontal' },
+  { slug: 'gerador-padroes-css',                   name: 'Gerador de Padrões CSS',                 category: 'design', description: 'Gere backgrounds repetitivos: pontos, grade, linhas, diagonal e xadrez.', icon: 'mdi:texture' },
 ]
 
 // ─── Itens unificados para busca global ───────────────────────────────────────
@@ -459,20 +581,22 @@ const unifiedItems = computed<UnifiedItem[]>(() => {
 // ─── Categorias unificadas (ferramentas + apps) ───────────────────────────────
 const allCategories = computed(() => {
   const cats = [
-    { id: 'todas',      label: `Todas (${unifiedItems.value.length})`, icon: 'mdi:view-grid-outline', count: 0 },
-    // Tool categories
-    { id: 'calculadoras',label: 'Calculadoras', icon: 'mdi:calculator',                    count: store.tools.filter(t => t.category === 'calculadoras').length },
-    { id: 'geradores',   label: 'Geradores',    icon: 'mdi:wand-magic-sparkles',            count: store.tools.filter(t => t.category === 'geradores').length    },
-    { id: 'conversores', label: 'Conversores',  icon: 'mdi:swap-horizontal',                count: store.tools.filter(t => t.category === 'conversores').length  },
-    { id: 'validadores', label: 'Validadores',  icon: 'mdi:checkbox-marked-circle-outline', count: store.tools.filter(t => t.category === 'validadores').length  },
-    { id: 'simuladores', label: 'Simuladores',  icon: 'mdi:chart-timeline-variant',         count: store.tools.filter(t => t.category === 'simuladores').length  },
-    { id: 'texto',       label: 'Texto & OCR',  icon: 'mdi:format-text',                    count: store.tools.filter(t => t.category === 'texto').length + apps.filter(a => a.category === 'texto').length },
-    // App categories
-    { id: 'financas',    label: 'Finanças & Saúde', icon: 'mdi:cash-multiple',    count: apps.filter(a => a.category === 'financas').length  },
-    { id: 'marketing',   label: 'Marketing',        icon: 'mdi:trending-up',      count: apps.filter(a => a.category === 'marketing').length },
-    { id: 'dev',         label: 'Dev Tools',        icon: 'mdi:code-braces',      count: apps.filter(a => a.category === 'dev').length       },
-    { id: 'design',      label: 'Design & Mídia',   icon: 'mdi:palette-outline',  count: apps.filter(a => a.category === 'design').length    },
-    { id: 'negocios',    label: 'Negócios',          icon: 'mdi:briefcase-outline',count: apps.filter(a => a.category === 'negocios').length  },
+    { id: 'todas',       label: `Todas (${unifiedItems.value.length})`, icon: 'mdi:view-grid-outline', count: 0 },
+    // Categorias de ferramentas rápidas (store)
+    { id: 'calculadoras', label: 'Calculadoras', icon: 'mdi:calculator',                     count: store.tools.filter(t => t.category === 'calculadoras').length },
+    { id: 'geradores',    label: 'Geradores',    icon: 'mdi:auto-fix',                       count: store.tools.filter(t => t.category === 'geradores').length    },
+    { id: 'conversores',  label: 'Conversores',  icon: 'mdi:swap-horizontal',                count: store.tools.filter(t => t.category === 'conversores').length  },
+    { id: 'validadores',  label: 'Validadores',  icon: 'mdi:checkbox-marked-circle-outline', count: store.tools.filter(t => t.category === 'validadores').length  },
+    { id: 'simuladores',  label: 'Simuladores',  icon: 'mdi:chart-timeline-variant',         count: store.tools.filter(t => t.category === 'simuladores').length  },
+    { id: 'texto',        label: 'Texto',        icon: 'mdi:format-text',                    count: store.tools.filter(t => t.category === 'texto').length + apps.filter(a => a.category === 'texto').length },
+    // Categorias de aplicações
+    { id: 'financas',     label: 'Finanças',     icon: 'mdi:cash-multiple',                  count: apps.filter(a => a.category === 'financas').length   },
+    { id: 'marketing',    label: 'Marketing',    icon: 'mdi:trending-up',                    count: apps.filter(a => a.category === 'marketing').length  },
+    { id: 'dev',          label: 'Dev Tools',    icon: 'mdi:code-braces',                    count: apps.filter(a => a.category === 'dev').length        },
+    { id: 'design',       label: 'Design',       icon: 'mdi:palette-outline',                count: apps.filter(a => a.category === 'design').length     },
+    { id: 'documentos',   label: 'Documentos',   icon: 'mdi:file-document-multiple-outline', count: apps.filter(a => a.category === 'documentos').length },
+    { id: 'dados',        label: 'Dados',        icon: 'mdi:database-plus-outline',          count: apps.filter(a => a.category === 'dados').length      },
+    { id: 'matematica',   label: 'Matemática',   icon: 'mdi:calculator-variant-outline',     count: apps.filter(a => a.category === 'matematica').length },
   ]
   return cats
 })
@@ -552,3 +676,8 @@ const heroBadges = [
 .scrollbar-none::-webkit-scrollbar     { display: none; }
 .scrollbar-none                        { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
+
+
+
+
+

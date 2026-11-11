@@ -91,7 +91,7 @@
             </h3>
           </div>
           <RouterLink to="/ferramentas" class="text-xs font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1">
-            <span>Ver Catálogo Completo (120+)</span>
+            <span>Ver Catálogo Completo (280+)</span>
             <Icon icon="mdi:arrow-right" class="w-3.5 h-3.5" />
           </RouterLink>
         </div>

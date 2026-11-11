@@ -97,7 +97,7 @@
         </div>
 
         <div class="tip-card-warning">
-          <i class="fas fa-shield-alt text-amber-500 flex-shrink-0 mt-0.5"></i>
+          <i class="fas fa-shield-halved text-amber-500 flex-shrink-0 mt-0.5"></i>
           <span class="text-xs">Sempre aplique HTML encode antes de exibir conteúdo de usuários para evitar ataques XSS.</span>
         </div>
       </div>
@@ -194,3 +194,4 @@ const copiar = async () => {
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

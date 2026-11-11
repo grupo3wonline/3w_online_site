@@ -2,7 +2,7 @@
   <ToolShell
     title="Simulador de Seguro"
     description="Estime o prêmio de seguro para automóvel, residencial ou vida com base no perfil de risco."
-    icon="fa-shield-alt"
+    icon="fa-shield-halved"
     icon-gradient="from-blue-500 to-indigo-700"
     orb-color="blue"
     :quick-tips="['Comparar CET entre seguradoras', 'Franquia maior = prêmio menor', 'Perfil de risco define valor']"
@@ -25,7 +25,7 @@
             <!-- Tipo de seguro -->
             <div>
               <label class="input-aurora-label">
-                <i class="fas fa-shield-alt mr-1.5 text-blue-500"></i>
+                <i class="fas fa-shield-halved mr-1.5 text-blue-500"></i>
                 Tipo de Seguro
               </label>
               <div class="grid grid-cols-3 gap-2 mt-1">
@@ -84,7 +84,7 @@
           </div>
 
           <div class="flex gap-3 mt-4">
-            <BaseButton variant="success" icon="fa-shield-alt" @click="calcular" class="flex-1">
+            <BaseButton variant="success" icon="fa-shield-halved" @click="calcular" class="flex-1">
               Calcular Prêmio
             </BaseButton>
             <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
@@ -138,7 +138,7 @@
         </Transition>
 
         <div v-if="!resultado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
-          <i class="fas fa-shield-alt text-4xl mb-3 opacity-30 block text-blue-400"></i>
+          <i class="fas fa-shield-halved text-4xl mb-3 opacity-30 block text-blue-400"></i>
           <p class="text-sm">Selecione o tipo de seguro e preencha os dados para estimar o prêmio</p>
         </div>
       </div>
@@ -241,3 +241,4 @@ watch(tipoSeguro, () => { resultado.value = null })
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

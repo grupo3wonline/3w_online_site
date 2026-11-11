@@ -110,7 +110,7 @@
             </div>
 
             <div class="tip-card-success">
-              <i class="fas fa-shield-alt text-emerald-500 flex-shrink-0 mt-0.5"></i>
+              <i class="fas fa-shield-halved text-emerald-500 flex-shrink-0 mt-0.5"></i>
               <span class="text-xs">CDBs são garantidos pelo FGC até R$ 250.000 por CPF por instituição. Seguros para a renda fixa.</span>
             </div>
           </div>
@@ -191,3 +191,4 @@ const calcular = () => {
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

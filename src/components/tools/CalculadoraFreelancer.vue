@@ -32,7 +32,7 @@
               placeholder="Moradia, alimentação, transporte..." tooltip="Soma de todas as suas despesas pessoais mensais: aluguel, alimentação, transporte, saúde, lazer, etc." @input="calcular" />
             <BaseInput v-model="despesasNegocios" label="Despesas do Negócio (R$)" type="number" icon="fa-briefcase"
               placeholder="Software, internet, equipamentos..." tooltip="Custos operacionais: assinaturas de software, internet, energia, contabilidade, cursos, marketing." @input="calcular" />
-            <BaseInput v-model="reservaEmergencia" label="Reserva de Emergência (R$)" type="number" icon="fa-shield-alt"
+            <BaseInput v-model="reservaEmergencia" label="Reserva de Emergência (R$)" type="number" icon="fa-shield-halved"
               tooltip="Quanto você quer guardar mensalmente para imprevistos (recomendado: 10–20% da renda)." @input="calcular" />
             <BaseInput v-model="impostos" label="Impostos Estimados (%)" type="number" icon="fa-percent"
               placeholder="Ex: 15" :min="0" :max="80" tooltip="Percentual de impostos sobre o faturamento (Simples Nacional: ~6–15%, PJ: ~13–17%, PF: até 27,5%)." @input="calcular" />
@@ -227,3 +227,4 @@ const formatarMoeda = (v: number) => v.toLocaleString('pt-BR', { style: 'currenc
 calcular()
 watch([despesasPessoais, despesasNegocios, reservaEmergencia, impostos, horasPorDia, diasPorSemana, aproveitamento, margemLucro], calcular)
 </script>
+

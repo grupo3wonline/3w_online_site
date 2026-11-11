@@ -40,7 +40,7 @@
             </a>
             <RouterLink to="/ferramentas" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-sm">
               <Icon icon="mdi:tools" class="w-4 h-4 mr-2 text-secondary-300" />
-              120+ Ferramentas Grátis
+              280+ Ferramentas Grátis
             </RouterLink>
           </div>
 
@@ -372,7 +372,7 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════════════════
-         #ferramentas ─ Suíte de 120+ Ferramentas
+         #ferramentas ─ Suíte de 280+ Ferramentas
     ══════════════════════════════════════════════════════════════════ -->
     <section id="ferramentas" class="section-padding bg-white dark:bg-slate-900 border-y border-gray-100 dark:border-slate-700/50">
       <div class="container">
@@ -385,7 +385,7 @@
             </p>
           </div>
           <RouterLink to="/ferramentas" class="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700">
-            Explorar todas as 120+ ferramentas <Icon icon="mdi:arrow-right" class="w-4 h-4" />
+            Explorar todas as 280+ ferramentas <Icon icon="mdi:arrow-right" class="w-4 h-4" />
           </RouterLink>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1038,7 +1038,7 @@ const stats = [
   { value: '150+', label: 'Projetos Entregues com Sucesso' },
   { value: '98%',  label: 'Índice de Satisfação de Clientes' },
   { value: '5+ Anos', label: 'de Experiência no Mercado' },
-  { value: '120+', label: 'Ferramentas Digitais Gratuitas' },
+  { value: '280+', label: 'Ferramentas Digitais Gratuitas' },
 ]
 
 const services = [
@@ -1097,7 +1097,7 @@ const timeline = [
   { year: '2021', title: 'Consolidação em Tráfego Pago & Parcerias',    description: 'Certificações em Google Ads e Meta Ads, atingindo mais de 50 projetos entregues com alto retorno sobre investimento.'                                        },
   { year: '2022', title: 'Atendimento em Escala Nacional',               description: 'Expansão da carteira de clientes para múltiplos estados do Brasil com suporte remoto ágil e de alta qualidade.'                                            },
   { year: '2023', title: 'Pioneirismo em Automação & Inteligência Artificial', description: 'Implantação de agentes inteligentes com LLMs, automações de WhatsApp e ferramentas de produtividade para empresas.'                                 },
-  { year: '2024+',title: 'Marca de 150+ Projetos & Suíte de 120+ Ferramentas', description: 'Lançamento da suíte digital com mais de 120 utilitários gratuitos client-side e consolidação como referência em tecnologia.'                       },
+  { year: '2024+',title: 'Marca de 150+ Projetos & Suíte de 280+ Ferramentas', description: 'Lançamento da suíte digital com mais de 280 utilitários gratuitos client-side e consolidação como referência em tecnologia.'                       },
 ]
 
 const certifications = [

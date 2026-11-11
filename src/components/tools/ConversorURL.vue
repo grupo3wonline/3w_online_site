@@ -83,7 +83,7 @@
         </div>
 
         <div class="tip-card-warning">
-          <i class="fas fa-shield-alt text-amber-500 flex-shrink-0 mt-0.5"></i>
+          <i class="fas fa-shield-halved text-amber-500 flex-shrink-0 mt-0.5"></i>
           <span class="text-xs">Sempre encode parâmetros de URL antes de enviá-los para evitar ataques de injeção e garantir compatibilidade com todos os navegadores.</span>
         </div>
       </div>
@@ -162,3 +162,4 @@ const copiar = async (): Promise<void> => {
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

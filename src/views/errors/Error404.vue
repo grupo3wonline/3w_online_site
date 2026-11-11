@@ -67,7 +67,7 @@
           </RouterLink>
           <RouterLink to="/ferramentas" class="p-2.5 rounded-lg bg-slate-900/80 hover:bg-primary-950/60 border border-slate-700/50 hover:border-primary-500/50 text-slate-200 hover:text-white transition-all flex items-center gap-2">
             <Icon icon="mdi:tools" class="w-4 h-4 text-purple-400" />
-            <span>120+ Ferramentas Grátis</span>
+            <span>280+ Ferramentas Grátis</span>
           </RouterLink>
           <a href="/#contato" class="p-2.5 rounded-lg bg-slate-900/80 hover:bg-primary-950/60 border border-slate-700/50 hover:border-primary-500/50 text-slate-200 hover:text-white transition-all flex items-center gap-2">
             <Icon icon="mdi:email-outline" class="w-4 h-4 text-pink-400" />

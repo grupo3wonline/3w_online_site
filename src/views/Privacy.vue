@@ -115,7 +115,7 @@
           <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
             <h2 class="text-base sm:text-lg font-bold text-emerald-950 mb-2 flex items-center gap-2">
               <Icon icon="mdi:shield-check" class="w-5 h-5 text-emerald-600" />
-              3. Privacidade Total nas Mais de 120 Ferramentas Gratuitas (Client-Side)
+              3. Privacidade Total nas Mais de 280 Ferramentas Gratuitas (Client-Side)
             </h2>
             <p class="text-xs sm:text-sm text-emerald-900 leading-relaxed mb-3">
               Todas as ferramentas interativas oferecidas no portal (geradores de código, calculadoras de ROI, simuladores financeiros, geradores de QR Code, formatadores de dados, etc.) são processadas <strong>100% no navegador (Client-Side)</strong> do usuário.
@@ -329,7 +329,7 @@ const privacyFaqs = [
   },
   {
     question: 'Os dados inseridos nas ferramentas digitais ficam armazenados?',
-    answer: 'Não. Todas as 120+ ferramentas são 100% client-side. Os dados processados (textos, CPFs, CNPJs, etc.) ficam apenas na memória do seu navegador e são destruídos ao fechar a aba. Zero transmissão para servidores.',
+    answer: 'Não. Todas as 280+ ferramentas são 100% client-side. Os dados processados (textos, CPFs, CNPJs, etc.) ficam apenas na memória do seu navegador e são destruídos ao fechar a aba. Zero transmissão para servidores.',
   },
   {
     question: 'A 3W Online está em conformidade com o GDPR europeu?',

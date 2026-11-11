@@ -2,7 +2,7 @@
   <ToolShell
     title="Ponto de Equilíbrio"
     description="Calcule o break-even: volume mínimo de vendas para cobrir todos os custos."
-    icon="fa-balance-scale"
+    icon="fa-scale-balanced"
     icon-gradient="from-emerald-500 to-teal-700"
     orb-color="emerald"
     :quick-tips="['Break-even em unidades', 'Margem de contribuição', 'Simulação de vendas']"
@@ -153,7 +153,7 @@
         </Transition>
 
         <div v-if="!calculado" class="glass-panel text-center py-12 text-gray-400 dark:text-slate-500">
-          <i class="fas fa-balance-scale text-4xl mb-3 opacity-30 block text-emerald-400"></i>
+          <i class="fas fa-scale-balanced text-4xl mb-3 opacity-30 block text-emerald-400"></i>
           <p class="text-sm">Informe custos fixos, preço e custo variável</p>
         </div>
       </div>
@@ -222,3 +222,4 @@ const limpar = () => {
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

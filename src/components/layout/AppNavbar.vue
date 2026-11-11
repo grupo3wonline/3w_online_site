@@ -67,7 +67,7 @@
             <Icon icon="mdi:tools" class="w-4 h-4 mr-1.5 text-secondary-300" />
             Ferramentas
             <span class="ml-1.5 px-1.5 py-0.5 bg-gradient-to-r from-secondary-500 to-teal-400 text-slate-950 font-black text-[9px] rounded-full uppercase tracking-wider shadow-sm">
-              182+
+              280+
             </span>
           </RouterLink>
 
@@ -186,7 +186,7 @@ const isServicesActive = computed(() => route.path.startsWith('/servicos'))
 const mobileLinks = [
   { path: '/',           label: 'Home',               icon: 'mdi:home-outline'           },
   { path: '/servicos',   label: 'Todos os Serviços',  icon: 'mdi:briefcase-outline'      },
-  { path: '/ferramentas',label: 'Ferramentas & Apps', icon: 'mdi:tools',                badge: '182+' },
+  { path: '/ferramentas',label: 'Ferramentas & Apps', icon: 'mdi:tools',                badge: '280+' },
 ]
 
 const serviceDropdown = [

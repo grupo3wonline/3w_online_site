@@ -114,7 +114,7 @@
             <!-- Comparativo visual -->
             <div class="glass-panel p-4">
               <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3">
-                <i class="fas fa-balance-scale mr-2 text-primary-500"></i>
+                <i class="fas fa-scale-balanced mr-2 text-primary-500"></i>
                 Comparativo
               </h4>
               <div class="grid grid-cols-2 gap-3">
@@ -282,3 +282,4 @@ watch([precoGasolina, precoAlcool, consumoGasolina, consumoAlcool, km], calcular
 .scale-in-enter-from { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to   { opacity: 0; }
 </style>
+

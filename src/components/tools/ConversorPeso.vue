@@ -37,7 +37,7 @@
               label="Valor"
               type="number"
               step="0.001"
-              icon="fa-balance-scale"
+              icon="fa-scale-balanced"
               placeholder="1"
               tooltip="Digite o valor na unidade de origem selecionada acima."
               hint="Aceita decimais (ex: 1.5, 0.001)"
@@ -196,3 +196,4 @@ converter()
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

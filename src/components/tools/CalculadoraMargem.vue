@@ -117,7 +117,7 @@
         <!-- Comparação de conceitos -->
         <div class="glass-panel p-4">
           <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3">
-            <i class="fas fa-balance-scale mr-2 text-amber-500"></i>
+            <i class="fas fa-scale-balanced mr-2 text-amber-500"></i>
             Margem vs Markup
           </h4>
           <div class="grid grid-cols-2 gap-3 text-xs">
@@ -222,3 +222,4 @@ watch([modo, precoCusto, precoVenda, margemDesejada, markupDesejado], calcularAu
 .scale-in-enter-from { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to   { opacity: 0; }
 </style>
+

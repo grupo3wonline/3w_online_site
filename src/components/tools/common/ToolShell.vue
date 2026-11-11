@@ -61,101 +61,113 @@
       <slot name="header"></slot>
     </div>
 
-    <!-- ── Dicas rápidas (pills) ────────────────────────────────── -->
-    <div v-if="quickTips?.length" class="flex flex-wrap gap-2 mb-5">
-      <span
-        v-for="qt in quickTips"
-        :key="qt"
-        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800/40"
-      >
-        <i class="fas fa-check-circle text-primary-500 dark:text-primary-400 text-[10px]"></i>
-        {{ qt }}
-      </span>
-    </div>
+    <!-- ══ Aurora Glass Surface ════════════════════════════════════
+         Em modo claro: fundo dark-navy garante contraste para todos
+         os elementos glass (text-white, bg-white/5, etc.).
+         O div filho class="dark" força todas as variantes dark: do
+         Tailwind — independente do tema do sistema operacional.
+    ═══════════════════════════════════════════════════════════════ -->
+    <div class="aurora-glass-surface">
+      <div class="dark px-4 sm:px-5 pt-5 pb-7">
 
-    <!-- ── Conteúdo principal ───────────────────────────────────── -->
-    <slot></slot>
-
-    <!-- ── Seção de Dicas ───────────────────────────────────────── -->
-    <div v-if="tips?.length" class="mt-5 space-y-3">
-      <button
-        @click="tipsOpen = !tipsOpen"
-        class="accordion-trigger text-sm"
-      >
-        <span class="flex items-center gap-2">
-          <i class="fas fa-lightbulb text-amber-500"></i>
-          Dicas & Boas Práticas
-          <span class="badge-aurora-orange">{{ tips.length }}</span>
-        </span>
-        <i :class="['fas', tipsOpen ? 'fa-chevron-up' : 'fa-chevron-down', 'text-xs text-gray-400 transition-transform']"></i>
-      </button>
-      <Transition name="accordion">
-        <div v-if="tipsOpen" class="space-y-2.5">
-          <div
-            v-for="(tip, i) in tips"
-            :key="i"
-            :class="[
-              'tip-card',
-              tip.type === 'warning' ? 'tip-card-warning' : tip.type === 'success' ? 'tip-card-success' : ''
-            ]"
+        <!-- ── Dicas rápidas (pills) ──────────────────────────── -->
+        <div v-if="quickTips?.length" class="flex flex-wrap gap-2 mb-5">
+          <span
+            v-for="qt in quickTips"
+            :key="qt"
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-primary-500/20 text-primary-200 border border-primary-500/30"
           >
-            <i :class="[
-              'fas mt-0.5 flex-shrink-0 text-sm',
-              tip.type === 'warning' ? 'fa-exclamation-triangle text-amber-500' :
-              tip.type === 'success' ? 'fa-check-circle text-emerald-500' :
-              'fa-info-circle text-blue-500'
-            ]"></i>
-            <div>
-              <strong v-if="tip.title" class="block mb-0.5">{{ tip.title }}</strong>
-              <span>{{ tip.text }}</span>
-            </div>
-          </div>
+            <i class="fas fa-check-circle text-primary-400 text-[10px]"></i>
+            {{ qt }}
+          </span>
         </div>
-      </Transition>
-    </div>
 
-    <!-- ── Seção de Exemplos ────────────────────────────────────── -->
-    <div v-if="examples?.length" class="mt-3 space-y-3">
-      <button
-        @click="examplesOpen = !examplesOpen"
-        class="accordion-trigger text-sm"
-      >
-        <span class="flex items-center gap-2">
-          <i class="fas fa-code text-purple-500"></i>
-          Exemplos de Uso
-          <span class="badge-aurora-purple">{{ examples.length }}</span>
-        </span>
-        <i :class="['fas', examplesOpen ? 'fa-chevron-up' : 'fa-chevron-down', 'text-xs text-gray-400 transition-transform']"></i>
-      </button>
-      <Transition name="accordion">
-        <div v-if="examplesOpen" class="space-y-3">
-          <div
-            v-for="(ex, i) in examples"
-            :key="i"
-            class="glass-panel p-4"
+        <!-- ── Conteúdo principal ──────────────────────────────── -->
+        <slot></slot>
+
+        <!-- ── Seção de Dicas ──────────────────────────────────── -->
+        <div v-if="tips?.length" class="mt-5 space-y-3">
+          <button
+            @click="tipsOpen = !tipsOpen"
+            class="accordion-trigger text-sm"
           >
-            <div class="flex items-start gap-2.5 mb-2">
-              <span class="w-5 h-5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-[11px] font-black flex-shrink-0 mt-0.5">
-                {{ i + 1 }}
-              </span>
-              <div>
-                <strong v-if="ex.title" class="text-xs font-bold text-gray-900 dark:text-white block mb-0.5">
-                  {{ ex.title }}
-                </strong>
-                <p class="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">{{ ex.desc }}</p>
+            <span class="flex items-center gap-2">
+              <i class="fas fa-lightbulb text-amber-500"></i>
+              Dicas & Boas Práticas
+              <span class="badge-aurora-orange">{{ tips.length }}</span>
+            </span>
+            <i :class="['fas', tipsOpen ? 'fa-chevron-up' : 'fa-chevron-down', 'text-xs text-gray-400 transition-transform']"></i>
+          </button>
+          <Transition name="accordion">
+            <div v-if="tipsOpen" class="space-y-2.5">
+              <div
+                v-for="(tip, i) in tips"
+                :key="i"
+                :class="[
+                  'tip-card',
+                  tip.type === 'warning' ? 'tip-card-warning' : tip.type === 'success' ? 'tip-card-success' : ''
+                ]"
+              >
+                <i :class="[
+                  'fas mt-0.5 flex-shrink-0 text-sm',
+                  tip.type === 'warning' ? 'fa-exclamation-triangle text-amber-500' :
+                  tip.type === 'success' ? 'fa-check-circle text-emerald-500' :
+                  'fa-info-circle text-blue-500'
+                ]"></i>
+                <div>
+                  <strong v-if="tip.title" class="block mb-0.5">{{ tip.title }}</strong>
+                  <span>{{ tip.text }}</span>
+                </div>
               </div>
             </div>
-            <div v-if="ex.code" class="example-block mt-2">{{ ex.code }}</div>
-            <div v-if="ex.result" class="mt-2 px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 text-xs text-emerald-700 dark:text-emerald-300">
-              <i class="fas fa-arrow-right mr-1.5 text-[10px]"></i>
-              <strong>Resultado:</strong> {{ ex.result }}
-            </div>
-          </div>
+          </Transition>
         </div>
-      </Transition>
-    </div>
 
-  </div>
+        <!-- ── Seção de Exemplos ───────────────────────────────── -->
+        <div v-if="examples?.length" class="mt-3 space-y-3">
+          <button
+            @click="examplesOpen = !examplesOpen"
+            class="accordion-trigger text-sm"
+          >
+            <span class="flex items-center gap-2">
+              <i class="fas fa-code text-purple-500"></i>
+              Exemplos de Uso
+              <span class="badge-aurora-purple">{{ examples.length }}</span>
+            </span>
+            <i :class="['fas', examplesOpen ? 'fa-chevron-up' : 'fa-chevron-down', 'text-xs text-gray-400 transition-transform']"></i>
+          </button>
+          <Transition name="accordion">
+            <div v-if="examplesOpen" class="space-y-3">
+              <div
+                v-for="(ex, i) in examples"
+                :key="i"
+                class="glass-panel p-4"
+              >
+                <div class="flex items-start gap-2.5 mb-2">
+                  <span class="w-5 h-5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-[11px] font-black flex-shrink-0 mt-0.5">
+                    {{ i + 1 }}
+                  </span>
+                  <div>
+                    <strong v-if="ex.title" class="text-xs font-bold text-gray-900 dark:text-white block mb-0.5">
+                      {{ ex.title }}
+                    </strong>
+                    <p class="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">{{ ex.desc }}</p>
+                  </div>
+                </div>
+                <div v-if="ex.code" class="example-block mt-2">{{ ex.code }}</div>
+                <div v-if="ex.result" class="mt-2 px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/40 text-xs text-emerald-700 dark:text-emerald-300">
+                  <i class="fas fa-arrow-right mr-1.5 text-[10px]"></i>
+                  <strong>Resultado:</strong> {{ ex.result }}
+                </div>
+              </div>
+            </div>
+          </Transition>
+        </div>
+
+      </div><!-- /dark -->
+    </div><!-- /aurora-glass-surface -->
+
+  </div><!-- /tool-shell -->
 </template>
 
 <script setup lang="ts">

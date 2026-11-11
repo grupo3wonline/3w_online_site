@@ -116,7 +116,7 @@
             <!-- Comparação de métodos -->
             <div class="glass-panel p-4">
               <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
-                <i class="fas fa-balance-scale text-violet-500"></i>Comparação de Métodos
+                <i class="fas fa-scale-balanced text-violet-500"></i>Comparação de Métodos
               </h4>
               <div class="space-y-2">
                 <div v-for="metodo in comparacao" :key="metodo.tipo"
@@ -213,3 +213,4 @@ const calcular = () => {
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

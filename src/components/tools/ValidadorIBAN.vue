@@ -99,7 +99,7 @@
             </div>
 
             <div v-if="valido" class="tip-card-success">
-              <i class="fas fa-shield-alt text-emerald-500 flex-shrink-0 mt-0.5"></i>
+              <i class="fas fa-shield-halved text-emerald-500 flex-shrink-0 mt-0.5"></i>
               <span class="text-xs">Verificação MOD-97 aprovada. Este IBAN está estruturalmente correto.</span>
             </div>
           </div>
@@ -200,3 +200,4 @@ const limpar = () => {
 .scale-in-enter-from { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to   { opacity: 0; }
 </style>
+

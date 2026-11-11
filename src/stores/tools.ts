@@ -23,7 +23,7 @@ export const useToolsStore = defineStore('tools', () => {
   const tools = ref<Tool[]>([
     // Calculadoras Financeiras
     { id: 'calculadora-freelancer', name: 'Calculadora de Custos para Freelancers', description: 'Calcule o valor da sua hora de trabalho', icon: 'fa-calculator', category: 'calculadoras', path: '/ferramentas/calculadora-freelancer' },
-    { id: 'calculadora-anuncios', name: 'Calculadora de Custos de Anúncios', description: 'Calcule ROI e custos de campanhas', icon: 'fa-ad', category: 'calculadoras', path: '/ferramentas/calculadora-anuncios' },
+    { id: 'calculadora-anuncios', name: 'Calculadora de Custos de Anúncios', description: 'Calcule ROI e custos de campanhas', icon: 'fa-rectangle-ad', category: 'calculadoras', path: '/ferramentas/calculadora-anuncios' },
     { id: 'calculadora-precificacao', name: 'Calculadora de Precificação', description: 'Defina o preço ideal para produtos e serviços', icon: 'fa-tags', category: 'calculadoras', path: '/ferramentas/calculadora-precificacao' },
     { id: 'calculadora-imc', name: 'Calculadora de IMC', description: 'Calcule seu Índice de Massa Corporal', icon: 'fa-weight-scale', category: 'calculadoras', path: '/ferramentas/calculadora-imc' },
     { id: 'calculadora-orcamento', name: 'Calculadora de Orçamento', description: 'Gerencie seu orçamento mensal', icon: 'fa-money-bill-wave', category: 'calculadoras', path: '/ferramentas/calculadora-orcamento' },
@@ -33,7 +33,6 @@ export const useToolsStore = defineStore('tools', () => {
     { id: 'calculadora-social-media', name: 'Calculadora Social Media', description: 'Investimentos em mídias sociais', icon: 'fa-share-nodes', category: 'calculadoras', path: '/ferramentas/calculadora-social-media' },
     { id: 'calculadora-juros', name: 'Calculadora de Juros Compostos', description: 'Calcule rendimentos e investimentos', icon: 'fa-chart-line', category: 'calculadoras', path: '/ferramentas/calculadora-juros' },
     { id: 'calculadora-desconto', name: 'Calculadora de Desconto', description: 'Calcule descontos e preços finais', icon: 'fa-percent', category: 'calculadoras', path: '/ferramentas/calculadora-desconto' },
-    { id: 'calculadora-margem', name: 'Calculadora de Margem de Lucro', description: 'Calcule margem e markup de produtos', icon: 'fa-coins', category: 'calculadoras', path: '/ferramentas/calculadora-margem' },
     { id: 'calculadora-tempo', name: 'Calculadora de Tempo', description: 'Calcule diferenças entre datas e horas', icon: 'fa-clock', category: 'calculadoras', path: '/ferramentas/calculadora-tempo' },
     { id: 'calculadora-conversao', name: 'Calculadora de Conversão de Unidades', description: 'Converta medidas e unidades', icon: 'fa-arrows-rotate', category: 'calculadoras', path: '/ferramentas/calculadora-conversao' },
     { id: 'calculadora-emprestimo', name: 'Calculadora de Empréstimo', description: 'Calcule parcelas e juros de empréstimos', icon: 'fa-hand-holding-dollar', category: 'calculadoras', path: '/ferramentas/calculadora-emprestimo' },
@@ -55,17 +54,15 @@ export const useToolsStore = defineStore('tools', () => {
     { id: 'calculadora-energia', name: 'Calculadora de Energia', description: 'Calcule energia cinética e potencial', icon: 'fa-bolt', category: 'calculadoras', path: '/ferramentas/calculadora-energia' },
     { id: 'calculadora-densidade', name: 'Calculadora de Densidade', description: 'Calcule densidade usando d = m/V', icon: 'fa-flask', category: 'calculadoras', path: '/ferramentas/calculadora-densidade' },
     { id: 'calculadora-margem-lucro', name: 'Calculadora de Margem de Lucro', description: 'Calcule margem bruta, líquida e markup', icon: 'fa-chart-line', category: 'calculadoras', path: '/ferramentas/calculadora-margem-lucro' },
-    { id: 'calculadora-ponto-equilibrio', name: 'Calculadora de Ponto de Equilíbrio', description: 'Calcule o break-even point do negócio', icon: 'fa-balance-scale', category: 'calculadoras', path: '/ferramentas/calculadora-ponto-equilibrio' },
+    { id: 'calculadora-ponto-equilibrio', name: 'Calculadora de Ponto de Equilíbrio', description: 'Calcule o break-even point do negócio', icon: 'fa-scale-balanced', category: 'calculadoras', path: '/ferramentas/calculadora-ponto-equilibrio' },
     { id: 'calculadora-depreciacao', name: 'Calculadora de Depreciação', description: 'Calcule depreciação de ativos', icon: 'fa-chart-line', category: 'calculadoras', path: '/ferramentas/calculadora-depreciacao' },
     { id: 'calculadora-roi', name: 'Calculadora de ROI', description: 'Calcule Retorno sobre Investimento', icon: 'fa-money-bill-trend-up', category: 'calculadoras', path: '/ferramentas/calculadora-roi' },
 
     // Geradores
     { id: 'gerador-senha', name: 'Gerador de Senha', description: 'Gere senhas fortes e seguras', icon: 'fa-lock', category: 'geradores', path: '/ferramentas/gerador-senha' },
-    { id: 'gerador-qrcode', name: 'Gerador de QR Code', description: 'Crie QR Codes personalizados', icon: 'fa-qrcode', category: 'geradores', path: '/ferramentas/gerador-qrcode' },
     { id: 'gerador-uuid', name: 'Gerador de UUID', description: 'Gere identificadores únicos universais', icon: 'fa-fingerprint', category: 'geradores', path: '/ferramentas/gerador-uuid' },
     { id: 'gerador-cpf-cnpj', name: 'Gerador de CPF/CNPJ', description: 'Gere CPF e CNPJ válidos para testes', icon: 'fa-id-card', category: 'geradores', path: '/ferramentas/gerador-cpf-cnpj' },
-    { id: 'gerador-lorem-ipsum', name: 'Gerador de Lorem Ipsum', description: 'Texto Lorem Ipsum para projetos', icon: 'fa-paragraph', category: 'geradores', path: '/ferramentas/gerador-lorem-ipsum' },
-    { id: 'gerador-cores', name: 'Gerador de Paleta de Cores', description: 'Crie paletas de cores harmoniosas', icon: 'fa-palette', category: 'geradores', path: '/ferramentas/gerador-cores' },
+    { id: 'gerador-cores', name: 'Gerador de Paleta de Cores', description: 'Crie paletas aleat�rias e explore combina��es de cores', icon: 'fa-palette', category: 'geradores', path: '/ferramentas/gerador-cores' },
     { id: 'gerador-gradiente', name: 'Gerador de Gradiente CSS', description: 'Crie gradientes CSS personalizados', icon: 'fa-brush', category: 'geradores', path: '/ferramentas/gerador-gradiente' },
     { id: 'gerador-avatar', name: 'Gerador de Avatar', description: 'Gere avatares aleatórios únicos', icon: 'fa-user-circle', category: 'geradores', path: '/ferramentas/gerador-avatar' },
     { id: 'gerador-hash', name: 'Gerador de Hash', description: 'Gere hashes MD5, SHA-1, SHA-256', icon: 'fa-hashtag', category: 'geradores', path: '/ferramentas/gerador-hash' },
@@ -77,14 +74,11 @@ export const useToolsStore = defineStore('tools', () => {
     { id: 'gerador-sql', name: 'Gerador de SQL', description: 'Gere comandos SQL INSERT automaticamente', icon: 'fa-database', category: 'geradores', path: '/ferramentas/gerador-sql' },
     { id: 'gerador-csv', name: 'Gerador de CSV', description: 'Crie arquivos CSV com dados fictícios', icon: 'fa-file-csv', category: 'geradores', path: '/ferramentas/gerador-csv' },
     { id: 'gerador-srt', name: 'Gerador de Legenda SRT', description: 'Crie arquivos de legenda no formato SRT', icon: 'fa-closed-captioning', category: 'geradores', path: '/ferramentas/gerador-srt' },
-    { id: 'gerador-palheta', name: 'Gerador de Palheta de Cores', description: 'Gere paletas de cores harmônicas', icon: 'fa-palette', category: 'geradores', path: '/ferramentas/gerador-palheta' },
     { id: 'gerador-prefixo-sufixo', name: 'Gerador de Prefixo e Sufixo', description: 'Adicione prefixos e sufixos em listas', icon: 'fa-text-width', category: 'geradores', path: '/ferramentas/gerador-prefixo-sufixo' },
     { id: 'gerador-url', name: 'Gerador de URL', description: 'URLs amigáveis e otimizadas', icon: 'fa-link', category: 'geradores', path: '/ferramentas/gerador-url' },
-    { id: 'gerador-marca-dagua', name: 'Gerador de Marca D\'Água', description: 'Adicione marcas d\'água em imagens', icon: 'fa-image', category: 'geradores', path: '/ferramentas/gerador-marca-dagua' },
     { id: 'gerador-utm', name: 'Gerador de Links UTM', description: 'Crie links com parâmetros UTM', icon: 'fa-link', category: 'geradores', path: '/ferramentas/gerador-utm' },
     { id: 'gerador-tabuada', name: 'Gerador de Tabuada', description: 'Gere tabuadas de multiplicação', icon: 'fa-table', category: 'geradores', path: '/ferramentas/gerador-tabuada' },
     { id: 'ocr', name: 'OCR - Extração de Texto', description: 'Extraia texto de imagens', icon: 'fa-image', category: 'geradores', path: '/ferramentas/ocr' },
-    { id: 'extrator-emails', name: 'Extrator de E-mails', description: 'Extraia endereços de e-mail de textos', icon: 'fa-at', category: 'geradores', path: '/ferramentas/extrator-emails' },
     { id: 'sorteiador', name: 'Sorteiador', description: 'Sorteios aleatórios justos', icon: 'fa-dice', category: 'geradores', path: '/ferramentas/sorteiador' },
 
     // Texto
@@ -95,14 +89,13 @@ export const useToolsStore = defineStore('tools', () => {
 
     // Conversores
     { id: 'conversor-moeda', name: 'Conversor de Moedas', description: 'Converta entre moedas com cotação real', icon: 'fa-coins', category: 'conversores', path: '/ferramentas/conversor-moeda' },
-    { id: 'conversor-base64', name: 'Conversor Base64', description: 'Encode/decode Base64', icon: 'fa-code', category: 'conversores', path: '/ferramentas/conversor-base64' },
+    { id: 'conversor-base64', name: 'Conversor Base64', description: 'Encode/decode texto, arquivos e imagens em Base64', icon: 'fa-code', category: 'conversores', path: '/ferramentas/conversor-base64' },
     { id: 'conversor-url', name: 'Conversor URL Encode', description: 'Encode/decode URL', icon: 'fa-link', category: 'conversores', path: '/ferramentas/conversor-url' },
     { id: 'conversor-html', name: 'Conversor HTML Entities', description: 'Converta caracteres especiais HTML', icon: 'fa-code', category: 'conversores', path: '/ferramentas/conversor-html' },
     { id: 'conversor-markdown', name: 'Conversor Markdown', description: 'Converta Markdown para HTML', icon: 'fa-file-code', category: 'conversores', path: '/ferramentas/conversor-markdown' },
     { id: 'conversor-json-yaml', name: 'Conversor JSON/YAML', description: 'Converta entre JSON e YAML', icon: 'fa-right-left', category: 'conversores', path: '/ferramentas/conversor-json-yaml' },
     { id: 'conversor-xml-json', name: 'Conversor XML/JSON', description: 'Converta entre XML e JSON', icon: 'fa-file-code', category: 'conversores', path: '/ferramentas/conversor-xml-json' },
     { id: 'conversor-csv-json', name: 'Conversor CSV/JSON', description: 'Converta entre CSV e JSON', icon: 'fa-table', category: 'conversores', path: '/ferramentas/conversor-csv-json' },
-    { id: 'conversor-rgb-hex', name: 'Conversor RGB/HEX', description: 'Converta cores RGB para HEX', icon: 'fa-palette', category: 'conversores', path: '/ferramentas/conversor-rgb-hex' },
     { id: 'conversor-timestamp', name: 'Conversor de Timestamp', description: 'Converta timestamp Unix', icon: 'fa-calendar-days', category: 'conversores', path: '/ferramentas/conversor-timestamp' },
     { id: 'conversor-fuso-horario', name: 'Conversor de Fuso Horário', description: 'Converta entre fusos horários', icon: 'fa-earth-americas', category: 'conversores', path: '/ferramentas/conversor-fuso-horario' },
     { id: 'conversor-binario', name: 'Conversor Binário', description: 'Converta entre decimal, binário, octal e hex', icon: 'fa-microchip', category: 'conversores', path: '/ferramentas/conversor-binario' },
@@ -125,7 +118,7 @@ export const useToolsStore = defineStore('tools', () => {
     { id: 'validador-cep', name: 'Validador de CEP', description: 'Valide e consulte CEPs brasileiros', icon: 'fa-map-marked-alt', category: 'validadores', path: '/ferramentas/validador-cep' },
     { id: 'validador-cartao', name: 'Validador de Cartão de Crédito', description: 'Valide números de cartões (Luhn)', icon: 'fa-credit-card', category: 'validadores', path: '/ferramentas/validador-cartao' },
     { id: 'validador-senha', name: 'Validador de Senha', description: 'Analise força de senhas', icon: 'fa-lock', category: 'validadores', path: '/ferramentas/validador-senha' },
-    { id: 'validador-json', name: 'Validador de JSON', description: 'Valide e formate JSON', icon: 'fa-code', category: 'validadores', path: '/ferramentas/validador-json' },
+    { id: 'validador-json', name: 'JSON Formatter & Validator', description: 'Formate, valide, minifique e analise JSON com syntax highlight', icon: 'fa-code', category: 'validadores', path: '/ferramentas/validador-json' },
     { id: 'validador-xml', name: 'Validador de XML', description: 'Valide e formate XML', icon: 'fa-file-code', category: 'validadores', path: '/ferramentas/validador-xml' },
     { id: 'validador-html', name: 'Validador de HTML', description: 'Valide código HTML', icon: 'fa-code', category: 'validadores', path: '/ferramentas/validador-html' },
     { id: 'validador-css', name: 'Validador de CSS', description: 'Valide código CSS', icon: 'fa-paintbrush', category: 'validadores', path: '/ferramentas/validador-css' },
@@ -232,3 +225,5 @@ export const useToolsStore = defineStore('tools', () => {
     setSearchQuery,
   }
 })
+
+

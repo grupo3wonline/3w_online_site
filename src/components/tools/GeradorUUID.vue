@@ -235,7 +235,9 @@ gerar()
 </script>
 
 <style scoped>
-.btn-aurora-purple { @apply btn-aurora from-violet-500 to-purple-700 hover:from-violet-600 hover:to-purple-800; }
+.btn-aurora-purple {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-violet-500 to-purple-700 hover:from-violet-600 hover:to-purple-800 shadow-sm transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-95 disabled:opacity-50;
+}
 .scale-in-enter-active, .scale-in-leave-active { transition: all 0.25s ease; }
 .scale-in-enter-from { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to   { opacity: 0; }

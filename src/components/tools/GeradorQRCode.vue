@@ -93,7 +93,7 @@
 
             <div>
               <label class="input-aurora-label">
-                <i class="fas fa-shield-alt mr-1 text-green-500"></i>
+                <i class="fas fa-shield-halved mr-1 text-green-500"></i>
                 Nível de correção de erros
               </label>
               <div class="grid grid-cols-4 gap-1.5">
@@ -267,3 +267,4 @@ const qualidadeLabel = qualidadeInfo()
 onMounted(gerar)
 watch([corCodigo, corFundo, tamanho], gerar)
 </script>
+

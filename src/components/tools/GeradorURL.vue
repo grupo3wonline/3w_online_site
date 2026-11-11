@@ -40,7 +40,7 @@
                 @click="tipoConversao = 'encode'"
                 :class="['p-4 rounded-xl border-2 transition-all text-center', tipoConversao === 'encode' ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20' : 'border-gray-200 dark:border-slate-700 hover:border-teal-300']"
               >
-                <i class="fas fa-shield-alt text-2xl mb-2 block text-teal-600 dark:text-teal-400"></i>
+                <i class="fas fa-shield-halved text-2xl mb-2 block text-teal-600 dark:text-teal-400"></i>
                 <div class="font-semibold text-sm text-gray-900 dark:text-white">URL Encode</div>
                 <div class="text-xs text-gray-500">texto%20codificado</div>
               </button>
@@ -215,3 +215,4 @@ const limpar = () => { textoEntrada.value = ''; resultado.value = '' }
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

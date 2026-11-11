@@ -117,7 +117,7 @@
     </div>
 
     <div class="tip-card-success mt-4">
-      <i class="fas fa-shield-alt text-emerald-500 flex-shrink-0 mt-0.5"></i>
+      <i class="fas fa-shield-halved text-emerald-500 flex-shrink-0 mt-0.5"></i>
       <span class="text-xs">O HTML gerado é sanitizado com DOMPurify para prevenir ataques XSS antes de ser renderizado no preview.</span>
     </div>
 
@@ -226,3 +226,4 @@ converter()
 .prose pre code { background: none; padding: 0; }
 .prose a { color: #3b82f6; text-decoration: underline; }
 </style>
+

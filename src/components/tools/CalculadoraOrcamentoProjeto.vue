@@ -97,7 +97,7 @@
                 type="number"
                 :min="0"
                 :max="50"
-                icon="fa-shield-alt"
+                icon="fa-shield-halved"
                 hint="10–25% recomendado"
                 tooltip="Percentual de reserva para imprevistos e mudanças de escopo."
               />
@@ -301,3 +301,4 @@ const limpar = () => {
 .scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
 .scale-in-leave-to                              { opacity: 0; }
 </style>
+

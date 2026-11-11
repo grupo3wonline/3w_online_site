@@ -100,7 +100,7 @@
                 5. Suíte de Ferramentas Gratuitas Client-Side
               </h2>
               <p>
-                A 3W Online disponibiliza gratuitamente mais de 120 ferramentas online (calculadoras, conversores, validadores e geradores) no modelo <em>"as-is"</em> (no estado em que se encontram). As ferramentas são executadas exclusivamente no navegador do usuário para fins de conveniência e produtividade, sem garantia explícita de aplicação jurídica ou financeira vinculante.
+                A 3W Online disponibiliza gratuitamente mais de 280 ferramentas online (calculadoras, conversores, validadores e geradores) no modelo <em>"as-is"</em> (no estado em que se encontram). As ferramentas são executadas exclusivamente no navegador do usuário para fins de conveniência e produtividade, sem garantia explícita de aplicação jurídica ou financeira vinculante.
               </p>
             </div>
 
