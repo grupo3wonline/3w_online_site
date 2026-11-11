@@ -162,6 +162,8 @@ export const solucoesMap: Record<string, SolucaoLoader> = {
 
   // ── Utilitários ───────────────────────────────────────────────────────────
   'meu-ip': () => import('./MeuIP.vue'),
+  'consulta-dominio': () => import('./ConsultaDominio.vue'),
+  'whois-dominio':    () => import('./ConsultaDominio.vue'),
 
   // ── Calculadora Científica, ASCII & Loteria ───────────────────────────────
   'calculadora-cientifica':     () => import('./CalculadoraCientificaFinanceira.vue'),

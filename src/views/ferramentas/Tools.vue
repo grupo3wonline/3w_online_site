@@ -410,11 +410,11 @@ const apps = [
   { slug: 'conversor-cores',                        name: 'Conversor de Cores',                     category: 'dev', description: 'Converta cores entre HEX, RGB, HSL e outros.', icon: 'mdi:eyedropper-variant' },
   { slug: 'convert-share',                          name: 'Convert & Share',                        category: 'dev', description: 'Converta e compartilhe arquivos nos formatos populares.', icon: 'mdi:share-variant-outline' },
   // Texto & Conteúdo
-  { slug: 'extrator-email-cpf-cnpj',               name: 'Extrator E-mail/CPF/CNPJ',              category: 'texto', description: 'Extraia e-mails, CPFs e CNPJs de qualquer texto � c�pia individual ou em lote.', icon: 'mdi:email-search-outline' },
+  { slug: 'extrator-email-cpf-cnpj',               name: 'Extrator E-mail/CPF/CNPJ',              category: 'texto', description: 'Extraia e-mails, CPFs e CNPJs de qualquer texto � c�pia individual ou em lote.', icon: 'mdi:email-search-outline' },
   { slug: 'extrator-texto',                         name: 'Extrator de Texto',                      category: 'texto', description: 'Extraia conteúdo específico com regex.', icon: 'mdi:text-box-search-outline' },
   { slug: 'manipulador-lista',                      name: 'Manipulador de Lista',                   category: 'texto', description: 'Ordene, duplique, filtre e transforme listas.', icon: 'mdi:format-list-bulleted' },
   { slug: 'wordcraft-pro',                          name: 'WordCraft Pro',                          category: 'texto', description: 'Editor avançado com ferramentas de formatação.', icon: 'mdi:pencil-ruler' },
-  { slug: 'ipsum-generator-plus',                   name: 'Ipsum Generator Plus',                   category: 'texto', description: 'Gere Lorem Ipsum, Hemdal Lorem e textos placeholder em v�rios idiomas.', icon: 'mdi:format-quote-close' },
+  { slug: 'ipsum-generator-plus',                   name: 'Ipsum Generator Plus',                   category: 'texto', description: 'Gere Lorem Ipsum, Hemdal Lorem e textos placeholder em v�rios idiomas.', icon: 'mdi:format-quote-close' },
   { slug: 'extrator-email',                         name: 'Extrator de E-mails',                    category: 'texto', description: 'Extraia todos os e-mails de um texto.', icon: 'mdi:email-multiple-outline' },
   { slug: 'digitador',                              name: 'Digitador Automático',                   category: 'texto', description: 'Automatize a digitação com velocidade configurável.', icon: 'mdi:keyboard-outline' },
   { slug: 'teste-personalidade',                    name: 'Teste de Personalidade',                 category: 'texto', description: 'Descubra seu perfil com testes detalhados.', icon: 'mdi:head-cog-outline' },
@@ -518,7 +518,8 @@ const apps = [
   { slug: 'contador-dias',                          name: 'Contador de Dias entre Datas',           category: 'matematica', description: 'Calcule a diferença em dias, semanas, meses e anos entre duas datas.', icon: 'mdi:calendar-range-outline' },
   { slug: 'somar-dias',                             name: 'Somar Dias em Datas',                    category: 'matematica', description: 'Adicione um número de dias a uma data e veja qual dia cairá.', icon: 'mdi:calendar-plus-outline' },
   { slug: 'subtrair-dias',                          name: 'Subtrair Dias em Datas',                 category: 'matematica', description: 'Subtraia dias de uma data e veja qual dia resultará.', icon: 'mdi:calendar-minus-outline' },
-  { slug: 'meu-ip',                                 name: 'Meu Endereço IP',                        category: 'dev', description: 'Veja seu IP externo, localização e informações sobre sua conexão.', icon: 'mdi:ip-network-outline' },
+  { slug: 'meu-ip',                                 name: 'Meu Endereço IP',                        category: 'dev', description: 'IPv4, IPv6, DNS Reverso (PTR), localização, ISP, ASN e detecção de VPN/Proxy.', icon: 'mdi:ip-network-outline' },
+  { slug: 'consulta-dominio',                      name: 'Consulta de Domínio & WHOIS',            category: 'dev', description: 'Consulte WHOIS/RDAP, registrante, datas, nameservers e todos os registros DNS de qualquer domínio.', icon: 'mdi:domain' },
 
   // ── Calculadora Científica, ASCII & Loteria ───────────────────────────────
   { slug: 'calculadora-cientifica',               name: 'Calculadora Científica & Financeira',    category: 'matematica', description: 'Calculadora científica completa, funções financeiras (juros, PMT, inflação) e gerador de tabuadas.', icon: 'mdi:calculator-variant' },

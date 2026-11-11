@@ -186,6 +186,8 @@ const solutionMeta: Record<string, { name: string }> = {
   'somar-dias':                             { name: 'Somar Dias em Datas' },
   'subtrair-dias':                          { name: 'Subtrair Dias em Datas' },
   'meu-ip':                                 { name: 'Meu Endereço IP' },
+  'consulta-dominio':                       { name: 'Consulta de Domínio & WHOIS' },
+  'whois-dominio':                          { name: 'WHOIS / Domínio' },
   // ── Marketing Pro & Design Pro ────────────────────────────────────────────
   'calculadora-engajamento':               { name: 'Calculadora de Engajamento' },
   'calculadora-roas':                      { name: 'Calculadora de ROAS' },
