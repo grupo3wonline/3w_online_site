@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 
@@ -6,9 +6,23 @@ import { resolve } from 'path'
  * Plugin de desenvolvimento que intercepta /api.php e faz o fetch
  * server-side (Node), ocultando os endpoints externos do DevTools do browser.
  *
- * Em produção, o mesmo /api.php é servido por PHP (HostGator).
+ * As URLs dos endpoints são lidas do .env (sem prefixo VITE_ → só Node, nunca
+ * expostas ao bundle do browser). Em produção o PHP faz o mesmo via getenv().
  */
-function apiProxyDevPlugin(): Plugin {
+function apiProxyDevPlugin(env: Record<string, string>): Plugin {
+  // URLs lidas do .env, com fallback idêntico ao api-config.php
+  const urls = {
+    ipv4:         env.API_EXT_IPV4           || 'https://api4.ipify.org',
+    ipv6:         env.API_EXT_IPV6           || 'https://api6.ipify.org',
+    geoip:        env.API_EXT_GEOIP          || 'https://ipwho.is',
+    geoipFallback:env.API_EXT_GEOIP_FALLBACK || 'https://ipapi.co/json/',
+    dns:          env.API_EXT_DNS            || 'https://dns.google/resolve',
+    rdap:         env.API_EXT_RDAP           || 'https://rdap.org/domain',
+    cepBrasilapi: env.API_EXT_CEP_BRASILAPI  || 'https://brasilapi.com.br/api/cep/v2',
+    cepViacep:    env.API_EXT_CEP_VIACEP     || 'https://viacep.com.br/ws',
+    cnpj:         env.API_EXT_CNPJ           || 'https://brasilapi.com.br/api/cnpj/v1',
+  }
+
   // Espelha a lógica de resolveUrl() em public/api.php
   function resolveTarget(t: number, v: string, q: string): string | null {
     const cleanIp     = (s: string) => s.replace(/[^0-9a-fA-F.:]/g, '')
@@ -21,19 +35,19 @@ function apiProxyDevPlugin(): Plugin {
     }
 
     switch (t) {
-      case 1: return 'https://api4.ipify.org?format=json'
-      case 2: return 'https://api6.ipify.org?format=json'
-      case 3: { const ip = cleanIp(v); return ip ? `https://ipwho.is/${ip}` : 'https://ipwho.is/' }
-      case 4: return 'https://ipapi.co/json/'
+      case 1: return `${urls.ipv4}?format=json`
+      case 2: return `${urls.ipv6}?format=json`
+      case 3: { const ip = cleanIp(v); return ip ? `${urls.geoip}/${ip}` : `${urls.geoip}/` }
+      case 4: return urls.geoipFallback
       case 5: {
         const name = encodeURIComponent(cleanDomain(v))
         const type = cleanDnsType(q)
-        return name ? `https://dns.google/resolve?name=${name}&type=${type}` : null
+        return name ? `${urls.dns}?name=${name}&type=${type}` : null
       }
-      case 6: { const d = cleanDomain(v); return d ? `https://rdap.org/domain/${d}` : null }
-      case 7: { const c = cleanDigits(v); return c.length === 8  ? `https://brasilapi.com.br/api/cep/v2/${c}` : null }
-      case 8: { const c = cleanDigits(v); return c.length === 8  ? `https://viacep.com.br/ws/${c}/json/` : null }
-      case 9: { const c = cleanDigits(v); return c.length === 14 ? `https://brasilapi.com.br/api/cnpj/v1/${c}` : null }
+      case 6: { const d = cleanDomain(v); return d ? `${urls.rdap}/${d}` : null }
+      case 7: { const c = cleanDigits(v); return c.length === 8  ? `${urls.cepBrasilapi}/${c}` : null }
+      case 8: { const c = cleanDigits(v); return c.length === 8  ? `${urls.cepViacep}/${c}/json/` : null }
+      case 9: { const c = cleanDigits(v); return c.length === 14 ? `${urls.cnpj}/${c}` : null }
       default: return null
     }
   }
@@ -108,26 +122,32 @@ function apiProxyDevPlugin(): Plugin {
   }
 }
 
-export default defineConfig({
-  plugins: [vue(), apiProxyDevPlugin()],
-  resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
+export default defineConfig(({ mode }) => {
+  // loadEnv com prefixo '' carrega TODAS as vars do .env,
+  // incluindo as sem VITE_ (disponíveis apenas aqui no Node, nunca no bundle).
+  const env = loadEnv(mode, process.cwd(), '')
+
+  return {
+    plugins: [vue(), apiProxyDevPlugin(env)],
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, 'src'),
+      },
     },
-  },
-  server: {
-    port: 3000,
-    host: true,
-  },
-  build: {
-    target: 'es2020',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['vue', 'vue-router', 'pinia'],
-          ui: ['sweetalert2', '@iconify/vue'],
+    server: {
+      port: 3000,
+      host: true,
+    },
+    build: {
+      target: 'es2020',
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'vue-router', 'pinia'],
+            ui: ['sweetalert2', '@iconify/vue'],
+          },
         },
       },
     },
-  },
+  }
 })

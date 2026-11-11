@@ -1,6 +1,6 @@
 <template>
   <a
-    href="https://wa.me/5541996924829?text=Olá! Gostaria de saber mais sobre os serviços da 3W Online."
+    :href="whatsappUrl"
     target="_blank"
     rel="noopener noreferrer"
     class="whatsapp-float"
@@ -12,5 +12,12 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
+
+const whatsappUrl = computed(() => {
+  const num = import.meta.env.VITE_WHATSAPP_NUMBER || '5541996924829'
+  const msg = encodeURIComponent('Olá! Gostaria de saber mais sobre os serviços da 3W Online.')
+  return `https://wa.me/${num}?text=${msg}`
+})
 </script>

@@ -4,6 +4,34 @@
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
+# 9. Variáveis de Ambiente do Backend (Chaves Secretas da API)
+#    Configure aqui as chaves SECRETAS do proxy PHP (api.php).
+#    Estas variáveis são lidas por api-config.php via getenv().
+#
+#    ⚠️  INSTRUÇÕES:
+#    1. Descomente as linhas SetEnv abaixo
+#    2. Substitua os valores pelos seus segredos reais
+#    3. NUNCA commite este arquivo com os valores preenchidos!
+#
+#    Para gerar o HMAC_SECRET:
+#      php -r "echo bin2hex(random_bytes(32));"
+# ------------------------------------------------------------------------------
+# SetEnv API_HMAC_SECRET     cole_aqui_string_hexadecimal_de_64_chars
+# SetEnv API_RECAPTCHA_SECRET cole_aqui_chave_secreta_do_google_recaptcha
+# SetEnv API_TURNSTILE_SECRET cole_aqui_chave_secreta_do_cloudflare_turnstile
+
+# ── URLs dos endpoints externos (opcional — altere apenas se usar APIs próprias)
+# SetEnv API_EXT_IPV4           https://api4.ipify.org
+# SetEnv API_EXT_IPV6           https://api6.ipify.org
+# SetEnv API_EXT_GEOIP          https://ipwho.is
+# SetEnv API_EXT_GEOIP_FALLBACK https://ipapi.co/json/
+# SetEnv API_EXT_DNS            https://dns.google/resolve
+# SetEnv API_EXT_RDAP           https://rdap.org/domain
+# SetEnv API_EXT_CEP_BRASILAPI  https://brasilapi.com.br/api/cep/v2
+# SetEnv API_EXT_CEP_VIACEP     https://viacep.com.br/ws
+# SetEnv API_EXT_CNPJ           https://brasilapi.com.br/api/cnpj/v1
+
+# ------------------------------------------------------------------------------
 # 1. Configurações Globais do Servidor
 # ------------------------------------------------------------------------------
 Options -Indexes -MultiViews

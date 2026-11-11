@@ -1,15 +1,20 @@
 /**
  * Composable para SEO, SEM, GEO e AEO (Answer Engine Optimization).
- * Gerencia meta tags, dados estruturados (Schema.org/JSON-LD),
- * Open Graph, Twitter Cards, canonical URLs, geo-targeting, AEO para IA e SEM.
+ * Lê BASE_URL, contatos e coordenadas do .env (VITE_*).
  */
 
-const BASE_URL = 'https://www.3wonline.com.br'
-const SITE_NAME = '3W Online'
-const DEFAULT_IMAGE = `${BASE_URL}/og-image.jpg`
-const GEO_REGION = 'BR-PR'
-const GEO_PLACE = 'Curitiba'
-const GEO_POSITION = '-25.4284;-49.2733'
+const BASE_URL    = import.meta.env.VITE_SITE_URL   || 'https://www.3wonline.com.br'
+const SITE_NAME   = import.meta.env.VITE_APP_NAME   || '3W Online'
+const DEFAULT_IMAGE = `${BASE_URL}${import.meta.env.VITE_OG_IMAGE || '/og-image.jpg'}`
+const GEO_REGION  = import.meta.env.VITE_GEO_REGION || 'BR-PR'
+const GEO_PLACE   = import.meta.env.VITE_GEO_CITY   || 'Curitiba'
+const GEO_LAT     = import.meta.env.VITE_GEO_LAT    || '-25.4284'
+const GEO_LNG     = import.meta.env.VITE_GEO_LNG    || '-49.2733'
+const GEO_POSITION = `${GEO_LAT};${GEO_LNG}`
+const COMPANY_PHONE = import.meta.env.VITE_PHONE_INTL || '+55-41-99692-4829'
+const COMPANY_EMAIL = import.meta.env.VITE_SITE_EMAIL || 'contato@3wonline.com.br'
+const FACEBOOK_URL  = import.meta.env.VITE_FACEBOOK_URL  || 'https://www.facebook.com/grupo3wonline'
+const INSTAGRAM_URL = import.meta.env.VITE_INSTAGRAM_URL || 'https://www.instagram.com/grupo3wonline'
 
 export interface FaqItem {
   question: string
@@ -89,7 +94,7 @@ export function useSeo() {
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: '3W Online',
+    name: SITE_NAME,
     alternateName: 'Grupo 3W Online',
     url: BASE_URL,
     logo: `${BASE_URL}/favicon.svg`,
@@ -98,46 +103,43 @@ export function useSeo() {
     address: {
       '@type': 'PostalAddress',
       addressCountry: 'BR',
-      addressRegion: 'PR',
-      addressLocality: 'Curitiba',
+      addressRegion: import.meta.env.VITE_GEO_STATE || 'PR',
+      addressLocality: GEO_PLACE,
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: -25.4284,
-      longitude: -49.2733,
+      latitude: parseFloat(GEO_LAT),
+      longitude: parseFloat(GEO_LNG),
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+55-41-99692-4829',
+      telephone: COMPANY_PHONE,
       contactType: 'customer service',
       availableLanguage: ['Portuguese', 'English'],
       areaServed: ['BR', 'US', 'EU'],
     },
-    sameAs: [
-      'https://www.facebook.com/grupo3wonline',
-      'https://www.instagram.com/grupo3wonline',
-    ],
+    sameAs: [FACEBOOK_URL, INSTAGRAM_URL].filter(Boolean),
   }
 
   /** Schema.org — LocalBusiness (GEO) */
   const localBusinessSchema = {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
-    name: '3W Online',
+    name: SITE_NAME,
     image: `${BASE_URL}/favicon.svg`,
     url: BASE_URL,
-    telephone: '+55-41-99692-4829',
-    email: 'contato@3wonline.com.br',
+    telephone: COMPANY_PHONE,
+    email: COMPANY_EMAIL,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Curitiba',
-      addressRegion: 'PR',
+      addressLocality: GEO_PLACE,
+      addressRegion: import.meta.env.VITE_GEO_STATE || 'PR',
       addressCountry: 'BR',
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: -25.4284,
-      longitude: -49.2733,
+      latitude: parseFloat(GEO_LAT),
+      longitude: parseFloat(GEO_LNG),
     },
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
@@ -147,8 +149,8 @@ export function useSeo() {
     },
     priceRange: '$$',
     areaServed: [
-      { '@type': 'City', name: 'Curitiba' },
-      { '@type': 'State', name: 'Paraná' },
+      { '@type': 'City',    name: GEO_PLACE },
+      { '@type': 'State',   name: import.meta.env.VITE_GEO_STATE || 'Paraná' },
       { '@type': 'Country', name: 'Brasil' },
     ],
   }

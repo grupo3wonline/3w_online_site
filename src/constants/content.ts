@@ -1,12 +1,18 @@
 /**
  * Constantes de conteúdo reutilizáveis em toda a aplicação.
- * Mesclado dos backups: grupo-3w-online-landing-page, site_antigo_3w, site_novo_3w
+ * Lê dos valores definidos no .env (VITE_*) com fallback seguro.
  */
 
-export const WHATSAPP_NUMBER = '5541996924829'
+export const WHATSAPP_NUMBER  = import.meta.env.VITE_WHATSAPP_NUMBER  || '5541996924829'
+export const COMPANY_EMAIL    = import.meta.env.VITE_SITE_EMAIL        || 'contato@3wonline.com.br'
+export const COMPANY_PHONE    = import.meta.env.VITE_PHONE             || '(41) 99692-4829'
+export const COMPANY_PHONE_INTL = import.meta.env.VITE_PHONE_INTL     || '+55-41-99692-4829'
 export const WHATSAPP_BASE_URL = `https://wa.me/${WHATSAPP_NUMBER}`
-export const COMPANY_EMAIL = 'contato@3wonline.com.br'
-export const COMPANY_PHONE = '(41) 99692-4829'
+export const SITE_URL         = import.meta.env.VITE_SITE_URL          || 'https://www.3wonline.com.br'
+export const PRIVACY_EMAIL    = import.meta.env.VITE_PRIVACY_EMAIL     || 'privacidade@3wonline.com.br'
+export const FACEBOOK_URL     = import.meta.env.VITE_FACEBOOK_URL      || 'https://www.facebook.com/grupo3wonline'
+export const INSTAGRAM_URL    = import.meta.env.VITE_INSTAGRAM_URL     || 'https://www.instagram.com/grupo3wonline'
+export const LINKEDIN_URL     = import.meta.env.VITE_LINKEDIN_URL      || ''
 
 export interface FaqItem {
   question: string

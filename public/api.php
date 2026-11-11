@@ -290,32 +290,32 @@ function cleanDnsType(string $s): string
 function resolveUrl(int $t, string $v, string $q): ?string
 {
     switch ($t) {
-        case 1: return 'https://api4.ipify.org?format=json';
-        case 2: return 'https://api6.ipify.org?format=json';
+        case 1: return API_EXT_IPV4 . '?format=json';
+        case 2: return API_EXT_IPV6 . '?format=json';
         case 3:
             $ip = cleanIp($v);
-            return $ip ? "https://ipwho.is/{$ip}" : 'https://ipwho.is/';
+            return $ip ? API_EXT_GEOIP . "/{$ip}" : API_EXT_GEOIP . '/';
         case 4:
-            return 'https://ipapi.co/json/';
+            return API_EXT_GEOIP_FALLBACK;
         case 5:
             $name = urlencode(cleanDomain($v));
             if ($name === '') return null;
-            return 'https://dns.google/resolve?name=' . $name . '&type=' . cleanDnsType($q);
+            return API_EXT_DNS . '?name=' . $name . '&type=' . cleanDnsType($q);
         case 6:
             $domain = cleanDomain($v);
-            return $domain !== '' ? "https://rdap.org/domain/{$domain}" : null;
+            return $domain !== '' ? API_EXT_RDAP . "/{$domain}" : null;
         case 7:
             $cep = cleanDigits($v);
             return strlen($cep) === 8
-                ? "https://brasilapi.com.br/api/cep/v2/{$cep}" : null;
+                ? API_EXT_CEP_BRASILAPI . "/{$cep}" : null;
         case 8:
             $cep = cleanDigits($v);
             return strlen($cep) === 8
-                ? "https://viacep.com.br/ws/{$cep}/json/" : null;
+                ? API_EXT_CEP_VIACEP . "/{$cep}/json/" : null;
         case 9:
             $cnpj = cleanDigits($v);
             return strlen($cnpj) === 14
-                ? "https://brasilapi.com.br/api/cnpj/v1/{$cnpj}" : null;
+                ? API_EXT_CNPJ . "/{$cnpj}" : null;
         default:
             return null;
     }

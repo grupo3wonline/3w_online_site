@@ -31,7 +31,7 @@ import { useRecaptcha }  from './useRecaptcha'
 import { useTurnstile }  from './useTurnstile'
 
 /* ── Constantes ─────────────────────────────────────────────────────────── */
-const BASE = '/api.php'
+const BASE = import.meta.env.VITE_API_PROXY || '/api.php'
 
 /* ── URL Builder ────────────────────────────────────────────────────────── */
 function buildUrl(t: number, v?: string, extras?: Record<string, string>): string {
