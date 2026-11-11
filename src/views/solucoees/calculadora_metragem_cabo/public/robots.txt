@@ -1,6 +1,0 @@
-# robots.txt - Calculadora de Metragem de Cabos
-
-User-agent: *
-Allow: /
-
-Sitemap: https://app.3wonline.com/calculadora_metragem_cabo/sitemap.xml

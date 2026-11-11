@@ -5,12 +5,17 @@
       Pular para o conteúdo principal
     </a>
 
-    <!-- Loading Overlay Global -->
+    <!-- Loading Overlay Global — Branded -->
     <Transition name="fade">
-      <div v-if="isLoading" class="loading-overlay" role="alert" aria-live="polite">
-        <div class="flex flex-col items-center gap-4">
-          <div class="loading-spinner"></div>
-          <p class="text-white font-medium text-sm">Carregando...</p>
+      <div v-if="isLoading" class="loading-overlay" role="alert" aria-live="polite" aria-label="Carregando página">
+        <div class="loading-logo-pulse">
+          <span class="text-white font-black text-xl tracking-tight">3W</span>
+        </div>
+        <p class="text-white font-semibold text-sm mb-2">Carregando...</p>
+        <div class="loading-dots">
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
+          <div class="loading-dot"></div>
         </div>
       </div>
     </Transition>

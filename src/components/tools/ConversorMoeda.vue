@@ -1,162 +1,208 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
-          <i class="fas fa-dollar-sign text-blue-600 dark:text-blue-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Conversor de Moeda</h1>
-        <p class="text-gray-600 dark:text-gray-400">Converta valores entre diferentes moedas</p>
-      </div>
+  <ToolShell
+    title="Conversor de Moedas"
+    description="Converta entre as principais moedas mundiais com taxas aproximadas. Para operações financeiras, consulte seu banco."
+    icon="fa-money-bill-wave"
+    icon-gradient="from-green-500 to-emerald-700"
+    orb-color="emerald"
+    :quick-tips="['15+ moedas', 'Conversão bidirecional', 'Tabela completa']"
+    :tips="[
+      { title: 'Taxas estimadas', text: 'As taxas desta calculadora são referências aproximadas. Para câmbio real, consulte seu banco ou corretora.' },
+      { title: 'IOF e spread', text: 'Ao comprar moeda no banco, o valor real inclui IOF (1,1% a 6,38%) e spread bancário.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Real para Dólar', desc: 'R$ 1.000 BRL',   result: 'Aprox. US$ 200 USD (taxa ~5.0)' },
+      { title: 'Euro para Real',  desc: '€ 500 EUR',       result: 'Aprox. R$ 2.750 BRL (taxa ~5.5)' },
+    ]"
+  >
 
-      <div class="space-y-6">
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-          <div class="text-center">
-            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Cotações atualizadas em tempo real</div>
-            <div class="text-xs text-gray-500 dark:text-gray-500">Valores simulados para demonstração</div>
+    <div class="tool-body">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+        <!-- De -->
+        <div>
+          <label class="input-aurora-label">
+            <i class="fas fa-arrow-right-from-bracket mr-1.5 text-blue-500"></i>
+            De
+          </label>
+          <div class="flex gap-2">
+            <select v-model="moedaDe" class="input-aurora w-24 flex-shrink-0" @change="converter">
+              <option v-for="m in moedas" :key="m.code" :value="m.code">{{ m.code }}</option>
+            </select>
+            <input v-model.number="valorDe" type="number" min="0" step="0.01"
+              class="input-aurora flex-1" placeholder="1000" @input="converter" />
           </div>
+          <p class="input-aurora-hint">{{ moedas.find(m => m.code === moedaDe)?.nome }}</p>
         </div>
 
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">De</label>
-            <div class="flex gap-2">
-              <select v-model="moedaOrigem" @change="converter" class="w-1/3 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                <option v-for="moeda in moedas" :key="moeda.codigo" :value="moeda.codigo">{{ moeda.codigo }} - {{ moeda.nome }}</option>
-              </select>
-              <input v-model="valorOrigem" @input="converter" type="number" step="0.01" placeholder="0.00" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-right text-2xl font-bold" />
-            </div>
-          </div>
-
-          <div class="flex justify-center">
-            <button @click="inverterMoedas" class="p-3 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50 rounded-full transition-colors">
-              <i class="fas fa-exchange-alt text-blue-600 dark:text-blue-400 text-xl"></i>
+        <!-- Troca -->
+        <div class="flex flex-col sm:items-start">
+          <div class="hidden sm:flex items-end h-10 pb-1 mt-6">
+            <button @click="trocar" class="copy-btn" title="Trocar moedas">
+              <i class="fas fa-arrows-rotate"></i>
+              Trocar
             </button>
           </div>
+        </div>
 
+        <!-- Para -->
+        <div class="sm:-mt-2">
+          <label class="input-aurora-label">
+            <i class="fas fa-arrow-right-to-bracket mr-1.5 text-teal-500"></i>
+            Para
+          </label>
+          <div class="flex gap-2">
+            <select v-model="moedaPara" class="input-aurora w-24 flex-shrink-0" @change="converter">
+              <option v-for="m in moedas" :key="m.code" :value="m.code">{{ m.code }}</option>
+            </select>
+            <div class="flex-1 relative">
+              <input :value="valorPara.toFixed(2)" readonly
+                class="input-aurora w-full font-bold text-primary-700 dark:text-primary-300 bg-primary-50 dark:bg-primary-900/20 cursor-default" />
+              <button @click="copiarResultado" class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary-600 transition-colors" title="Copiar">
+                <i class="fas fa-copy text-xs"></i>
+              </button>
+            </div>
+          </div>
+          <p class="input-aurora-hint">{{ moedas.find(m => m.code === moedaPara)?.nome }}</p>
+        </div>
+
+        <div class="flex items-end sm:mt-0 mt-0">
+          <button @click="trocar" class="btn-aurora w-full sm:w-auto">
+            <i class="fas fa-arrows-rotate mr-1.5"></i>
+            Inverter moedas
+          </button>
+        </div>
+      </div>
+
+      <!-- Taxa e resultado -->
+      <div v-if="taxa" class="tool-result-info">
+        <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Para</label>
-            <div class="flex gap-2">
-              <select v-model="moedaDestino" @change="converter" class="w-1/3 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
-                <option v-for="moeda in moedas" :key="moeda.codigo" :value="moeda.codigo">{{ moeda.codigo }} - {{ moeda.nome }}</option>
-              </select>
-              <div class="flex-1 px-4 py-2 border-2 border-blue-500 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-gray-900 dark:text-white text-right text-2xl font-bold">
-                {{ valorDestino }}
-              </div>
-            </div>
+            <p class="text-sm text-blue-800 dark:text-blue-200">
+              <strong>1 {{ moedaDe }}</strong> = <strong>{{ taxa.toFixed(4) }} {{ moedaPara }}</strong>
+            </p>
+            <p class="text-xs text-blue-600 dark:text-blue-300 mt-0.5">
+              Inverso: 1 {{ moedaPara }} = {{ (1/taxa).toFixed(4) }} {{ moedaDe }}
+            </p>
           </div>
-        </div>
-
-        <div v-if="taxaConversao" class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-          <div class="text-center">
-            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Taxa de Conversão</div>
-            <div class="text-xl font-bold text-blue-600 dark:text-blue-400">
-              1 {{ moedaOrigem }} = {{ taxaConversao }} {{ moedaDestino }}
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div v-for="moeda in moedasPopulares" :key="moeda.codigo" @click="conversaoRapida(moeda.codigo)" class="bg-gray-50 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg p-4 cursor-pointer transition-colors">
-            <div class="text-center">
-              <div class="text-2xl mb-1">{{ moeda.simbolo }}</div>
-              <div class="text-sm font-bold text-gray-900 dark:text-white">{{ moeda.codigo }}</div>
-              <div class="text-xs text-gray-600 dark:text-gray-400">{{ moeda.valor }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-blue-600 dark:text-blue-400 mt-1 mr-3"></i>
-            <div class="text-sm text-blue-800 dark:text-blue-300">
-              <p class="font-semibold mb-2">Moedas mais negociadas:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>USD:</strong> Dólar Americano - moeda de reserva mundial</li>
-                <li><strong>EUR:</strong> Euro - moeda da zona do euro</li>
-                <li><strong>GBP:</strong> Libra Esterlina - Reino Unido</li>
-                <li><strong>JPY:</strong> Iene Japonês - moeda asiática principal</li>
-                <li><strong>BRL:</strong> Real Brasileiro - moeda nacional</li>
-              </ul>
-            </div>
+          <div class="text-right">
+            <p class="text-2xl font-black text-blue-700 dark:text-blue-300">
+              {{ moedas.find(m => m.code === moedaPara)?.symbol }}{{ valorPara.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+            </p>
+            <p class="text-xs text-blue-500 dark:text-blue-400">{{ moedas.find(m => m.code === moedaPara)?.nome }}</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Tabela comparativa de todas as moedas -->
+    <div class="mt-4">
+      <button @click="tabelaOpen = !tabelaOpen" class="accordion-trigger">
+        <span class="flex items-center gap-2 text-sm">
+          <i class="fas fa-table text-primary-500"></i>
+          Tabela completa — {{ valorDe }} {{ moedaDe }} em outras moedas
+        </span>
+        <i :class="['fas', tabelaOpen ? 'fa-chevron-up' : 'fa-chevron-down', 'text-xs text-gray-400']"></i>
+      </button>
+      <Transition name="accordion">
+        <div v-if="tabelaOpen" class="mt-3 glass-panel overflow-hidden">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-0 divide-x divide-y divide-gray-100 dark:divide-slate-700">
+            <div
+              v-for="m in moedasOrdenadas"
+              :key="m.code"
+              class="p-3 hover:bg-primary-50/50 dark:hover:bg-primary-900/10 transition-colors cursor-pointer"
+              @click="moedaPara = m.code; converter()"
+            >
+              <div class="flex items-center justify-between gap-2">
+                <div>
+                  <span class="font-bold text-sm text-gray-900 dark:text-white">{{ m.code }}</span>
+                  <span class="text-[10px] text-gray-500 dark:text-slate-400 ml-1">{{ m.symbol }}</span>
+                </div>
+                <span class="text-xs font-semibold text-primary-600 dark:text-primary-400 tabular-nums">
+                  {{ (valorDe * taxas[moedaDe] / taxas[m.code]).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}
+                </span>
+              </div>
+              <p class="text-[10px] text-gray-400 dark:text-slate-500 truncate">{{ m.nome }}</p>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </div>
+
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 
-const { trackToolUsage } = useAnalytics()
+const tabelaOpen = ref(false)
+const moedaDe    = ref('BRL')
+const moedaPara  = ref('USD')
+const valorDe    = ref<number>(1000)
+const valorPara  = ref(0)
+const taxa       = ref(0)
 
-const moedaOrigem = ref('BRL')
-const moedaDestino = ref('USD')
-const valorOrigem = ref(100)
-const valorDestino = ref('0.00')
-const taxaConversao = ref('')
+// Taxas aproximadas relativas ao USD
+const taxas: Record<string, number> = {
+  USD: 1, EUR: 0.93, GBP: 0.79, JPY: 148.5, BRL: 5.05,
+  ARS: 835, CAD: 1.37, AUD: 1.54, CHF: 0.89, CNY: 7.24,
+  MXN: 17.1, CLP: 950, COP: 4100, PEN: 3.73,
+  NZD: 1.63, ZAR: 18.6, INR: 83.2, NOK: 10.6, SEK: 10.9, DKK: 6.92,
+}
 
-const moedas = [
-  { codigo: 'BRL', nome: 'Real Brasileiro', simbolo: 'R$', taxa: 1 },
-  { codigo: 'USD', nome: 'Dólar Americano', simbolo: '$', taxa: 5.0 },
-  { codigo: 'EUR', nome: 'Euro', simbolo: '€', taxa: 5.4 },
-  { codigo: 'GBP', nome: 'Libra Esterlina', simbolo: '£', taxa: 6.3 },
-  { codigo: 'JPY', nome: 'Iene Japonês', simbolo: '¥', taxa: 0.033 },
-  { codigo: 'CAD', nome: 'Dólar Canadense', simbolo: 'C$', taxa: 3.7 },
-  { codigo: 'AUD', nome: 'Dólar Australiano', simbolo: 'A$', taxa: 3.3 },
-  { codigo: 'CHF', nome: 'Franco Suíço', simbolo: 'CHF', taxa: 5.7 },
-  { codigo: 'CNY', nome: 'Yuan Chinês', simbolo: '¥', taxa: 0.70 },
-  { codigo: 'ARS', nome: 'Peso Argentino', simbolo: '$', taxa: 0.0055 }
+interface Moeda { code: string; nome: string; symbol: string }
+
+const moedas: Moeda[] = [
+  { code: 'BRL', nome: 'Real Brasileiro',       symbol: 'R$'   },
+  { code: 'USD', nome: 'Dólar Americano',        symbol: '$'    },
+  { code: 'EUR', nome: 'Euro',                   symbol: '€'    },
+  { code: 'GBP', nome: 'Libra Esterlina',        symbol: '£'    },
+  { code: 'JPY', nome: 'Iene Japonês',           symbol: '¥'    },
+  { code: 'CAD', nome: 'Dólar Canadense',        symbol: 'C$'   },
+  { code: 'AUD', nome: 'Dólar Australiano',      symbol: 'A$'   },
+  { code: 'CHF', nome: 'Franco Suíço',           symbol: 'Fr'   },
+  { code: 'CNY', nome: 'Yuan Chinês',            symbol: '¥'    },
+  { code: 'MXN', nome: 'Peso Mexicano',          symbol: '$'    },
+  { code: 'ARS', nome: 'Peso Argentino',         symbol: '$'    },
+  { code: 'CLP', nome: 'Peso Chileno',           symbol: '$'    },
+  { code: 'COP', nome: 'Peso Colombiano',        symbol: '$'    },
+  { code: 'PEN', nome: 'Sol Peruano',            symbol: 'S/'   },
+  { code: 'NZD', nome: 'Dólar Neozelandês',      symbol: 'NZ$'  },
+  { code: 'ZAR', nome: 'Rand Sul-Africano',      symbol: 'R'    },
+  { code: 'INR', nome: 'Rúpia Indiana',          symbol: '₹'    },
+  { code: 'NOK', nome: 'Coroa Norueguesa',       symbol: 'kr'   },
+  { code: 'SEK', nome: 'Coroa Sueca',            symbol: 'kr'   },
+  { code: 'DKK', nome: 'Coroa Dinamarquesa',     symbol: 'kr'   },
 ]
 
-const moedasPopulares = computed(() => {
-  const popular = ['USD', 'EUR', 'GBP', 'JPY']
-  return popular.map(codigo => {
-    const moeda = moedas.find(m => m.codigo === codigo)
-    const valor = calcularValor(1, 'BRL', codigo)
-    return {
-      ...moeda,
-      valor: `R$ 1 = ${valor}`
-    }
-  })
-})
+const moedasOrdenadas = computed(() => moedas.filter(m => m.code !== moedaDe.value))
 
-const calcularValor = (valor, de, para) => {
-  const moedaDe = moedas.find(m => m.codigo === de)
-  const moedaPara = moedas.find(m => m.codigo === para)
-  
-  if (!moedaDe || !moedaPara) return '0.00'
-  
-  const valorEmBRL = valor * moedaDe.taxa
-  const valorConvertido = valorEmBRL / moedaPara.taxa
-  
-  return valorConvertido.toFixed(2)
+function converter() {
+  const vd = Number(valorDe.value) || 0
+  const rDe = taxas[moedaDe.value]
+  const rPa = taxas[moedaPara.value]
+  if (!rDe || !rPa) return
+  taxa.value     = rPa / rDe
+  valorPara.value = vd * taxa.value
 }
 
-const converter = () => {
-  const valor = Number(valorOrigem.value) || 0
-  valorDestino.value = calcularValor(valor, moedaOrigem.value, moedaDestino.value)
-  
-  const taxa = calcularValor(1, moedaOrigem.value, moedaDestino.value)
-  taxaConversao.value = taxa
-  
-  trackToolUsage('Conversor Moeda', 'convert', { de: moedaOrigem.value, para: moedaDestino.value })
-}
-
-const inverterMoedas = () => {
-  const temp = moedaOrigem.value
-  moedaOrigem.value = moedaDestino.value
-  moedaDestino.value = temp
+function trocar() {
+  const tmp   = moedaDe.value
+  moedaDe.value  = moedaPara.value
+  moedaPara.value = tmp
   converter()
 }
 
-const conversaoRapida = (codigo) => {
-  moedaDestino.value = codigo
-  converter()
+async function copiarResultado() {
+  await navigator.clipboard.writeText(valorPara.value.toFixed(2))
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Copiado!', showConfirmButton: false, timer: 1500 })
 }
 
-// Conversão inicial
 converter()
 </script>
+
+<style scoped>
+.accordion-enter-active, .accordion-leave-active { transition: all 0.25s ease; overflow: hidden; max-height: 600px; }
+.accordion-enter-from, .accordion-leave-to       { max-height: 0; opacity: 0; }
+</style>

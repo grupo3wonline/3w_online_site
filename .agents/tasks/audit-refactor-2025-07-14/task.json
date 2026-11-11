@@ -1,0 +1,7 @@
+{
+  "task_id": "task-audit-refactor-3wonline",
+  "task_description": "Auditoria e refatoração completa do portal 3W Online: adicionar composables de segurança (CSRF, honeypot, debounce, dark mode), instalar DOMPurify, configurar vitest, implementar dark mode toggle, adicionar crédito de desenvolvedor no rodapé, criar página /cookies, hardening de segurança (CSP, .htaccess, DOMPurify em v-html), adicionar autocomplete=off e honeypot ao formulário de contato, escrever e rodar testes Vitest, atualizar documentação.",
+  "status": "completed",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004"],
+  "blocked_reason": null
+}

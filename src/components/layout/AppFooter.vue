@@ -154,12 +154,11 @@ const { openPreferences } = usePrivacyConsent()
 const currentYear = new Date().getFullYear()
 
 const navLinks = [
-  { path: '/', label: 'Página Inicial' },
-  { path: '/sobre', label: 'Sobre Nós' },
-  { path: '/servicos', label: 'Nossos Serviços' },
-  { path: '/ferramentas', label: 'Ferramentas Gratuitas', badge: '120+' },
-  { path: '/institucional', label: 'Institucional' },
-  { path: '/contato', label: 'Fale Conosco' },
+  { path: '/',           label: 'Página Inicial'                                      },
+  { path: '/servicos',   label: 'Nossos Serviços'                                     },
+  { path: '/ferramentas',label: 'Ferramentas & Apps', badge: '182+'                   },
+  { path: '/#sobre',     label: 'Sobre a 3W Online'                                   },
+  { path: '/#contato',   label: 'Fale Conosco'                                        },
 ]
 
 const serviceLinks = [

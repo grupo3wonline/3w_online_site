@@ -32,20 +32,18 @@ Construir e manter uma plataforma web de alta conversão, institucional e de uti
 | **Linguagem** | **TypeScript** | `^5.5.3` | Tipagem estática estrita (`strict: true`, `vue-tsc`) |
 | **Build & Bundler** | **Vite** | `^5.4.2` | HMR instantâneo, ESM nativo, code-splitting e chunking otimizado |
 | **Styling & CSS** | **Tailwind CSS** | `^3.4.17` | Utility-first CSS mobile-first, PostCSS, Autoprefixer, `@tailwindcss/forms` |
-| **State Management** | **Pinia** | `^2.1.7` | Store reativa modular para catálogo e busca de ferramentas |
-| **Roteamento** | **Vue Router** | `^4.5.1` | Lazy-loading com dynamic imports, guards de SEO/Analytics e rotas aninhadas |
-| **Internacionalização** | **vue-i18n** | `^9.13.1` | Suporte i18n com catálogo padrão `pt-BR` |
-| **Data & Queries** | **@tanstack/vue-query** | `^5.51.0` | Cache assíncrono e gerenciamento de estado de dados externos |
-| **Tabelas Complexas** | **@tanstack/vue-table** | `^8.17.0` | Tabelas headless de alta performance |
+| **State Management** | **Pinia** | `^2.1.7` | Stores reativas modulares para ferramentas e soluções |
+| **Roteamento** | **Vue Router** | `^4.5.1` | Lazy-loading com dynamic imports, guards de SEO/Analytics, redirects de âncora |
 | **Composables & Utilidades** | **@vueuse/core** | `^10.11.0` | Utilitários de sensores, clipboard, storage e eventos de browser |
 | **Animações** | **@vueuse/motion** | `^2.2.3` | Micro-animações e transições declarativas |
-| **Formulários & Validação** | **Zod** + **Vee-Validate** | `^3.23.8` / `^4.13.1` | Validação de schemas tipados e tratamento de erros de formulários |
+| **Validação de Schemas** | **Zod** | `^3.23.8` | Validação de schemas tipados em formulários e tools |
 | **Máscaras de Input** | **Maska** | `^3.0.0` | Máscaras de telefone, CPF, CNPJ, moeda e CEP |
-| **Iconografia** | **@iconify/vue** + **FontAwesome** | `^4.1.2` / `^6.5.2` | Conjunto leve de ícones sob demanda (MDI, Heroicons, FA6) |
+| **Iconografia** | **@iconify/vue** + **FontAwesome** | `^4.1.2` / `^6.5.2` | @iconify para todo o layout (MDI); FontAwesome para dark-mode toggle |
 | **Alertas & Modais** | **SweetAlert2** | `^11.12.0` | Notificações visuais e confirmações de ações |
 | **Processamento Local** | **Tesseract.js** + **QRCode** | `^7.0.0` / `^1.5.4` | OCR no navegador via WebAssembly e gerador de QR Codes |
 | **Busca Local (Fuzzy)** | **Fuse.js** | `^7.0.0` | Busca instantânea no catálogo de 120+ ferramentas |
 | **Manipulação de Datas** | **date-fns** | `^3.6.0` | Utilitários imutáveis para cálculos e formatação de datas |
+| **Sanitização XSS** | **DOMPurify** | `^3.4.17` | Sanitização de `v-html` em ferramentas com entrada do usuário |
 | **Testes Unitários** | **Vitest** | `^1.6.0` | Suíte de testes unitários ultrarrápida integrada ao Vite |
 | **Testes E2E** | **Playwright** | `^1.45.0` | Testes automatizados ponta a ponta em múltiplos navegadores |
 | **Qualidade de Código** | **ESLint** + **Prettier** | `^8.57.0` / `^3.3.0` | Linting com regras Vue/TS e formatação padronizada |
@@ -91,31 +89,29 @@ src/
 ├── locales/
 │   └── pt-BR.ts                  # Dicionário de tradução e internacionalização
 ├── router/
-│   ├── index.ts                  # Configuração do Vue Router, rotas principais, guards e SEO
-│   └── tools.ts                  # Definição e rotas dinâmicas de todas as ferramentas digitais
+│   ├── index.ts                  # Rotas principais + redirects: /sobre→/#sobre, /institucional→/#institucional, /contato→/#contato
+│   ├── tools.ts                  # 126 rotas de ferramentas (lazy-loaded)
+│   └── solucoes.ts               # 63 rotas de soluções (1 catálogo + 62 individuais)
 ├── stores/
-│   └── tools.ts                  # Pinia store para catálogo, categorias, filtros e histórico de ferramentas
+│   ├── tools.ts                  # Pinia store para catálogo, categorias e busca de ferramentas
+│   └── solucoes.ts               # Pinia store para catálogo, categorias e busca das 62 soluções
 ├── views/
-│   ├── Home.vue                  # Página inicial com proposta de valor, estatísticas, serviços, ferramentas e simulador
-│   ├── About.vue                 # História, posicionamento institucional e credenciais
+│   ├── Home.vue                  # Página unificada: hero, serviços, sobre, institucional, contato, FAQ
 │   ├── Services.vue              # Catálogo geral de soluções e orçamentos
-│   ├── Contact.vue               # Formulário de contato, canais diretos e WhatsApp
-│   ├── Tools.vue                 # Hub central de busca e catálogo de mais de 120 ferramentas digitais
-│   ├── ToolWrapper.vue           # Wrapper genérico com layout, breadcrumbs e SEO para cada ferramenta
-│   ├── Institucional.vue         # Missão, visão, valores e estrutura do Grupo 3W Online
-│   ├── Regulamento.vue           # Regulamentos, termos de campanhas e diretrizes de prestação
+│   ├── Solucoes.vue              # Hub de busca e catálogo das 62 soluções
+│   ├── SolucaoView.vue           # Wrapper dinâmico por slug para soluções individuais
+│   ├── Pagamento.vue             # Pagamento seguro (noindex)
 │   ├── Privacy.vue               # Política de Privacidade e proteção de dados (LGPD)
 │   ├── Terms.vue                 # Termos de Uso e Condições Gerais
-│   ├── Pagamento.vue             # Informações e facilidades de pagamento seguro
-│   ├── LandingAds.vue            # LP especializada em Tráfego Pago / Google Ads / Meta Ads
-│   ├── LandingMarketing.vue      # LP focada em Marketing Digital e Estratégia
-│   ├── LandingPRD.vue            # LP de Soluções de Produto e Engenharia
-│   ├── LandingSitesSistemas.vue  # LP para Criação de Sites e Sistemas Web
-│   ├── lp/                       # Landing pages adicionais (G3w.vue, Sistemas.vue)
-│   ├── services/                 # 13 páginas detalhadas de cada serviço (Web, App, IA, Social Media, etc.)
-│   └── errors/                   # Error403.vue, Error404.vue, Error500.vue
+│   ├── Cookies.vue               # Política de Cookies e preferências
+│   ├── Regulamento.vue           # Regulamento de serviços
+│   ├── errors/                   # Error403.vue, Error404.vue, Error500.vue
+│   ├── ferramentas/              # Tools.vue (hub), ToolWrapper.vue (wrapper lazy)
+│   ├── lp/                       # Landing pages (G3w.vue, Sistemas.vue, Ads, Marketing, Sites, PRD)
+│   ├── services/                 # 13 páginas detalhadas de serviço
+│   └── solucoees/                # Fonte: 62 projetos standalone (NÃO compilados com o site principal)
 ├── App.vue                       # Componente raiz, layout base, loading overlay global e transições
-├── main.ts                       # Bootstrap da aplicação, plugins, diretivas globais e montagem
+├── main.ts                       # Bootstrap da aplicação, Pinia, Router, diretivas globais
 └── env.d.ts                      # Declarações de tipos de ambiente do Vite
 ```
 

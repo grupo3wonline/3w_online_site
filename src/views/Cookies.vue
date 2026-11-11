@@ -282,11 +282,23 @@ import { useSeo } from '@/composables/useSeo'
 
 const { openPreferences } = usePrivacyConsent()
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
+
+const cookieFaqs = [
+  { question: 'Posso usar o site sem cookies?', answer: 'Sim, o site funciona com apenas os cookies essenciais ativados. Cookies analíticos e de marketing são opcionais e podem ser recusados.' },
+  { question: 'Como desativo os cookies de marketing?', answer: 'Clique em "Preferências de Privacidade" no rodapé do site, desative a categoria "Cookies de Marketing" e salve suas preferências.' },
+  { question: 'Os cookies coletam dados pessoais identificáveis?', answer: 'Não. Os cookies analíticos utilizam IP anonimizado e não identificam usuários individualmente. Os cookies essenciais não coletam dados pessoais.' },
+  { question: 'Por quanto tempo os cookies ficam armazenados?', answer: 'Cookies de sessão são excluídos ao fechar o navegador. Cookies persistentes duram no máximo 13 meses, conforme exigido pelo GDPR.' },
+]
+
 applySeo({
-  title: 'Política de Cookies | 3W Online',
-  description: 'Saiba quais cookies utilizamos e como gerenciar suas preferências de privacidade na 3W Online.',
+  title: 'Política de Cookies | LGPD & GDPR | 3W Online',
+  description:
+    'Saiba quais cookies utilizamos e como gerenciar suas preferências de privacidade na 3W Online. Conformidade com LGPD, GDPR, CCPA e POPIA.',
   path: '/cookies',
-  keywords: 'cookies, política de cookies, privacidade, lgpd, 3w online',
+  keywords: 'cookies, política de cookies, privacidade, lgpd, gdpr, 3w online',
+  faqs: cookieFaqs,
 })
+
+injectJsonLd(faqSchema(cookieFaqs), 'schema-faq')
 </script>

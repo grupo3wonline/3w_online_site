@@ -1,205 +1,177 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
-          <i class="fas fa-percent text-blue-600 dark:text-blue-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Calculadora de Porcentagem</h1>
-        <p class="text-gray-600 dark:text-gray-400">Calcule porcentagens, aumentos e descontos</p>
-      </div>
-
-      <div class="space-y-6">
-        <!-- Tipo de Cálculo -->
-        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-            Tipo de Cálculo
-          </label>
-          <div class="grid md:grid-cols-2 gap-3">
-            <button
-              v-for="tipo in tiposCalculo"
-              :key="tipo.id"
-              @click="tipoSelecionado = tipo.id"
-              :class="[
-                'p-4 rounded-lg border-2 transition-all text-left',
-                tipoSelecionado === tipo.id
-                  ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/30'
-                  : 'border-gray-200 dark:border-gray-600 hover:border-blue-400'
-              ]"
-            >
-              <div class="flex items-center gap-3">
-                <i :class="[tipo.icon, 'text-blue-600 dark:text-blue-400']"></i>
-                <div>
-                  <div class="font-semibold text-gray-900 dark:text-white">{{ tipo.nome }}</div>
-                  <div class="text-xs text-gray-600 dark:text-gray-400">{{ tipo.descricao }}</div>
-                </div>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Porcentagem de um Valor -->
-        <div v-if="tipoSelecionado === 'percentual'" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-          <div class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="percentual1" label="Porcentagem (%)" type="number" />
-            <BaseInput v-model="valor1" label="De qual valor?" type="number" />
-          </div>
-          <BaseButton @click="calcularPercentual" variant="primary" class="w-full">
-            <i class="fas fa-calculator mr-2"></i>Calcular
-          </BaseButton>
-          <div v-if="resultado1" class="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-4 text-center">
-            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ percentual1 }}% de {{ formatarMoeda(valor1) }} é:</div>
-            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ formatarMoeda(resultado1) }}</div>
-          </div>
-        </div>
-
-        <!-- Quanto é X de Y em Porcentagem -->
-        <div v-if="tipoSelecionado === 'proporcao'" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-          <div class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="valor2a" label="Valor (parte)" type="number" />
-            <BaseInput v-model="valor2b" label="Valor (total)" type="number" />
-          </div>
-          <BaseButton @click="calcularProporcao" variant="primary" class="w-full">
-            <i class="fas fa-calculator mr-2"></i>Calcular
-          </BaseButton>
-          <div v-if="resultado2" class="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-4 text-center">
-            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">{{ formatarMoeda(valor2a) }} representa:</div>
-            <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ resultado2 }}%</div>
-            <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">de {{ formatarMoeda(valor2b) }}</div>
-          </div>
-        </div>
-
-        <!-- Aumento Percentual -->
-        <div v-if="tipoSelecionado === 'aumento'" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-          <div class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="valor3" label="Valor inicial" type="number" />
-            <BaseInput v-model="percentual3" label="Aumento (%)" type="number" />
-          </div>
-          <BaseButton @click="calcularAumento" variant="primary" class="w-full">
-            <i class="fas fa-arrow-up mr-2"></i>Calcular Aumento
-          </BaseButton>
-          <div v-if="resultado3" class="space-y-3">
-            <div class="bg-green-100 dark:bg-green-900/30 rounded-lg p-4">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Valor do aumento:</div>
-              <div class="text-2xl font-bold text-green-600 dark:text-green-400">+ {{ formatarMoeda(resultado3.aumento) }}</div>
-            </div>
-            <div class="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-4">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Valor final:</div>
-              <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ formatarMoeda(resultado3.final) }}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Desconto Percentual -->
-        <div v-if="tipoSelecionado === 'desconto'" class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 space-y-4">
-          <div class="grid md:grid-cols-2 gap-4">
-            <BaseInput v-model="valor4" label="Valor inicial" type="number" />
-            <BaseInput v-model="percentual4" label="Desconto (%)" type="number" />
-          </div>
-          <BaseButton @click="calcularDesconto" variant="primary" class="w-full">
-            <i class="fas fa-arrow-down mr-2"></i>Calcular Desconto
-          </BaseButton>
-          <div v-if="resultado4" class="space-y-3">
-            <div class="bg-red-100 dark:bg-red-900/30 rounded-lg p-4">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Valor do desconto:</div>
-              <div class="text-2xl font-bold text-red-600 dark:text-red-400">- {{ formatarMoeda(resultado4.desconto) }}</div>
-            </div>
-            <div class="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-4">
-              <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">Valor final:</div>
-              <div class="text-3xl font-bold text-blue-600 dark:text-blue-400">{{ formatarMoeda(resultado4.final) }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-blue-600 dark:text-blue-400 mt-1 mr-3"></i>
-            <div class="text-sm text-blue-800 dark:text-blue-300">
-              <p class="font-semibold mb-2">Exemplos de uso:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li>Calcular descontos em compras</li>
-                <li>Calcular aumento salarial</li>
-                <li>Saber qual porcentagem de meta foi atingida</li>
-                <li>Calcular impostos e taxas</li>
-                <li>Analisar crescimento ou redução</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+  <ToolShell
+    title="Calculadora de Porcentagem"
+    description="Calcule porcentagens de múltiplas formas: valor, aumento, redução e comparação entre valores."
+    icon="fa-percent"
+    icon-gradient="from-cyan-500 to-teal-700"
+    orb-color="cyan"
+    :quick-tips="['4 modos de cálculo', 'Resultado imediato', 'Histórico de operações']"
+    :tips="toolTips"
+    :examples="[
+      { title: '10% de desconto',       desc: '10% de R$ 350',           result: 'R$ 35 de desconto → R$ 315' },
+      { title: 'Qual % representa?',    desc: '45 é qual % de 300?',      result: '15%' },
+      { title: 'Variação de preço',     desc: 'De R$ 80 para R$ 92',      result: 'Aumento de 15%' },
+    ]"
+  >
+    <!-- Abas de modo -->
+    <div class="tool-section mb-4">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button
+          v-for="m in modos"
+          :key="m.id"
+          :class="[
+            'p-2.5 rounded-xl text-xs font-semibold border transition-all text-center',
+            modo === m.id
+              ? 'bg-primary-600 text-white border-primary-600 shadow-sm'
+              : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 border-gray-200 dark:border-slate-600 hover:border-primary-400'
+          ]"
+          @click="modo = (m.id as typeof modo.value); calcular()"
+        >
+          <i :class="['fas', m.icon, 'block mb-1', modo === m.id ? 'text-white' : 'text-primary-500']"></i>
+          {{ m.label }}
+        </button>
       </div>
     </div>
-  </div>
+
+    <div class="tool-body">
+      <div class="space-y-3">
+        <!-- Modo 1: X% de Y -->
+        <template v-if="modo === 'valor'">
+          <p class="text-sm font-semibold text-gray-600 dark:text-slate-300 mb-3">
+            Calcular: <em>Qual é <strong class="text-primary-600">X%</strong> de <strong class="text-primary-600">Y</strong>?</em>
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="a" label="Porcentagem (%)" type="number" icon="fa-percent" placeholder="15" @input="calcular" />
+            <BaseInput v-model="b" label="Valor base"      type="number" icon="fa-coins"   placeholder="200" @input="calcular" />
+          </div>
+        </template>
+
+        <!-- Modo 2: X é qual % de Y -->
+        <template v-if="modo === 'qual'">
+          <p class="text-sm font-semibold text-gray-600 dark:text-slate-300 mb-3">
+            Calcular: <em><strong class="text-primary-600">X</strong> é qual porcentagem de <strong class="text-primary-600">Y</strong>?</em>
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="a" label="Valor parcial (X)" type="number" icon="fa-hashtag"  placeholder="30" @input="calcular" />
+            <BaseInput v-model="b" label="Valor total (Y)"   type="number" icon="fa-chart-pie" placeholder="200" @input="calcular" />
+          </div>
+        </template>
+
+        <!-- Modo 3: Variação % -->
+        <template v-if="modo === 'variacao'">
+          <p class="text-sm font-semibold text-gray-600 dark:text-slate-300 mb-3">
+            Calcular: <em>Variação percentual de <strong class="text-primary-600">A</strong> para <strong class="text-primary-600">B</strong></em>
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="a" label="Valor inicial" type="number" icon="fa-play"   placeholder="100" @input="calcular" />
+            <BaseInput v-model="b" label="Valor final"   type="number" icon="fa-flag"   placeholder="115" @input="calcular" />
+          </div>
+        </template>
+
+        <!-- Modo 4: Valor original -->
+        <template v-if="modo === 'original'">
+          <p class="text-sm font-semibold text-gray-600 dark:text-slate-300 mb-3">
+            Calcular: <em>Valor original antes de um <strong class="text-primary-600">X%</strong> de desconto/acréscimo</em>
+          </p>
+          <div class="grid grid-cols-2 gap-3">
+            <BaseInput v-model="a" label="Valor atual (após %)" type="number" icon="fa-tag"    placeholder="85" @input="calcular" />
+            <BaseInput v-model="b" label="Porcentagem aplicada (%)" type="number" icon="fa-percent" placeholder="15" @input="calcular"
+              hint="Negativo = desconto, positivo = acréscimo" />
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <Transition name="fade-in-up">
+      <div v-if="res !== null" class="mt-4 tool-result-info text-center">
+        <p class="text-xs text-blue-600 dark:text-blue-300 mb-2">{{ resLabel }}</p>
+        <p class="text-5xl font-black text-blue-700 dark:text-blue-300">{{ resFormatado }}</p>
+        <p v-if="resExtra" class="text-sm text-blue-500 dark:text-blue-400 mt-1">{{ resExtra }}</p>
+
+        <!-- Mini histórico -->
+        <div class="flex flex-wrap justify-center gap-2 mt-4">
+          <span v-for="h in historico.slice(-5).reverse()" :key="h"
+            class="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-mono">
+            {{ h }}
+          </span>
+        </div>
+      </div>
+    </Transition>
+
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage } = useAnalytics()
+const modo = ref<'valor' | 'qual' | 'variacao' | 'original'>('valor')
+const a = ref<number | ''>(15)
+const b = ref<number | ''>(200)
 
-const tiposCalculo = [
-  { id: 'percentual', nome: 'X% de Y', descricao: 'Quanto é uma porcentagem de um valor', icon: 'fas fa-percentage' },
-  { id: 'proporcao', nome: 'X é Y% de Z', descricao: 'Qual porcentagem um valor representa', icon: 'fas fa-chart-pie' },
-  { id: 'aumento', nome: 'Aumento %', descricao: 'Aplicar aumento percentual', icon: 'fas fa-arrow-up' },
-  { id: 'desconto', nome: 'Desconto %', descricao: 'Aplicar desconto percentual', icon: 'fas fa-arrow-down' }
+const toolTips = [
+  { text: 'X% de Y: Qual é 15% de R$ 200? Resultado: R$ 30' },
+  { text: 'X é qual % de Y: 30 é qual % de 200? Resultado: 15%' },
+  { text: 'Aumento/Reducao: De 100 para 115, aumento de 15%', type: 'info' as const },
 ]
 
-const tipoSelecionado = ref('percentual')
+const modos = [
+  { id: 'valor',    label: 'X% de Y',    icon: 'fa-percent'    },
+  { id: 'qual',     label: 'X é % de Y', icon: 'fa-question'   },
+  { id: 'variacao', label: 'Variação %', icon: 'fa-arrows-up-down' },
+  { id: 'original', label: 'Original',   icon: 'fa-rotate-left'},
+]
 
-// Tipo 1: X% de Y
-const percentual1 = ref(10)
-const valor1 = ref(100)
-const resultado1 = ref(0)
+const res      = ref<number | null>(null)
+const resLabel = ref('')
+const resExtra = ref('')
+const historico = ref<string[]>([])
 
-// Tipo 2: X é Y% de Z
-const valor2a = ref(25)
-const valor2b = ref(100)
-const resultado2 = ref(0)
+const resFormatado = computed(() => {
+  if (res.value === null) return ''
+  const v = res.value
+  if (modo.value === 'qual' || modo.value === 'variacao') return `${v.toFixed(2)}%`
+  return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })
+})
 
-// Tipo 3: Aumento
-const valor3 = ref(100)
-const percentual3 = ref(10)
-const resultado3 = ref(null)
+function calcular() {
+  const na = Number(a.value)
+  const nb = Number(b.value)
+  if (!na && na !== 0) { res.value = null; return }
 
-// Tipo 4: Desconto
-const valor4 = ref(100)
-const percentual4 = ref(10)
-const resultado4 = ref(null)
-
-const formatarMoeda = (valor) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL'
-  }).format(valor)
-}
-
-const calcularPercentual = () => {
-  resultado1.value = (valor1.value * percentual1.value) / 100
-  trackToolUsage('Calculadora Porcentagem', 'percentual')
-}
-
-const calcularProporcao = () => {
-  resultado2.value = ((valor2a.value / valor2b.value) * 100).toFixed(2)
-  trackToolUsage('Calculadora Porcentagem', 'proporcao')
-}
-
-const calcularAumento = () => {
-  const aumento = (valor3.value * percentual3.value) / 100
-  resultado3.value = {
-    aumento,
-    final: valor3.value + aumento
+  if (modo.value === 'valor') {
+    if (!nb) { res.value = null; return }
+    res.value = (na / 100) * nb
+    resLabel.value = `${na}% de ${nb} =`
+    resExtra.value = `Resto: ${(nb - res.value).toLocaleString('pt-BR', {minimumFractionDigits:2})}`
+    historico.value.push(`${na}% de ${nb} = ${res.value.toFixed(2)}`)
   }
-  trackToolUsage('Calculadora Porcentagem', 'aumento')
+  else if (modo.value === 'qual') {
+    if (!nb) { res.value = null; return }
+    res.value = (na / nb) * 100
+    resLabel.value = `${na} representa`
+    resExtra.value = `de um total de ${nb}`
+    historico.value.push(`${na}/${nb} = ${res.value.toFixed(2)}%`)
+  }
+  else if (modo.value === 'variacao') {
+    if (!nb || !na) { res.value = null; return }
+    res.value = ((nb - na) / na) * 100
+    resLabel.value = res.value >= 0 ? 'Aumento de' : 'Redução de'
+    resExtra.value = `De ${na} → ${nb} (Δ ${(nb - na >= 0 ? '+' : '')}${(nb-na).toLocaleString('pt-BR',{minimumFractionDigits:2})})`
+    historico.value.push(`${na}→${nb}: ${res.value >= 0 ? '+' : ''}${res.value.toFixed(2)}%`)
+  }
+  else if (modo.value === 'original') {
+    if (!nb) { res.value = null; return }
+    res.value = na / (1 + nb / 100)
+    resLabel.value = `Valor original antes do ${nb > 0 ? 'acréscimo' : 'desconto'} de ${Math.abs(nb)}%:`
+    resExtra.value = `Diferença aplicada: ${(na - res.value).toLocaleString('pt-BR',{minimumFractionDigits:2})}`
+    historico.value.push(`Original de ${na} (${nb}%): ${res.value.toFixed(2)}`)
+  }
+
+  if (historico.value.length > 10) historico.value.shift()
 }
 
-const calcularDesconto = () => {
-  const desconto = (valor4.value * percentual4.value) / 100
-  resultado4.value = {
-    desconto,
-    final: valor4.value - desconto
-  }
-  trackToolUsage('Calculadora Porcentagem', 'desconto')
-}
+calcular()
 </script>

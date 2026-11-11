@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useSeo } from '@/composables/useSeo'
+import { useAnalytics } from '@/composables/useAnalytics'
 import { toolsRoutes } from './tools'
-import { solucoesRoutes } from './solucoes'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -15,14 +15,10 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    // Conteúdo de "Sobre" unificado na Home — redireciona para a seção #sobre
     path: '/sobre',
     name: 'About',
-    component: () => import('@/views/About.vue'),
-    meta: {
-      title: 'Sobre a 3W Online | Agência de Marketing Digital em Curitiba PR',
-      description: 'Conheça a 3W Online: agência de marketing digital em Curitiba com 5+ anos de experiência, 150+ projetos entregues. Especialistas em sites, sistemas e automação com IA.',
-      keywords: 'sobre 3w online, agência marketing digital curitiba, equipe marketing digital, quem somos',
-    },
+    redirect: { path: '/', hash: '#sobre' },
   },
   {
     path: '/servicos',
@@ -35,14 +31,10 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    // Conteúdo de "Contato" unificado na Home — redireciona para #contato
     path: '/contato',
     name: 'Contact',
-    component: () => import('@/views/Contact.vue'),
-    meta: {
-      title: 'Contato | Fale com a 3W Online - Orçamento Gratuito',
-      description: 'Entre em contato com a 3W Online para orçamento gratuito. WhatsApp (41) 99692-4829. Agência em Curitiba, Paraná. Resposta em até 24 horas úteis (Segunda a Sexta das 8h às 18h).',
-      keywords: 'contato 3w online, orçamento marketing digital, whatsapp agência curitiba, fale conosco',
-    },
+    redirect: { path: '/', hash: '#contato' },
   },
   {
     path: '/privacidade',
@@ -85,14 +77,10 @@ const routes: RouteRecordRaw[] = [
     },
   },
   {
+    // Conteúdo "Institucional" unificado na Home — redireciona para #institucional
     path: '/institucional',
     name: 'Institucional',
-    component: () => import('@/views/Institucional.vue'),
-    meta: {
-      title: 'Institucional | Grupo 3W Online - Missão, Visão e Valores',
-      description: 'Conheça o Grupo 3W Online: nossa missão, visão, valores e história. Agência de marketing digital e tecnologia em Curitiba desde 2019.',
-      keywords: 'institucional, missão visão valores, grupo 3w online, história empresa',
-    },
+    redirect: { path: '/', hash: '#institucional' },
   },
   {
     path: '/ferramentas',
@@ -195,6 +183,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Gestão de Google Ads e Meta Ads em Curitiba | Tráfego Pago | 3W Online',
       description: 'Gestão profissional de anúncios Google Ads e Meta Ads em Curitiba. Campanhas otimizadas para gerar leads e vendas com ROI comprovado. Relatórios detalhados.',
+      serviceType: 'Gest�o de An�ncios Google Ads e Meta Ads',
       keywords: 'google ads curitiba, meta ads, facebook ads, instagram ads, gestão anúncios, tráfego pago, campanhas ads',
     },
   },
@@ -215,6 +204,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Desenvolvimento de Aplicativos em Curitiba | Apps iOS e Android | 3W Online',
       description: 'Desenvolvimento de aplicativos mobile em Curitiba. Apps nativos e híbridos para iOS e Android. React Native, UI/UX exclusivo e publicação nas lojas.',
+      serviceType: 'Desenvolvimento de Aplicativos Mobile',
       keywords: 'desenvolvimento apps curitiba, aplicativos mobile, ios, android, react native, app sob medida',
     },
   },
@@ -225,6 +215,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Consultoria em Marketing Digital em Curitiba | Estratégia | 3W Online',
       description: 'Consultoria especializada em marketing digital em Curitiba. Diagnóstico, plano estratégico, análise de concorrência e acompanhamento de resultados.',
+      serviceType: 'Consultoria em Marketing Digital',
       keywords: 'consultoria marketing digital curitiba, estratégia marketing, diagnóstico digital, plano marketing',
     },
   },
@@ -235,6 +226,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Planejamento de Campanhas Publicitárias em Curitiba | 3W Online',
       description: 'Planejamento estratégico de campanhas publicitárias em Curitiba. Campanhas digitais, integradas e sazonais com foco em ROI e resultados mensuráveis.',
+      serviceType: 'Planejamento de Campanhas Publicit�rias',
       keywords: 'planejamento campanhas curitiba, campanha publicitária, mídia digital, estratégia campanha',
     },
   },
@@ -255,6 +247,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Publicidade e Propaganda em Curitiba | Agência | 3W Online',
       description: 'Agência de publicidade e propaganda em Curitiba. Campanhas integradas online e offline, produção de materiais e gestão de mídia.',
+      serviceType: 'Publicidade e Propaganda',
       keywords: 'publicidade curitiba, propaganda, agência publicidade, campanha publicitária, mídia offline',
     },
   },
@@ -275,6 +268,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Assessoria de Imprensa e Relações Públicas em Curitiba | 3W Online',
       description: 'Assessoria de imprensa e relações públicas em Curitiba. Gestão de crise, relacionamento com mídia, comunicação corporativa e eventos.',
+      serviceType: 'Assessoria de Imprensa e Rela��es P�blicas',
       keywords: 'assessoria imprensa curitiba, relações públicas, gestão crise, comunicação corporativa, pr',
     },
   },
@@ -285,6 +279,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Pacote Marketing Digital Completo R$ 500/mês em Curitiba | 3W Online',
       description: 'Pacote completo de marketing digital por R$ 500/mês em Curitiba. Gestão de redes sociais, produção de conteúdo, anúncios e relatórios. Sem fidelidade.',
+      serviceType: 'Marketing Digital Completo', servicePrice: '500',
       keywords: 'pacote marketing digital curitiba, marketing digital barato, gestão redes sociais, anúncios, r$ 500',
     },
   },
@@ -295,6 +290,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Desenvolvimento de Sistemas Web em Curitiba | CRM, ERP | 3W Online',
       description: 'Desenvolvimento de sistemas web sob medida em Curitiba. CRM, ERP, agendamento, estoque, financeiro e plataformas SaaS com tecnologia de ponta.',
+      serviceType: 'Desenvolvimento de Sistemas Web Sob Medida',
       keywords: 'desenvolvimento sistemas curitiba, sistema web, crm personalizado, erp, saas, software sob medida',
     },
   },
@@ -309,14 +305,8 @@ const routes: RouteRecordRaw[] = [
     },
   },
 
-  // Soluções Digitais (63 rotas: catálogo + 62 soluções individuais)
-  ...solucoesRoutes,
-
-  // Ferramentas (todas as 126+ ferramentas integradas)
+  // Ferramentas (126 ferramentas + 62 aplicações integradas via AppWrapper)
   ...toolsRoutes,
-
-  // Soluções (62 aplicações independentes)
-  ...solucoesRoutes,
 
   // Error Pages
   {
@@ -348,13 +338,17 @@ const router = createRouter({
   },
 })
 
-// Guard global para SEO (title, description, OG, Twitter, GEO, canonical)
+// Guard global para SEO (title, description, OG, Twitter, GEO, canonical, schemas)
 router.beforeEach((to) => {
-  const { applySeo } = useSeo()
-  const title = (to.meta.title as string) || '3W Online | Marketing Digital e Desenvolvimento'
-  const description = (to.meta.description as string) || 'Agência de marketing digital em Curitiba. Sites, sistemas, apps e automação com IA.'
-  const keywords = to.meta.keywords as string | undefined
-  const noindex = to.meta.noindex as boolean | undefined
+  const { applySeo, injectJsonLd, serviceSchema, breadcrumbSchema, websiteSchema, BASE_URL } = useSeo()
+  const { trackPageView } = useAnalytics()
+
+  const title       = (to.meta.title       as string)  || '3W Online | Marketing Digital e Desenvolvimento'
+  const description = (to.meta.description as string)  || 'Agência de marketing digital em Curitiba. Sites, sistemas, apps e automação com IA.'
+  const keywords    = to.meta.keywords  as string | undefined
+  const noindex     = to.meta.noindex   as boolean | undefined
+  const serviceType = to.meta.serviceType as string | undefined
+  const servicePrice= to.meta.servicePrice as string | undefined
 
   applySeo({
     title,
@@ -362,7 +356,50 @@ router.beforeEach((to) => {
     path: to.path,
     keywords,
     noindex: noindex || false,
+    serviceType,
+    servicePrice,
   })
+
+  // GA4 — page view automático a cada navegação
+  trackPageView(to.path, title)
+
+  // WebSite schema (global — injeta apenas na Home)
+  if (to.path === '/') {
+    injectJsonLd(websiteSchema, 'schema-website')
+  }
+
+  // BreadcrumbList JSON-LD via rota
+  const breadcrumbs = buildBreadcrumbs(to.path, title)
+  if (breadcrumbs.length > 1) {
+    injectJsonLd(breadcrumbSchema(breadcrumbs), 'schema-breadcrumb-route')
+  }
 })
+
+/** Constrói o array de breadcrumbs a partir do path atual */
+function buildBreadcrumbs(path: string, currentTitle: string) {
+  const BASE_URL = 'https://www.3wonline.com.br'
+  const crumbs: { name: string; url: string }[] = [
+    { name: 'Início', url: BASE_URL + '/' },
+  ]
+
+  if (path === '/') return crumbs
+
+  const segments = path.split('/').filter(Boolean)
+
+  if (segments[0] === 'servicos') {
+    crumbs.push({ name: 'Serviços', url: BASE_URL + '/servicos' })
+    if (segments[1]) crumbs.push({ name: currentTitle.split(' | ')[0], url: BASE_URL + path })
+  } else if (segments[0] === 'ferramentas') {
+    crumbs.push({ name: 'Ferramentas', url: BASE_URL + '/ferramentas' })
+    if (segments[1]) crumbs.push({ name: currentTitle.split(' | ')[0], url: BASE_URL + path })
+  } else if (segments[0] === 'solucoes') {
+    crumbs.push({ name: 'Soluções Digitais', url: BASE_URL + '/solucoes' })
+    if (segments[1]) crumbs.push({ name: currentTitle.split(' | ')[0], url: BASE_URL + path })
+  } else {
+    crumbs.push({ name: currentTitle.split(' | ')[0], url: BASE_URL + path })
+  }
+
+  return crumbs
+}
 
 export default router

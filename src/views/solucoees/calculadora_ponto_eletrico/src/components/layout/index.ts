@@ -1,5 +1,0 @@
-export { default as Header } from './Header.vue'
-export { default as Footer } from './Footer.vue'
-export { default as Breadcrumb } from './Breadcrumb.vue'
-export { default as LoadingOverlay } from './LoadingOverlay.vue'
-export { default as ThemeToggle } from './ThemeToggle.vue'

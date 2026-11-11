@@ -1,0 +1,29 @@
+{
+  "id": "FEAT-001",
+  "type": "chore",
+  "description": "Infraestrutura de segurança: instalar DOMPurify + @types/dompurify + @vue/test-utils + jsdom no worktree, ativar darkMode:'class' no Tailwind, criar vitest.config.ts com ambiente jsdom, e criar os quatro composables ausentes: useDebounce.ts, useCSRFToken.ts, useHoneypot.ts, useDarkMode.ts em src/composables/. Esta FEAT é pré-requisito para FEAT-002 (useDarkMode) e FEAT-003 (useHoneypot, useCSRFToken, useDebounce). Não depende de nenhuma outra FEAT.",
+  "status": "completed",
+  "steps": [
+    "1. cd d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/refactor-audit e executar 'npm install' (node_modules não existe no worktree — passo obrigatório antes de qualquer outro).",
+    "2. Instalar pacotes: 'npm install dompurify' e 'npm install -D @types/dompurify @vue/test-utils jsdom'. Confirmar que aparecem em package.json do worktree.",
+    "3. Em tailwind.config.js (worktree raiz), inserir 'darkMode: \"class\",' como primeiro campo do objeto exportado (antes de 'content:').",
+    "4. Criar vitest.config.ts na raiz do worktree com: import { defineConfig } from 'vitest/config'; import vue from '@vitejs/plugin-vue'; import { resolve } from 'path'; export default defineConfig({ plugins: [vue()], test: { environment: 'jsdom', globals: true, include: ['src/tests/**/*.test.ts'] }, resolve: { alias: { '@': resolve(__dirname, 'src') } } });",
+    "5. Criar src/composables/useDebounce.ts: exporta função debounce<T extends (...args: unknown[]) => unknown>(fn: T, delay = 300) que usa setTimeout/clearTimeout e retorna função tipada.",
+    "6. Criar src/composables/useCSRFToken.ts: exporta useCSRFToken() com getToken() (lê/cria UUID via crypto.randomUUID() no localStorage na chave '_3w_csrf') e validateToken(t: string): boolean.",
+    "7. Criar src/composables/useHoneypot.ts: exporta useHoneypot() com hpField: Ref<string>, isBot: ComputedRef<boolean> (true quando hpField.value !== ''), resetHoneypot().",
+    "8. Criar src/composables/useDarkMode.ts: ao montar, lê localStorage.getItem('theme'); se 'dark', adiciona classe 'dark' em document.documentElement; expõe isDark: Ref<boolean> e toggleDark() que alterna a classe e persiste no localStorage."
+  ],
+  "acceptance_criteria": [
+    "npm install roda sem erros no worktree",
+    "package.json do worktree lista dompurify em dependencies e @types/dompurify, @vue/test-utils, jsdom em devDependencies",
+    "tailwind.config.js contém darkMode: 'class'",
+    "vitest.config.ts existe na raiz do worktree com environment: 'jsdom'",
+    "src/composables/useDebounce.ts, useCSRFToken.ts, useHoneypot.ts, useDarkMode.ts existem e exportam os símbolos esperados",
+    "npm run build passa sem erros de TypeScript"
+  ],
+  "verification": [
+    "cd d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/refactor-audit; npm run build — deve completar sem erros"
+  ],
+  "blocked_reason": null,
+  "findings": "npm install concluído sem erros (527 pacotes). dompurify adicionado a dependencies; @types/dompurify, @vue/test-utils e jsdom adicionados a devDependencies. tailwind.config.js atualizado com darkMode: 'class'. vitest.config.ts criado na raiz com environment jsdom e alias @→src. Quatro composables criados: useDebounce (debounce genérico com clearTimeout), useCSRFToken (UUID via crypto.randomUUID, localStorage '_3w_csrf'), useHoneypot (hpField Ref<string>, isBot ComputedRef<boolean>, resetHoneypot), useDarkMode (onMounted lê localStorage 'theme' ou prefers-color-scheme, toggleDark alterna classe 'dark' no documentElement e persiste). Build npm run build passou sem erros TypeScript (346 módulos, 170 chunks). Avisos de deprecação registrados: eslint@8.57, vue-i18n@9 — não são bloqueadores para esta FEAT. 37–40 vulnerabilidades de audit (herdadas, não introduzidas por esta FEAT)."
+}

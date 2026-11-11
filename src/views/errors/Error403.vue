@@ -27,10 +27,10 @@
           <Icon icon="mdi:home" class="w-4 h-4" />
           Retornar ao Início
         </RouterLink>
-        <RouterLink to="/contato" class="btn-secondary !bg-slate-800 hover:!bg-slate-700 !text-white text-xs sm:text-sm font-bold !py-3 !px-6 border border-slate-700 flex items-center gap-2">
+        <a href="/#contato" class="btn-secondary !bg-slate-800 hover:!bg-slate-700 !text-white text-xs sm:text-sm font-bold !py-3 !px-6 border border-slate-700 flex items-center gap-2">
           <Icon icon="mdi:email-outline" class="w-4 h-4" />
           Falar com o Suporte
-        </RouterLink>
+        </a>
         <a
           href="https://wa.me/5541996924829?text=Olá! Recebi um aviso de erro 403 no site da 3W Online e gostaria de orientações."
           target="_blank"

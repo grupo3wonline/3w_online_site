@@ -1,0 +1,33 @@
+{
+  "id": "FEAT-005",
+  "type": "feat",
+  "description": "Convert final 9 React→Vue components (batch 2) + create 4 iframe-fallback stubs for plain-HTML tools + finalize src/components/solucoes/index.ts with all 62 entries. This completes the component layer. Depends on FEAT-001; independent of FEAT-002/003/004.",
+  "status": "completed",
+  "steps": [
+    "Apply the same React→Vue conversion rules from FEAT-004 step 1 to all 9 React components in this batch.",
+    "Convert meu-bolso-mensal: Source is d:/.../solucoees/meu_bolso_mensal/src/components/CalculatorApp.tsx (79 TSX files total). Port the monthly budget calculator (income, expenses, savings). Create src/components/solucoes/meu-bolso-mensal.vue.",
+    "Convert modificador-texto: Source is d:/.../solucoees/modificador_texto/src/ (55 TSX files). Find the main text modifier (case change, reverse, trim, replace). Extract all transformations. Create src/components/solucoes/modificador-texto.vue.",
+    "Convert pdf-convert-pro: Source is d:/.../solucoees/pdf_convert_pro/src/ (8 TSX files). This tool converts files to/from PDF. If it uses browser-only APIs (PDF.js or html2canvas), port them. If it requires server-side processing, build a client-side-only version that handles text→PDF download using the browser's print dialog. Create src/components/solucoes/pdf-convert-pro.vue.",
+    "Convert planejador-casamento: Source is d:/.../solucoees/planejador_casamento/src/ (68 TSX files). Find the wedding planner (checklist, budget, vendor list, timeline). Create src/components/solucoes/planejador-casamento.vue.",
+    "Convert qr-code-pro: Source is d:/.../solucoees/qr_code_pro/src/ (JSX, not TSX). Main files are src/App.jsx and src/components/QRCodeGenerator.jsx. The main project already has the 'qrcode' npm package. Port the QR code generator with download capability. Create src/components/solucoes/qr-code-pro.vue.",
+    "Convert secure-secret-generator: Source is d:/.../solucoees/secure_secret_generator_password/src/ (55 TSX files). Port the password/secret generator (length, charset options, strength meter). Use crypto.getRandomValues for generation. Create src/components/solucoes/secure-secret-generator.vue.",
+    "Convert sorteio-facil: Source is d:/.../solucoees/sorteio_facil/src/pages/ (NamesDraw.tsx, NumberDraw.tsx, GroupsDraw.tsx). Port as a tabbed component with three draw modes. Create src/components/solucoes/sorteio-facil.vue.",
+    "Convert teste-personalidade: Source is d:/.../solucoees/teste_personalidade/src/ (93 TSX files — large). Find the main personality quiz component (questions, answers, result computation). Port the quiz flow and results display. Create src/components/solucoes/teste-personalidade.vue.",
+    "Convert watermark-wizard: Source is d:/.../solucoees/watermark_wizard_online/src/ (65 TSX files). Find the watermark-on-image tool (canvas API). Port it. Create src/components/solucoes/watermark-wizard.vue.",
+    "Create 4 fallback stub components for plain-HTML/PHP tools that have no portable Vue/React source: (a) src/components/solucoes/extrator-email.vue — renders a card: title 'Extrator de E-mails', description 'Ferramenta disponível em formato standalone. Acesse através do link direto.', a placeholder UI with a text area and 'extrair emails' button that uses a regex on input text client-side (basic extraction). (b) src/components/solucoes/consulta-pix.vue — renders a card for PIX key lookup; since the original was PHP-server-side, build a minimal client-side version that explains PIX key validation rules and validates the format client-side. (c) src/components/solucoes/teste-vocacional.vue — renders a simple vocational quiz with 5-10 hard-coded questions and a scoring result; content can be generic/educational. (d) src/components/solucoes/wordcraft-pro.vue — renders a creative writing assistant with text input + simple word-count stats + writing tips; the original was a plain HTML page.",
+    "Finalize src/components/solucoes/index.ts (worktree): ensure ALL 62 entries are present. The final map must have exactly these 62 keys: 'analisador-texto', 'calculadora-aluguel-facil', 'calculadora-campanha-trafego', 'calculadora-churrasco', 'calculadora-empresarial', 'calculadora-evento', 'calculadora-freelance', 'calculadora-imc', 'calculadora-indicadores-financeiros', 'calculadora-metragem-cabo', 'calculadora-orcamento-marketing-digital', 'calculadora-ponto-eletrico', 'calculadora-preco', 'calculadora-produto-servico', 'calculadora-programadores', 'calculadora-saude', 'calculadora-social-midia', 'code-logic-flow-studio', 'code-master', 'dados-brasil-generator-pro', 'dev-playground', 'dev-start', 'dev-toolkit-suite-essentials', 'empreenda-facil', 'entity-converter-pro', 'excel-consolidator', 'gerador-legenda', 'investsim', 'marca-dagua', 'orcamento-social-midia', 'rendimento-salarial', 'seu-peso', 'simuladores-empresariais', 'srt-converter-pro', 'thumbnail-pro', 'thumbnail-youtube', 'code-gen', 'color-craft', 'conversor-cores', 'convert-share', 'digitador', 'divisor-texto', 'extrator-email-cpf-cnpj', 'extrator-texto', 'finance-flow', 'gerador-fatura', 'gerador-gradiente', 'ipsum-generator-plus', 'manipulador-lista', 'meu-bolso-mensal', 'modificador-texto', 'pdf-convert-pro', 'planejador-casamento', 'qr-code-pro', 'secure-secret-generator', 'sorteio-facil', 'teste-personalidade', 'watermark-wizard', 'extrator-email', 'consulta-pix', 'teste-vocacional', 'wordcraft-pro'. Write the file fresh with all 62 entries if adding incrementally is error-prone."
+  ],
+  "acceptance_criteria": [
+    "All 13 component files exist (9 React-converted + 4 stubs) at src/components/solucoes/<slug>.vue",
+    "src/components/solucoes/index.ts has exactly 62 entries — count matches: Object.keys(solucoesMap).length === 62",
+    "Navigating to /solucoes shows no placeholder cards for any of the 62 slugs",
+    "npm run build completes with 0 errors",
+    "npx vitest run — all existing tests pass"
+  ],
+  "verification": [
+    "npm run build (in worktree) — exits 0",
+    "npx vitest run (in worktree) — all tests pass"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

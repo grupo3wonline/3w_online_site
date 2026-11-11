@@ -1,0 +1,25 @@
+{
+  "project_type": "Vue 3 + TypeScript SPA (Vite), dark-themed agency/tools site",
+  "language": "TypeScript + Vue 3 SFCs (<script setup lang=\"ts\">)",
+  "build_system": "Vite 5 + vue-tsc; npm scripts. Build: vue-tsc -b then vite build. TS strict mode. tsconfig excludes src/views/solucoees/ (standalone apps, never compiled by main project).",
+  "test_framework": "Vitest 1.x with jsdom; config in vitest.config.js; glob src/tests/**/*.test.ts; @vue/test-utils for component tests",
+  "build_command": "npm run build",
+  "test_command": "npx vitest run",
+  "verification_instructions": "1. cd into the worktree: d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes  2. Run: npx vue-tsc -b --noEmit (fast type check)  3. Run: npm run build (full build)  4. Run: npx vitest run (unit tests)",
+  "snapshot_or_generated_files": null,
+  "environment_constraints": "Windows; PowerShell shell. Use git -C <worktree-path> for all git commands. NEVER read/write to node_modules. The solucoees source apps in d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/src/views/solucoees/ are part of the MAIN repo (not inside the worktree) — use their ABSOLUTE paths when reading sources. The worktree is at d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes and all code changes go there.",
+  "contribution_requirements": "All new components: <script setup lang=\"ts\">. No default exports (Vue SFCs export implicitly). @iconify/vue Icon for icons (not FontAwesome). Tailwind utility classes only (no inline styles). No imports from src/views/solucoees/ in the site components — solucoees are standalone apps, never importable. Each solucao component must be fully self-contained (no external Pinia stores).",
+  "key_patterns": "1. Dropdown menus: same open/close ref pattern as servicesOpen in AppNavbar.vue — mouseenter/mouseleave, Transition name=dropdown, white card with shadow. 2. Breadcrumb: dark navy gradient (from-[#0a1628] via-[#111d3a] to-[#162044]), RouterLink chain. 3. Promo banner: bg-gradient-to-r from-accent-500 to-accent-600, Transition fade mode out-in, prev/next buttons, 4-second setInterval. 4. Privacy seal: bg-emerald-50/70 border-emerald-100 with mdi:shield-check. 5. Tool components: flat .vue file, all state local, Icon from @iconify/vue, classes bg-[#0a1628] text-white for dark sections, Tailwind for layout. 6. Router: RouteRecordRaw array exported as named const (toolsRoutes pattern), spread into index.ts routes array. 7. SolucaoView: reads route.params.slug, looks up solucoesMap[slug], renders defineAsyncComponent; fallback shows placeholder card.",
+  "relevant_files": [
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes/src/components/layout/AppNavbar.vue",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes/src/views/ToolWrapper.vue",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes/src/views/Tools.vue",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes/src/router/tools.ts",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes/src/router/index.ts",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes/src/stores/tools.ts",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/src/views/solucoees/calculadora_imc/src/views/CalculatorView.vue",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/src/views/solucoees/calculadora_imc/src/components/calculator/ImcCalculator.vue",
+    "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/src/views/solucoees/code_gen/src/pages/Index.tsx"
+  ],
+  "directory_structure": "worktree/src/: components/layout (AppNavbar, AppFooter), components/tools (120+ tool SFCs), components/ui, composables, router (index.ts, tools.ts), stores (tools.ts), views (Home, Tools, ToolWrapper, Services*, About, Contact, etc.), tests/. NEW: components/solucoes/ (SolucaoLayout.vue, index.ts, 62 <slug>.vue files), views/SolucaoView.vue, views/Solucoes.vue, router/solucoes.ts. SOURCES (read-only, main project): src/views/solucoees/<folder>/src/ — 36 Vue solutions and 22 React solutions and 4 plain-HTML solutions."
+}

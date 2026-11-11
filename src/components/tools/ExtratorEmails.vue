@@ -190,7 +190,22 @@ function baixarTxt() {
 </script>
 
 <style scoped>
-.btn-aurora-purple { background: linear-gradient(135deg, #7c3aed, #5b21b6); @apply btn-aurora; }
+.btn-aurora-purple {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #fff;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: all 0.2s;
+}
+.btn-aurora-purple:hover { background: linear-gradient(135deg, #6d28d9, #4c1d95); }
+.btn-aurora-purple:disabled { opacity: 0.5; cursor: not-allowed; }
 .fade-in-up-enter-active, .fade-in-up-leave-active { transition: all 0.25s ease; }
 .fade-in-up-enter-from { transform: translateY(8px); opacity: 0; }
 .fade-in-up-leave-to   { opacity: 0; }

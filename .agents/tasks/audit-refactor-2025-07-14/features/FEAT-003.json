@@ -1,0 +1,30 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Hardening de segurança: CSP meta tag em index.html, X-Frame-Options DENY + HSTS em .htaccess, autocomplete=off em BaseInput.vue, proteção do formulário Contact.vue com honeypot+CSRF+debounce+disable-after-submit, e DOMPurify.sanitize() nos quatro componentes que usam v-html com entrada do usuário (ConversorMarkdown, ValidadorRegex, CalculadoraPitagoras, CalculadoraFracao). Depende de FEAT-001 (composables devem existir). Independente de FEAT-002 e FEAT-004. Preservar toda a lógica de negócio das ferramentas.",
+  "status": "completed",
+  "steps": [
+    "1. Em index.html, antes da tag '</head>', inserir a meta CSP: <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-ancestors 'none';\" />.",
+    "2. Em public/.htaccess, localizar a linha 'Header always set X-Frame-Options \"SAMEORIGIN\"' e alterar para 'Header always set X-Frame-Options \"DENY\"'. Adicionar após a linha Permissions-Policy: 'Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains; preload\"'.",
+    "3. Ler src/components/tools/common/BaseInput.vue. No elemento <input> (está na linha ~22 aproximadamente), adicionar o atributo autocomplete=\"off\". Não alterar nenhuma outra lógica.",
+    "4. Ler src/views/Contact.vue completamente. No <script setup>: importar { useHoneypot } from '@/composables/useHoneypot', { useCSRFToken } from '@/composables/useCSRFToken', { debounce } from '@/composables/useDebounce'. Desestruturar { hpField, isBot, resetHoneypot } e { getToken } e criar isSubmitting = ref(false). Criar debouncedSubmit = debounce(async () => { if (isBot.value) return; isSubmitting.value = true; /* lógica de submit existente */ isSubmitting.value = false; }, 300). Alterar @submit.prevent para chamar debouncedSubmit. No template: (a) adicionar autocomplete=\"off\" ao elemento <form>; (b) adicionar antes do botão submit um campo honeypot oculto: <input type=\"text\" v-model=\"hpField\" name=\"hp_field\" tabindex=\"-1\" aria-hidden=\"true\" style=\"position:absolute;left:-9999px;width:1px;height:1px;opacity:0;\" autocomplete=\"off\" />; (c) adicionar campo CSRF: <input type=\"hidden\" name=\"_csrf\" :value=\"getToken()\" />; (d) adicionar :disabled=\"isSubmitting\" ao botão de submit.",
+    "5. Ler src/components/tools/ConversorMarkdown.vue. Adicionar 'import DOMPurify from 'dompurify'' no bloco <script setup>. Localizar onde 'html' é atribuída (provavelmente uma computed ou ref que recebe o resultado da conversão Markdown). Envolver a atribuição: html.value = DOMPurify.sanitize(resultado_da_conversao). Se for computed, o return deve ser DOMPurify.sanitize(htmlComputado).",
+    "6. Ler src/components/tools/ValidadorRegex.vue. Adicionar import DOMPurify. Localizar a computed 'textoHighlighted' que retorna HTML com marcações. Envolver o return com DOMPurify.sanitize(htmlGerado).",
+    "7. Ler src/components/tools/CalculadoraPitagoras.vue. Adicionar import DOMPurify. Localizar a ref/computed 'explicacao' que gera HTML (v-html=\"explicacao\" na linha ~107). Envolver a atribuição/return com DOMPurify.sanitize(...).",
+    "8. Ler src/components/tools/CalculadoraFracao.vue. Adicionar import DOMPurify. Localizar onde 'resultado.explicacao' é definida (v-html=\"resultado.explicacao\" na linha ~77). Envolver com DOMPurify.sanitize(...)."
+  ],
+  "acceptance_criteria": [
+    "index.html contém a meta Content-Security-Policy com frame-ancestors 'none'",
+    "public/.htaccess tem X-Frame-Options DENY (não SAMEORIGIN)",
+    "public/.htaccess tem Strict-Transport-Security header",
+    "src/components/tools/common/BaseInput.vue tem autocomplete=\"off\" no elemento <input>",
+    "src/views/Contact.vue tem campo honeypot oculto, campo _csrf hidden, @submit chama função debounced, botão submit tem :disabled=\"isSubmitting\"",
+    "ConversorMarkdown.vue, ValidadorRegex.vue, CalculadoraPitagoras.vue, CalculadoraFracao.vue todos importam DOMPurify e sanitizam antes de v-html",
+    "npm run build passa sem erros de TypeScript"
+  ],
+  "verification": [
+    "cd d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/refactor-audit; npm run build — deve completar sem erros de TypeScript"
+  ],
+  "blocked_reason": null,
+  "findings": "Todos os critérios de aceitação atendidos. Build: npm run build ✓ (vue-tsc + vite, 0 erros TS, 353 módulos transformados). Implementações: (1) CSP meta tag com frame-ancestors 'none' inserida em index.html; (2) X-Frame-Options alterado de SAMEORIGIN para DENY, HSTS max-age=31536000 adicionado em .htaccess; (3) autocomplete='off' adicionado ao <input> de BaseInput.vue; (4) Contact.vue: importa useHoneypot/useCSRFToken/debounce, debouncedSubmit criada (guarda isBot + chama handleSubmit), honeypot oculto e campo _csrf adicionados no template, form tem autocomplete='off', resetHoneypot() chamado após submit bem-sucedido; (5–8) DOMPurify importado e .sanitize() envolvendo todos os pontos v-html em ConversorMarkdown, ValidadorRegex, CalculadoraPitagoras e CalculadoraFracao. Nota: DOMPurify (v3.4.17) e @types/dompurify (v3.0.5) já estavam listados em package.json — nenhuma dependência nova necessária."
+}

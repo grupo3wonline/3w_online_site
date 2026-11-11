@@ -1,0 +1,28 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "UI/UX: adicionar dark mode toggle na AppNavbar, crédito de desenvolvedor HOTWYL|WILLFROMBRASIL no AppFooter, link de Política de Cookies no rodapé, criar página /cookies (Cookies.vue), adicionar rota /cookies ao router, e inserir hreflang tags em index.html. Depende de FEAT-001 (useDarkMode.ts deve existir). Independente de FEAT-003 e FEAT-004.",
+  "status": "completed",
+  "steps": [
+    "1. Ler src/components/layout/AppNavbar.vue para localizar o bloco 'Right / Actions' (div com classe 'flex items-center gap-2'). Importar useDarkMode. Adicionar botão toggle entre o botão WhatsApp e o hamburguer mobile: <button @click='toggleDark()' class='p-2 rounded-lg hover:bg-white/10 transition-colors text-white' :aria-label=\"isDark ? 'Ativar tema claro' : 'Ativar tema escuro'\" :title=\"isDark ? 'Tema claro' : 'Tema escuro'\"><i :class=\"['fas', isDark ? 'fa-sun' : 'fa-moon', 'w-5 h-5']\"></i></button>. No <script setup>, importar e desestruturar { isDark, toggleDark } from '@/composables/useDarkMode'.",
+    "2. Ler src/components/layout/AppFooter.vue para localizar o Bottom Bar (div com 'border-t border-slate-800/80'). Na faixa de links, inserir RouterLink para /cookies após 'Termos de Uso': <RouterLink to='/cookies' class='footer-link'>Política de Cookies</RouterLink>. Abaixo do parágrafo de copyright, adicionar: <p class='text-gray-500 text-[10px] text-center mt-1'>Sistema desenvolvido por <span class='text-gray-400 font-medium'>HOTWYL</span> <span class='text-gray-600'>|</span> <span class='text-gray-400 font-medium'>WILLFROMBRASIL</span></p>.",
+    "3. Criar src/views/Cookies.vue seguindo o padrão visual de src/views/Privacy.vue (ler Privacy.vue como referência). A página deve ter: hero dark navy com AppBreadcrumb, conteúdo em pt-BR cobrindo — O que são cookies, tipos (essenciais, analíticos, marketing), como desativar, lista de cookies do site, contato. Meta da rota: title 'Política de Cookies | 3W Online', description 'Saiba quais cookies utilizamos e como gerenciar suas preferências de privacidade na 3W Online.'",
+    "4. Em src/router/index.ts, inserir a rota para /cookies após a rota /regulamento e antes da rota /institucional: { path: '/cookies', name: 'Cookies', component: () => import('@/views/Cookies.vue'), meta: { title: 'Política de Cookies | 3W Online', description: 'Saiba quais cookies utilizamos e como gerenciar suas preferências de privacidade na 3W Online.', keywords: 'cookies, política de cookies, privacidade, lgpd, 3w online' } }.",
+    "5. Em index.html, após a linha '<link rel=\"canonical\" href=\"https://www.3wonline.com.br\" />' (linha ~16), inserir: <link rel=\"alternate\" hreflang=\"pt-BR\" href=\"https://www.3wonline.com.br\" /> e <link rel=\"alternate\" hreflang=\"x-default\" href=\"https://www.3wonline.com.br\" />."
+  ],
+  "acceptance_criteria": [
+    "Botão dark mode aparece na Navbar (ícone fa-moon / fa-sun) e chama toggleDark()",
+    "Clicar no toggle adiciona/remove classe 'dark' em document.documentElement",
+    "Preferência persiste no localStorage na chave 'theme'",
+    "Rodapé mostra 'Sistema desenvolvido por HOTWYL | WILLFROMBRASIL'",
+    "Link 'Política de Cookies' aparece no Bottom Bar do rodapé e leva a /cookies",
+    "Rota /cookies existe no router e resolve para Cookies.vue",
+    "index.html contém as duas tags hreflang (pt-BR e x-default)",
+    "npm run build passa sem erros"
+  ],
+  "verification": [
+    "cd d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/refactor-audit; npm run build — deve completar sem erros de TypeScript"
+  ],
+  "blocked_reason": null,
+  "findings": "Dark mode toggle added to AppNavbar using fa-moon/fa-sun icons; useDarkMode imported from FEAT-001 composable. AppFooter updated: 'Política de Cookies' RouterLink inserted after 'Termos de Uso', HOTWYL|WILLFROMBRASIL credit paragraph added below copyright wrapped in a div for proper stacking. Cookies.vue created following Privacy.vue pattern with 7 sections (O que são cookies, tipos, lista tabular, como desativar, bases legais, atualizações, contato). Route /cookies inserted between /regulamento and /institucional. hreflang pt-BR and x-default tags added to index.html after canonical. npm run build: ✓ built in 7.59s — 0 TypeScript errors."
+}

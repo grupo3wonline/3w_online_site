@@ -1,111 +1,138 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-teal-100 dark:bg-teal-900/30 rounded-full mb-4">
-          <i class="fas fa-ruler text-teal-600 dark:text-teal-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Conversor de Temperatura</h1>
-        <p class="text-gray-600 dark:text-gray-400">Converta entre Celsius, Fahrenheit e Kelvin</p>
-      </div>
+  <ToolShell
+    title="Conversor de Temperatura"
+    description="Converta entre Celsius, Fahrenheit, Kelvin e Rankine com referências de temperatura do cotidiano."
+    icon="fa-thermometer-half"
+    icon-gradient="from-red-500 to-orange-600"
+    orb-color="orange"
+    :quick-tips="['4 escalas', 'Referências rápidas', 'Conversão ao digitar']"
+    :tips="[
+      { title: 'Fórmulas principais', text: '°F = (°C × 9/5) + 32 | K = °C + 273,15 | Ra = K × 1,8 (Rankine).' },
+      { title: 'Escala Kelvin', text: 'O zero absoluto é −273,15°C (0 K). Não existem temperaturas negativas em Kelvin.', type: 'info' },
+    ]"
+    :examples="[
+      { title: 'Temperatura corporal', desc: '36,5°C',  result: '97,7°F | 309,65K' },
+      { title: 'Água ferve',           desc: '100°C',   result: '212°F | 373,15K' },
+      { title: 'Zero absoluto',        desc: '−273,15°C', result: '−459,67°F | 0K' },
+    ]"
+  >
 
-      <div class="space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-gradient-to-br from-teal-50 to-teal-100 dark:from-teal-900/20 dark:to-teal-900/30 rounded-xl p-6 border-2 border-teal-200 dark:border-teal-800">
-            <div class="text-center mb-4">
-              <div class="text-4xl mb-2">🌡️</div>
-              <div class="text-lg font-bold text-gray-900 dark:text-white">Celsius (°C)</div>
-            </div>
-            <input v-model="celsius" @input="convertFromCelsius" type="number" step="0.1" class="w-full px-4 py-3 border-2 border-teal-300 dark:border-teal-700 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-center text-2xl font-bold" />
+    <!-- Cards de temperatura -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+      <div
+        v-for="u in unidades"
+        :key="u.key"
+        :class="['rounded-2xl p-5 border-2 transition-all', u.bgClass]"
+      >
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <span class="text-2xl font-black" :class="u.textClass">{{ u.sigla }}</span>
+            <span class="text-xs text-gray-500 dark:text-slate-400 ml-1.5">{{ u.nome }}</span>
           </div>
-
-          <div class="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-900/30 rounded-xl p-6 border-2 border-orange-200 dark:border-orange-800">
-            <div class="text-center mb-4">
-              <div class="text-4xl mb-2">🌡️</div>
-              <div class="text-lg font-bold text-gray-900 dark:text-white">Fahrenheit (°F)</div>
-            </div>
-            <input v-model="fahrenheit" @input="convertFromFahrenheit" type="number" step="0.1" class="w-full px-4 py-3 border-2 border-orange-300 dark:border-orange-700 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-center text-2xl font-bold" />
-          </div>
-
-          <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-900/30 rounded-xl p-6 border-2 border-blue-200 dark:border-blue-800">
-            <div class="text-center mb-4">
-              <div class="text-4xl mb-2">❄️</div>
-              <div class="text-lg font-bold text-gray-900 dark:text-white">Kelvin (K)</div>
-            </div>
-            <input v-model="kelvin" @input="convertFromKelvin" type="number" step="0.1" class="w-full px-4 py-3 border-2 border-blue-300 dark:border-blue-700 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-center text-2xl font-bold" />
-          </div>
+          <span class="text-xl">{{ u.emoji }}</span>
         </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <button v-for="ref in referenciasTemperatura" :key="ref.nome" @click="usarReferencia(ref.celsius)" class="p-3 bg-gray-50 dark:bg-gray-700 hover:bg-teal-50 dark:hover:bg-teal-900/20 rounded-lg transition-colors text-left">
-            <div class="text-xs text-gray-600 dark:text-gray-400">{{ ref.nome }}</div>
-            <div class="font-bold text-teal-600 dark:text-teal-400 text-sm">{{ ref.celsius }}°C</div>
-          </button>
-        </div>
-
-        <div class="bg-teal-50 dark:bg-teal-900/20 border-l-4 border-teal-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-teal-600 dark:text-teal-400 mt-1 mr-3"></i>
-            <div class="text-sm text-teal-800 dark:text-teal-300">
-              <p class="font-semibold mb-2">Fórmulas de conversão:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>Celsius para Fahrenheit:</strong> °F = (°C × 9/5) + 32</li>
-                <li><strong>Fahrenheit para Celsius:</strong> °C = (°F - 32) × 5/9</li>
-                <li><strong>Celsius para Kelvin:</strong> K = °C + 273.15</li>
-                <li><strong>Kelvin para Celsius:</strong> °C = K - 273.15</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <input
+          v-model="valores[u.key]"
+          type="number"
+          step="0.01"
+          class="w-full text-center text-3xl font-black bg-transparent border-0 border-b-2 outline-none pb-1"
+          :class="[u.inputClass, 'dark:text-white']"
+          @input="() => converter(u.key)"
+        />
       </div>
     </div>
-  </div>
+
+    <!-- Fórmulas -->
+    <details class="mb-4">
+      <summary class="accordion-trigger cursor-pointer text-sm select-none">
+        <span class="flex items-center gap-2">
+          <i class="fas fa-square-root-alt text-primary-500"></i>
+          Fórmulas de conversão
+        </span>
+        <i class="fas fa-chevron-down text-xs text-gray-400"></i>
+      </summary>
+      <div class="mt-2 glass-panel p-4 space-y-1.5 text-xs font-mono text-gray-700 dark:text-slate-200">
+        <p>°F = (°C × 9/5) + 32</p>
+        <p>K  = °C + 273.15</p>
+        <p>Ra = (°C + 273.15) × 1.8</p>
+      </div>
+    </details>
+
+    <!-- Referências rápidas -->
+    <div>
+      <p class="input-aurora-label mb-3">
+        <i class="fas fa-bookmark mr-1.5 text-orange-500"></i>
+        Referências rápidas
+      </p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button
+          v-for="ref in referencias"
+          :key="ref.nome"
+          @click="usarReferencia(ref.celsius)"
+          class="p-3 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-orange-400 dark:hover:border-orange-600 hover:bg-orange-50/50 dark:hover:bg-orange-900/10 transition-all text-left"
+        >
+          <span class="text-[10px] text-gray-500 dark:text-slate-400 block leading-tight">{{ ref.nome }}</span>
+          <span class="font-black text-orange-600 dark:text-orange-400 text-sm">{{ ref.celsius }}°C</span>
+        </button>
+      </div>
+    </div>
+
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+<script setup lang="ts">
+import { reactive } from 'vue'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 
-const { trackToolUsage } = useAnalytics()
+type Escala = 'celsius' | 'fahrenheit' | 'kelvin' | 'rankine'
 
-const celsius = ref(0)
-const fahrenheit = ref(32)
-const kelvin = ref(273.15)
+const valores = reactive<Record<Escala, number | ''>>({
+  celsius:    0,
+  fahrenheit: 32,
+  kelvin:     273.15,
+  rankine:    491.67,
+})
 
-const referenciasTemperatura = [
-  { nome: 'Água congela', celsius: 0 },
-  { nome: 'Temperatura ambiente', celsius: 25 },
-  { nome: 'Temperatura corporal', celsius: 36.5 },
-  { nome: 'Água ferve', celsius: 100 },
-  { nome: 'Zero absoluto', celsius: -273.15 },
-  { nome: 'Febre', celsius: 38 },
-  { nome: 'Dia quente', celsius: 35 },
-  { nome: 'Dia frio', celsius: 10 }
+const unidades = [
+  { key: 'celsius'    as Escala, sigla: '°C', nome: 'Celsius',    emoji: '🌡️', bgClass: 'bg-gradient-to-br from-teal-50 to-teal-100/60 dark:from-teal-900/20 dark:to-teal-800/10 border-teal-200 dark:border-teal-800',   textClass: 'text-teal-700 dark:text-teal-300',    inputClass: 'border-teal-400 text-teal-700 dark:text-teal-200'   },
+  { key: 'fahrenheit' as Escala, sigla: '°F', nome: 'Fahrenheit',  emoji: '🔥', bgClass: 'bg-gradient-to-br from-orange-50 to-orange-100/60 dark:from-orange-900/20 dark:to-orange-800/10 border-orange-200 dark:border-orange-800',textClass: 'text-orange-700 dark:text-orange-300',inputClass: 'border-orange-400 text-orange-700 dark:text-orange-200'},
+  { key: 'kelvin'     as Escala, sigla: 'K',  nome: 'Kelvin',      emoji: '❄️', bgClass: 'bg-gradient-to-br from-blue-50 to-blue-100/60 dark:from-blue-900/20 dark:to-blue-800/10 border-blue-200 dark:border-blue-800',       textClass: 'text-blue-700 dark:text-blue-300',    inputClass: 'border-blue-400 text-blue-700 dark:text-blue-200'   },
+  { key: 'rankine'    as Escala, sigla: '°Ra', nome: 'Rankine',    emoji: '🔬', bgClass: 'bg-gradient-to-br from-purple-50 to-purple-100/60 dark:from-purple-900/20 dark:to-purple-800/10 border-purple-200 dark:border-purple-800',textClass: 'text-purple-700 dark:text-purple-300',inputClass: 'border-purple-400 text-purple-700 dark:text-purple-200'},
 ]
 
-const convertFromCelsius = () => {
-  const c = Number(celsius.value) || 0
-  fahrenheit.value = ((c * 9/5) + 32).toFixed(2)
-  kelvin.value = (c + 273.15).toFixed(2)
-  trackToolUsage('Conversor Temperatura', 'convert', { from: 'celsius' })
+const referencias = [
+  { nome: 'Zero absoluto',         celsius: -273.15 },
+  { nome: 'Nitrogênio líquido',     celsius: -196    },
+  { nome: 'Ponto de fusão do gelo', celsius: 0       },
+  { nome: 'Dia agradável',          celsius: 22      },
+  { nome: 'Temperatura corporal',   celsius: 36.5    },
+  { nome: 'Febre',                  celsius: 38.5    },
+  { nome: 'Água ferve (1 atm)',     celsius: 100     },
+  { nome: 'Pão saindo do forno',    celsius: 180     },
+]
+
+function converter(origem: Escala) {
+  const v = Number(valores[origem])
+  if (isNaN(v)) return
+
+  let c = 0
+  switch (origem) {
+    case 'celsius':    c = v; break
+    case 'fahrenheit': c = (v - 32) * 5 / 9; break
+    case 'kelvin':     c = v - 273.15; break
+    case 'rankine':    c = (v - 491.67) * 5 / 9; break
+  }
+
+  const r = (n: number) => Math.round(n * 100) / 100
+
+  if (origem !== 'celsius')    valores.celsius    = r(c)
+  if (origem !== 'fahrenheit') valores.fahrenheit = r(c * 9 / 5 + 32)
+  if (origem !== 'kelvin')     valores.kelvin     = r(c + 273.15)
+  if (origem !== 'rankine')    valores.rankine    = r((c + 273.15) * 1.8)
 }
 
-const convertFromFahrenheit = () => {
-  const f = Number(fahrenheit.value) || 0
-  celsius.value = ((f - 32) * 5/9).toFixed(2)
-  kelvin.value = (Number(celsius.value) + 273.15).toFixed(2)
-  trackToolUsage('Conversor Temperatura', 'convert', { from: 'fahrenheit' })
-}
-
-const convertFromKelvin = () => {
-  const k = Number(kelvin.value) || 0
-  celsius.value = (k - 273.15).toFixed(2)
-  fahrenheit.value = ((Number(celsius.value) * 9/5) + 32).toFixed(2)
-  trackToolUsage('Conversor Temperatura', 'convert', { from: 'kelvin' })
-}
-
-const usarReferencia = (valorCelsius) => {
-  celsius.value = valorCelsius
-  convertFromCelsius()
+function usarReferencia(celsius: number) {
+  valores.celsius = celsius
+  converter('celsius')
 }
 </script>

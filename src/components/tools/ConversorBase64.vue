@@ -1,90 +1,209 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-full mb-4">
-          <i class="fas fa-code text-indigo-600 dark:text-indigo-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Conversor Base64</h1>
-        <p class="text-gray-600 dark:text-gray-400">Encode e decode Base64</p>
+  <ToolShell
+    title="Conversor Base64"
+    description="Encode e decode Base64 — converta texto, URLs ou código para Base64 e vice-versa com suporte a UTF-8."
+    icon="fa-code"
+    icon-gradient="from-indigo-500 to-blue-800"
+    orb-color="indigo"
+    :quick-tips="['Encode & decode', 'Suporte UTF-8', 'Preview instantâneo']"
+    :tips="base64Tips"
+    :examples="base64Examples"
+  >
+
+    <div class="tool-body">
+      <!-- Toggle de modo -->
+      <div class="flex gap-2 p-1 bg-gray-100 dark:bg-slate-700 rounded-xl mb-4">
+        <button
+          :class="['flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2',
+            modo === 'encode' ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600']"
+          @click="modo = 'encode'; converter()"
+        >
+          <i class="fas fa-arrow-right text-xs"></i>
+          Texto → Base64 (Encode)
+        </button>
+        <button
+          :class="['flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2',
+            modo === 'decode' ? 'bg-indigo-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600']"
+          @click="modo = 'decode'; converter()"
+        >
+          <i class="fas fa-arrow-left text-xs"></i>
+          Base64 → Texto (Decode)
+        </button>
       </div>
 
-      <div class="space-y-6">
-        <div class="flex gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <button @click="modo = 'encode'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'encode' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-arrow-right mr-2"></i>Encode
-          </button>
-          <button @click="modo = 'decode'" class="flex-1 py-3 px-4 rounded-lg font-medium transition-colors" :class="modo === 'decode' ? 'bg-indigo-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'">
-            <i class="fas fa-arrow-left mr-2"></i>Decode
-          </button>
+      <!-- Entrada -->
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-1.5">
+          <label class="input-aurora-label !mb-0">
+            <i :class="['fas mr-1.5 text-sm', modo === 'encode' ? 'fa-align-left text-indigo-500' : 'fa-code text-blue-500']"></i>
+            {{ modo === 'encode' ? 'Texto de entrada' : 'Base64 de entrada' }}
+          </label>
+          <span class="text-[11px] text-gray-400 dark:text-slate-500">{{ entrada.length }} caracteres</span>
         </div>
+        <textarea
+          v-model="entrada"
+          @input="converter"
+          rows="5"
+          :placeholder="modo === 'encode' ? 'Digite ou cole o texto aqui...' : 'Cole o Base64 aqui para decodificar...'"
+          class="input-aurora resize-y font-mono text-sm"
+        ></textarea>
+      </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Entrada</label>
-          <textarea v-model="entrada" @input="converter" rows="6" :placeholder="modo === 'encode' ? 'Digite o texto para encodar...' : 'Cole o Base64 para decodar...'" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 resize-none font-mono text-sm"></textarea>
+      <!-- Ações rápidas -->
+      <div class="flex gap-2 mb-4">
+        <button @click="colar" class="copy-btn">
+          <i class="fas fa-paste"></i> Colar
+        </button>
+        <button @click="entrada = ''; saida = ''; erro = ''" class="copy-btn">
+          <i class="fas fa-eraser"></i> Limpar
+        </button>
+        <button @click="trocar" class="copy-btn" title="Trocar entrada/saída">
+          <i class="fas fa-arrows-rotate"></i> Trocar
+        </button>
+        <div class="ml-auto flex items-center gap-2">
+          <label class="flex items-center gap-1.5 text-xs text-gray-600 dark:text-slate-300 cursor-pointer">
+            <input type="checkbox" v-model="urlSafe" @change="converter" class="w-3.5 h-3.5 accent-indigo-600" />
+            URL-safe
+          </label>
         </div>
+      </div>
 
-        <div v-if="saida">
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resultado</label>
+      <!-- Erro -->
+      <div v-if="erro" class="tip-card-warning mb-4">
+        <i class="fas fa-exclamation-triangle text-amber-500 flex-shrink-0 mt-0.5"></i>
+        <span class="text-xs">{{ erro }}</span>
+      </div>
+
+      <!-- Resultado -->
+      <Transition name="scale-in">
+        <div v-if="saida && !erro">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="input-aurora-label !mb-0">
+              <i :class="['fas mr-1.5 text-sm', modo === 'encode' ? 'fa-code text-blue-500' : 'fa-align-left text-green-500']"></i>
+              {{ modo === 'encode' ? 'Base64 gerado' : 'Texto decodificado' }}
+            </label>
+            <div class="flex items-center gap-2 text-[11px] text-gray-400 dark:text-slate-500">
+              <span>{{ saida.length }} chars</span>
+              <span>|</span>
+              <span>+{{ sizeIncrease }}% tamanho</span>
+            </div>
+          </div>
           <div class="relative">
-            <textarea v-model="saida" readonly rows="6" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-600 text-gray-900 dark:text-white resize-none font-mono text-sm"></textarea>
-            <button @click="copiar" class="absolute top-2 right-2 px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm">
-              <i class="fas fa-copy mr-1"></i>Copiar
-            </button>
+            <textarea
+              :value="saida"
+              readonly
+              rows="5"
+              class="input-aurora resize-y font-mono text-sm bg-gray-50/80 dark:bg-slate-700/60 cursor-text"
+            ></textarea>
+            <div class="absolute top-2 right-2 flex gap-1.5">
+              <button @click="copiar" class="copy-btn py-1">
+                <i :class="['fas', copiado ? 'fa-check text-emerald-500' : 'fa-copy']"></i>
+                {{ copiado ? 'Copiado!' : 'Copiar' }}
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div v-if="erro" class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4">
-          <div class="flex">
-            <i class="fas fa-exclamation-circle text-red-600 dark:text-red-400 mt-1 mr-3"></i>
-            <div class="text-sm text-red-800 dark:text-red-300">{{ erro }}</div>
+          <!-- Tamanho comparativo -->
+          <div class="mt-3 glass-panel p-3">
+            <div class="flex items-center gap-4 text-xs">
+              <div class="flex-1">
+                <p class="text-gray-500 dark:text-slate-400 mb-1">Original</p>
+                <div class="strength-track">
+                  <div class="strength-bar bg-blue-500" :style="{ width: '100%' }"></div>
+                </div>
+                <p class="font-mono font-bold text-gray-700 dark:text-slate-200 mt-0.5">{{ entrada.length }} chars</p>
+              </div>
+              <i class="fas fa-arrow-right text-gray-300 dark:text-slate-600"></i>
+              <div class="flex-1">
+                <p class="text-gray-500 dark:text-slate-400 mb-1">{{ modo === 'encode' ? 'Base64' : 'Decoded' }}</p>
+                <div class="strength-track">
+                  <div class="strength-bar" :class="modo === 'encode' ? 'bg-indigo-500' : 'bg-green-500'"
+                    :style="{ width: Math.min((saida.length / entrada.length) * 100, 100) + '%' }"></div>
+                </div>
+                <p class="font-mono font-bold text-gray-700 dark:text-slate-200 mt-0.5">{{ saida.length }} chars</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </Transition>
     </div>
-  </div>
+
+  </ToolShell>
 </template>
 
-<script setup>
-import { ref } from 'vue'
+<script setup lang="ts">
+import { ref, computed } from 'vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 
-const { trackToolUsage, trackConversion } = useAnalytics()
+const base64Examples = [
+  { title: 'Texto simples', desc: 'Encode: Ola mundo!', code: 'T2zDoSBtdW5kbyE=', result: 'Decodificando volta ao original' },
+  { title: 'JWT token',     desc: 'Payload de um JWT',  code: 'eyJzdWIiOiIxMjM0NTY3ODkw...', result: 'JSON com dados do usuario' },
+  { title: 'Data URI',      desc: 'Imagem em Base64',   code: 'data_image_png_base64_iVBOR...', result: 'Embedding de imagens em HTML/CSS' },
+]
 
-const modo = ref('encode')
+const base64Tips = [
+  { title: 'Base64 nao e criptografia', text: 'Base64 e apenas uma codificacao. Qualquer pessoa pode decodificar. Nao use para proteger dados sensiveis.' },
+  { title: 'URL-safe Base64', text: 'Padrao URL usa traco e underline ao inves de mais e barra. Use para tokens JWT, parametros de URL e cookies.', type: 'info' as const },
+  { title: 'Tamanho aumenta', text: 'O encoding Base64 aumenta o tamanho em ~33%. 100 bytes viram ~137 caracteres.', type: 'warning' as const },
+]
+
+const modo    = ref<'encode' | 'decode'>('encode')
 const entrada = ref('')
-const saida = ref('')
-const erro = ref('')
+const saida   = ref('')
+const erro    = ref('')
+const copiado = ref(false)
+const urlSafe = ref(false)
 
-const converter = () => {
-  erro.value = ''
-  if (!entrada.value) {
-    saida.value = ''
-    return
-  }
+const sizeIncrease = computed(() => {
+  if (!entrada.value || !saida.value) return 0
+  return Math.round(((saida.value.length / entrada.value.length) - 1) * 100)
+})
 
+function converter() {
+  erro.value  = ''
+  saida.value = ''
+  if (!entrada.value) return
   try {
     if (modo.value === 'encode') {
-      saida.value = btoa(unescape(encodeURIComponent(entrada.value)))
-      trackToolUsage('Conversor Base64', 'encode')
+      let r = btoa(unescape(encodeURIComponent(entrada.value)))
+      if (urlSafe.value) r = r.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+      saida.value = r
     } else {
-      saida.value = decodeURIComponent(escape(atob(entrada.value)))
-      trackToolUsage('Conversor Base64', 'decode')
+      let v = entrada.value
+      if (urlSafe.value) v = v.replace(/-/g, '+').replace(/_/g, '/')
+      saida.value = decodeURIComponent(escape(atob(v)))
     }
-  } catch (e) {
-    erro.value = 'Erro ao converter. Verifique se o formato está correto.'
-    saida.value = ''
+  } catch {
+    erro.value = 'Erro ao converter. Verifique se o Base64 está correto e completo.'
   }
 }
 
-const copiar = async () => {
+async function copiar() {
+  await navigator.clipboard.writeText(saida.value)
+  copiado.value = true
+  setTimeout(() => (copiado.value = false), 2000)
+}
+
+async function colar() {
   try {
-    await navigator.clipboard.writeText(saida.value)
-    trackConversion('copy', 'base64')
-    Swal.fire({ icon: 'success', title: 'Copiado!', timer: 1000, showConfirmButton: false })
-  } catch (error) {
-    Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível copiar' })
+    entrada.value = await navigator.clipboard.readText()
+    converter()
+  } catch {
+    Swal.fire({ toast: true, position: 'top-end', icon: 'warning', title: 'Permissão de clipboard negada', showConfirmButton: false, timer: 2000 })
   }
 }
+
+function trocar() {
+  if (!saida.value) return
+  entrada.value = saida.value
+  modo.value    = modo.value === 'encode' ? 'decode' : 'encode'
+  converter()
+}
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.25s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>

@@ -1,130 +1,200 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-full mb-4">
-          <i class="fas fa-lock text-yellow-600 dark:text-yellow-400 text-2xl"></i>
+  <ToolShell
+    title="Verificador de Força de Senha"
+    description="Analise a segurança de uma senha com score detalhado, entropia e sugestões de melhoria."
+    icon="fa-lock"
+    icon-gradient="from-purple-500 to-violet-700"
+    orb-color="purple"
+    :quick-tips="['Score detalhado', 'Estimativa de crack', 'Sugestões de melhoria']"
+    :tips="[
+      { text: 'Senhas fortes têm 16+ caracteres com letras, números e símbolos.' },
+      { text: 'Nunca use palavras do dicionário como base — são fáceis de quebrar por força bruta.', type: 'warning' },
+      { text: 'Use um gerenciador de senhas (Bitwarden, 1Password) para gerenciar senhas únicas.', type: 'info' },
+    ]"
+  >
+    <div class="tool-body">
+      <div class="relative">
+        <label class="input-aurora-label">
+          <i class="fas fa-key mr-1.5 text-purple-500"></i>
+          Senha para analisar
+        </label>
+        <div class="relative">
+          <input
+            v-model="senha"
+            :type="mostrarSenha ? 'text' : 'password'"
+            class="input-aurora pr-12"
+            placeholder="Digite a senha para analisar..."
+            autocomplete="off"
+          />
+          <button
+            type="button"
+            @click="mostrarSenha = !mostrarSenha"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-slate-200 transition-colors"
+            :title="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'"
+          >
+            <i :class="['fas', mostrarSenha ? 'fa-eye-slash' : 'fa-eye', 'text-sm']"></i>
+          </button>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Validador de Senha</h1>
-        <p class="text-gray-600 dark:text-gray-400">Analise a força da sua senha</p>
+        <p class="input-aurora-hint">{{ senha.length }} caracteres</p>
       </div>
+    </div>
 
-      <div class="space-y-6">
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-          <BaseInput v-model="senha" label="Senha" type="password" placeholder="Digite sua senha" @input="validar" />
+    <!-- Resultado -->
+    <Transition name="scale-in">
+      <div v-if="senha" class="mt-4 space-y-4">
+        <!-- Score visual -->
+        <div :class="['p-5 rounded-2xl border-2', scoreBg]">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-semibold" :class="scoreColor">Força da Senha</span>
+            <span :class="['text-xl font-black', scoreColor]">{{ scoreLabel }}</span>
+          </div>
+          <div class="strength-track mb-2">
+            <div
+              class="strength-bar transition-all duration-700"
+              :class="scoreBar"
+              :style="{ width: `${(score / 5) * 100}%` }"
+            ></div>
+          </div>
+          <div class="flex justify-between text-[10px] text-gray-500 dark:text-slate-400">
+            <span>Muito Fraca</span><span>Fraca</span><span>Média</span><span>Forte</span><span>Muito Forte</span>
+          </div>
         </div>
 
-        <div v-if="resultado" class="space-y-4">
-          <div :class="['rounded-lg p-6', getCorForca()]">
-            <div class="flex items-center justify-between mb-4">
-              <div>
-                <div class="text-2xl font-bold">{{ getForcaTexto() }}</div>
-                <div class="text-sm opacity-75">Pontuação: {{ forca }}/100</div>
-              </div>
-              <div class="text-5xl">{{ getIconeForca() }}</div>
-            </div>
-            <div class="w-full bg-white/30 rounded-full h-3">
-              <div :class="['h-3 rounded-full transition-all', getBarraColor()]" :style="`width: ${forca}%`"></div>
+        <!-- Métricas -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="metric-glass">
+            <div class="metric-glass-value text-purple-600 dark:text-purple-400">{{ analise.entropia.toFixed(0) }}</div>
+            <div class="metric-glass-label">Bits de entropia</div>
+          </div>
+          <div class="metric-glass">
+            <div class="metric-glass-value text-blue-600 dark:text-blue-400">{{ analise.poolSize }}</div>
+            <div class="metric-glass-label">Tamanho do pool</div>
+          </div>
+          <div class="metric-glass">
+            <div class="metric-glass-value text-teal-600 dark:text-teal-400 text-sm">{{ analise.tempoCrack }}</div>
+            <div class="metric-glass-label">Tempo p/ quebrar</div>
+          </div>
+        </div>
+
+        <!-- Checklist de requisitos -->
+        <div class="glass-panel p-4">
+          <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+            <i class="fas fa-clipboard-check text-primary-500"></i>
+            Checklist de Segurança
+          </h4>
+          <div class="space-y-2">
+            <div
+              v-for="req in requisitos"
+              :key="req.label"
+              class="flex items-center gap-3 text-xs"
+              :class="req.ok ? 'text-emerald-700 dark:text-emerald-300' : 'text-gray-500 dark:text-slate-400'"
+            >
+              <i :class="['fas', req.ok ? 'fa-check-circle text-emerald-500' : 'fa-circle text-gray-300 dark:text-slate-600', 'w-4 flex-shrink-0']"></i>
+              {{ req.label }}
             </div>
           </div>
+        </div>
 
-          <div class="grid md:grid-cols-2 gap-3">
-            <div v-for="check in checklist" :key="check.nome" :class="['p-3 rounded-lg flex items-center gap-3', check.ok ? 'bg-green-50 dark:bg-green-900/20' : 'bg-gray-100 dark:bg-gray-700']">
-              <i :class="['text-lg', check.ok ? 'fas fa-check-circle text-green-600' : 'fas fa-times-circle text-gray-400']"></i>
-              <span :class="['text-sm', check.ok ? 'text-green-900 dark:text-green-300' : 'text-gray-600']">{{ check.nome }}</span>
-            </div>
-          </div>
-
-          <div v-if="sugestoes.length > 0" class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4">
-            <div class="font-semibold text-yellow-900 dark:text-yellow-300 mb-2">💡 Sugestões</div>
-            <ul class="text-sm text-yellow-800 dark:text-yellow-400 space-y-1">
-              <li v-for="(sug, i) in sugestoes" :key="i">• {{ sug }}</li>
+        <!-- Sugestões -->
+        <div v-if="sugestoes.length" class="tip-card-warning">
+          <i class="fas fa-lightbulb text-amber-500 flex-shrink-0 mt-0.5"></i>
+          <div>
+            <p class="font-semibold text-xs mb-1">Como melhorar:</p>
+            <ul class="text-xs space-y-0.5">
+              <li v-for="s in sugestoes" :key="s">• {{ s }}</li>
             </ul>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </Transition>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
 
-const { trackToolUsage } = useAnalytics()
+const senha       = ref('')
+const mostrarSenha= ref(false)
 
-const senha = ref('')
-const resultado = ref(false)
-const forca = ref(0)
+// ─── Análise ──────────────────────────────────────────────────────────────────
+const analise = computed(() => {
+  const s = senha.value
+  if (!s) return { entropia: 0, poolSize: 0, tempoCrack: '—' }
 
-const checklist = computed(() => [
-  { nome: 'Mínimo 8 caracteres', ok: senha.value.length >= 8 },
-  { nome: 'Letras maiúsculas', ok: /[A-Z]/.test(senha.value) },
-  { nome: 'Letras minúsculas', ok: /[a-z]/.test(senha.value) },
-  { nome: 'Números', ok: /\d/.test(senha.value) },
-  { nome: 'Caracteres especiais', ok: /[!@#$%^&*(),.?":{}|<>]/.test(senha.value) },
-  { nome: 'Mínimo 12 caracteres', ok: senha.value.length >= 12 }
-])
+  let pool = 0
+  if (/[a-z]/.test(s)) pool += 26
+  if (/[A-Z]/.test(s)) pool += 26
+  if (/[0-9]/.test(s)) pool += 10
+  if (/[^a-zA-Z0-9]/.test(s)) pool += 32
 
-const sugestoes = computed(() => {
-  const sugs = []
-  if (senha.value.length < 8) sugs.push('Use pelo menos 8 caracteres')
-  if (!/[A-Z]/.test(senha.value)) sugs.push('Adicione letras maiúsculas')
-  if (!/[a-z]/.test(senha.value)) sugs.push('Adicione letras minúsculas')
-  if (!/\d/.test(senha.value)) sugs.push('Adicione números')
-  if (!/[!@#$%^&*(),.?":{}|<>]/.test(senha.value)) sugs.push('Adicione caracteres especiais')
-  if (senha.value.length < 12) sugs.push('Senhas com 12+ caracteres são mais seguras')
-  return sugs
+  const entropia    = s.length * Math.log2(pool || 1)
+  const combinations = Math.pow(pool || 1, s.length)
+  // Assume 10 bilhões de tentativas/segundo
+  const segundos = combinations / 1e10
+  let tempoCrack = '< 1 segundo'
+  if (segundos > 60) tempoCrack = `${(segundos / 60).toFixed(0)} minutos`
+  if (segundos > 3600) tempoCrack = `${(segundos / 3600).toFixed(0)} horas`
+  if (segundos > 86400) tempoCrack = `${(segundos / 86400).toFixed(0)} dias`
+  if (segundos > 365 * 86400) tempoCrack = `${(segundos / (365 * 86400)).toFixed(0)} anos`
+  if (segundos > 1000 * 365 * 86400) tempoCrack = 'Séculos'
+  if (entropia > 100) tempoCrack = '∞ Impossível'
+
+  return { entropia, poolSize: pool, tempoCrack }
 })
 
-const validar = () => {
-  if (!senha.value) {
-    resultado.value = false
-    return
-  }
+const score = computed(() => {
+  const s = senha.value
+  if (!s) return 0
+  const e = analise.value.entropia
+  if (e < 28) return 1
+  if (e < 36) return 2
+  if (e < 60) return 3
+  if (e < 80) return 4
+  return 5
+})
 
-  let pontos = 0
-  
-  if (senha.value.length >= 8) pontos += 20
-  if (senha.value.length >= 12) pontos += 15
-  if (senha.value.length >= 16) pontos += 10
-  if (/[a-z]/.test(senha.value)) pontos += 15
-  if (/[A-Z]/.test(senha.value)) pontos += 15
-  if (/\d/.test(senha.value)) pontos += 10
-  if (/[!@#$%^&*(),.?":{}|<>]/.test(senha.value)) pontos += 15
-  
-  forca.value = Math.min(pontos, 100)
-  resultado.value = true
-  
-  trackToolUsage('Validador Senha', 'validate', { strength: forca.value })
-}
+const scoreLabel = computed(() => ['', 'Muito Fraca', 'Fraca', 'Média', 'Forte', 'Muito Forte'][score.value])
+const scoreColor = computed(() => ['','text-red-600','text-orange-500','text-amber-500','text-emerald-600','text-blue-600'][score.value])
+const scoreBar   = computed(() => ['','bg-red-500','bg-orange-500','bg-amber-400','bg-emerald-500','bg-blue-600'][score.value])
+const scoreBg    = computed(() => [
+  '',
+  'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
+  'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800',
+  'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800',
+  'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800',
+  'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
+][score.value])
 
-const getForcaTexto = () => {
-  if (forca.value < 40) return 'Fraca'
-  if (forca.value < 70) return 'Média'
-  if (forca.value < 90) return 'Forte'
-  return 'Muito Forte'
-}
+const requisitos = computed(() => {
+  const s = senha.value
+  return [
+    { label: 'Mínimo de 8 caracteres',               ok: s.length >= 8  },
+    { label: 'Mínimo de 12 caracteres (recomendado)', ok: s.length >= 12 },
+    { label: 'Contém letras minúsculas (a–z)',         ok: /[a-z]/.test(s) },
+    { label: 'Contém letras maiúsculas (A–Z)',         ok: /[A-Z]/.test(s) },
+    { label: 'Contém números (0–9)',                   ok: /[0-9]/.test(s) },
+    { label: 'Contém símbolos (!@#$%...)',             ok: /[^a-zA-Z0-9]/.test(s) },
+    { label: 'Não é uma sequência óbvia',              ok: !/^(123|abc|qwerty|password|senha)/i.test(s) },
+    { label: 'Mais de 16 caracteres (ótimo)',          ok: s.length >= 16 },
+  ]
+})
 
-const getIconeForca = () => {
-  if (forca.value < 40) return '😟'
-  if (forca.value < 70) return '😐'
-  if (forca.value < 90) return '😊'
-  return '🎉'
-}
-
-const getCorForca = () => {
-  if (forca.value < 40) return 'bg-red-50 dark:bg-red-900/20 text-red-900 dark:text-red-300'
-  if (forca.value < 70) return 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-900 dark:text-yellow-300'
-  if (forca.value < 90) return 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-300'
-  return 'bg-green-50 dark:bg-green-900/20 text-green-900 dark:text-green-300'
-}
-
-const getBarraColor = () => {
-  if (forca.value < 40) return 'bg-red-500'
-  if (forca.value < 70) return 'bg-yellow-500'
-  if (forca.value < 90) return 'bg-blue-500'
-  return 'bg-green-500'
-}
+const sugestoes = computed(() => {
+  const s = senha.value
+  const list: string[] = []
+  if (s.length < 8)  list.push('Aumente para pelo menos 8 caracteres.')
+  if (s.length < 12) list.push('16+ caracteres é o ideal para contas importantes.')
+  if (!/[A-Z]/.test(s)) list.push('Adicione letras maiúsculas.')
+  if (!/[0-9]/.test(s)) list.push('Inclua pelo menos um número.')
+  if (!/[^a-zA-Z0-9]/.test(s)) list.push('Adicione símbolos especiais (!@#$%^&*).')
+  if (/(.)\1{2,}/.test(s)) list.push('Evite repetir o mesmo caractere consecutivamente.')
+  return list
+})
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.25s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>

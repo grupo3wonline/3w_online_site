@@ -1,145 +1,150 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
-          <i class="fas fa-building text-green-600 dark:text-green-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Validador de CNPJ</h1>
-        <p class="text-gray-600 dark:text-gray-400">Valide números de CNPJ brasileiros</p>
+  <ToolShell
+    title="Validador de CNPJ"
+    description="Valide CNPJs com verificação matemática completa dos dígitos verificadores e formatação automática."
+    icon="fa-building"
+    icon-gradient="from-indigo-500 to-blue-800"
+    orb-color="indigo"
+    :quick-tips="['Validação matemática', 'Formatação automática', 'Lote de CNPJs']"
+    :tips="[
+      { title: 'Apenas estrutura', text: 'Esta ferramenta valida apenas a estrutura matemática do CNPJ. Não verifica situação cadastral na Receita Federal.' },
+      { title: 'Consulta oficial', text: 'Para consultar a situação cadastral real, acesse: www.receita.fazenda.gov.br', type: 'info' },
+    ]"
+    :examples="[
+      { title: 'CNPJ formatado',  desc: '11.222.333/0001-81', result: '✅ CNPJ válido' },
+      { title: 'CNPJ sem máscara', desc: '11222333000181',    result: '✅ CNPJ válido' },
+    ]"
+  >
+    <div class="tool-body">
+      <BaseInput
+        v-model="cnpjRaw"
+        label="CNPJ para validar"
+        icon="fa-building"
+        placeholder="00.000.000/0000-00"
+        :max="18"
+        clearable
+        tooltip="Digite ou cole o CNPJ. Aceita com ou sem formatação."
+        :error="erro"
+        hint="Aceita: 00.000.000/0001-00 ou 00000000000100"
+        @input="onInput"
+        @enter="validar"
+      />
+
+      <div v-if="cnpjFormatado" class="mt-2 px-3 py-2 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800/40">
+        <span class="text-xs text-blue-600 dark:text-blue-300 font-mono">
+          <i class="fas fa-magic mr-1.5"></i>
+          Formatado: <strong>{{ cnpjFormatado }}</strong>
+        </span>
       </div>
 
-      <div class="space-y-6">
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-          <BaseInput v-model="cnpj" label="CNPJ" placeholder="00.000.000/0000-00" @input="validar" maxlength="18" />
-        </div>
-
-        <div v-if="resultado" class="space-y-4">
-          <div :class="['rounded-lg p-8 text-center', valido ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30' : 'bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/30 dark:to-orange-900/30']">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4" :class="valido ? 'bg-green-100 dark:bg-green-900/50' : 'bg-red-100 dark:bg-red-900/50'">
-              <i :class="['text-4xl', valido ? 'fas fa-check text-green-600 dark:text-green-400' : 'fas fa-times text-red-600 dark:text-red-400']"></i>
-            </div>
-            <div class="text-2xl font-bold mb-2" :class="valido ? 'text-green-900 dark:text-green-300' : 'text-red-900 dark:text-red-300'">
-              {{ valido ? 'CNPJ Válido' : 'CNPJ Inválido' }}
-            </div>
-            <div class="text-sm" :class="valido ? 'text-green-700 dark:text-green-400' : 'text-red-700 dark:text-red-400'">
-              {{ mensagem }}
-            </div>
-          </div>
-
-          <div v-if="valido" class="bg-white dark:bg-gray-700 rounded-lg p-6">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-4">Informações</h4>
-            <div class="space-y-3">
-              <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-                <span class="text-gray-600 dark:text-gray-400">CNPJ Formatado</span>
-                <span class="font-mono font-semibold text-gray-900 dark:text-white">{{ cnpjFormatado }}</span>
-              </div>
-              <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-                <span class="text-gray-600 dark:text-gray-400">Raiz</span>
-                <span class="font-mono text-gray-900 dark:text-white">{{ cnpjNumeros.slice(0,8) }}</span>
-              </div>
-              <div class="flex justify-between py-2 border-b border-gray-200 dark:border-gray-600">
-                <span class="text-gray-600 dark:text-gray-400">Filial</span>
-                <span class="font-mono text-gray-900 dark:text-white">{{ cnpjNumeros.slice(8,12) }}</span>
-              </div>
-              <div class="flex justify-between py-2">
-                <span class="text-gray-600 dark:text-gray-400">Dígitos Verificadores</span>
-                <span class="font-mono font-semibold text-green-600 dark:text-green-400">{{ cnpjNumeros.slice(12) }}</span>
-              </div>
-            </div>
-            
-            <BaseButton @click="copiar" variant="secondary" class="w-full mt-4">
-              <i class="fas fa-copy mr-2"></i>Copiar CNPJ
-            </BaseButton>
-          </div>
-        </div>
-
-        <div class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-4">
-          <div class="text-sm text-green-800 dark:text-green-300">
-            <p class="font-semibold mb-1">Formato: 00.000.000/0000-00</p>
-            <p class="text-xs">14 dígitos com validação por módulo 11</p>
-          </div>
-        </div>
+      <div class="flex gap-3 mt-4">
+        <BaseButton variant="primary" icon="fa-search" @click="validar" class="flex-1">Validar CNPJ</BaseButton>
+        <BaseButton variant="outline" icon="fa-trash-alt" @click="limpar">Limpar</BaseButton>
       </div>
     </div>
-  </div>
+
+    <Transition name="scale-in">
+      <div v-if="resultado !== null" class="mt-4">
+        <div :class="[
+          'flex flex-col sm:flex-row items-center gap-4 p-5 rounded-2xl border-2',
+          resultado.valido
+            ? 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/15 border-emerald-300 dark:border-emerald-700'
+            : 'bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/20 dark:to-rose-900/15 border-red-300 dark:border-red-700',
+        ]">
+          <div :class="[
+            'w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl flex-shrink-0 mx-auto sm:mx-0 shadow-lg',
+            resultado.valido ? 'bg-gradient-to-br from-emerald-400 to-teal-600' : 'bg-gradient-to-br from-red-400 to-rose-600',
+          ]">
+            <i :class="['fas', resultado.valido ? 'fa-check' : 'fa-times']"></i>
+          </div>
+          <div>
+            <h3 :class="['text-xl font-black', resultado.valido ? 'text-emerald-700 dark:text-emerald-300' : 'text-red-600 dark:text-red-400']">
+              {{ resultado.valido ? 'CNPJ Válido ✓' : 'CNPJ Inválido ✗' }}
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-slate-300 mt-0.5">{{ resultado.mensagem }}</p>
+            <div v-if="resultado.valido" class="flex flex-wrap gap-2 mt-2">
+              <span class="stat-pill font-mono text-xs">{{ cnpjFormatado }}</span>
+              <span class="stat-pill text-xs">Matriz/Filial: {{ resultado.estabelecimento }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="resultado.valido" class="mt-3 flex gap-2">
+          <button @click="copiar(false)" class="copy-btn flex-1 justify-center py-2">
+            <i class="fas fa-copy"></i> Copiar sem máscara
+          </button>
+          <button @click="copiar(true)" class="copy-btn flex-1 justify-center py-2">
+            <i class="fas fa-copy"></i> Copiar formatado
+          </button>
+        </div>
+      </div>
+    </Transition>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import BaseInput from './common/BaseInput.vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage } = useAnalytics()
+const cnpjRaw = ref('')
+const erro    = ref('')
 
-const cnpj = ref('')
-const resultado = ref(false)
-const valido = ref(false)
-const mensagem = ref('')
+interface ResultadoCNPJ { valido: boolean; mensagem: string; estabelecimento: string }
+const resultado = ref<ResultadoCNPJ | null>(null)
 
-const cnpjNumeros = computed(() => cnpj.value.replace(/\D/g, ''))
-
+const cnpjSoNums = computed(() => cnpjRaw.value.replace(/\D/g, ''))
 const cnpjFormatado = computed(() => {
-  const num = cnpjNumeros.value
-  if (num.length !== 14) return num
-  return `${num.slice(0,2)}.${num.slice(2,5)}.${num.slice(5,8)}/${num.slice(8,12)}-${num.slice(12)}`
+  const n = cnpjSoNums.value
+  if (n.length < 2)  return ''
+  if (n.length <= 5) return `${n.slice(0,2)}.${n.slice(2)}`
+  if (n.length <= 8) return `${n.slice(0,2)}.${n.slice(2,5)}.${n.slice(5)}`
+  if (n.length <= 12)return `${n.slice(0,2)}.${n.slice(2,5)}.${n.slice(5,8)}/${n.slice(8)}`
+  return `${n.slice(0,2)}.${n.slice(2,5)}.${n.slice(5,8)}/${n.slice(8,12)}-${n.slice(12,14)}`
 })
 
-const validarCNPJ = (cnpjStr) => {
-  cnpjStr = cnpjStr.replace(/\D/g, '')
-  
-  if (cnpjStr.length !== 14) return false
-  if (/^(\d)\1{13}$/.test(cnpjStr)) return false
-
-  const calcularDigito = (cnpj, peso) => {
-    let soma = 0
-    for (let i = 0; i < peso.length; i++) {
-      soma += Number.parseInt(cnpj.charAt(i)) * peso[i]
-    }
-    const resto = soma % 11
-    return resto < 2 ? 0 : 11 - resto
-  }
-
-  const peso1 = [5,4,3,2,9,8,7,6,5,4,3,2]
-  const peso2 = [6,5,4,3,2,9,8,7,6,5,4,3,2]
-
-  const digito1 = calcularDigito(cnpjStr, peso1)
-  const digito2 = calcularDigito(cnpjStr, peso2)
-
-  return Number.parseInt(cnpjStr.charAt(12)) === digito1 && Number.parseInt(cnpjStr.charAt(13)) === digito2
+function calcularDigito(cnpj: string, pesos: number[]): number {
+  let soma = 0
+  for (let i = 0; i < pesos.length; i++) soma += parseInt(cnpj[i]) * pesos[i]
+  const r = soma % 11
+  return r < 2 ? 0 : 11 - r
 }
 
-const validar = () => {
-  const num = cnpjNumeros.value
-  
-  if (num.length === 0) {
-    resultado.value = false
-    return
-  }
-
-  if (num.length !== 14) {
-    resultado.value = true
-    valido.value = false
-    mensagem.value = 'CNPJ deve ter 14 dígitos'
-    return
-  }
-
-  const isValid = validarCNPJ(num)
-  resultado.value = true
-  valido.value = isValid
-  mensagem.value = isValid ? 'CNPJ válido e verificado' : 'CNPJ inválido ou dígitos verificadores incorretos'
-  
-  trackToolUsage('Validador CNPJ', 'validate', { valid: isValid })
+function validarCNPJ(cnpj: string): ResultadoCNPJ {
+  const n = cnpj.replace(/\D/g, '')
+  if (n.length !== 14)         return { valido: false, mensagem: 'CNPJ deve ter 14 dígitos.', estabelecimento: '' }
+  if (/^(\d)\1{13}$/.test(n)) return { valido: false, mensagem: 'CNPJ inválido — dígitos repetidos.', estabelecimento: '' }
+  const p1 = [5,4,3,2,9,8,7,6,5,4,3,2]
+  const p2 = [6,5,4,3,2,9,8,7,6,5,4,3,2]
+  const d1 = calcularDigito(n, p1)
+  const d2 = calcularDigito(n, p2)
+  if (d1 !== parseInt(n[12]) || d2 !== parseInt(n[13]))
+    return { valido: false, mensagem: `Dígitos verificadores incorretos.`, estabelecimento: '' }
+  const ord = parseInt(n.slice(8,12))
+  return { valido: true, mensagem: 'CNPJ estruturalmente válido.', estabelecimento: ord === 1 ? 'Matriz' : `Filial ${ord}` }
 }
 
-const copiar = async () => {
-  try {
-    await navigator.clipboard.writeText(cnpjFormatado.value)
-    Swal.fire({ icon: 'success', title: 'Copiado!', timer: 2000 })
-  } catch {
-    Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível copiar' })
-  }
+function onInput() { erro.value = ''; resultado.value = null }
+
+function validar() {
+  const n = cnpjSoNums.value
+  if (!n) { erro.value = 'Digite um CNPJ.'; return }
+  if (n.length !== 14) { erro.value = `CNPJ incompleto (${n.length}/14 dígitos).`; return }
+  erro.value = ''
+  resultado.value = validarCNPJ(n)
+}
+
+function limpar() { cnpjRaw.value = ''; erro.value = ''; resultado.value = null }
+
+async function copiar(formatado: boolean) {
+  await navigator.clipboard.writeText(formatado ? cnpjFormatado.value : cnpjSoNums.value)
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Copiado!', showConfirmButton: false, timer: 1500 })
 }
 </script>
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.25s ease; }
+.scale-in-enter-from                            { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to                              { opacity: 0; }
+</style>

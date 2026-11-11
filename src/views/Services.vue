@@ -137,7 +137,7 @@
     </section>
 
     <!-- Por que Escolher a 3W Online -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Garantias</span>

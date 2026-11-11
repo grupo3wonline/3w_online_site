@@ -1,362 +1,248 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-4">
-          <i class="fas fa-id-card text-blue-600 dark:text-blue-400 text-2xl"></i>
-        </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Gerador de CPF e CNPJ</h1>
-        <p class="text-gray-600 dark:text-gray-400">Gere CPF e CNPJ válidos para testes e desenvolvimento</p>
+  <ToolShell
+    title="Gerador de CPF & CNPJ"
+    description="Gere CPFs e CNPJs matematicamente válidos para ambientes de teste e desenvolvimento. APENAS para testes."
+    icon="fa-id-card"
+    icon-gradient="from-blue-500 to-indigo-700"
+    orb-color="blue"
+    :quick-tips="['Algoritmo oficial', 'Validação integrada', 'Download em lote']"
+    :tips="[
+      { title: 'APENAS para desenvolvimento', text: 'Os documentos gerados são válidos matematicamente mas NÃO correspondem a pessoas ou empresas reais. Use apenas em ambientes de teste/homologação.', type: 'warning' },
+      { title: 'CPF gerado com dígitos verificadores reais', text: 'O algoritmo usa a mesma fórmula da Receita Federal (Módulo 11) garantindo que o CPF/CNPJ seja aceito em campos com validação.', type: 'info' },
+    ]"
+    :examples="[
+      { title: 'CPF de teste', desc: '10 dígitos + 2 verificadores', code: '111.444.777-35', result: 'Válido matematicamente' },
+      { title: 'CNPJ de teste', desc: '12 dígitos + 2 verificadores', code: '11.222.333/0001-81', result: 'Matriz, filial 0001' },
+    ]"
+  >
+
+    <div class="tool-body">
+      <!-- Toggle CPF / CNPJ -->
+      <div class="flex gap-2 p-1 bg-gray-100 dark:bg-slate-700 rounded-xl mb-4">
+        <button
+          :class="['flex-1 py-3 rounded-lg text-sm font-semibold transition-all flex flex-col items-center gap-1',
+            tipo === 'cpf' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600']"
+          @click="tipo = 'cpf'; gerar()"
+        >
+          <i class="fas fa-user text-lg"></i>
+          <span>CPF</span>
+        </button>
+        <button
+          :class="['flex-1 py-3 rounded-lg text-sm font-semibold transition-all flex flex-col items-center gap-1',
+            tipo === 'cnpj' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600']"
+          @click="tipo = 'cnpj'; gerar()"
+        >
+          <i class="fas fa-building text-lg"></i>
+          <span>CNPJ</span>
+        </button>
       </div>
 
-      <div class="space-y-6">
-        <!-- Tipo de Documento -->
-        <div class="flex gap-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <button
-            @click="tipo = 'cpf'; gerar()"
-            class="flex-1 py-4 px-4 rounded-lg font-medium transition-colors"
-            :class="tipo === 'cpf' ? 'bg-blue-600 text-white shadow-lg' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'"
-          >
-            <i class="fas fa-user text-2xl mb-2"></i>
-            <div class="text-sm">CPF</div>
-          </button>
-          <button
-            @click="tipo = 'cnpj'; gerar()"
-            class="flex-1 py-4 px-4 rounded-lg font-medium transition-colors"
-            :class="tipo === 'cnpj' ? 'bg-blue-600 text-white shadow-lg' : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-gray-300'"
-          >
-            <i class="fas fa-building text-2xl mb-2"></i>
-            <div class="text-sm">CNPJ</div>
-          </button>
-        </div>
-
-        <!-- Quantidade -->
+      <!-- Configurações -->
+      <div class="grid grid-cols-2 gap-3 mb-4">
         <BaseInput
           v-model="quantidade"
-          label="Quantidade"
-          type="number"
-          :min="1"
-          :max="50"
-          icon="fa-solid fa-hashtag"
+          label="Quantidade" type="number" :min="1" :max="50"
+          icon="fa-hashtag" placeholder="5"
+          tooltip="Gere entre 1 e 50 documentos por vez."
         />
-
-        <!-- Formatação -->
-        <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <input
-            type="checkbox"
-            id="formatado"
-            v-model="formatado"
-            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          >
-          <label for="formatado" class="text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
-            Gerar com formatação (pontos e hífens)
-          </label>
-        </div>
-
-        <!-- Botões -->
-        <div class="flex gap-4">
-          <BaseButton @click="gerar" variant="primary" class="flex-1">
-            <i class="fas fa-rotate mr-2"></i>
-            Gerar {{ tipo.toUpperCase() }}
-          </BaseButton>
-          <BaseButton @click="limpar" variant="outline">
-            <i class="fas fa-eraser"></i>
-          </BaseButton>
-        </div>
-
-        <!-- Documentos Gerados -->
-        <div v-if="documentos.length > 0" class="space-y-4">
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-gray-900 dark:text-white">
-                {{ documentos.length }} {{ tipo.toUpperCase() }}(s) gerado(s)
-              </h3>
-              <div class="flex gap-2">
-                <BaseButton @click="copiarTodos" variant="outline" size="sm">
-                  <i class="fas fa-copy mr-2"></i>
-                  Copiar Todos
-                </BaseButton>
-                <BaseButton @click="baixarTxt" variant="outline" size="sm">
-                  <i class="fas fa-download mr-2"></i>
-                  Baixar
-                </BaseButton>
-              </div>
-            </div>
-
-            <div class="space-y-2 max-h-96 overflow-y-auto">
-              <div
-                v-for="(doc, index) in documentos"
-                :key="index"
-                class="flex items-center justify-between bg-white dark:bg-gray-600 rounded-lg p-4 group"
-              >
-                <div class="flex-1">
-                  <code class="text-lg text-blue-600 dark:text-blue-400 font-mono">
-                    {{ doc }}
-                  </code>
-                  <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    <i class="fas fa-check-circle text-green-500 mr-1"></i>
-                    Válido
-                  </div>
-                </div>
-                <button
-                  @click="copiar(doc)"
-                  class="ml-3 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors opacity-0 group-hover:opacity-100"
-                >
-                  <i class="fas fa-copy mr-1"></i>
-                  Copiar
-                </button>
-              </div>
-            </div>
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="input-aurora-label !mb-0">
+              <i class="fas fa-paint-brush mr-1 text-blue-500"></i>
+              Formatação
+            </label>
           </div>
-
-          <!-- Aviso Importante -->
-          <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 p-4">
-            <div class="flex">
-              <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-400 mt-1 mr-3"></i>
-              <div class="text-sm text-yellow-800 dark:text-yellow-300">
-                <p class="font-semibold mb-2">⚠️ Aviso Importante:</p>
-                <ul class="list-disc list-inside space-y-1">
-                  <li>Estes documentos são válidos apenas algoritmicamente</li>
-                  <li>Use APENAS para testes, desenvolvimento e ambientes homologação</li>
-                  <li>NÃO use em produção ou para fraudes (crime previsto em lei)</li>
-                  <li>Não correspondem a pessoas ou empresas reais</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Validador -->
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-            <h3 class="font-semibold text-gray-900 dark:text-white mb-4">
-              <i class="fas fa-shield-halved text-blue-600 dark:text-blue-400 mr-2"></i>
-              Validar {{ tipo.toUpperCase() }}
-            </h3>
-            
-            <div class="flex gap-3">
-              <input
-                v-model="documentoParaValidar"
-                type="text"
-                :placeholder="`Digite um ${tipo.toUpperCase()} para validar`"
-                class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-600 text-gray-900 dark:text-white font-mono"
-              />
-              <BaseButton @click="validar" variant="primary">
-                <i class="fas fa-check mr-2"></i>
-                Validar
-              </BaseButton>
-            </div>
-
-            <div v-if="resultadoValidacao !== null" class="mt-4 p-4 rounded-lg" :class="resultadoValidacao ? 'bg-green-100 dark:bg-green-900/30' : 'bg-red-100 dark:bg-red-900/30'">
-              <div class="flex items-center gap-2">
-                <i :class="resultadoValidacao ? 'fas fa-check-circle text-green-600' : 'fas fa-times-circle text-red-600'"></i>
-                <span :class="resultadoValidacao ? 'text-green-800 dark:text-green-300' : 'text-red-800 dark:text-red-300'" class="font-medium">
-                  {{ resultadoValidacao ? `${tipo.toUpperCase()} válido!` : `${tipo.toUpperCase()} inválido!` }}
-                </span>
-              </div>
-            </div>
+          <div class="flex gap-2 mt-1">
+            <label class="checkbox-aurora flex-1">
+              <input type="checkbox" v-model="formatado" class="w-4 h-4 accent-blue-600" @change="gerar" />
+              <span class="text-xs">Com pontuação</span>
+            </label>
           </div>
         </div>
       </div>
+
+      <div class="flex gap-3">
+        <BaseButton variant="primary" icon="fa-rotate" @click="gerar" class="flex-1">
+          Gerar {{ tipo.toUpperCase() }}(s)
+        </BaseButton>
+        <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
+          Limpar
+        </BaseButton>
+      </div>
     </div>
-  </div>
+
+    <!-- Lista de documentos -->
+    <Transition name="scale-in">
+      <div v-if="documentos.length > 0" class="mt-4 space-y-3">
+
+        <!-- Aviso -->
+        <div class="tip-card-warning">
+          <i class="fas fa-exclamation-triangle text-amber-500 flex-shrink-0 mt-0.5"></i>
+          <span class="text-xs">
+            <strong>⚠️ Aviso:</strong> Use APENAS em testes, desenvolvimento e homologação.
+            NÃO use em produção ou para fraudes — crime previsto no Art. 297 do Código Penal.
+          </span>
+        </div>
+
+        <!-- Ações -->
+        <div class="flex gap-2">
+          <button @click="copiarTodos" class="copy-btn flex-1 justify-center py-2.5">
+            <i class="fas fa-copy"></i> Copiar todos
+          </button>
+          <button @click="baixarTxt" class="copy-btn flex-1 justify-center py-2.5">
+            <i class="fas fa-download"></i> Baixar .txt
+          </button>
+        </div>
+
+        <!-- Lista -->
+        <div class="glass-panel overflow-hidden">
+          <div class="max-h-72 overflow-y-auto divide-y divide-gray-100 dark:divide-slate-700">
+            <div
+              v-for="(doc, i) in documentos"
+              :key="i"
+              class="flex items-center justify-between px-4 py-3 hover:bg-primary-50/40 dark:hover:bg-primary-900/10 transition-colors group"
+            >
+              <div class="flex-1">
+                <code class="text-sm text-blue-600 dark:text-blue-300 font-mono">{{ doc }}</code>
+                <span class="ml-2 text-[10px] text-emerald-500 dark:text-emerald-400">
+                  <i class="fas fa-check-circle"></i> válido
+                </span>
+              </div>
+              <button
+                @click="copiarUm(doc)"
+                class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 ml-2"
+                title="Copiar"
+              >
+                <i class="fas fa-copy text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Validador inline -->
+        <div class="glass-panel p-4">
+          <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+            <i class="fas fa-shield-halved text-blue-500"></i>
+            Validar {{ tipo.toUpperCase() }}
+          </h4>
+          <div class="flex gap-2">
+            <input
+              v-model="docParaValidar"
+              type="text"
+              :placeholder="`Cole um ${tipo.toUpperCase()} para validar`"
+              class="input-aurora flex-1 font-mono"
+            />
+            <BaseButton variant="primary" icon="fa-check" @click="validar" size="sm">
+              Validar
+            </BaseButton>
+          </div>
+          <Transition name="scale-in">
+            <div v-if="resultadoVal !== null" class="mt-3 flex items-center gap-2 text-sm font-semibold"
+              :class="resultadoVal ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'">
+              <i :class="['fas', resultadoVal ? 'fa-check-circle' : 'fa-times-circle']"></i>
+              {{ resultadoVal ? `${tipo.toUpperCase()} válido!` : `${tipo.toUpperCase()} inválido.` }}
+            </div>
+          </Transition>
+        </div>
+      </div>
+    </Transition>
+
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import BaseInput from './common/BaseInput.vue'
-import BaseButton from './common/BaseButton.vue'
 import Swal from 'sweetalert2'
-import { useAnalytics } from '../../composables/useAnalytics'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage, trackConversion } = useAnalytics()
+const tipo           = ref<'cpf' | 'cnpj'>('cpf')
+const quantidade     = ref<number | ''>(5)
+const formatado      = ref(true)
+const documentos     = ref<string[]>([])
+const docParaValidar = ref('')
+const resultadoVal   = ref<boolean | null>(null)
 
-const tipo = ref('cpf')
-const quantidade = ref(5)
-const formatado = ref(true)
-const documentos = ref([])
-const documentoParaValidar = ref('')
-const resultadoValidacao = ref(null)
-
-const gerarCPF = () => {
-  const num = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10))
-  
-  // Primeiro dígito verificador
-  let soma = 0
-  for (let i = 0; i < 9; i++) {
-    soma += num[i] * (10 - i)
-  }
-  let digito1 = 11 - (soma % 11)
-  digito1 = digito1 > 9 ? 0 : digito1
-  num.push(digito1)
-  
-  // Segundo dígito verificador
-  soma = 0
-  for (let i = 0; i < 10; i++) {
-    soma += num[i] * (11 - i)
-  }
-  let digito2 = 11 - (soma % 11)
-  digito2 = digito2 > 9 ? 0 : digito2
-  num.push(digito2)
-  
-  const cpf = num.join('')
-  return formatado.value ? cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : cpf
+// ── Geração ───────────────────────────────────────────────────────────────────
+function gerarCPF(): string {
+  const n = Array.from({ length: 9 }, () => Math.floor(Math.random() * 10))
+  let s = n.reduce((acc, v, i) => acc + v * (10 - i), 0)
+  let d1 = 11 - s % 11; if (d1 > 9) d1 = 0; n.push(d1)
+  s = n.reduce((acc, v, i) => acc + v * (11 - i), 0)
+  let d2 = 11 - s % 11; if (d2 > 9) d2 = 0; n.push(d2)
+  const str = n.join('')
+  return formatado.value ? str.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') : str
 }
 
-const gerarCNPJ = () => {
-  const num = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10))
-  num.push(0, 0, 0, 1) // Filial 0001
-  
-  // Primeiro dígito verificador
-  const pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-  let soma = 0
-  for (let i = 0; i < 12; i++) {
-    soma += num[i] * pesos1[i]
-  }
-  let digito1 = soma % 11
-  digito1 = digito1 < 2 ? 0 : 11 - digito1
-  num.push(digito1)
-  
-  // Segundo dígito verificador
-  const pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-  soma = 0
-  for (let i = 0; i < 13; i++) {
-    soma += num[i] * pesos2[i]
-  }
-  let digito2 = soma % 11
-  digito2 = digito2 < 2 ? 0 : 11 - digito2
-  num.push(digito2)
-  
-  const cnpj = num.join('')
-  return formatado.value ? cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5') : cnpj
+function gerarCNPJ(): string {
+  const n = [...Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)), 0, 0, 0, 1]
+  const p1 = [5,4,3,2,9,8,7,6,5,4,3,2]
+  let s = n.reduce((a, v, i) => a + v * p1[i], 0); let d1 = s % 11; d1 = d1 < 2 ? 0 : 11 - d1; n.push(d1)
+  const p2 = [6,5,4,3,2,9,8,7,6,5,4,3,2]
+  s = n.reduce((a, v, i) => a + v * p2[i], 0); let d2 = s % 11; d2 = d2 < 2 ? 0 : 11 - d2; n.push(d2)
+  const str = n.join('')
+  return formatado.value ? str.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5') : str
 }
 
-const validarCPF = (cpf) => {
-  cpf = cpf.replace(/\D/g, '')
-  
-  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false
-  
-  let soma = 0
-  for (let i = 0; i < 9; i++) {
-    soma += parseInt(cpf.charAt(i)) * (10 - i)
-  }
-  let digito = 11 - (soma % 11)
-  if (digito > 9) digito = 0
-  if (digito !== parseInt(cpf.charAt(9))) return false
-  
-  soma = 0
-  for (let i = 0; i < 10; i++) {
-    soma += parseInt(cpf.charAt(i)) * (11 - i)
-  }
-  digito = 11 - (soma % 11)
-  if (digito > 9) digito = 0
-  return digito === parseInt(cpf.charAt(10))
-}
-
-const validarCNPJ = (cnpj) => {
-  cnpj = cnpj.replace(/\D/g, '')
-  
-  if (cnpj.length !== 14 || /^(\d)\1+$/.test(cnpj)) return false
-  
-  const pesos1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-  let soma = 0
-  for (let i = 0; i < 12; i++) {
-    soma += parseInt(cnpj.charAt(i)) * pesos1[i]
-  }
-  let digito = soma % 11
-  digito = digito < 2 ? 0 : 11 - digito
-  if (digito !== parseInt(cnpj.charAt(12))) return false
-  
-  const pesos2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
-  soma = 0
-  for (let i = 0; i < 13; i++) {
-    soma += parseInt(cnpj.charAt(i)) * pesos2[i]
-  }
-  digito = soma % 11
-  digito = digito < 2 ? 0 : 11 - digito
-  return digito === parseInt(cnpj.charAt(13))
-}
-
-const gerar = () => {
-  const qtd = Number(quantidade.value)
-  
+function gerar() {
+  const qtd = Number(quantidade.value) || 1
   if (qtd < 1 || qtd > 50) {
-    Swal.fire({ icon: 'error', title: 'Erro', text: 'Quantidade deve estar entre 1 e 50' })
-    return
+    Swal.fire({ icon: 'warning', title: 'Entre 1 e 50 documentos', confirmButtonColor: '#2563eb' }); return
   }
-
-  documentos.value = []
-  for (let i = 0; i < qtd; i++) {
-    documentos.value.push(tipo.value === 'cpf' ? gerarCPF() : gerarCNPJ())
-  }
-
-  trackToolUsage('Gerador CPF/CNPJ', 'generate')
+  documentos.value = Array.from({ length: qtd }, () => tipo.value === 'cpf' ? gerarCPF() : gerarCNPJ())
 }
 
-const validar = () => {
-  if (!documentoParaValidar.value) {
-    Swal.fire({ icon: 'error', title: 'Erro', text: 'Digite um documento para validar' })
-    return
-  }
-
-  resultadoValidacao.value = tipo.value === 'cpf' 
-    ? validarCPF(documentoParaValidar.value)
-    : validarCNPJ(documentoParaValidar.value)
+// ── Validação ─────────────────────────────────────────────────────────────────
+function validarCPF(cpf: string): boolean {
+  const n = cpf.replace(/\D/g, '')
+  if (n.length !== 11 || /^(\d)\1+$/.test(n)) return false
+  let s = 0; for (let i = 0; i < 9; i++) s += +n[i] * (10 - i)
+  let d = 11 - s % 11; if (d > 9) d = 0; if (d !== +n[9]) return false
+  s = 0; for (let i = 0; i < 10; i++) s += +n[i] * (11 - i)
+  d = 11 - s % 11; if (d > 9) d = 0; return d === +n[10]
 }
 
-const copiar = async (doc) => {
-  try {
-    await navigator.clipboard.writeText(doc)
-    trackConversion('copy', tipo.value)
-    Swal.fire({
-      icon: 'success',
-      title: 'Copiado!',
-      timer: 1000,
-      showConfirmButton: false
-    })
-  } catch (error) {
-    Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível copiar' })
-  }
+function validarCNPJ(cnpj: string): boolean {
+  const n = cnpj.replace(/\D/g, '')
+  if (n.length !== 14 || /^(\d)\1+$/.test(n)) return false
+  const p1 = [5,4,3,2,9,8,7,6,5,4,3,2]
+  let s = p1.reduce((a, v, i) => a + +n[i] * v, 0); let d = s % 11; d = d < 2 ? 0 : 11 - d; if (d !== +n[12]) return false
+  const p2 = [6,5,4,3,2,9,8,7,6,5,4,3,2]
+  s = p2.reduce((a, v, i) => a + +n[i] * v, 0); d = s % 11; d = d < 2 ? 0 : 11 - d; return d === +n[13]
 }
 
-const copiarTodos = async () => {
-  try {
-    await navigator.clipboard.writeText(documentos.value.join('\n'))
-    trackConversion('copy', `${tipo.value}-all`)
-    Swal.fire({
-      icon: 'success',
-      title: 'Copiado!',
-      text: `${documentos.value.length} documentos copiados`,
-      timer: 1500,
-      showConfirmButton: false
-    })
-  } catch (error) {
-    Swal.fire({ icon: 'error', title: 'Erro', text: 'Não foi possível copiar' })
-  }
+function validar() {
+  if (!docParaValidar.value) return
+  resultadoVal.value = tipo.value === 'cpf' ? validarCPF(docParaValidar.value) : validarCNPJ(docParaValidar.value)
 }
 
-const baixarTxt = () => {
+async function copiarUm(doc: string) {
+  await navigator.clipboard.writeText(doc)
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Copiado!', showConfirmButton: false, timer: 1200 })
+}
+
+async function copiarTodos() {
+  await navigator.clipboard.writeText(documentos.value.join('\n'))
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: `${documentos.value.length} copiados!`, showConfirmButton: false, timer: 1500 })
+}
+
+function baixarTxt() {
   const blob = new Blob([documentos.value.join('\n')], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
+  const url  = URL.createObjectURL(blob)
   const link = document.createElement('a')
-  link.href = url
-  link.download = `${tipo.value}-${Date.now()}.txt`
-  link.click()
+  link.href = url; link.download = `${tipo.value}-${Date.now()}.txt`; link.click()
   URL.revokeObjectURL(url)
-  
-  trackConversion('download', tipo.value)
-  Swal.fire({
-    icon: 'success',
-    title: 'Download iniciado!',
-    timer: 1500,
-    showConfirmButton: false
-  })
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Download iniciado!', showConfirmButton: false, timer: 1500 })
 }
 
-const limpar = () => {
-  documentos.value = []
-  documentoParaValidar.value = ''
-  resultadoValidacao.value = null
-}
+function limpar() { documentos.value = []; docParaValidar.value = ''; resultadoVal.value = null }
 
-// Gerar inicialmente
 gerar()
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.25s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>

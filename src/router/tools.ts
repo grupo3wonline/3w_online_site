@@ -141,6 +141,29 @@ export const toolsRoutes: RouteRecordRaw[] = [
       { path: 'simulador-energia-solar', name: 'SimuladorEnergiaSolar', component: () => import('@/components/tools/SimuladorEnergiaSolar.vue'), meta: { title: 'Simulador Energia Solar | 3W Online', description: 'Economia com solar' } },
       { path: 'simulador-divida', name: 'SimuladorDivida', component: () => import('@/components/tools/SimuladorDivida.vue'), meta: { title: 'Simulador de Quitação de Dívida | 3W Online', description: 'Planeje pagamento' } },
       { path: 'simulador-cambio', name: 'SimuladorCambio', component: () => import('@/components/tools/SimuladorCambio.vue'), meta: { title: 'Simulador de Câmbio | 3W Online', description: 'Conversão de moedas' } },
+
+      // ── Catch-all para Aplicações (62 apps) — deve ser o último filho ─────
+      // Slugs não mapeados para uma ferramenta específica acima chegam aqui.
+      // AppWrapper carrega o componente dinamicamente via solucoesMap.
+      {
+        path: ':slug',
+        name: 'FerraApp',
+        component: () => import('@/views/ferramentas/AppWrapper.vue'),
+        meta: {
+          title: 'Aplicação Digital | Ferramentas 3W Online',
+          description: 'Acesse gratuitamente esta aplicação web profissional da 3W Online.',
+        },
+      },
     ],
+  },
+
+  // ── Redirects de retrocompatibilidade — /solucoes/* → /ferramentas/* ────────
+  {
+    path: '/solucoes',
+    redirect: '/ferramentas#aplicacoes',
+  },
+  {
+    path: '/solucoes/:slug',
+    redirect: (to) => `/ferramentas/${to.params.slug}`,
   },
 ]

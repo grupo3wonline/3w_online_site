@@ -1,9 +1,0 @@
-dist
-node_modules
-coverage
-playwright-report
-test-results
-bun.lockb
-package-lock.json
-*.min.js
-*.min.css

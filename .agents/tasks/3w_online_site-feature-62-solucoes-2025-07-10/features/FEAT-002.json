@@ -1,0 +1,41 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Port 18 Vue→Vue solution components (batch 1). For each slug: read the standalone app's source files at d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/src/views/solucoees/<folder>/src/ and create a self-contained SFC at src/components/solucoes/<slug>.vue in the worktree. Then add all 18 entries to solucoesMap in src/components/solucoes/index.ts. This FEAT depends on FEAT-001 (index.ts and SolucaoView.vue must already exist).",
+  "status": "completed",
+  "steps": [
+    "PORTING RULES (apply to every component in this FEAT): (1) Read the source app's main view file(s) in .../src/views/*.vue and .../src/components/ to understand the business logic. (2) Create a single-file component at src/components/solucoes/<slug>.vue in the WORKTREE (d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/feature-62-solucoes/). (3) The component is the tool body only — no navbar, no footer, no breadcrumb (SolucaoLayout wraps it). (4) Replace any Pinia store usage with local ref/reactive state. (5) Replace @vueuse/motion v-motion directives with plain Tailwind transitions. (6) Replace custom BaseCard/BaseButton/BaseInput/BaseSelect etc. with equivalent inline Tailwind markup. (7) Keep all Maska masks if the source uses them (maska is available in the main project). (8) Keep SweetAlert2 calls (sweetalert2 is available). (9) Replace Iconify import `from '@iconify/vue'` — already available. (10) Remove all router-link internal nav (links to /calculadora sub-routes etc.). (11) Remove PDF generation imports that depend on standalone app deps (e.g. jspdf) unless jspdf is in the main package.json — check package.json before omitting. Main project has: @iconify/vue, @vueuse/core, @vueuse/motion, date-fns, dompurify, fuse.js, maska, pinia, qrcode, sweetalert2, tesseract.js, vee-validate, vue, vue-i18n, vue-router, zod. (12) Use `<script setup lang=\"ts\">`. (13) Use only Tailwind v3 utilities for styling. (14) Component filename must match the slug exactly (kebab-case).",
+    "Port analisador-texto: Source is d:/.../solucoees/analisador_texto/src/. Main view likely in src/views/ or src/components/. Extract: the text analysis logic (caracteres, palavras, frases, parágrafos, tempo de leitura, tempo de fala). Create src/components/solucoes/analisador-texto.vue.",
+    "Port calculadora-aluguel-facil: Source is d:/.../solucoees/calculadora_aluguel_facil/src/. Extract: rental cost breakdown logic (aluguel base, condomínio, IPTU, seguro, total). Create src/components/solucoes/calculadora-aluguel-facil.vue.",
+    "Port calculadora-campanha-trafego: Source is d:/.../solucoees/calculadora_campanha_trafego/src/. Extract: traffic campaign calculator (budget, CPC, CPL, ROAS). Create src/components/solucoes/calculadora-campanha-trafego.vue.",
+    "Port calculadora-churrasco: Source is d:/.../solucoees/calculadora_churrasco/src/. Extract: churrasco quantity calculator (guests, meat, beverages, cost). Create src/components/solucoes/calculadora-churrasco.vue.",
+    "Port calculadora-empresarial: Source is d:/.../solucoees/calculadora_empresarial/src/views/CalculadorasView.vue. This app has multiple calculators — port the main CalculadorasView which orchestrates sub-calculators. Extract all sub-calculator components inline. Create src/components/solucoes/calculadora-empresarial.vue.",
+    "Port calculadora-evento: Source is d:/.../solucoees/calculadora_evento/src/. Extract: event cost estimator. Create src/components/solucoes/calculadora-evento.vue.",
+    "Port calculadora-freelance: Source is d:/.../solucoees/calculadora_freelance/src/. Extract: freelance hourly rate / project cost calculator. Create src/components/solucoes/calculadora-freelance.vue.",
+    "Port calculadora-imc: Source is d:/.../solucoees/calculadora_imc/src/views/CalculatorView.vue and src/components/calculator/ImcCalculator.vue (the main calculator logic file, 16KB). Read ImcCalculator.vue, ImcGauge.vue, ImcTrendCard.vue, src/lib/imc/calculator.ts and types.ts. Port all logic inline, omitting PDF export (jspdf not in main project). Replace @vueuse/motion with plain CSS transitions. Replace Pinia history store with local ref<HistoryEntry[]>([]) saved to localStorage. Create src/components/solucoes/calculadora-imc.vue.",
+    "Port calculadora-indicadores-financeiros: Source is d:/.../solucoees/calculadora_Indicadores_financeiros/src/. Extract: financial indicators (ROI, ROE, EBITDA, margem). Create src/components/solucoes/calculadora-indicadores-financeiros.vue.",
+    "Port calculadora-metragem-cabo: Source is d:/.../solucoees/calculadora_metragem_cabo/src/. Extract: cable length/cost estimator. Create src/components/solucoes/calculadora-metragem-cabo.vue.",
+    "Port calculadora-orcamento-marketing-digital: Source is d:/.../solucoees/calculadora_orcamento_marketing_digital/src/. Extract: digital marketing budget planner. Create src/components/solucoes/calculadora-orcamento-marketing-digital.vue.",
+    "Port calculadora-ponto-eletrico: Source is d:/.../solucoees/calculadora_ponto_eletrico/src/. Extract: electrical point calculator (circuit load, wire sizing). Create src/components/solucoes/calculadora-ponto-eletrico.vue.",
+    "Port calculadora-preco: Source is d:/.../solucoees/calculadora_preco/src/. Extract: pricing calculator (custo, markup, margem). Create src/components/solucoes/calculadora-preco.vue.",
+    "Port calculadora-produto-servico: Source is d:/.../solucoees/calculadora_produto_servico/src/. Extract: product/service pricing logic. Create src/components/solucoes/calculadora-produto-servico.vue.",
+    "Port calculadora-programadores: Source is d:/.../solucoees/calculadora_programadores/src/. Extract: programmer rate/project estimator. Create src/components/solucoes/calculadora-programadores.vue.",
+    "Port calculadora-saude: Source is d:/.../solucoees/calculadora_saude/src/. Extract: health metrics (BMI, BMR, macros, water intake). Create src/components/solucoes/calculadora-saude.vue.",
+    "Port calculadora-social-midia: Source is d:/.../solucoees/calculadora_social_midia/src/. Extract: social media metrics calculator (engagement, reach, budget). Create src/components/solucoes/calculadora-social-midia.vue.",
+    "Port code-logic-flow-studio: Source is d:/.../solucoees/code_logic_flow_studio/src/. Extract: logic flow visualization/builder. Create src/components/solucoes/code-logic-flow-studio.vue.",
+    "Update src/components/solucoes/index.ts (worktree) to add entries for all 18 components ported in this FEAT: `'analisador-texto': () => import('./analisador-texto.vue'), 'calculadora-aluguel-facil': () => import('./calculadora-aluguel-facil.vue'), ...` (all 18 slugs). Append to the existing empty object — do not remove any entries that may already exist."
+  ],
+  "acceptance_criteria": [
+    "All 18 .vue files exist at src/components/solucoes/<slug>.vue in the worktree",
+    "src/components/solucoes/index.ts has 18 new entries",
+    "Navigating to /solucoes/calculadora-imc renders the IMC calculator (not the placeholder card)",
+    "npm run build completes with 0 errors",
+    "npx vitest run — all 7 existing tests pass (no regressions)"
+  ],
+  "verification": [
+    "npm run build (in worktree) — exits 0",
+    "npx vitest run (in worktree) — all tests pass"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

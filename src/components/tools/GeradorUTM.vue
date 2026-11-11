@@ -1,261 +1,204 @@
 <template>
-  <div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full mb-4">
-          <i class="fas fa-link text-purple-600 dark:text-purple-400 text-2xl"></i>
+  <ToolShell
+    title="Gerador de Links UTM"
+    description="Crie links rastreados com parâmetros UTM para campanhas de marketing digital no Google Analytics e GA4."
+    icon="fa-link"
+    icon-gradient="from-orange-500 to-amber-700"
+    orb-color="orange"
+    :quick-tips="['5 parâmetros UTM', 'Présets de campanha', 'Validação automática']"
+    :tips="[
+      { text: 'UTM = Urchin Tracking Module. Permite rastrear qual campanha gerou cada visita.' },
+      { text: 'utm_source: google, facebook | utm_medium: cpc, email, social | utm_campaign: nome da campanha.', type: 'info' },
+      { text: 'Use letras minúsculas e hifens em todos os parâmetros UTM para consistência nos relatórios.', type: 'warning' },
+    ]"
+  >
+    <div class="tool-body">
+      <div class="space-y-3">
+        <BaseInput
+          v-model="url"
+          label="URL de destino *"
+          icon="fa-globe"
+          placeholder="https://www.seusite.com.br/pagina"
+          tooltip="A URL base sem parâmetros. Deve começar com http:// ou https://"
+          :error="erroUrl"
+          @input="erroUrl = ''"
+        />
+
+        <!-- Présets -->
+        <div>
+          <label class="input-aurora-label text-xs mb-2">Pré-sets de campanha</label>
+          <div class="flex flex-wrap gap-1.5">
+            <button
+              v-for="p in presets"
+              :key="p.label"
+              class="px-3 py-1.5 rounded-lg text-xs font-semibold border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 hover:border-orange-400 hover:text-orange-600 dark:hover:text-orange-400 transition-all"
+              @click="aplicarPreset(p)"
+            >
+              <i :class="['fas', p.icon, 'mr-1 text-orange-500']"></i>
+              {{ p.label }}
+            </button>
+          </div>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Gerador de Links UTM</h1>
-        <p class="text-gray-600 dark:text-gray-400">Crie links com parâmetros UTM para rastreamento de campanhas</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <BaseInput v-model="source"   label="utm_source *"   icon="fa-at"           placeholder="google"        tooltip="Origem do tráfego: google, facebook, newsletter, instagram, etc." />
+          <BaseInput v-model="medium"   label="utm_medium *"   icon="fa-road"         placeholder="cpc"           tooltip="Canal de marketing: cpc, email, social, organic, referral, etc." />
+          <BaseInput v-model="campaign" label="utm_campaign *"  icon="fa-bullhorn"     placeholder="nome-campanha" tooltip="Nome único da campanha para identificação nos relatórios." />
+          <BaseInput v-model="term"     label="utm_term"       icon="fa-search"       placeholder="palavra-chave" hint="Para campanhas de busca paga (Google Ads)." />
+          <BaseInput v-model="content"  label="utm_content"    icon="fa-layers"       placeholder="cta-header"    hint="Para A/B test de criativos ou variações de anúncio." class="sm:col-span-2" />
+        </div>
       </div>
 
-      <div class="space-y-6">
-        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-6 space-y-4">
-          <div>
-            <label for="urlBase" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              URL Base *
-            </label>
-            <input
-              id="urlBase"
-              v-model="urlBase"
-              type="url"
-              placeholder="https://seusite.com/pagina"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label for="utmSource" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                UTM Source * <span class="text-xs text-gray-500">(origem do tráfego)</span>
-              </label>
-              <input
-                id="utmSource"
-                v-model="utmSource"
-                type="text"
-                placeholder="google, facebook, newsletter"
-                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-            </div>
-
-            <div>
-              <label for="utmMedium" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                UTM Medium * <span class="text-xs text-gray-500">(tipo de mídia)</span>
-              </label>
-              <input
-                id="utmMedium"
-                v-model="utmMedium"
-                type="text"
-                placeholder="cpc, email, social, banner"
-                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label for="utmCampaign" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              UTM Campaign * <span class="text-xs text-gray-500">(nome da campanha)</span>
-            </label>
-            <input
-              id="utmCampaign"
-              v-model="utmCampaign"
-              type="text"
-              placeholder="black_friday_2025, lancamento_produto"
-              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          <div class="grid md:grid-cols-2 gap-4">
-            <div>
-              <label for="utmTerm" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                UTM Term <span class="text-xs text-gray-500">(palavra-chave)</span>
-              </label>
-              <input
-                id="utmTerm"
-                v-model="utmTerm"
-                type="text"
-                placeholder="desconto, promoção"
-                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-            </div>
-
-            <div>
-              <label for="utmContent" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                UTM Content <span class="text-xs text-gray-500">(conteúdo)</span>
-              </label>
-              <input
-                id="utmContent"
-                v-model="utmContent"
-                type="text"
-                placeholder="banner_principal, link_texto"
-                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-            </div>
-          </div>
-        </div>
-
-        <BaseButton @click="gerarLink" variant="primary" class="w-full" :disabled="!podeGerar">
-          <i class="fas fa-magic mr-2"></i>Gerar Link UTM
+      <div class="flex gap-3 mt-4">
+        <BaseButton variant="primary" icon="fa-link" @click="gerar" class="flex-1">
+          Gerar Link UTM
         </BaseButton>
-
-        <div v-if="linkGerado" class="space-y-4">
-          <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-6">
-            <div class="flex justify-between items-center mb-3">
-              <h3 class="font-bold text-gray-900 dark:text-white">Link Gerado</h3>
-              <div class="flex gap-2">
-                <button @click="copiarLink" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm">
-                  <i class="fas fa-copy mr-2"></i>Copiar
-                </button>
-                <button @click="encurtarLink" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm">
-                  <i class="fas fa-compress mr-2"></i>Encurtar
-                </button>
-              </div>
-            </div>
-            
-            <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm break-all">
-              {{ linkGerado }}
-            </div>
-          </div>
-
-          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-            <h4 class="font-semibold text-gray-900 dark:text-white mb-3">Parâmetros UTM</h4>
-            <div class="space-y-2 text-sm">
-              <div class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">utm_source:</span>
-                <span class="font-mono text-gray-900 dark:text-white">{{ utmSource }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">utm_medium:</span>
-                <span class="font-mono text-gray-900 dark:text-white">{{ utmMedium }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">utm_campaign:</span>
-                <span class="font-mono text-gray-900 dark:text-white">{{ utmCampaign }}</span>
-              </div>
-              <div v-if="utmTerm" class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">utm_term:</span>
-                <span class="font-mono text-gray-900 dark:text-white">{{ utmTerm }}</span>
-              </div>
-              <div v-if="utmContent" class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">utm_content:</span>
-                <span class="font-mono text-gray-900 dark:text-white">{{ utmContent }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-500 p-4">
-          <div class="flex">
-            <i class="fas fa-info-circle text-purple-600 dark:text-purple-400 mt-1 mr-3"></i>
-            <div class="text-sm text-purple-800 dark:text-purple-300">
-              <p class="font-semibold mb-2">Parâmetros UTM:</p>
-              <ul class="list-disc list-inside space-y-1 text-xs">
-                <li><strong>utm_source:</strong> Origem do tráfego (google, facebook, newsletter)</li>
-                <li><strong>utm_medium:</strong> Tipo de mídia (cpc, email, social, organic)</li>
-                <li><strong>utm_campaign:</strong> Nome específico da campanha</li>
-                <li><strong>utm_term:</strong> Palavras-chave pagas (opcional)</li>
-                <li><strong>utm_content:</strong> Diferencia anúncios similares (opcional)</li>
-                <li>Use no Google Analytics, Facebook Ads, etc.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <BaseButton variant="outline" icon="fa-eraser" @click="limpar">
+          Limpar
+        </BaseButton>
       </div>
     </div>
-  </div>
+
+    <!-- Resultado -->
+    <Transition name="scale-in">
+      <div v-if="linkGerado" class="mt-4 space-y-4">
+        <div class="glass-panel p-4">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+              <i class="fas fa-link text-orange-500"></i>
+              Link com UTM
+            </h4>
+            <div class="flex gap-2">
+              <button @click="copiarLink" class="copy-btn">
+                <i :class="['fas', copiado ? 'fa-check text-emerald-500' : 'fa-copy']"></i>
+                {{ copiado ? 'Copiado!' : 'Copiar' }}
+              </button>
+              <a :href="linkGerado" target="_blank" rel="noopener noreferrer" class="copy-btn">
+                <i class="fas fa-external-link-alt text-xs"></i>
+                Testar
+              </a>
+            </div>
+          </div>
+          <div class="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-3">
+            <code class="text-xs text-blue-600 dark:text-blue-300 break-all font-mono leading-relaxed">{{ linkGerado }}</code>
+          </div>
+        </div>
+
+        <!-- Parâmetros detalhados -->
+        <div class="glass-panel p-4">
+          <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 mb-3 flex items-center gap-2">
+            <i class="fas fa-list-check text-primary-500"></i>
+            Parâmetros UTM
+          </h4>
+          <div class="space-y-2 text-xs">
+            <div v-for="p in parametrosVisiveis" :key="p.chave"
+              class="flex items-center justify-between py-1.5 border-b border-gray-100 dark:border-slate-700 last:border-0">
+              <div>
+                <code class="font-mono font-bold text-orange-600 dark:text-orange-400">{{ p.chave }}</code>
+                <span class="text-gray-400 dark:text-slate-500 ml-2">{{ p.desc }}</span>
+              </div>
+              <code class="font-mono font-semibold text-gray-700 dark:text-slate-200">{{ p.valor }}</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-card-success">
+          <i class="fas fa-check-circle text-emerald-500 flex-shrink-0 mt-0.5"></i>
+          <span>Link gerado com {{ parametrosVisiveis.length }} parâmetros UTM. Configure uma View de Campanha no GA4 para visualizar os resultados.</span>
+        </div>
+      </div>
+    </Transition>
+  </ToolShell>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue'
-import BaseButton from './common/BaseButton.vue'
-import { useAnalytics } from '../../composables/useAnalytics'
 import Swal from 'sweetalert2'
+import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
+import BaseInput from '@/components/tools/common/BaseInput.vue'
 
-const { trackToolUsage } = useAnalytics()
-
-const urlBase = ref('')
-const utmSource = ref('')
-const utmMedium = ref('')
-const utmCampaign = ref('')
-const utmTerm = ref('')
-const utmContent = ref('')
+// ─── Estado ───────────────────────────────────────────────────────────────────
+const url      = ref('https://www.seusite.com.br')
+const source   = ref('')
+const medium   = ref('')
+const campaign = ref('')
+const term     = ref('')
+const content  = ref('')
+const erroUrl  = ref('')
 const linkGerado = ref('')
+const copiado    = ref(false)
 
-const podeGerar = computed(() => {
-  return urlBase.value && utmSource.value && utmMedium.value && utmCampaign.value
-})
+// ─── Pré-sets ─────────────────────────────────────────────────────────────────
+const presets = [
+  { label: 'Google Ads',    icon: 'fa-google',     source: 'google',       medium: 'cpc',         campaign: 'google-ads-search'  },
+  { label: 'Meta Ads',      icon: 'fa-facebook',   source: 'facebook',     medium: 'cpc',         campaign: 'meta-ads-feed'      },
+  { label: 'Instagram',     icon: 'fa-instagram',  source: 'instagram',    medium: 'social',      campaign: 'instagram-stories'  },
+  { label: 'E-mail',        icon: 'fa-envelope',   source: 'newsletter',   medium: 'email',       campaign: 'email-mensal'       },
+  { label: 'WhatsApp',      icon: 'fa-whatsapp',   source: 'whatsapp',     medium: 'social',      campaign: 'whatsapp-broadcast' },
+  { label: 'LinkedIn',      icon: 'fa-linkedin',   source: 'linkedin',     medium: 'social',      campaign: 'linkedin-posts'     },
+  { label: 'TikTok',        icon: 'fa-tiktok',     source: 'tiktok',       medium: 'cpc',         campaign: 'tiktok-ads'         },
+  { label: 'YouTube',       icon: 'fa-youtube',    source: 'youtube',      medium: 'video',       campaign: 'youtube-ads'        },
+]
 
-const gerarLink = () => {
-  if (!podeGerar.value) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Campos Obrigatórios',
-      text: 'Preencha URL, Source, Medium e Campaign',
-      confirmButtonColor: '#9333ea'
-    })
+function aplicarPreset(p: typeof presets[0]) {
+  source.value   = p.source
+  medium.value   = p.medium
+  campaign.value = p.campaign
+}
+
+// ─── Geração ──────────────────────────────────────────────────────────────────
+function gerar() {
+  if (!url.value.trim() || !url.value.startsWith('http')) {
+    erroUrl.value = 'Informe uma URL válida começando com http:// ou https://'
+    return
+  }
+  if (!source.value.trim() || !medium.value.trim() || !campaign.value.trim()) {
+    Swal.fire({ icon: 'warning', title: 'Campos obrigatórios', text: 'Preencha utm_source, utm_medium e utm_campaign.', confirmButtonColor: '#ea580c' })
     return
   }
 
-  try {
-    const url = new URL(urlBase.value)
-    url.searchParams.set('utm_source', utmSource.value.toLowerCase().replace(/\s+/g, '_'))
-    url.searchParams.set('utm_medium', utmMedium.value.toLowerCase().replace(/\s+/g, '_'))
-    url.searchParams.set('utm_campaign', utmCampaign.value.toLowerCase().replace(/\s+/g, '_'))
-    
-    if (utmTerm.value) {
-      url.searchParams.set('utm_term', utmTerm.value.toLowerCase().replace(/\s+/g, '_'))
-    }
-    
-    if (utmContent.value) {
-      url.searchParams.set('utm_content', utmContent.value.toLowerCase().replace(/\s+/g, '_'))
-    }
+  const params = new URLSearchParams()
+  if (source.value.trim())   params.set('utm_source',   sanitize(source.value))
+  if (medium.value.trim())   params.set('utm_medium',   sanitize(medium.value))
+  if (campaign.value.trim()) params.set('utm_campaign', sanitize(campaign.value))
+  if (term.value.trim())     params.set('utm_term',     sanitize(term.value))
+  if (content.value.trim())  params.set('utm_content',  sanitize(content.value))
 
-    linkGerado.value = url.toString()
-    
-    trackToolUsage('Gerador UTM', 'generate')
-    
-    Swal.fire({
-      icon: 'success',
-      title: 'Link Gerado!',
-      text: 'Link UTM criado com sucesso',
-      confirmButtonColor: '#9333ea'
-    })
-  } catch {
-    Swal.fire({
-      icon: 'error',
-      title: 'URL Inválida',
-      text: 'Por favor, insira uma URL válida (ex: https://seusite.com)',
-      confirmButtonColor: '#9333ea'
-    })
-  }
+  const base = url.value.includes('?') ? url.value + '&' : url.value + '?'
+  linkGerado.value = base + params.toString()
 }
 
-const copiarLink = () => {
-  navigator.clipboard.writeText(linkGerado.value)
-  
-  trackToolUsage('Gerador UTM', 'copy')
-  
-  Swal.fire({
-    icon: 'success',
-    title: 'Link Copiado!',
-    timer: 2000,
-    showConfirmButton: false
-  })
+function sanitize(s: string): string {
+  return s.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-_]/g, '')
 }
 
-const encurtarLink = () => {
-  Swal.fire({
-    icon: 'info',
-    title: 'Encurtar Link',
-    html: `
-      <p class="mb-3">Use um serviço de encurtamento:</p>
-      <div class="space-y-2">
-        <a href="https://bitly.com" target="_blank" class="block text-blue-600 hover:underline">• Bitly</a>
-        <a href="https://tinyurl.com" target="_blank" class="block text-blue-600 hover:underline">• TinyURL</a>
-        <a href="https://rebrandly.com" target="_blank" class="block text-blue-600 hover:underline">• Rebrandly</a>
-      </div>
-    `,
-    confirmButtonColor: '#9333ea'
-  })
+const parametrosVisiveis = computed(() => {
+  const list = []
+  if (source.value.trim())   list.push({ chave: 'utm_source',   valor: sanitize(source.value),   desc: 'Origem' })
+  if (medium.value.trim())   list.push({ chave: 'utm_medium',   valor: sanitize(medium.value),   desc: 'Canal' })
+  if (campaign.value.trim()) list.push({ chave: 'utm_campaign', valor: sanitize(campaign.value), desc: 'Campanha' })
+  if (term.value.trim())     list.push({ chave: 'utm_term',     valor: sanitize(term.value),     desc: 'Palavra-chave' })
+  if (content.value.trim())  list.push({ chave: 'utm_content',  valor: sanitize(content.value),  desc: 'Criativo/variação' })
+  return list
+})
+
+async function copiarLink() {
+  await navigator.clipboard.writeText(linkGerado.value)
+  copiado.value = true
+  setTimeout(() => (copiado.value = false), 2000)
+  Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Link copiado!', showConfirmButton: false, timer: 1800 })
+}
+
+function limpar() {
+  url.value = 'https://www.seusite.com.br'
+  source.value = medium.value = campaign.value = term.value = content.value = ''
+  linkGerado.value = ''
 }
 </script>
+
+<style scoped>
+.scale-in-enter-active, .scale-in-leave-active { transition: all 0.25s ease; }
+.scale-in-enter-from { transform: scale(0.97); opacity: 0; }
+.scale-in-leave-to   { opacity: 0; }
+</style>

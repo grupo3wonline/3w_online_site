@@ -136,9 +136,9 @@
           Entre em contato e solicite um escopo detalhado e transparente para o seu projeto.
         </p>
         <div class="flex flex-col sm:flex-row gap-3.5 justify-center">
-          <RouterLink to="/contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
+          <a href="/#contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
             Solicitar Proposta Comercial
-          </RouterLink>
+          </a>
           <a
             href="https://wa.me/5541996924829?text=Olá! Gostaria de esclarecer dúvidas sobre os Termos de Serviço."
             target="_blank"
@@ -159,11 +159,23 @@ import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
+
+const termsFaqs = [
+  { question: 'Os projetos desenvolvidos são de propriedade do cliente?', answer: 'Sim. Após o pagamento integral, o cliente recebe todos os direitos patrimoniais sobre o código-fonte desenvolvido exclusivamente para ele.' },
+  { question: 'Existe fidelidade contratual nos serviços mensais?', answer: 'Não. Nossos contratos de serviço mensal (redes sociais, gestão de anúncios) não exigem fidelidade. O cliente pode cancelar com aviso prévio de 30 dias.' },
+  { question: 'Como funciona a garantia de 30 dias em sites?', answer: 'Após a entrega do site, garantimos 30 dias de suporte técnico gratuito para ajustes, correções de bugs e dúvidas operacionais sem custo adicional.' },
+  { question: 'A 3W Online emite nota fiscal?', answer: 'Sim. Emitimos Nota Fiscal Eletrônica (NF-e) para todos os serviços prestados, operando sob o regime do Simples Nacional com CNPJ regularmente cadastrado.' },
+]
+
 applySeo({
   title: 'Termos de Uso | 3W Online - Condições Gerais de Serviços',
-  description: 'Leia os Termos de Uso da 3W Online: diretrizes de prestação de serviços, desenvolvimento de software, propriedade intelectual e responsabilidades.',
+  description:
+    'Leia os Termos de Uso da 3W Online: diretrizes de prestação de serviços, desenvolvimento de software, propriedade intelectual e responsabilidades.',
   path: '/termos',
   keywords: 'termos de uso 3w online, contrato de prestação de serviços, termos legais tecnologia',
+  faqs: termsFaqs,
 })
+
+injectJsonLd(faqSchema(termsFaqs), 'schema-faq')
 </script>

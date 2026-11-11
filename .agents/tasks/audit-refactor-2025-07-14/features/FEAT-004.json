@@ -1,0 +1,35 @@
+{
+  "id": "FEAT-004",
+  "type": "test",
+  "description": "Testes Vitest, build final e documentação: criar 7 arquivos de teste em src/tests/, rodar 'npx vitest --run' no worktree, salvar resultados em test-results.md, rodar 'npm run build', atualizar README.md e design-system.md. Depende de FEAT-001 (vitest.config.ts + composables), FEAT-002 (Cookies.vue, useDarkMode), e FEAT-003 (useHoneypot, useCSRFToken, useDebounce). Deve ser executada por último.",
+  "status": "completed",
+  "steps": [
+    "1. Criar diretório src/tests/composables/ e src/tests/components/ e src/tests/security/ no worktree.",
+    "2. Criar src/tests/composables/useDebounce.test.ts: importar { debounce } from '@/composables/useDebounce'; usar vi.useFakeTimers(); testar que a função debounced não dispara antes do delay; dispara depois de avançar o timer; chamadas repetidas reiniciam o contador.",
+    "3. Criar src/tests/composables/useCSRFToken.test.ts: importar { useCSRFToken }; usar localStorageMock (via beforeEach(() => localStorage.clear())); testar que getToken() retorna string não-vazia; que duas chamadas retornam o mesmo token; validateToken(t) retorna true para token correto e false para string diferente.",
+    "4. Criar src/tests/composables/useHoneypot.test.ts: importar { useHoneypot }; testar que isBot.value é false quando hpField.value é ''; true quando hpField.value é qualquer string não-vazia; resetHoneypot() volta hpField para ''.",
+    "5. Criar src/tests/composables/useDarkMode.test.ts: importar { useDarkMode }; antes de cada teste, limpar localStorage e remover classe 'dark' do document.documentElement; testar que toggleDark() adiciona classe 'dark'; segunda chamada remove; isDark.value reflete estado; localStorage.getItem('theme') é 'dark' ou 'light' conforme o estado.",
+    "6. Criar src/tests/components/AppBreadcrumb.test.ts: importar { mount } from '@vue/test-utils' e AppBreadcrumb de '@/components/ui/AppBreadcrumb.vue'; usar RouterLinkStub do vue-test-utils; montar com props items=[{label:'Início',path:'/'},{label:'Contato'}]; verificar que dois itens são renderizados; o último não tem RouterLink (é span com aria-current='page'); o primeiro tem RouterLink para '/'.",
+    "7. Criar src/tests/components/CookieBanner.test.ts: importar { mount } from '@vue/test-utils' e CookieBanner; mockar usePrivacyConsent (vi.mock('@/composables/usePrivacyConsent')); testar que banner está visível quando getStoredConsent() retorna null; oculto quando retorna objeto de consentimento; clicar em 'Aceitar Todos' chama acceptAll().",
+    "8. Criar src/tests/security/forms.test.ts: importar { useHoneypot }, { useCSRFToken }, { debounce }; testar: (a) submit é bloqueado (função não chamada) quando isBot.value é true; (b) debounce previne segunda chamada dentro do delay (usar vi.useFakeTimers); (c) validateToken retorna false para token incorreto.",
+    "9. Executar no worktree: 'npx vitest --run 2>&1'. Capturar saída completa (incluindo erros se houver). Se algum teste falhar, corrigir o teste (não o código de produção, salvo se o código estiver errado). Re-executar até todos passarem.",
+    "10. Salvar saída do vitest --run em d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.agents/tasks/audit-refactor-2025-07-14/test-results.md com cabeçalho '# Resultados dos Testes Vitest', data e hora, e saída completa.",
+    "11. Executar 'npm run build' no worktree. Confirmar zero erros.",
+    "12. Atualizar README.md no worktree: adicionar/atualizar seções — Visão Geral, Stack Tecnológica, Como Executar (npm install, npm run dev, npm run build, npx vitest --run), Composables de Segurança (useCSRFToken, useHoneypot, useDebounce, useDarkMode), Estrutura de Diretórios.",
+    "13. Atualizar design-system.md no worktree: adicionar seção '## Dark Mode' com — como ativar (toggle na Navbar), persistência (localStorage chave 'theme'), como usar tokens Tailwind dark: nas classes, e exemplo de uso do composable useDarkMode."
+  ],
+  "acceptance_criteria": [
+    "src/tests/ contém 7 arquivos de teste (4 composables, 2 componentes, 1 segurança)",
+    "npx vitest --run termina com todos os testes passando (0 failed)",
+    "test-results.md existe em d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.agents/tasks/audit-refactor-2025-07-14/ com saída do vitest",
+    "npm run build passa sem erros",
+    "README.md atualizado com seção de composables de segurança",
+    "design-system.md atualizado com seção Dark Mode"
+  ],
+  "verification": [
+    "cd d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/refactor-audit; npx vitest --run — todos os testes devem passar (0 failed)",
+    "cd d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.worktrees/refactor-audit; npm run build — deve completar sem erros"
+  ],
+  "blocked_reason": null,
+  "findings": "FEAT-004 concluída com sucesso. 7 arquivos de teste criados em src/tests/ (4 composables, 2 componentes, 1 segurança). npx vitest --run: 7 test files, 23 tests, 0 failed. npm run build: 353 modules, 0 errors, built in 20.05s. README.md atualizado com seções: Visão Geral, Stack Tecnológica, Como Executar, Composables de Segurança (useCSRFToken, useHoneypot, useDebounce, useDarkMode), Estrutura de Diretórios. design-system.md atualizado com seção '## 6. Dark Mode' cobrindo: ativação via Navbar, persistência em localStorage chave 'theme', uso de tokens Tailwind dark:, exemplo do composable useDarkMode."
+}

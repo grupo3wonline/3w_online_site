@@ -1,0 +1,7 @@
+{
+  "task_id": "task-3w_online_site-feature-62-solucoes-2025-07-10",
+  "task_description": "Integrate 62 standalone solutions (apps) into the 3W Online site stack (Vue 3 + TS + Tailwind + Iconify + Pinia + SweetAlert2). Covers: Soluções dropdown in navbar (T1), SolucaoLayout/SolucaoView/index.ts architecture (T2), 62 ported Vue components (T3), router with 62 individual routes (T4), and Solucoes.vue catalog page with ?cat= filter (T5).",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003", "FEAT-004", "FEAT-005"],
+  "blocked_reason": null
+}

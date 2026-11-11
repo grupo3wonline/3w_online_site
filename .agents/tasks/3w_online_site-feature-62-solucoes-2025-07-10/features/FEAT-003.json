@@ -1,0 +1,40 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "Port 18 Vue→Vue solution components (batch 2). Same approach as FEAT-002: read standalone app source from d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/src/views/solucoees/<folder>/src/, create self-contained SFC in worktree at src/components/solucoes/<slug>.vue, then add all 18 entries to index.ts. This FEAT is independent of FEAT-002 (different files) but depends on FEAT-001.",
+  "status": "completed",
+  "steps": [
+    "Apply the same porting rules from FEAT-002 step 1 to all 18 components in this batch.",
+    "Port code-master: Source is d:/.../solucoees/code_master/src/. Extract main code editor/formatter logic. Create src/components/solucoes/code-master.vue.",
+    "Port dados-brasil-generator-pro: Source is d:/.../solucoees/dados_brasil_generator_pro/src/ (75 Vue files — large app). Find the main generator view (likely src/views/HomeView.vue or a GeneratorView). Port the primary generator form and its output logic. Inline sub-components as template sections. Create src/components/solucoes/dados-brasil-generator-pro.vue.",
+    "Port dev-playground: Source is d:/.../solucoees/dev_playground/src/ (43 Vue files). Find the code playground component. Port the main editor + output panel. Create src/components/solucoes/dev-playground.vue.",
+    "Port dev-start: Source is d:/.../solucoees/dev_start/src/ (30 Vue files). Extract the project scaffolding/checklist logic. Create src/components/solucoes/dev-start.vue.",
+    "Port dev-toolkit-suite-essentials: Source is d:/.../solucoees/dev_toolkit_suite_essentials/src/ (59 Vue files). This is a multi-tool suite — find the main tool list or tab-based view and port the primary tool(s). Use tabs to switch between sub-tools. Create src/components/solucoes/dev-toolkit-suite-essentials.vue.",
+    "Port empreenda-facil: Source is d:/.../solucoees/empreenda_facil_gerador/src/. Extract the business plan generator form and output. Create src/components/solucoes/empreenda-facil.vue.",
+    "Port entity-converter-pro: Source is d:/.../solucoees/entity_converter_pro/src/ (20 Vue files). Extract HTML entity encoder/decoder logic. Create src/components/solucoes/entity-converter-pro.vue.",
+    "Port excel-consolidator: Source is d:/.../solucoees/excel_consolidator/src/ (17 Vue files). Extract spreadsheet consolidation/merge logic. Create src/components/solucoes/excel-consolidator.vue.",
+    "Port gerador-legenda: Source is d:/.../solucoees/gerador_legenda/src/ (9 Vue files). Extract caption/legend generator form. Create src/components/solucoes/gerador-legenda.vue.",
+    "Port investsim: Source is d:/.../solucoees/investsim/src/ (18 Vue files). Extract investment simulator (compound interest, portfolio projection). Create src/components/solucoes/investsim.vue.",
+    "Port marca-dagua: Source is d:/.../solucoees/marca_dagua/src/ (21 Vue files). Extract watermark-on-image logic (canvas API). Create src/components/solucoes/marca-dagua.vue.",
+    "Port orcamento-social-midia: Source is d:/.../solucoees/orcamento_social_midia/src/ (19 Vue files). Extract social media budget proposal generator. Create src/components/solucoes/orcamento-social-midia.vue.",
+    "Port rendimento-salarial: Source is d:/.../solucoees/rendimento_salarial/src/ (27 Vue files). Extract salary/income calculator (CLT, PJ, MEI comparison). Create src/components/solucoes/rendimento-salarial.vue.",
+    "Port seu-peso: Source is d:/.../solucoees/seu_peso/src/ (21 Vue files). Extract weight tracking and ideal weight calculator. Create src/components/solucoes/seu-peso.vue.",
+    "Port simuladores-empresariais: Source is d:/.../solucoees/simuladores_empresariais/src/ (31 Vue files). Extract business simulator suite (breakeven, cashflow, etc.) — use tabs for multiple simulators. Create src/components/solucoes/simuladores-empresariais.vue.",
+    "Port srt-converter-pro: Source is d:/.../solucoees/srt_converter_pro/src/ (30 Vue files). Extract SRT subtitle file parser/editor/converter. Create src/components/solucoes/srt-converter-pro.vue.",
+    "Port thumbnail-pro: Source is d:/.../solucoees/thumbnail_pro/src/ (16 Vue files). Extract thumbnail generator (canvas-based image composition). Create src/components/solucoes/thumbnail-pro.vue.",
+    "Port thumbnail-youtube: Source is d:/.../solucoees/thumbnail_youtube/src/ (14 Vue files). Extract YouTube thumbnail template/generator. Create src/components/solucoes/thumbnail-youtube.vue.",
+    "Update src/components/solucoes/index.ts (worktree) to add entries for all 18 components ported in this FEAT: 'code-master', 'dados-brasil-generator-pro', 'dev-playground', 'dev-start', 'dev-toolkit-suite-essentials', 'empreenda-facil', 'entity-converter-pro', 'excel-consolidator', 'gerador-legenda', 'investsim', 'marca-dagua', 'orcamento-social-midia', 'rendimento-salarial', 'seu-peso', 'simuladores-empresariais', 'srt-converter-pro', 'thumbnail-pro', 'thumbnail-youtube'. Append to the existing entries — do not remove any."
+  ],
+  "acceptance_criteria": [
+    "All 18 .vue files exist at src/components/solucoes/<slug>.vue in the worktree",
+    "src/components/solucoes/index.ts now has 36 entries (18 from FEAT-002 + 18 from this FEAT)",
+    "npm run build completes with 0 errors",
+    "npx vitest run — all existing tests pass"
+  ],
+  "verification": [
+    "npm run build (in worktree) — exits 0",
+    "npx vitest run (in worktree) — all tests pass"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

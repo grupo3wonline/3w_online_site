@@ -166,6 +166,91 @@
             <p class="mt-4 text-xs text-gray-600">
               Para formalizar qualquer solicitação, envie uma mensagem para nosso Encarregado de Dados (DPO) através do e-mail: <a href="mailto:privacidade@3wonline.com.br" class="text-primary-600 font-bold underline">privacidade@3wonline.com.br</a>. Respondemos em até 5 dias úteis.
             </p>
+
+            <!-- ─── Formulário de Requisição Formal de Dados (LGPD Art.18 / GDPR Art.15-22 / CCPA) ─── -->
+            <div id="solicitar-direitos" class="mt-6 p-5 rounded-2xl border-2 border-primary-200 dark:border-primary-700 bg-primary-50/60 dark:bg-slate-800">
+              <h3 class="font-bold text-sm text-primary-700 dark:text-primary-300 mb-4 flex items-center gap-2">
+                <Icon icon="mdi:file-document-edit-outline" class="w-5 h-5" />
+                Formulário de Requisição Formal — Exercício de Direitos de Privacidade
+              </h3>
+              <p class="text-xs text-gray-600 dark:text-slate-300 mb-4">
+                Preencha o formulário abaixo para exercer qualquer um dos seus direitos. Sua solicitação será encaminhada ao DPO e respondida em <strong>até 5 dias úteis</strong>, conforme exigido pela LGPD (Art. 18), GDPR (Art. 15–22) e CCPA.
+              </p>
+              <form @submit.prevent="debouncedPrivacySubmit" novalidate autocomplete="off" class="space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="form-label text-xs" for="dsr-name">Nome Completo <span class="text-red-500">*</span></label>
+                    <input id="dsr-name" v-model="dsrForm.name" type="text" autocomplete="name" class="form-input" placeholder="Seu nome completo" required />
+                  </div>
+                  <div>
+                    <label class="form-label text-xs" for="dsr-email">E-mail <span class="text-red-500">*</span></label>
+                    <input id="dsr-email" v-model="dsrForm.email" type="email" autocomplete="email" class="form-input" placeholder="seu@email.com" required />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="form-label text-xs" for="dsr-country">País de Residência <span class="text-red-500">*</span></label>
+                  <select id="dsr-country" v-model="dsrForm.country" autocomplete="country" class="form-select">
+                    <option value="">Selecione...</option>
+                    <option value="BR">🇧🇷 Brasil — LGPD</option>
+                    <option value="EU">🇪🇺 União Europeia / UK — GDPR</option>
+                    <option value="US">🇺🇸 Estados Unidos — CCPA/CPRA</option>
+                    <option value="ZA">🇿🇦 África do Sul — POPIA</option>
+                    <option value="OTHER">🌍 Outro País</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="form-label text-xs">Tipo de Solicitação <span class="text-red-500">*</span></label>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <label
+                      v-for="opt in dsrOptions"
+                      :key="opt.value"
+                      class="flex items-start gap-2 p-2.5 rounded-lg border text-xs cursor-pointer transition-all"
+                      :class="dsrForm.type === opt.value ? 'bg-primary-50 dark:bg-primary-900/30 border-primary-500 text-primary-900 dark:text-primary-200 font-semibold' : 'bg-white dark:bg-slate-700 border-gray-200 dark:border-slate-600 text-gray-700 dark:text-slate-300 hover:border-primary-300'"
+                    >
+                      <input type="radio" :value="opt.value" v-model="dsrForm.type" class="mt-0.5 text-primary-600" />
+                      <span>{{ opt.label }}</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="form-label text-xs" for="dsr-details">Detalhes da Solicitação (Opcional)</label>
+                  <textarea id="dsr-details" v-model="dsrForm.details" rows="2" autocomplete="off" class="form-textarea" placeholder="Descreva brevemente sua solicitação ou forneça informações adicionais..."></textarea>
+                </div>
+
+                <div class="flex items-start gap-2">
+                  <input id="dsr-confirm" v-model="dsrForm.confirm" type="checkbox" class="mt-1 h-4 w-4 text-primary-600 rounded border-gray-300" required />
+                  <label for="dsr-confirm" class="text-[11px] text-gray-600 dark:text-slate-300 cursor-pointer">
+                    Confirmo que sou o titular dos dados referenciados e estou exercendo meu direito em conformidade com a legislação de privacidade aplicável ao meu país de residência.
+                  </label>
+                </div>
+
+                <!-- Honeypot — invisível ao usuário, se preenchido = bot -->
+                <input type="text" v-model="hpPrivacy" name="hp_dsr" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" autocomplete="off" />
+                <input type="hidden" name="_csrf" :value="csrfToken" />
+
+                <!-- Cloudflare Turnstile -->
+                <AppTurnstile
+                  ref="turnstilePrivacyRef"
+                  action="privacy_request"
+                  @success="turnstilePrivacyToken = $event"
+                  @expired="turnstilePrivacyToken = ''"
+                  @error="turnstilePrivacyToken = ''"
+                />
+
+                <button
+                  type="submit"
+                  :disabled="!dsrForm.name || !dsrForm.email || !dsrForm.type || !dsrForm.confirm || isSubmittingPrivacy"
+                  class="btn-primary text-xs !py-2.5 w-full sm:w-auto"
+                >
+                  <Icon v-if="isSubmittingPrivacy" icon="mdi:loading" class="w-4 h-4 mr-2 animate-spin" />
+                  <Icon v-else icon="mdi:send-outline" class="w-4 h-4 mr-2" />
+                  Enviar Solicitação ao DPO
+                </button>
+              </form>
+            </div>
           </div>
 
           <!-- 6. Segurança e Transferência Internacional -->
@@ -205,18 +290,135 @@
 </template>
 
 <script setup lang="ts">
+import { reactive, ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import AppTurnstile from '@/components/ui/AppTurnstile.vue'
 import { usePrivacyConsent } from '@/composables/usePrivacyConsent'
 import { useSeo } from '@/composables/useSeo'
+import { useHoneypot } from '@/composables/useHoneypot'
+import { useCSRFToken } from '@/composables/useCSRFToken'
+import { useFormSecurity } from '@/composables/useFormSecurity'
+import { useRecaptcha } from '@/composables/useRecaptcha'
+import { debounce } from '@/composables/useDebounce'
 
 const { openPreferences } = usePrivacyConsent()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 
-const { applySeo } = useSeo()
+// ─── Segurança ────────────────────────────────────────────────────────────────
+const { hpField: hpPrivacy, isBot: isBotPrivacy } = useHoneypot()
+const { getToken: getCsrfToken } = useCSRFToken()
+const { sanitizeFormData, detectInjectionAttempt, useSubmitGuard } = useFormSecurity()
+const { execute: recaptchaExecute } = useRecaptcha()
+
+const csrfToken = getCsrfToken()
+const { isSubmitting: isSubmittingPrivacy, wasSubmittedRecently, markAsSubmitted } =
+  useSubmitGuard('privacy-dsr')
+const turnstilePrivacyToken = ref('')
+const turnstilePrivacyRef = ref<InstanceType<typeof AppTurnstile> | null>(null)
+
+// FAQs de Privacidade — para FAQ Schema (AEO/SEO)
+const privacyFaqs = [
+  {
+    question: 'A 3W Online vende meus dados pessoais?',
+    answer: 'Não. A 3W Online NUNCA vende, aluga ou compartilha dados pessoais com terceiros para fins comerciais. Estamos em conformidade com LGPD, GDPR, CCPA (Do Not Sell) e POPIA.',
+  },
+  {
+    question: 'Como posso solicitar a exclusão dos meus dados?',
+    answer: 'Você pode solicitar a exclusão pelo formulário nesta página ou enviando e-mail para privacidade@3wonline.com.br. Respondemos em até 5 dias úteis conforme exigido pela LGPD (Art. 18) e GDPR (Art. 17).',
+  },
+  {
+    question: 'Os dados inseridos nas ferramentas digitais ficam armazenados?',
+    answer: 'Não. Todas as 120+ ferramentas são 100% client-side. Os dados processados (textos, CPFs, CNPJs, etc.) ficam apenas na memória do seu navegador e são destruídos ao fechar a aba. Zero transmissão para servidores.',
+  },
+  {
+    question: 'A 3W Online está em conformidade com o GDPR europeu?',
+    answer: 'Sim. Implementamos bases legais lícitas para tratamento de dados, Cláusulas Contratuais Padrão (SCCs) para transferências internacionais e respeitamos todos os direitos dos titulares previstos nos Artigos 15 a 22 do GDPR.',
+  },
+  {
+    question: 'Posso retirar meu consentimento de cookies a qualquer momento?',
+    answer: 'Sim. Você pode alterar ou retirar seu consentimento de cookies a qualquer momento clicando em "Preferências de Privacidade" no rodapé do site ou acessando nossa Central de Privacidade.',
+  },
+]
+
 applySeo({
   title: 'Política de Privacidade Global | LGPD, GDPR, CCPA, POPIA | 3W Online',
-  description: 'Conheça nossa Política de Privacidade Global em total conformidade com a LGPD (Brasil), GDPR (Europa), CCPA (EUA) e POPIA (África do Sul). Transparência e segurança total.',
+  description:
+    'Conheça nossa Política de Privacidade Global em total conformidade com a LGPD (Brasil), GDPR (Europa), CCPA (EUA) e POPIA (África do Sul). Transparência e segurança total.',
   path: '/privacidade',
   keywords: 'política de privacidade 3w online, lgpd 3w online, gdpr curitiba, ccpa compliance, privacidade de dados',
+  faqs: privacyFaqs,
 })
+
+// ─── Formulário DSR (Data Subject Request) ────────────────────────────────────
+const dsrForm = reactive({
+  name: '',
+  email: '',
+  country: '',
+  type: '',
+  details: '',
+  confirm: false,
+})
+
+const dsrOptions = [
+  { value: 'access',      label: '📋 Acesso e Confirmação — Saber quais dados temos sobre você' },
+  { value: 'correction',  label: '✏️ Retificação — Corrigir dados incorretos ou incompletos' },
+  { value: 'deletion',    label: '🗑️ Eliminação / Esquecimento — Apagar meus dados' },
+  { value: 'portability', label: '📤 Portabilidade — Receber meus dados em formato legível' },
+  { value: 'objection',   label: '🚫 Oposição / Opt-Out — Revogar consentimento ou comunicações' },
+  { value: 'info',        label: '❓ Informação — Saber com quem meus dados foram compartilhados' },
+]
+
+function submitPrivacyRequest(): void {
+  if (!dsrForm.name || !dsrForm.email || !dsrForm.type || !dsrForm.confirm) return
+  if (isBotPrivacy.value) return  // Bloqueia bot (honeypot)
+  if (wasSubmittedRecently()) {
+    alert('Sua solicitação já foi enviada. Aguarde nossa resposta.')
+    return
+  }
+
+  // Detecção de injeção
+  const suspicious = detectInjectionAttempt({ name: dsrForm.name, email: dsrForm.email, details: dsrForm.details })
+  if (suspicious.length > 0) return
+
+  if (isSubmittingPrivacy.value) return
+  isSubmittingPrivacy.value = true
+
+  // Sanitiza com DOMPurify
+  const safeForm = sanitizeFormData({
+    name: dsrForm.name,
+    email: dsrForm.email,
+    details: dsrForm.details,
+  })
+
+  // Executa reCAPTCHA v3 em background
+  recaptchaExecute('privacy_request').then((_token) => {
+    const typeLabel = dsrOptions.find((o) => o.value === dsrForm.type)?.label ?? dsrForm.type
+    const countryLabel: Record<string, string> = {
+      BR: 'Brasil (LGPD)', EU: 'UE/UK (GDPR)', US: 'EUA (CCPA)', ZA: 'África do Sul (POPIA)', OTHER: 'Outro País',
+    }
+
+    const msg = encodeURIComponent(
+      `Olá! Gostaria de exercer meus direitos de privacidade.\n\n` +
+      `👤 Nome: ${safeForm.name}\n` +
+      `📧 E-mail: ${safeForm.email}\n` +
+      `🌍 País / Lei: ${countryLabel[dsrForm.country] ?? dsrForm.country}\n` +
+      `📋 Tipo de Solicitação: ${typeLabel}\n` +
+      `💬 Detalhes: ${safeForm.details || 'Nenhum detalhe adicional'}\n\n` +
+      `Aguardo resposta em até 5 dias úteis conforme previsto na legislação de privacidade aplicável.`,
+    )
+
+    window.open(`https://wa.me/5541996924829?text=${msg}`, '_blank')
+    markAsSubmitted()
+
+    // Reset
+    Object.assign(dsrForm, { name: '', email: '', country: '', type: '', details: '', confirm: false })
+    turnstilePrivacyToken.value = ''
+    turnstilePrivacyRef.value?.reset()
+    isSubmittingPrivacy.value = false
+  }).catch(() => { isSubmittingPrivacy.value = false })
+}
+
+// Debounce para evitar duplo envio
+const debouncedPrivacySubmit = debounce(submitPrivacyRequest, 400)
 </script>

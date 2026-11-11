@@ -1,0 +1,9 @@
+{
+  "verdict": "APPROVED",
+  "summary": "Todos os 14 critérios de aceitação verificados e confirmados: 4 composables criados com contratos corretos, dark mode toggle funcional com persistência, crédito HOTWYL|WILLFROMBRASIL no rodapé, página /cookies criada e roteada, hreflang e CSP no index.html, X-Frame-Options DENY e HSTS no .htaccess, BaseInput com autocomplete=off, Contact.vue com honeypot+CSRF+debounce+:disabled, DOMPurify em todos os 4 pontos v-html, 23/23 testes Vitest passando, npm run build sem erros TypeScript (353 módulos), lógica de negócio das 126+ ferramentas intacta, e interface em pt-BR.",
+  "findings": [
+    "CSRF token sem validação server-side — o token gerado em useCSRFToken é incluído no formulário como campo hidden mas nunca validado por um backend (o submit abre o WhatsApp, não posta para um servidor). Não é um gap crítico no fluxo atual, mas se um endpoint server-side for adicionado no futuro, a validação do token precisará ser implementada no servidor para que a proteção tenha efeito.",
+    "useDarkMode cria estado reativo isolado por chamada — cada chamada a useDarkMode() instancia um ref(false) independente. Um segundo componente que chamar useDarkMode() e ler isDark.value não verá as atualizações disparadas pelo toggle da AppNavbar. Não causa bug hoje (AppNavbar é o único consumidor do toggle), mas tornaria a expansão para múltiplos consumidores propensa a dessincronização. O padrão mais robusto seria um ref module-level ou store Pinia."
+  ],
+  "reviewDoc": "d:/laragon/www/3wonline/0/0-dev/sys/dev/3w_online_site/.agents/tasks/audit-refactor-2025-07-14/2026-11-02-204111-review.md"
+}
