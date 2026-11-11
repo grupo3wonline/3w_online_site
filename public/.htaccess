@@ -98,6 +98,10 @@ ErrorDocument 500 /500.html
 # 7. Cabeçalhos de Segurança HTTP (Security Headers)
 # ------------------------------------------------------------------------------
 <IfModule mod_headers.c>
+  # Content Security Policy — restringe fontes de scripts, estilos e conexões
+  # connect-src 'self' garante que todos os fetch() vão apenas para o nosso domínio (via proxy)
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://nominatim.openstreetmap.org; frame-src 'self' https://www.openstreetmap.org https://challenges.cloudflare.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';"
+
   # Previne ataque MIME-sniffing
   Header always set X-Content-Type-Options "nosniff"
 

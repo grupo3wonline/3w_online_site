@@ -40,3 +40,6 @@ test-results/
 
 # Misc
 *.tsbuildinfo
+
+# Configuração do proxy PHP com chaves secretas (não commitar com chaves reais)
+public/api-config.php

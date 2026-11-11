@@ -134,17 +134,22 @@
     <!-- ══ ABA: CONSULTAR IP ══════════════════════════════════════════ -->
     <div v-if="aba === 'consultarip'" class="space-y-4">
       <div class="glass-panel p-4 space-y-3">
+        <!-- Anti-bot: honeypot -->
+        <div aria-hidden="true" style="position:absolute;left:-5000px;overflow:hidden;height:0;width:0">
+          <label for="_3w_hp_ip">Website</label>
+          <input id="_3w_hp_ip" name="website" type="text" tabindex="-1" autocomplete="new-password" v-model="hpField" />
+        </div>
         <label class="text-xs font-semibold text-blue-300 block">Endereço IPv4 ou IPv6</label>
         <div class="flex gap-2">
-          <input v-model="ipConsulta" @keyup.enter="consultarIP()" class="input-aurora flex-1 font-mono" placeholder="8.8.8.8 ou 2001:4860:4860::8888" />
-          <button @click="consultarIP()" :disabled="consultandoIP"
+          <input v-model="ipConsulta" @keyup.enter="debouncedConsultarIP()" class="input-aurora flex-1 font-mono" placeholder="8.8.8.8 ou 2001:4860:4860::8888" />
+          <button @click="debouncedConsultarIP()" :disabled="consultandoIP || guardIP.pending.value"
             class="flex items-center gap-2 px-4 py-2 bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white rounded-xl font-semibold text-sm transition-colors shrink-0">
             <Icon :icon="consultandoIP ? 'mdi:loading' : 'mdi:magnify'" class="w-4 h-4" :class="consultandoIP?'animate-spin':''" />
             Consultar
           </button>
         </div>
         <div class="flex flex-wrap gap-1.5">
-          <button v-for="ex in examplosIP" :key="ex.ip" @click="ipConsulta=ex.ip;consultarIP()"
+          <button v-for="ex in examplosIP" :key="ex.ip" @click="ipConsulta=ex.ip;debouncedConsultarIP()"
             class="text-[10px] px-2 py-1 rounded bg-white/5 hover:bg-white/15 text-blue-300 hover:text-white border border-white/10 transition-colors">
             {{ ex.label }}
           </button>
@@ -199,6 +204,14 @@ import { ref, computed, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import Swal from 'sweetalert2'
+import { useApiProxy }     from '@/composables/useApiProxy'
+import { useHoneypot }     from '@/composables/useHoneypot'
+import { useRequestGuard } from '@/composables/useRequestGuard'
+import { debounce }        from '@/composables/useDebounce'
+
+const proxy = useApiProxy()
+const { hpField, isBot } = useHoneypot()
+const guardIP            = useRequestGuard()
 
 const ipTips = [
   { title: 'Privacidade', text: 'Nenhum dado é armazenado. As consultas são feitas diretamente do seu navegador para APIs públicas gratuitas.', type: 'info' as const },
@@ -242,7 +255,7 @@ async function buscarPTR(ip: string): Promise<string> {
     } else {
       ptrName = ip.split('.').reverse().join('.') + '.in-addr.arpa'
     }
-    const r = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(ptrName)}&type=PTR`, {
+    const r = await proxy.secureFetch(proxy.dnsUrl(ptrName, 'PTR'), {
       signal: AbortSignal.timeout(6000)
     })
     const d = await r.json()
@@ -260,14 +273,14 @@ async function buscarMeuIP() {
     // 1. IPv4
     let ipv4 = ''
     try {
-      const r4 = await fetch('https://api4.ipify.org?format=json', { signal: AbortSignal.timeout(5000) })
+      const r4 = await proxy.secureFetch(proxy.ipv4Url(), { signal: AbortSignal.timeout(5000) })
       ipv4 = (await r4.json()).ip || ''
     } catch {}
 
     // 2. IPv6 (optional)
     let ipv6 = ''
     try {
-      const r6 = await fetch('https://api6.ipify.org?format=json', { signal: AbortSignal.timeout(5000) })
+      const r6 = await proxy.secureFetch(proxy.ipv6Url(), { signal: AbortSignal.timeout(5000) })
       ipv6 = (await r6.json()).ip || ''
       // Don't store if same as ipv4 (some APIs return IPv4-mapped IPv6)
       if (ipv6 === ipv4) ipv6 = ''
@@ -275,7 +288,7 @@ async function buscarMeuIP() {
 
     // 3. Geolocation + ISP (use ipv4 or fallback to auto)
     const geoIP = ipv4 || ''
-    const rGeo = await fetch(`https://ipwho.is/${geoIP}`, { signal: AbortSignal.timeout(8000) })
+    const rGeo = await proxy.secureFetch(proxy.geoipUrl(geoIP), { signal: AbortSignal.timeout(8000) })
     const geo = await rGeo.json()
 
     if (!geo.success && !ipv4) throw new Error('Não foi possível obter o IP.')
@@ -315,7 +328,7 @@ async function buscarMeuIP() {
   } catch (e: any) {
     // Fallback simples
     try {
-      const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(6000) })
+      const r = await proxy.secureFetch(proxy.geoipFallUrl(), { signal: AbortSignal.timeout(6000) })
       const d = await r.json()
       ipData.value = {
         ipv4: d.ip, ipv6: '', ptr: '',
@@ -402,11 +415,13 @@ const examplosIP = [
 ]
 
 async function consultarIP() {
+  if (isBot.value) return // Honeypot
   const ip = ipConsulta.value.trim()
   if (!ip) return
+  await guardIP.run(async () => {
   consultandoIP.value = true; erroConsulta.value = ''; resultConsulta.value = null
   try {
-    const r = await fetch(`https://ipwho.is/${encodeURIComponent(ip)}`, { signal: AbortSignal.timeout(8000) })
+    const r = await proxy.secureFetch(proxy.geoipUrl(ip), { signal: AbortSignal.timeout(8000) })
     const d = await r.json()
     if (!d.success) throw new Error(d.message || 'IP inválido ou não encontrado.')
 
@@ -438,7 +453,10 @@ async function consultarIP() {
   } finally {
     consultandoIP.value = false
   }
+  }) // guardIP.run
 }
+
+const debouncedConsultarIP = debounce(consultarIP, 400)
 
 const resultConsultaGrid = computed(() => {
   const r = resultConsulta.value

@@ -10,20 +10,25 @@
   >
     <!-- Campo de entrada único (compartilhado entre abas) -->
     <div class="glass-panel p-4 mb-4">
+      <!-- Anti-bot: honeypot -->
+      <div aria-hidden="true" style="position:absolute;left:-5000px;overflow:hidden;height:0;width:0">
+        <label for="_3w_hp_dom">Website</label>
+        <input id="_3w_hp_dom" name="website" type="text" tabindex="-1" autocomplete="new-password" v-model="hpField" />
+      </div>
       <div class="flex gap-2 items-end flex-wrap">
         <div class="flex-1">
           <label class="text-xs font-semibold text-blue-300 mb-1.5 block">Domínio</label>
-          <input v-model="dominio" @keyup.enter="consultar()" class="input-aurora w-full font-mono text-base"
+          <input v-model="dominio" @keyup.enter="debouncedConsultar()" class="input-aurora w-full font-mono text-base"
             placeholder="exemplo.com.br" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
         </div>
-        <button @click="consultar()" :disabled="consultando"
+        <button @click="debouncedConsultar()" :disabled="consultando || guard.pending.value"
           class="flex items-center gap-2 px-5 py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white rounded-xl font-semibold text-sm transition-colors shrink-0">
           <Icon :icon="consultando ? 'mdi:loading' : 'mdi:magnify'" class="w-5 h-5" :class="consultando?'animate-spin':''" />
           Consultar
         </button>
       </div>
       <div class="flex flex-wrap gap-1.5 mt-2">
-        <button v-for="ex in exemplos" :key="ex" @click="dominio=ex;consultar()"
+        <button v-for="ex in exemplos" :key="ex" @click="dominio=ex;debouncedConsultar()"
           class="text-[10px] px-2 py-1 rounded bg-white/5 hover:bg-white/15 text-blue-300 hover:text-white border border-white/10 transition-colors font-mono">
           {{ ex }}
         </button>
@@ -200,6 +205,14 @@ import { ref, computed, watch } from 'vue'
 import { Icon } from '@iconify/vue'
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import Swal from 'sweetalert2'
+import { useApiProxy }     from '@/composables/useApiProxy'
+import { useHoneypot }     from '@/composables/useHoneypot'
+import { useRequestGuard } from '@/composables/useRequestGuard'
+import { debounce }        from '@/composables/useDebounce'
+
+const proxy = useApiProxy()
+const { hpField, isBot } = useHoneypot()
+const guard              = useRequestGuard()
 
 const dominioTips = [
   { title: 'RDAP vs WHOIS', text: 'RDAP (Registration Data Access Protocol) é o padrão moderno para consulta de registros de domínio, substituto do WHOIS clássico.', type: 'info' as const },
@@ -256,6 +269,7 @@ function validarDominio(d: string): boolean {
 }
 
 async function consultar() {
+  if (isBot.value) return // Honeypot
   const raw = dominio.value.trim()
   if (!raw) return
   const d = limparDominio(raw)
@@ -263,6 +277,8 @@ async function consultar() {
 
   dominio.value = d
   dominioAtual.value = d
+
+  await guard.run(async () => {
   consultando.value = true
   erro.value = ''
   rdapData.value = null
@@ -275,13 +291,15 @@ async function consultar() {
   ])
 
   consultando.value = false
+  }) // guard.run
 }
+
+const debouncedConsultar = debounce(consultar, 400)
 
 async function buscarRDAP(d: string) {
   try {
     // Try rdap.org (universal RDAP client, redirects to right registry)
-    const r = await fetch(`https://rdap.org/domain/${encodeURIComponent(d)}`, {
-      headers: { 'Accept': 'application/rdap+json' },
+    const r = await proxy.secureFetch(proxy.rdapUrl(d), {
       signal: AbortSignal.timeout(12000),
     })
 
@@ -363,10 +381,7 @@ async function buscarDNS(d: string) {
 
   await Promise.allSettled(tipos.map(async (type) => {
     try {
-      const r = await fetch(
-        `https://dns.google/resolve?name=${encodeURIComponent(d)}&type=${type}`,
-        { signal: AbortSignal.timeout(8000) }
-      )
+      const r = await proxy.secureFetch(proxy.dnsUrl(d, type), { signal: AbortSignal.timeout(8000) })
       const data = await r.json()
       if (data.Status === 0 && data.Answer?.length) {
         results[type] = data.Answer.map((a: any) => ({
