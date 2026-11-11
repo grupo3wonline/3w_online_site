@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Prejuízo Invisível</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Canais Estratégicos</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Resultados</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Casos de Sucesso</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo Ágil</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Gestão de Anúncios e Tráfego Pago em Curitiba | Google & Meta Ads | 3W Online',
   description: 'Gestão profissional de anúncios no Google Ads e Meta Ads em Curitiba. Atraia leads qualificados todos os dias com alto ROI e sem fidelidade contratual.',
   path: '/servicos/gestao-anuncios',
   keywords: 'gestão de anúncios curitiba, tráfego pago curitiba, google ads curitiba, instagram ads curitiba, agência de tráfego curitiba',
+  serviceType: 'AdvertisingManagement',
+  servicePrice: 'A partir de R$ 497/mes',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'A verba de anúncios é paga para a 3W Online ou para o Google/Meta?', answer: 'A verba de anúncios é paga diretamente por você ao Google e Meta via cartão de crédito ou boleto da sua própria conta de anúncios. Para a 3W Online, você paga apenas a taxa de gestão estratégica.' },
   { question: 'Em quanto tempo começo a receber os primeiros contatos?', answer: 'Campanhas de tráfego pago geram contatos comerciais imediatos. É comum receber os primeiros leads qualificados nas primeiras 24 a 48 horas após a ativação.' },
   { question: 'Existe fidelidade contratual na gestão de tráfego?', answer: 'Não exigimos fidelidade forçada. Nossos contratos são mensais com aviso prévio simples de 30 dias.' },
+  { question: 'Quanto custa a gestao de anuncios no Google Ads em Curitiba?', answer: 'A taxa de gestao comeca a partir de R$ 497/mes. O investimento em midia e definido pelo cliente, recomendamos minimo de R$ 1.000/mes.' },
+  { question: 'Qual e o prazo para ver resultados com anuncios pagos?', answer: 'Os primeiros resultados aparecem em 7 a 15 dias. A otimizacao e o melhor desempenho geralmente ocorrem apos 30 a 90 dias de campanha.' },
+  { question: 'A 3W Online trabalha com Google Ads e Meta Ads?', answer: 'Sim! Gerenciamos campanhas no Google Ads (Search, Display, YouTube) e Meta Ads (Facebook e Instagram).' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

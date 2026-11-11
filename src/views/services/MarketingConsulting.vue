@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">A Estagnação Comercial</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Áreas de Diagnóstico</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Ganhos Reais</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Ciclo da Consultoria</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Consultoria Estratégica em Marketing em Curitiba | 3W Online',
   description: 'Consultoria em marketing estratégico e vendas em Curitiba. Diagnóstico de funil, posicionamento de mercado, CAC, LTV e plano de ação de 90 dias.',
   path: '/servicos/consultoria-marketing',
   keywords: 'consultoria de marketing curitiba, consultoria estratégica curitiba, inteligência de mercado curitiba, diagnóstico comercial',
+  serviceType: 'MarketingConsulting',
+  servicePrice: 'A partir de R$ 497',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'A consultoria é online ou presencial?', answer: 'Realizamos atendimentos presenciais em Curitiba e Região Metropolitana ou reuniões executivas por videoconferência com gravação para empresas de todo o Brasil.' },
   { question: 'Quanto tempo dura o programa de consultoria?', answer: 'Nosso programa padrão tem duração de 90 dias com encontros quinzenais para acompanhamento direto da implementação e análise dos indicadores de ROI.' },
   { question: 'A 3W ajuda a treinar os vendedores da minha empresa?', answer: 'Sim! Como parte da consultoria, entregamos playbooks comerciais e realizamos alinhamento com seu time de vendas para otimizar o fechamento de propostas no WhatsApp.' },
+  { question: 'Quanto custa uma consultoria de marketing digital em Curitiba?', answer: 'A consultoria estrategica comeca a partir de R$ 497 por sessao ou em pacotes de 90 dias com acompanhamento. Entre em contato para um diagnostico gratuito.' },
+  { question: 'O que esta incluido no programa de consultoria de 90 dias?', answer: 'Diagnostico completo de funil, analise de concorrencia, plano de acao com metas, acompanhamento quinzenal de resultados e ajustes estrategicos continuos.' },
+  { question: 'Como a 3W Online diferencia sua consultoria das demais agencias?', answer: 'Combinamos marketing estrategico com tecnologia e dados reais: analise de CAC, LTV, funil de conversao e inteligencia artificial para decisoes mais precisas e resultados mensuraveis.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

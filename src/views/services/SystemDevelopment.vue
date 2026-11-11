@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Gargalos Operacionais</span>
@@ -120,7 +120,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Engenharia Sob Medida</span>
@@ -164,7 +164,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Resultados Percebidos</span>
@@ -197,7 +197,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Casos de Sucesso</span>
@@ -263,7 +263,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo Simples</span>
@@ -296,7 +296,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -415,7 +415,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -468,12 +468,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Desenvolvimento de Sistemas Web Sob Medida em Curitiba | 3W Online',
   description: 'Desenvolvimento de sistemas web sob medida em Curitiba: ERPs leves, CRMs, painéis de gestão e automações sem cobrança de mensalidade por usuário.',
   path: '/servicos/criacao-sistemas',
   keywords: 'sistemas web sob medida curitiba, desenvolvimento sistemas curitiba, erp sob medida, crm personalizado curitiba',
+  serviceType: 'WebSystemDevelopment',
+  servicePrice: 'A partir de R$ 4.997',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -485,5 +487,10 @@ const faqs = [
   { question: 'Como funciona a importação dos dados das nossas planilhas atuais?', answer: 'Nossa equipe de engenharia realiza o tratamento, limpeza e migração de todos os dados históricos das suas planilhas para o novo banco de dados sem custo adicional.' },
   { question: 'Vocês realizam o treinamento da equipe?', answer: 'Sim! Entregamos manuais gravados em vídeo e realizamos sessões de treinamento ao vivo com os colaboradores para garantir rápida adoção.' },
   { question: 'O sistema funciona bem em tablets e celulares?', answer: 'Sim! Todas as telas são responsivas e adaptadas para acesso de qualquer dispositivo com conexão à internet.' },
+  { question: 'Quanto tempo leva para desenvolver um sistema web sob medida?', answer: 'Sistemas simples (3 a 5 modulos) levam de 30 a 60 dias. Sistemas complexos podem levar de 3 a 6 meses.' },
+  { question: 'Quanto custa um sistema web personalizado?', answer: 'Sistemas web basicos comecam a partir de R$ 4.997. O orcamento final depende das funcionalidades e integracoes.' },
+  { question: 'A 3W Online oferece manutencao para sistemas desenvolvidos?', answer: 'Sim! Planos de manutencao e suporte a partir de R$ 297/mes, incluindo atualizacoes, correcoes, backups e monitoramento.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

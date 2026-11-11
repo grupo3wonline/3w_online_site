@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Gargalo Invisível</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Pilares do Processo</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Ganhos Reais</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo de Implementação</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Organização Comercial e Processos de Vendas em Curitiba | 3W Online',
   description: 'Estruturação de processos comerciais e funil de vendas em Curitiba. Implementação de CRM, playbook de atendimento no WhatsApp, scripts e treinamento de equipe.',
   path: '/servicos/organizacao-comercial',
   keywords: 'organização comercial curitiba, processos de vendas curitiba, implementação de crm curitiba, playbook de vendas, treinamento de vendedores',
+  serviceType: 'BusinessOrganization',
+  servicePrice: 'A partir de R$ 1.497',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'Minha equipe é resistente a mudanças, vocês ajudam no treinamento?', answer: 'Sim! Realizamos treinamentos práticos e gravamos tutoriais em vídeo para facilitar a adaptação dos vendedores, mostrando que o CRM agiliza o trabalho deles em vez de burocratizar.' },
   { question: 'Quanto tempo leva para estruturar o processo comercial?', answer: 'A modelagem do funil, criação do playbook de atendimento e treinamento da equipe levam em média de 15 a 20 dias úteis.' },
   { question: 'Os scripts de atendimento funcionam para o WhatsApp?', answer: 'Sim! Entregamos scripts de resposta rápida formatados especificamente para o WhatsApp Business, com técnicas comprovadas de quebra de objeções e fechamento de contratos.' },
+  { question: 'Quanto custa estruturar o processo comercial da minha empresa em Curitiba?', answer: 'A organizacao comercial com implementacao de CRM e playbook de atendimento comeca a partir de R$ 1.497, com retorno sobre investimento ja nos primeiros 60 dias.' },
+  { question: 'Como a 3W Online diferencia sua consultoria comercial?', answer: 'Aliamos organizacao de processos com automacao: configuramos CRM integrado ao WhatsApp Business e scripts inteligentes que reduzem o tempo de resposta e aumentam a taxa de fechamento.' },
+  { question: 'Qual o prazo para ver resultados na organizacao comercial?', answer: 'As primeiras melhorias na taxa de conversao aparecem ja nos primeiros 30 dias apos a implantacao do CRM e dos novos scripts de atendimento.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

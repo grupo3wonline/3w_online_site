@@ -52,8 +52,55 @@
 
     <!-- Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-ancestors 'none';" />
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline'
+        https://fonts.googleapis.com
+        https://fonts.gstatic.com
+        https://www.googletagmanager.com
+        https://www.google-analytics.com
+        https://www.google.com
+        https://www.gstatic.com
+        https://challenges.cloudflare.com
+        https://static.cloudflareinsights.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' data: https://fonts.gstatic.com;
+      img-src 'self' data: https:;
+      frame-src https://www.google.com https://challenges.cloudflare.com https://www.googletagmanager.com;
+      connect-src 'self' https:
+        https://www.google-analytics.com
+        https://analytics.google.com
+        https://stats.g.doubleclick.net
+        https://region1.google-analytics.com
+        https://www.googletagmanager.com;
+      frame-ancestors 'self';
+      base-uri 'self';
+      form-action 'self';
+    " />
+
+    <!-- Google Tag Manager — deve ser a primeira tag no <head> -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WVMJV7G6');</script>
+
+    <!-- Google Analytics 4 (GA4) — G-J06THXX0MW -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J06THXX0MW"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-J06THXX0MW', {
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=None;Secure',
+        send_page_view: false
+      });
+    </script>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -155,8 +202,14 @@
       }
     }
     </script>
+    <!-- Google Search Console: substitua pelo codigo de verificacao em https://search.google.com/search-console -->
+    <!-- <meta name="google-site-verification" content="SEU_CODIGO_AQUI" /> -->
   </head>
   <body class="antialiased">
+    <!-- Google Tag Manager (noscript) — logo após a abertura do <body> -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WVMJV7G6"
+    height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
+
     <div id="app"></div>
     <noscript>
       <p>Este site requer JavaScript habilitado para funcionar corretamente. A 3W Online é uma agência de marketing digital em Curitiba especializada em criação de sites, gestão de redes sociais, anúncios e automação com inteligência artificial.</p>

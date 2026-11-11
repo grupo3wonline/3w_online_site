@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Cenário Atual</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Formatos Estratégicos</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Vantagens</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo Editorial</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Gestão de Redes Sociais em Curitiba | Instagram & Facebook | 3W Online',
   description: 'Gestão profissional de redes sociais em Curitiba: criação de conteúdo estratégico, design refinado, Reels, carrosséis e copywriting de conversão.',
   path: '/servicos/gestao-redes-sociais',
   keywords: 'gestão de redes sociais curitiba, social media curitiba, gerenciamento de instagram curitiba, agência de mídias sociais curitiba',
+  serviceType: 'SocialMediaManagement',
+  servicePrice: 'A partir de R$ 497/mes',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'Consigo aprovar os posts antes de serem publicados?', answer: 'Sim! Enviamos o cronograma editorial completo com artes e textos com antecedência para sua revisão e aprovação antes de qualquer agendamento.' },
   { question: 'Vocês também respondem os comentários e mensagens no direct?', answer: 'Oferecemos planos com moderação de comentários e triagem de mensagens no direct, direcionando os contatos quentes imediatamente para o WhatsApp comercial da sua empresa.' },
   { question: 'Existe carência ou fidelidade no contrato?', answer: 'Não exigimos fidelidade forçada. Nossos contratos são mensais com aviso prévio simples de 30 dias.' },
+  { question: 'Quanto custa a gestao de redes sociais em Curitiba?', answer: 'Os planos comecam a partir de R$ 497/mes, incluindo criacao de conteudo, postagens e relatorios mensais.' },
+  { question: 'Quais redes sociais a 3W Online gerencia?', answer: 'Instagram, Facebook, LinkedIn, TikTok e YouTube. O pacote e personalizado conforme o perfil do seu negocio.' },
+  { question: 'Como e medido o resultado da gestao de redes sociais?', answer: 'Entregamos relatorios mensais com metricas de engajamento, alcance, crescimento de seguidores e conversoes.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

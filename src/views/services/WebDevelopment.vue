@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Diagnóstico</span>
@@ -144,7 +144,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Mecanismo Único</span>
@@ -183,7 +183,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios com Resultados Percebidos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Vantagens Concretas</span>
@@ -219,7 +219,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Casos Reais</span>
@@ -285,7 +285,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo Simples</span>
@@ -318,7 +318,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -437,7 +437,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -490,12 +490,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Criação de Sites Profissionais em Curitiba | 3W Online',
   description: 'Criação de sites profissionais e landing pages de alta conversão em Curitiba. Carregamento em menos de 1.5s, Vue 3, SEO nativo e 30 dias de garantia.',
   path: '/servicos/criacao-sites',
   keywords: 'criação de sites curitiba, criação de sites profissionais, desenvolvimento de sites curitiba, landing pages curitiba',
+  serviceType: 'WebsiteCreation',
+  servicePrice: 'A partir de R$ 997',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -507,5 +509,10 @@ const faqs = [
   { question: 'Como funciona a garantia de 30 dias?', answer: 'Oferecemos 30 dias de garantia técnica gratuita pós-publicação para ajustes, dúvidas operacionais e correções sem qualquer custo adicional.' },
   { question: 'Vocês cuidam da hospedagem e do domínio?', answer: 'Sim! Como bônus especial, configuramos seu domínio, certificado SSL e hospedagem SSD em nuvem gratuitamente no primeiro ano.' },
   { question: 'Consigo editar os textos e fotos sozinho depois?', answer: 'Com certeza! Entregamos uma área administrativa amigável e um tutorial gravado em vídeo ensinando passo a passo como alterar qualquer informação.' },
+  { question: 'Quanto custa criar um site profissional em Curitiba?', answer: 'Sites institucionais custam a partir de R$ 997, e-commerces a partir de R$ 2.497. Solicite um orcamento personalizado.' },
+  { question: 'Quanto tempo leva para criar um site?', answer: 'Um site institucional e entregue em 7 a 15 dias uteis. Sites com funcionalidades avancadas ou e-commerces levam de 30 a 60 dias.' },
+  { question: 'O site criado pela 3W Online e otimizado para SEO?', answer: 'Sim! Todos os sites incluem otimizacao basica de SEO: meta tags, sitemap, schema markup, velocidade de carregamento e compatibilidade mobile.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

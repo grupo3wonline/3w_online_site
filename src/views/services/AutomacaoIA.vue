@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Gargalo do Atendimento</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Arquitetura de IA</span>
@@ -154,7 +154,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Resultados</span>
@@ -187,7 +187,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -253,7 +253,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo Simples</span>
@@ -286,7 +286,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -405,7 +405,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -458,12 +458,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Chatbots com Inteligência Artificial no WhatsApp em Curitiba | 3W Online',
   description: 'Automação comercial e chatbots inteligentes com IA no WhatsApp em Curitiba. Atendimento 24/7, qualificação de leads e agendamentos automáticos.',
   path: '/servicos/automacao-ia',
   keywords: 'chatbot whatsapp curitiba, automação com inteligência artificial, agente ia whatsapp, chatbot inteligente curitiba',
+  serviceType: 'AIAutomation',
+  servicePrice: 'A partir de R$ 1.997',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -474,5 +476,10 @@ const faqs = [
   { question: 'É possível transferir para um atendente humano quando necessário?', answer: 'Sim! Sempre que o cliente solicitar falar com uma pessoa ou quando a IA identificar uma oportunidade de fechamento, a conversa é transferida automaticamente com aviso no painel.' },
   { question: 'Existe risco de meu número de WhatsApp ser bloqueado?', answer: 'Trabalhamos exclusivamente com a API oficial do WhatsApp Business (Cloud API da Meta), garantindo conformidade total e zero risco de banimento.' },
   { question: 'Quanto tempo leva para treinar e ativar o robô?', answer: 'Em média, a estruturação da base de conhecimento, testes de precisão e ativação levam de 3 a 7 dias úteis.' },
+  { question: 'Como a automacao com IA pode ajudar minha empresa em Curitiba?', answer: 'A automacao elimina tarefas repetitivas, reduz custos e melhora o atendimento. Implementamos chatbots, automacao de WhatsApp, integracao de sistemas e analise preditiva.' },
+  { question: 'Quanto custa implementar automacao com inteligencia artificial?', answer: 'Projetos de automacao com IA comecam a partir de R$ 1.997. O investimento varia conforme a complexidade das integracoes.' },
+  { question: 'A 3W Online oferece chatbot com IA para WhatsApp?', answer: 'Sim! Desenvolvemos chatbots inteligentes com atendimento 24h, qualificacao de leads, agendamento e integracao com CRM.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

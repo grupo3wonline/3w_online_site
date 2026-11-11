@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">A Primeira Impressão</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Entregáveis de Design</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Vantagens</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo Criativo</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Design Gráfico e Branding em Curitiba | Criação de Marcas | 3W Online',
   description: 'Design gráfico profissional e criação de identidade visual em Curitiba. Logotipos exclusivos, manual de marca, papelaria e materiais institucionais.',
   path: '/servicos/design-grafico',
   keywords: 'design gráfico curitiba, criação de logotipo curitiba, identidade visual curitiba, branding curitiba, manual de marca',
+  serviceType: 'GraphicDesign',
+  servicePrice: 'A partir de R$ 497',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'Posso registrar a marca desenvolvida no INPI?', answer: 'Sim! Nossas criações são 100% originais e autorais, permitindo que você realize o processo de registro de marca no INPI com total segurança jurídica.' },
   { question: 'Em quais formatos receberei os arquivos finais?', answer: 'Entregamos o pacote completo com arquivos vetorizados e abertos (AI, EPS, PDF, SVG) e imagens em alta resolução com fundo transparente (PNG) para qualquer tipo de aplicação digital ou impressa.' },
   { question: 'Quanto tempo leva o processo de criação de identidade visual?', answer: 'O ciclo completo de pesquisa, criação de conceitos, aprovação e montagem do manual de marca leva em média de 10 a 15 dias úteis.' },
+  { question: 'Quanto custa criar uma identidade visual profissional em Curitiba?', answer: 'Pacotes de identidade visual partem de R$ 497, incluindo logotipo, paleta de cores, tipografia e manual de marca. Solicite um orcamento gratuito.' },
+  { question: 'Em quanto tempo fico com minha nova marca pronta?', answer: 'O processo completo de criacao e aprovacao da identidade visual leva em media de 10 a 15 dias uteis, com apresentacao de 2 a 3 conceitos.' },
+  { question: 'Qual e o diferencial do design da 3W Online?', answer: 'Aliamos design estrategico e estetica moderna com foco em conversao: cada peca visual e criada para gerar autoridade de marca, aumentar a percepcao de valor e facilitar a decisao de compra.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

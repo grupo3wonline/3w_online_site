@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Cenário Atual</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Pilares 360°</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Vantagens</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Casos Reais</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Metodologia Ágil</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Agência de Marketing Digital 360° em Curitiba | 3W Online',
   description: 'Marketing digital completo em Curitiba: gestão de redes sociais, tráfego pago Google & Meta Ads, SEO e automação com inteligência artificial para sua empresa.',
   path: '/servicos/marketing-digital',
   keywords: 'marketing digital curitiba, assessoria de marketing digital, agência 360 curitiba, gestão de tráfego e redes sociais curitiba',
+  serviceType: 'DigitalMarketing',
+  servicePrice: 'A partir de R$ 997/mes',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'Minha empresa precisa ter alguém interno cuidando de marketing?', answer: 'Não! Nossa equipe cuida de todas as etapas (criação visual, redação, configuração de anúncios e relatórios), necessitando apenas da sua aprovação mensal do cronograma.' },
   { question: 'Existe fidelidade ou multa rescisória?', answer: 'Trabalhamos com contratos mensais transparentes, sem multas rescisórias abusivas. Nosso objetivo é reter sua empresa pelos resultados consistentes gerados mês a mês.' },
   { question: 'Em quanto tempo começo a ver novos clientes?', answer: 'As campanhas de tráfego pago geram contatos comerciais imediatos (primeiros dias), enquanto a autoridade de redes sociais consolida uma base crescente e fiel de compradores ao longo dos primeiros meses.' },
+  { question: 'O que esta incluido no pacote de marketing digital da 3W Online?', answer: 'Gestao de redes sociais, criacao de conteudo, anuncios pagos, SEO, relatorios e acompanhamento estrategico — tudo personalizado.' },
+  { question: 'Quanto custa contratar uma agencia de marketing digital em Curitiba?', answer: 'Os planos comecam a partir de R$ 997/mes para pequenas empresas, com pacotes escalaveis conforme o crescimento do negocio.' },
+  { question: 'Como a 3W Online diferencia sua estrategia de marketing digital?', answer: 'Combinamos marketing digital com tecnologia e IA: automacoes, chatbots, analise de dados e integracao com CRM.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

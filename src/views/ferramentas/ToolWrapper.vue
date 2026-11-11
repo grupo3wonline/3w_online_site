@@ -186,10 +186,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { useToolsStore } from '@/stores/tools'
+import { useSeo } from '@/composables/useSeo'
+import { useAnalytics } from '@/composables/useAnalytics'
+import { useRecaptcha } from '@/composables/useRecaptcha'
 
 const route = useRoute()
 const toolsStore = useToolsStore()
@@ -247,6 +250,40 @@ const services = [
   { title: 'Automação com IA', description: 'Chatbots inteligentes, automação WhatsApp e fluxos 24h.', icon: 'mdi:robot', bgColor: 'bg-purple-50', iconColor: 'text-purple-600', path: '/servicos/automacao-ia' },
   { title: 'Sistemas Web', description: 'Plataformas customizadas, CRMs e ERPs sob medida.', icon: 'mdi:application-cog-outline', bgColor: 'bg-orange-50', iconColor: 'text-orange-600', path: '/servicos/criacao-sistemas' },
 ]
+
+const { injectJsonLd } = useSeo()
+const { trackToolUsage } = useAnalytics()
+const { execute: executeRecaptcha } = useRecaptcha()
+
+function setupToolTracking() {
+  const rawTitle = (route.meta.title as string) || 'Ferramenta Digital'
+  const description = (route.meta.description as string) || ''
+  const path = route.path
+  const toolTitle = rawTitle.split(' | ')[0]
+
+  injectJsonLd({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: toolTitle,
+    description,
+    url: 'https://www.3wonline.com.br' + path,
+    applicationCategory: 'UtilityApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'BRL' },
+    inLanguage: 'pt-BR',
+    provider: {
+      '@type': 'Organization',
+      name: '3W Online',
+      url: 'https://www.3wonline.com.br',
+    },
+  }, 'tool-webapp')
+
+  trackToolUsage(toolTitle, 'view')
+  executeRecaptcha('tool_view').catch(() => { /* silent background score */ })
+}
+
+onMounted(setupToolTracking)
+watch(() => route.path, setupToolTracking)
 
 const nextPromo = () => {
   currentPromo.value = (currentPromo.value + 1) % promos.length

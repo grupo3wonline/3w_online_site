@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Erro do Improviso</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Fases da Campanha</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Ganhos Reais</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Casos Reais</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Execução da Campanha</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Planejamento de Campanhas Promocionais e Lançamentos em Curitiba | 3W Online',
   description: 'Planejamento estratégico de campanhas comerciais, Black Friday, lançamentos e datas sazonais em Curitiba. Funil de antecipação e alta conversão.',
   path: '/servicos/planejamento-campanhas',
   keywords: 'planejamento de campanhas curitiba, lançamentos digitais, campanhas sazonais curitiba, estratégia de black friday',
+  serviceType: 'CampaignPlanning',
+  servicePrice: 'A partir de R$ 1.497',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'Vocês também criam as artes e vídeos da campanha?', answer: 'Sim! Entregamos o pacote completo: copywriting persuasivo, design dos banners, roteiros de vídeos para stories/reels e disparos de WhatsApp.' },
   { question: 'A 3W gerencia os anúncios durante o período da campanha?', answer: 'Com certeza! Nossos gestores de tráfego realizam acompanhamento em tempo real para otimizar os lances e garantir o menor custo por lead possível nos dias de pico.' },
   { question: 'Funciona para empresas de serviços e comércio físico local?', answer: 'Sim! Adaptamos a metodologia tanto para e-commerces quanto para lojas físicas, clínicas, escritórios e prestadores de serviços.' },
+  { question: 'Quanto custa planejar uma campanha publicitaria em Curitiba?', answer: 'O planejamento estrategico de campanhas comeca a partir de R$ 1.497, incluindo cronograma, criativos e gestao de trafego durante a campanha.' },
+  { question: 'Como a 3W Online maximiza os resultados nas datas sazonais?', answer: 'Usamos estrategia de listas VIP, remarketing inteligente, criacao de urgencia e segmentacao avancada para maximizar conversoes em Black Friday, Natal e outros eventos do calendario.' },
+  { question: 'Qual o diferencial do planejamento de campanhas da 3W Online?', answer: 'Aliamos criatividade com performance: cada campanha tem funil completo de antecipacao, aquecimento de audiencia, lancamento e recuperacao de carrinho, gerando o maximo de vendas no periodo.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

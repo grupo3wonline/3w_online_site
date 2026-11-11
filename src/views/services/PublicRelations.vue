@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">A Falta de Notoriedade</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Serviços de RP</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Vantagens</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Fluxo Editorial</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Assessoria de Imprensa e Relações Públicas em Curitiba | 3W Online',
   description: 'Assessoria de imprensa e relações públicas em Curitiba. Conquiste matérias espontâneas em grandes jornais e portais, media training e autoridade.',
   path: '/servicos/relacoes-publicas',
   keywords: 'assessoria de imprensa curitiba, relações públicas curitiba, assessoria de comunicação curitiba, media training curitiba',
+  serviceType: 'PublicRelations',
+  servicePrice: 'A partir de R$ 1.497/mes',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'A assessoria ajuda no ranqueamento SEO do meu site?', answer: 'Com certeza! Quando um grande portal de notícias menciona sua empresa e inclui um link para o seu site, o Google transfere altíssima autoridade de domínio, impulsionando suas posições orgânicas.' },
   { question: 'Vocês realizam treinamento antes das entrevistas?', answer: 'Sim! Nosso programa inclui sessões práticas de Media Training para preparar seus porta-vozes com as melhores técnicas de oratória e postura diante de repórteres.' },
   { question: 'Como acompanho as publicações que saíram sobre a minha empresa?', answer: 'Enviamos relatórios periódicos de clipping digital contendo os links das matérias, prints, dados de audiência estimada e cálculo de valor equivalente de mídia.' },
+  { question: 'Quanto custa contratar assessoria de imprensa em Curitiba?', answer: 'Os planos de assessoria de imprensa e relacoes publicas comecam a partir de R$ 1.497/mes, incluindo producao de pautas, gestao de relacionamento com veiculos e relatorios de clipping.' },
+  { question: 'Em quanto tempo consigo publicacoes na imprensa?', answer: 'As primeiras materias espontaneas geralmente aparecem entre 30 e 60 dias apos o inicio do trabalho de assessoria, dependendo da relevancia das pautas e dos veiculos alvo.' },
+  { question: 'Como a 3W Online diferencia sua assessoria de imprensa?', answer: 'Aliamos assessoria de imprensa tradicional com estrategia de SEO: cada publicacao em portais de grande audiencia gera links de autoridade que impulsionam o posicionamento organico do seu site no Google.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

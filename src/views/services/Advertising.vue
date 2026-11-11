@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">A Invisibilidade Publicitária</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Formatos Publicitários</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Vantagens</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo Criativo</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Agência de Publicidade e Propaganda em Curitiba | 3W Online',
   description: 'Agência de publicidade e propaganda em Curitiba: criação de conceitos criativos, comerciais em vídeo, campanhas de resposta direta e mídia OOH.',
   path: '/servicos/publicidade-propaganda',
   keywords: 'agência de publicidade curitiba, publicidade e propaganda curitiba, criação de campanhas publicitárias, agência de propaganda curitiba',
+  serviceType: 'Advertising',
+  servicePrice: 'A partir de R$ 1.997',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'Vocês realizam a gravação e edição dos comerciais em vídeo?', answer: 'Sim! Entregamos desde o roteiro publicitário e direção de cena até a edição final com locução profissional, trilhas sonoras licenciadas e efeitos visuais.' },
   { question: 'Como é calculada a verba de veiculação nos veículos de mídia?', answer: 'Apresentamos um plano detalhado de mídia com estimativas de alcance e custo por mil impactos (CPM), permitindo que você aprove os veículos antes de qualquer contratação.' },
   { question: 'Quanto tempo leva para produzir uma campanha publicitária?', answer: 'Campanhas completas com roteiros, vídeos e peças gráficas são produzidas e aprovadas em média de 15 a 20 dias úteis.' },
+  { question: 'Quanto custa contratar uma agencia de publicidade em Curitiba?', answer: 'Campanhas publicitarias completas (online e offline) comecam a partir de R$ 1.997, incluindo criacao de conceito, producao e estrategia de veiculacao.' },
+  { question: 'O que diferencia a 3W Online das demais agencias de publicidade?', answer: 'Integramos publicidade criativa com performance digital: unimos campanhas de branding com gestao de trafego pago para maximizar tanto reconhecimento de marca quanto conversoes mensuraveis.' },
+  { question: 'Como medir o retorno das campanhas publicitarias?', answer: 'Entregamos relatorios com metricas de alcance, frequencia, CPM e, para campanhas digitais, conversoes rastreadas via GA4 e GTM para visualizar o impacto direto nas vendas.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>

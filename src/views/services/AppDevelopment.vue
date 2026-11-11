@@ -69,7 +69,7 @@
     </section>
 
     <!-- 2. Segunda Dobra — O Problema (Identificação da Dor) -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">O Desafio Mobile</span>
@@ -118,7 +118,7 @@
     </section>
 
     <!-- 3. Terceira Dobra — A Solução & Mecanismo Único -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Recursos do App</span>
@@ -162,7 +162,7 @@
     </section>
 
     <!-- 4. Quarta Dobra — Benefícios Mensuráveis -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Vantagens</span>
@@ -195,7 +195,7 @@
     </section>
 
     <!-- 5. Quinta Dobra — Prova Social com Métricas Reais -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Depoimentos</span>
@@ -261,7 +261,7 @@
     </section>
 
     <!-- 6. Sexta Dobra — Como Funciona em 4 Passos -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Processo de Criação</span>
@@ -294,7 +294,7 @@
     </section>
 
     <!-- 7. Sétima Dobra — Diferenciais (Você vs Alternativas) -->
-    <section class="section-padding bg-slate-50 border-y border-gray-200/60">
+    <section class="section-padding bg-slate-50 dark:bg-slate-800 border-y border-gray-200/60">
       <div class="container max-w-4xl">
         <div class="text-center mb-12">
           <span class="section-label">Comparativo</span>
@@ -407,7 +407,7 @@
       </div>
     </section>
 
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
           <span class="section-label">Perguntas Decisivas</span>
@@ -460,12 +460,14 @@ import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
 applySeo({
   title: 'Desenvolvimento de Aplicativos Mobile iOS & Android em Curitiba | 3W Online',
   description: 'Desenvolvimento de apps mobile em Curitiba para iOS e Android. Notificações push, pagamentos integrados e publicação garantida nas lojas.',
   path: '/servicos/desenvolvimento-apps',
   keywords: 'desenvolvimento de aplicativos curitiba, criação de apps curitiba, aplicativo ios android curitiba, empresa de apps curitiba',
+  serviceType: 'MobileAppDevelopment',
+  servicePrice: 'A partir de R$ 7.997',
 })
 
 const simulatorRef = ref<HTMLElement>()
@@ -476,5 +478,10 @@ const faqs = [
   { question: 'A 3W Online cuida da aprovação e publicação nas lojas?', answer: 'Sim! Realizamos toda a homologação técnica, screenshots, configurações de privacidade e publicação direta na App Store e Google Play.' },
   { question: 'O código-fonte será 100% de propriedade da minha empresa?', answer: 'Com certeza! Ao final do projeto entregamos o repositório completo e todos os direitos autorais para sua empresa.' },
   { question: 'Quanto tempo leva para desenvolver um aplicativo?', answer: 'Aplicativos modulares costumam ser desenvolvidos e publicados entre 30 e 60 dias úteis com validações parciais contínuas.' },
+  { question: 'Quanto custa desenvolver um aplicativo mobile em Curitiba?', answer: 'Apps MVP comecam a partir de R$ 7.997. Apps com funcionalidades avancadas custam a partir de R$ 15.000. Desenvolvemos para iOS e Android simultaneamente.' },
+  { question: 'Quanto tempo leva para desenvolver um aplicativo?', answer: 'Um MVP e entregue em 60 a 90 dias. Um app completo com todas as funcionalidades leva de 3 a 6 meses.' },
+  { question: 'A 3W Online publica o app nas lojas Apple e Google?', answer: 'Sim! O processo de publicacao na App Store e Google Play esta incluido no desenvolvimento.' },
 ]
+
+injectJsonLd(faqSchema(faqs), 'schema-faq')
 </script>
