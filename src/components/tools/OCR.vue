@@ -52,7 +52,7 @@
           <!-- Upload Zone -->
           <div
             :class="['border-2 border-dashed rounded-2xl p-8 text-center transition-all', imagemCarregada ? 'border-purple-400 dark:border-purple-600' : 'border-gray-300 dark:border-slate-600 hover:border-purple-400 dark:hover:border-purple-600 hover:bg-purple-50/50 dark:hover:bg-purple-900/10 cursor-pointer']"
-            @click="!imagemCarregada && $refs.fileInput.click()"
+            @click="!imagemCarregada && fileInput?.click()"
             @dragover.prevent
             @drop.prevent="handleDrop"
           >
@@ -65,7 +65,7 @@
             <div v-else class="space-y-3">
               <img :src="imagemPreview" alt="Preview" class="max-h-48 mx-auto rounded-xl shadow-lg" />
               <div class="flex gap-3 justify-center">
-                <button @click.stop="$refs.fileInput.click()" class="copy-btn">
+                <button @click.stop="fileInput?.click()" class="copy-btn">
                   <i class="fas fa-exchange-alt mr-1"></i>Trocar
                 </button>
                 <button @click.stop="removerImagem" class="copy-btn !text-red-600 dark:!text-red-400">
@@ -167,7 +167,7 @@ import Swal from 'sweetalert2'
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 
-const fileInput          = ref(null)
+const fileInput          = ref<HTMLInputElement | null>(null)
 const imagemCarregada    = ref(false)
 const imagemPreview      = ref('')
 const idiomaSelecionado  = ref('por')
@@ -180,22 +180,26 @@ const confianca          = ref(0)
 const numeroCaracteres = computed(() => textoExtraido.value.length)
 const numeroPalavras   = computed(() => textoExtraido.value.trim().split(/\s+/).filter(p => p.length > 0).length)
 
-const handleFileUpload = (event) => {
-  const file = event.target.files[0]
+const handleFileUpload = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  carregarArquivo(input?.files?.[0])
+}
+
+const carregarArquivo = (file: File | undefined) => {
   if (!file) return
   if (file.size > 10 * 1024 * 1024) {
     Swal.fire({ icon: 'error', title: 'Arquivo muito grande', text: 'Máximo 10 MB', confirmButtonColor: '#7c3aed' })
     return
   }
   const reader = new FileReader()
-  reader.onload = (e) => { imagemPreview.value = e.target.result as string; imagemCarregada.value = true }
+  reader.onload = (e) => { imagemPreview.value = (e.target as FileReader).result as string; imagemCarregada.value = true }
   reader.readAsDataURL(file)
 }
 
 const handleDrop = (e: DragEvent) => {
   const file = e.dataTransfer?.files[0]
   if (!file || !file.type.startsWith('image/')) return
-  handleFileUpload({ target: { files: [file] } })
+  carregarArquivo(file)
 }
 
 const removerImagem = () => {

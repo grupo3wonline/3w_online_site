@@ -137,14 +137,16 @@ const tiposEndereco = [
   { id: 'bech32', nome: 'Bech32 (SegWit)',   prefixo: 'bc1' },
 ]
 
+interface EnderecoItem { endereco: string; tipo: string; chavePrivada: string }
+
 const tipoEndereco = ref('p2pkh')
 const quantidade   = ref(5)
-const enderecos    = ref([])
+const enderecos    = ref<EnderecoItem[]>([])
 
 const chars    = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 const charsHex = '0123456789abcdef'
 
-const rnd = (len, c) => Array.from({ length: len }, () => c[Math.floor(Math.random() * c.length)]).join('')
+const rnd = (len: number, c: string) => Array.from({ length: len }, () => c[Math.floor(Math.random() * c.length)]).join('')
 
 const gerarEnderecoP2PKH   = () => '1'    + rnd(33, chars)
 const gerarEnderecoP2SH    = () => '3'    + rnd(33, chars)
@@ -165,7 +167,7 @@ const gerar = () => {
   })
 }
 
-const copiar = async (texto) => {
+const copiar = async (texto: string) => {
   try {
     await navigator.clipboard.writeText(texto)
     Swal.fire({ title: 'Copiado!', icon: 'success', timer: 1200, showConfirmButton: false })

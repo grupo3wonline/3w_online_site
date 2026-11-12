@@ -195,9 +195,10 @@ const listaNomes       = ref('')
 const quantidadeNomes  = ref(1)
 const exibirResultado  = ref(false)
 const animando         = ref(false)
-const resultadoNumeros = ref([])
-const resultadoNomes   = ref([])
-const historico        = ref([])
+interface HistoricoItem { tipo: string; resultado: string; data: string }
+const resultadoNumeros = ref<number[]>([])
+const resultadoNomes   = ref<string[]>([])
+const historico        = ref<HistoricoItem[]>([])
 
 const nomesArray = computed(() =>
   listaNomes.value.split('\n').map(n => n.trim()).filter(n => n.length > 0)
@@ -247,7 +248,7 @@ async function sortear() {
   animando.value = false
 }
 
-function adicionarHistorico(item) {
+function adicionarHistorico(item: HistoricoItem) {
   historico.value.unshift(item)
   if (historico.value.length > 10) historico.value.pop()
 }

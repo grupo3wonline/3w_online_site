@@ -164,11 +164,16 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
 
+interface ResultadoHoraExtra {
+  valorHoraNormal: string; valorHora50: string; valorHora100: string
+  total50: string; total100: string; totalHorasExtras: string; totalHoras: string; salarioTotal: string
+}
+
 const salarioBruto  = ref(3000)
 const horasSemanais = ref(44)
 const horasExtras50 = ref(10)
 const horasExtras100 = ref(4)
-const resultado     = ref(null)
+const resultado     = ref<ResultadoHoraExtra | null>(null)
 
 function calcular() {
   const salario      = Number(salarioBruto.value)

@@ -168,10 +168,10 @@ const nomes    = ['João Silva', 'Maria Santos', 'Pedro Oliveira', 'Ana Costa', 
 const produtos = ['Notebook Dell', 'Mouse Logitech', 'Teclado Mecânico', 'Monitor LG', 'Webcam Full HD', 'Headset Gamer', 'Cadeira Gamer']
 const categorias = ['Eletrônicos', 'Informática', 'Periféricos', 'Móveis', 'Acessórios']
 
-const rnd    = (arr) => arr[Math.floor(Math.random() * arr.length)]
-const rndInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a
+const rnd    = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)]
+const rndInt = (a: number, b: number) => Math.floor(Math.random() * (b - a + 1)) + a
 
-const gerarPessoas = (qtd) => {
+const gerarPessoas   = (qtd: number) => {
   const d = delimitador.value
   let r = `Nome${d}Email${d}Idade${d}Cidade${d}Telefone${d}CPF\n`
   for (let i = 0; i < qtd; i++) {
@@ -185,7 +185,7 @@ const gerarPessoas = (qtd) => {
   return r
 }
 
-const gerarVendas = (qtd) => {
+const gerarVendas = (qtd: number) => {
   const d = delimitador.value
   let r = `Data${d}Produto${d}Quantidade${d}Valor Unitário${d}Total${d}Vendedor\n`
   for (let i = 0; i < qtd; i++) {
@@ -197,7 +197,7 @@ const gerarVendas = (qtd) => {
   return r
 }
 
-const gerarTransacoes = (qtd) => {
+const gerarTransacoes = (qtd: number) => {
   const d = delimitador.value
   let r = `ID${d}Data${d}Tipo${d}Valor${d}Status${d}Método\n`
   for (let i = 0; i < qtd; i++) {
@@ -207,7 +207,7 @@ const gerarTransacoes = (qtd) => {
   return r
 }
 
-const gerarEstoque = (qtd) => {
+const gerarEstoque = (qtd: number) => {
   const d = delimitador.value
   let r = `SKU${d}Produto${d}Categoria${d}Quantidade${d}Preço${d}Fornecedor\n`
   for (let i = 0; i < qtd; i++) {
@@ -219,7 +219,7 @@ const gerarEstoque = (qtd) => {
 const gerar = () => {
   const qtd = Number(quantidade.value)
   const geradores = { pessoas: gerarPessoas, vendas: gerarVendas, transacoes: gerarTransacoes, estoque: gerarEstoque }
-  csv.value = geradores[tipoDados.value](qtd)
+  csv.value = geradores[tipoDados.value as keyof typeof geradores](qtd)
   const linhas = csv.value.split('\n').filter(Boolean)
   linhasGeradas.value  = linhas.length - 1
   colunasGeradas.value = linhas[0]?.split(delimitador.value === '\t' ? '\t' : delimitador.value).length || 0

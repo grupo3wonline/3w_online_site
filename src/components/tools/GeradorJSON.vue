@@ -162,9 +162,9 @@ const produtos = ['Notebook', 'Mouse', 'Teclado', 'Monitor', 'Webcam', 'Headset'
 const categorias = ['Eletrônicos', 'Informática', 'Acessórios', 'Periféricos']
 const statusList = ['pendente', 'processando', 'enviado', 'entregue', 'cancelado']
 
-const rnd    = (arr) => arr[Math.floor(Math.random() * arr.length)]
-const rndInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a
-const talvezNull = (val) => incluirNulls.value && Math.random() < 0.2 ? null : val
+const rnd    = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)]
+const rndInt = (a: number, b: number) => Math.floor(Math.random() * (b - a + 1)) + a
+const talvezNull = (val: unknown) => incluirNulls.value && Math.random() < 0.2 ? null : val
 const gerarId    = () => Math.random().toString(36).substring(2, 15)
 
 const gerarUsuario = () => ({
@@ -207,7 +207,7 @@ const gerar = () => {
     return
   }
   const geradores = { usuario: gerarUsuario, produto: gerarProduto, empresa: gerarEmpresa, pedido: gerarPedido }
-  const dados = Array.from({ length: qtd }, () => geradores[templateSelecionado.value]())
+  const dados = Array.from({ length: qtd }, () => geradores[templateSelecionado.value as keyof typeof geradores]())
   jsonGerado.value = prettyPrint.value ? JSON.stringify(dados, null, 2) : JSON.stringify(dados)
 }
 
@@ -220,7 +220,7 @@ const copiar = async () => {
   }
 }
 
-const copiarSnippet = async (linguagem) => {
+const copiarSnippet = async (linguagem: string) => {
   const codigo = linguagem === 'js'
     ? `const data = JSON.parse(\`${jsonGerado.value}\`);`
     : `import json\n\ndata = json.loads('''${jsonGerado.value}''')`

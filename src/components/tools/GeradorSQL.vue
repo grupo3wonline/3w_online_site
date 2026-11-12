@@ -145,8 +145,8 @@ const categorias = ['Eletrônicos','Informática','Periféricos','Móveis','Aces
 const statusList = ['pendente','processando','enviado','entregue','cancelado']
 const cidades    = ['São Paulo','Rio de Janeiro','Belo Horizonte','Curitiba','Porto Alegre']
 
-const rnd  = (arr) => arr[Math.floor(Math.random() * arr.length)]
-const rndN = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+const rnd  = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)]
+const rndN = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min
 const rndDate = () => `2024-${String(rndN(1,12)).padStart(2,'0')}-${String(rndN(1,28)).padStart(2,'0')}`
 
 const gerarDados = (qtd: number) => {

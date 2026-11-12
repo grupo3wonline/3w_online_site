@@ -79,6 +79,7 @@ function fmtN(v: number) { return v.toLocaleString('pt-BR') }
         <label class="text-blue-200 text-sm font-medium block mb-2 flex items-center gap-2">
           <Icon icon="mdi:account-multiple-outline" class="w-4 h-4 text-indigo-400" />
           Número de Seguidores / Audiência
+        </label>
         <input v-model="followers" type="text" inputmode="numeric" autocomplete="off" placeholder="Ex: 50000"
           class="w-full input-aurora" />
         <p class="text-blue-300/60 text-xs mt-1">Número total de seguidores/visitantes atingidos</p>

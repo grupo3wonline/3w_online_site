@@ -194,9 +194,15 @@ const potenciaSistema  = ref(5)
 const custoInstalacao  = ref(25000)
 const taxaAumento      = ref(5)
 const degradacao       = ref(0.5)
-const resultado        = ref(null)
+const resultado        = ref<ResultadoEnergiaSolar | null>(null)
 
 const geracaoMensal = computed(() => (Number(potenciaSistema.value) * 130).toFixed(0))
+
+interface ResultadoEnergiaSolar {
+  paybackAnos: string; paybackMeses: number; economia5Anos: string; economia10Anos: string
+  economia25Anos: string; economiaAno1: string; economiaAno10: string; economiaAno25: string
+  roi: string; co2Evitado: string; arvores: number; energiaTotal: string
+}
 
 const economiaMensal = computed(() => {
   const geracao = Number(geracaoMensal.value)

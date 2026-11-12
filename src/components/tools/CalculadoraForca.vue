@@ -161,12 +161,12 @@ const calcular = () => {
 
 const getTitulo = () => {
   const titulos = { forca: 'Força', massa: 'Massa', aceleracao: 'Aceleração' }
-  return titulos[modoCalculo.value]
+  return titulos[modoCalculo.value as keyof typeof titulos]
 }
 
 const getUnidade = () => {
   const unids = { forca: 'N', massa: 'kg', aceleracao: 'm/s²' }
-  return unids[modoCalculo.value]
+  return unids[modoCalculo.value as keyof typeof unids]
 }
 </script>
 

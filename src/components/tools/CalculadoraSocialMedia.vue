@@ -203,8 +203,9 @@ const seguidoresAnteriores = ref(10000)
 const seguidoresAtuais     = ref(12000)
 const periodoDias          = ref(30)
 
-const resultado = ref(null)
+interface ResultadoSocialMedia { titulo: string; valor: string; descricao: string }
 
+const resultado       = ref<ResultadoSocialMedia | null>(null)
 const totalInteracoes = computed(() => Number(curtidas.value) + Number(comentarios.value) + Number(compartilhamentos.value))
 const alcance         = computed(() => Math.round(Number(seguidores.value) * 0.3).toLocaleString('pt-BR'))
 const ganhoSeguidores = computed(() => Number(seguidoresAtuais.value) - Number(seguidoresAnteriores.value))

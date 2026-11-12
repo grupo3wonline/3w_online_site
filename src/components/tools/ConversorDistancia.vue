@@ -134,9 +134,11 @@ import { ref } from 'vue'
 
 const unidadeOrigem  = ref('m')
 const unidadeDestino = ref('ft')
+interface ConversaoItem { unidade: string; nome: string; valor: string }
+
 const valorOrigem    = ref(1)
 const valorDestino   = ref('0')
-const conversoes     = ref([])
+const conversoes     = ref<ConversaoItem[]>([])
 
 const unidades = [
   { codigo: 'mm',  nome: 'Milímetro (mm)',        paraMetros: 0.001    },
@@ -157,12 +159,12 @@ const conversoesRapidas = [
   { de: 'ft', para: 'm'   },
 ]
 
-const fmtValor = (v) => {
+const fmtValor = (v: number) => {
   if (Math.abs(v) >= 1e6 || (Math.abs(v) < 0.001 && v !== 0)) return v.toExponential(4)
   return v.toPrecision(6).replace(/\.?0+$/, '')
 }
 
-const calcularValor = (valor, de, para) => {
+const calcularValor = (valor: number, de: string, para: string) => {
   const uDe   = unidades.find(u => u.codigo === de)
   const uPara = unidades.find(u => u.codigo === para)
   if (!uDe || !uPara) return '0'
@@ -186,7 +188,7 @@ const inverter = () => {
   converter()
 }
 
-const usarConversao = (c) => {
+const usarConversao = (c: { de: string; para: string }) => {
   unidadeOrigem.value  = c.de
   unidadeDestino.value = c.para
   converter()

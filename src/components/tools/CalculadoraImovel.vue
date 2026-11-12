@@ -143,10 +143,12 @@ import Swal from 'sweetalert2'
 
 const sistema = ref('price')
 const valorImovel = ref(300000)
-const entrada = ref(60000)
-const taxaJuros = ref(10.5)
-const prazoAnos = ref(20)
-const resultado = ref(null)
+interface ResultadoImovel { valorFinanciado: string; primeiraParcela: string; ultimaParcela: string; totalPago: string; totalJuros: string }
+
+const entrada    = ref(60000)
+const taxaJuros  = ref(10.5)
+const prazoAnos  = ref(20)
+const resultado  = ref<ResultadoImovel | null>(null)
 
 const calcular = () => {
   const imovel = Number(valorImovel.value)

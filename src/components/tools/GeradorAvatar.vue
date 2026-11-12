@@ -188,7 +188,7 @@ const nome              = ref('')
 const tamanho           = ref('256')
 const avatarGerado      = ref(false)
 const avatarUrl         = ref('')
-const variacoes         = ref([])
+const variacoes = ref<string[]>([])
 
 const estiloNome = computed(() => estilos.find(e => e.id === estiloSelecionado.value)?.nome || '')
 
@@ -196,7 +196,7 @@ const gerarSeed = () =>
   nome.value.trim() ? nome.value.trim().toLowerCase().replace(/\s+/g, '-')
                      : Math.random().toString(36).substring(2, 15)
 
-const gerarURL = (seed, estilo = estiloSelecionado.value) => {
+const gerarURL = (seed: string, estilo = estiloSelecionado.value) => {
   const sz = tamanho.value
   switch (estilo) {
     case 'avataaars': return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&size=${sz}`
@@ -217,7 +217,7 @@ const gerarVariacoes = () => {
   variacoes.value = Array.from({ length: 6 }, () => gerarURL(Math.random().toString(36).substring(2, 15)))
 }
 
-const selecionarVariacao = (url) => {
+const selecionarVariacao = (url: string) => {
   avatarUrl.value = url
 }
 

@@ -134,10 +134,12 @@ const bases = [
   { value: 'hexadecimal', label: 'Hexadecimal', desc: 'Base 16' },
 ]
 
+interface BinarioConversao { nome: string; descricao: string; valor: string }
+
 const baseOrigem = ref('decimal')
 const input      = ref('255')
-const resultado  = ref(null)
-const conversoes = ref([])
+const resultado  = ref<number | null>(null)
+const conversoes = ref<BinarioConversao[]>([])
 
 const getPlaceholder = () => ({
   decimal: '255', binario: '11111111', octal: '377', hexadecimal: 'FF',
@@ -181,7 +183,7 @@ const converter = () => {
   } catch (e) {
     resultado.value = null
     conversoes.value = []
-    Swal.fire({ title: 'Erro de Conversão', text: e.message, icon: 'error', confirmButtonColor: '#2563eb' })
+    Swal.fire({ title: 'Erro de Conversão', text: (e as Error).message, icon: 'error', confirmButtonColor: '#2563eb' })
   }
 }
 
@@ -191,7 +193,7 @@ const limpar = () => {
   conversoes.value = []
 }
 
-const copiar = async (texto) => {
+const copiar = async (texto: string) => {
   try {
     await navigator.clipboard.writeText(texto)
     Swal.fire({ title: 'Copiado!', icon: 'success', timer: 1500, showConfirmButton: false })

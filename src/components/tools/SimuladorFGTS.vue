@@ -152,7 +152,12 @@ import BaseInput from '@/components/tools/common/BaseInput.vue'
 const salarioBruto     = ref(3000)
 const mesesTrabalhados = ref(24)
 const saldoAtual       = ref(0)
-const resultado        = ref(null)
+const resultado        = ref<ResultadoFGTS | null>(null)
+
+interface ResultadoFGTS {
+  depositosMensais: string; totalDepositado: string; rendimentos: string
+  saldoProjetado: string; multaFGTS: string; totalDemissao: string
+}
 
 function calcular() {
   const salario = Number(salarioBruto.value)

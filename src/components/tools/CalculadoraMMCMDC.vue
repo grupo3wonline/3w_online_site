@@ -120,9 +120,10 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref, computed } from 'vue'
 
 const numerosTexto = ref('12, 18, 24')
-const fatoracao = ref([])
-const divisoresMMC = ref([])
-const divisoresMDC = ref([])
+interface FatoracaoLinha { numeros: number[]; divisor: number }
+const fatoracao    = ref<FatoracaoLinha[]>([])
+const divisoresMMC = ref<number[]>([])
+const divisoresMDC = ref<number[]>([])
 
 const numeros = computed(() =>
   numerosTexto.value
@@ -131,15 +132,13 @@ const numeros = computed(() =>
     .filter(n => !isNaN(n) && n > 0)
 )
 
-const mdc2 = (a, b) => {
+const mdc2 = (a: number, b: number): number => {
   while (b) { const t = b; b = a % b; a = t }
   return a
 }
-
-const mmc2 = (a, b) => (a * b) / mdc2(a, b)
-
-const calcularMDC = (nums) => nums.reduce((acc, num) => mdc2(acc, num))
-const calcularMMC = (nums) => nums.reduce((acc, num) => mmc2(acc, num))
+const mmc2 = (a: number, b: number) => (a * b) / mdc2(a, b)
+const calcularMDC = (nums: number[]) => nums.reduce((acc, num) => mdc2(acc, num))
+const calcularMMC = (nums: number[]) => nums.reduce((acc, num) => mmc2(acc, num))
 
 const resultadoMMC = computed(() => numeros.value.length < 2 ? 0 : calcularMMC(numeros.value))
 const resultadoMDC = computed(() => numeros.value.length < 2 ? 0 : calcularMDC(numeros.value))

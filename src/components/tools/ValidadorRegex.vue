@@ -43,7 +43,7 @@
             <div class="flex flex-wrap gap-4">
               <label v-for="f in flagsList" :key="f.key" class="flex items-center gap-2 cursor-pointer select-none">
                 <input
-                  v-model="flags[f.key]"
+                  v-model="flags[f.key as keyof typeof flags]"
                   type="checkbox"
                   class="checkbox-aurora"
                   @change="testar"

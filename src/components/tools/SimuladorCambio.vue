@@ -175,7 +175,7 @@ const tiposOp = [
 ]
 
 const taxasIOF = { cartao: 5.38, dinheiro: 1.1, transferencia: 0.38 }
-const taxaIOF  = computed(() => taxasIOF[tipoOperacao.value])
+const taxaIOF  = computed(() => taxasIOF[tipoOperacao.value as keyof typeof taxasIOF])
 const cotacaoFinal = computed(() => {
   const spread = Number(taxaSpread.value) / 100
   return (Number(cotacao.value) * (1 + spread)).toFixed(4)
@@ -202,7 +202,7 @@ const calcular = () => {
     const totM   = comSpread + comSpread * iofM
     const diff   = Math.abs(totM - total)
     const nomes  = { cartao: 'Cartão de Crédito/Débito', dinheiro: 'Dinheiro em Espécie', transferencia: 'Transferência (Wire)' }
-    return { tipo, nome: nomes[tipo], iof: iofPct, total: totM.toFixed(2), diferenca: diff.toFixed(2) }
+    return { tipo, nome: nomes[tipo as keyof typeof nomes], iof: iofPct, total: totM.toFixed(2), diferenca: diff.toFixed(2) }
   })
 }
 </script>

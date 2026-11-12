@@ -174,33 +174,33 @@ const input  = ref(`nome,idade,cidade,profissao\nJoão Silva,30,São Paulo,Desen
 const output = ref('')
 const erro   = ref('')
 
-const csvToJSON = (csv) => {
+const csvToJSON = (csv: string) => {
   const linhas = csv.trim().split('\n')
   if (!linhas.length) return '[]'
   const del = delimitador.value
   let headers = []
   let dados   = []
   if (primeiraLinhaHeader.value) {
-    headers = linhas[0].split(del).map(h => h.trim())
+    headers = linhas[0].split(del).map((h: string) => h.trim())
     dados   = linhas.slice(1)
   } else {
     const cols = linhas[0].split(del)
-    headers = cols.map((_, i) => `campo${i + 1}`)
+    headers = cols.map((_: string, i: number) => `campo${i + 1}`)
     dados   = linhas
   }
-  const resultado = dados.filter(l => l.trim()).map(linha => {
+  const resultado = dados.filter((l: string) => l.trim()).map((linha: string) => {
     const valores = linha.split(del)
-    const obj = {}
-    headers.forEach((h, i) => {
+    const obj: Record<string, string | number> = {}
+    headers.forEach((h: string, i: number) => {
       const v = (valores[i] ?? '').trim()
-      obj[h] = isNaN(v) || v === '' ? v : Number(v)
+      obj[h] = isNaN(Number(v)) || v === '' ? v : Number(v)
     })
     return obj
   })
   return JSON.stringify(resultado, null, 2)
 }
 
-const jsonToCSV = (json) => {
+const jsonToCSV = (json: string) => {
   const arr = JSON.parse(json)
   if (!Array.isArray(arr) || !arr.length) throw new Error('JSON deve ser um array de objetos')
   const headers = Object.keys(arr[0])
@@ -222,12 +222,12 @@ const converter = () => {
   try {
     output.value = modo.value === 'csv-json' ? csvToJSON(input.value) : jsonToCSV(input.value)
   } catch (e) {
-    erro.value = e.message
+    erro.value = (e as Error).message
     output.value = ''
   }
 }
 
-const contarLinhas  = (texto) => texto.trim().split('\n').filter(l => l).length
+const contarLinhas  = (texto: string) => texto.trim().split('\n').filter((l: string) => l).length
 const contarColunas = () => {
   if (!input.value.trim()) return 0
   try {

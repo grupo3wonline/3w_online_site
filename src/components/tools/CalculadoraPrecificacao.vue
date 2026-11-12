@@ -229,8 +229,13 @@ const impostoCusto   = ref(15)
 const precoMercado   = ref(100)
 const posicionamento = ref('igual')
 const valorPercebido = ref(120)
+interface ResultadoPrecificacao {
+  precoFinal: number; lucro: number; margemReal: number; markup: number; descontoMax: number
+  breakdown: { label: string; valor: string; cls?: string }[]
+}
+
 const descontoValor  = ref(10)
-const resultado      = ref(null)
+const resultado      = ref<ResultadoPrecificacao | null>(null)
 
 const fmt = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
@@ -261,11 +266,11 @@ const calcular = () => {
   } else if (estrategia.value === 'competitiva') {
     const pmkt = Number(precoMercado.value)
     if (!pmkt) { Swal.fire({ icon: 'warning', title: 'Informe o preço de mercado', confirmButtonColor: '#2563eb' }); return }
-    const fator = 1 + posicMap[posicionamento.value]
+const fator = 1 + posicMap[posicionamento.value as keyof typeof posicMap]
     precoFinal  = pmkt * fator
     breakdown = [
       { label: 'Preço de mercado',           valor: fmt(pmkt) },
-      { label: `Ajuste (${(posicMap[posicionamento.value]*100).toFixed(0)}%)`, valor: fmt(pmkt * posicMap[posicionamento.value]) },
+      { label: `Ajuste (${(posicMap[posicionamento.value as keyof typeof posicMap]*100).toFixed(0)}%)`, valor: fmt(pmkt * posicMap[posicionamento.value as keyof typeof posicMap]) },
       { label: 'Custo base',                 valor: fmt(custoV) },
       { label: 'Preço posicionado',          valor: fmt(precoFinal), cls: 'text-pink-600 dark:text-pink-400' },
     ]

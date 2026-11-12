@@ -151,7 +151,7 @@ const largura            = ref(2)
 const altura             = ref(100)
 const mostrarTexto       = ref(true)
 const codigoGerado       = ref(false)
-const canvasRef          = ref(null)
+const canvasRef          = ref<HTMLCanvasElement | null>(null)
 const dadosValidos       = ref(true)
 const mensagemValidacao  = ref('')
 
@@ -184,7 +184,7 @@ const validarDados = () => {
     ITF14: { re: /^\d{14}$/, msg: 'ITF-14 deve ter exatamente 14 dígitos' },
     CODE39:{ re: /^[0-9A-Z\-. $/+%]+$/, msg: 'Code 39 aceita números, letras maiúsculas e símbolos' },
   }
-  const regra = regras[formatoSelecionado.value]
+  const regra = regras[formatoSelecionado.value as keyof typeof regras]
   if (regra && !regra.re.test(v)) {
     mensagemValidacao.value = regra.msg; dadosValidos.value = false
   } else {
@@ -193,9 +193,9 @@ const validarDados = () => {
 }
 
 const gerarAleatorio = () => {
-  const rnd = (n) => Array.from({ length: n }, () => Math.floor(Math.random() * 10)).join('')
+  const rnd = (n: number) => Array.from({ length: n }, () => Math.floor(Math.random() * 10)).join('')
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  const rndChars = (n) => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
+  const rndChars = (n: number) => Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join('')
   dados.value = {
     EAN13:   rnd(13), EAN8: rnd(8), UPC: rnd(12), ITF14: rnd(14),
     CODE39:  rndChars(8), CODE128: `PROD${rnd(5)}`,
@@ -207,6 +207,7 @@ const desenharCodigoBarras = () => {
   const canvas = canvasRef.value
   if (!canvas) return
   const ctx       = canvas.getContext('2d')
+  if (!ctx) return
   const barW      = Number(largura.value)
   const barH      = Number(altura.value)
   const bits      = dados.value.split('').map(c => c.charCodeAt(0).toString(2).padStart(8, '0')).join('')
@@ -246,7 +247,8 @@ const gerar = () => {
 const baixarPNG = () => {
   const canvas = canvasRef.value
   if (!canvas) return
-  canvas.toBlob(blob => {
+  canvas.toBlob((blob: Blob | null) => {
+    if (!blob) return
     const url  = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url; link.download = `barcode-${formatoSelecionado.value}-${Date.now()}.png`; link.click()

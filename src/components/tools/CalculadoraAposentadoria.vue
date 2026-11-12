@@ -109,10 +109,12 @@ import Swal from 'sweetalert2'
 const idadeAtual = ref(30)
 const idadeAposentadoria = ref(60)
 const gastoMensal = ref(5000)
+interface ResultadoAposentadoria { patrimonioNecessario: string; aporteMensal: string; totalAportado: string }
+
 const expectativaVida = ref(85)
 const patrimonioAtual = ref(50000)
-const taxaRetorno = ref(8)
-const resultado = ref(null)
+const taxaRetorno     = ref(8)
+const resultado       = ref<ResultadoAposentadoria | null>(null)
 
 const anosAteAposentadoria = computed(() => Number(idadeAposentadoria.value) - Number(idadeAtual.value))
 const anosAposentado = computed(() => Number(expectativaVida.value) - Number(idadeAposentadoria.value))

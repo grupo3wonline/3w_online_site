@@ -168,8 +168,13 @@ import BaseInput from '@/components/tools/common/BaseInput.vue'
 const valorInicial = ref(5000)
 const aporteMensal = ref(500)
 const meses        = ref(24)
+interface ResultadoPoupanca {
+  saldoFinal: string; totalInvestido: string; totalAportes: string
+  totalJuros: string; rentabilidadePercentual: string; taxaMensal: string
+}
+
 const taxaSelic    = ref(11.25)
-const resultado    = ref(null)
+const resultado    = ref<ResultadoPoupanca | null>(null)
 
 function calcular() {
   const inicial       = Number(valorInicial.value)

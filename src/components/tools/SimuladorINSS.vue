@@ -187,13 +187,18 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
 
+interface ResultadoINSS {
+  titulo: string; valor: string; subtitulo: string
+  detalhes?: { label: string; descricao: string; valor: string }[]; infoTitulo: string
+}
+
 const tipoCalculo       = ref('contribuicao')
 const salarioBruto      = ref(3000)
 const tipoSegurado      = ref('empregado')
 const idadeAtual        = ref(35)
 const tempoContribuicao = ref(15)
 const mediaSalarial     = ref(3500)
-const resultado         = ref(null)
+const resultado         = ref<ResultadoINSS | null>(null)
 
 const faixasINSS = computed(() => {
   const sal = Number(salarioBruto.value)

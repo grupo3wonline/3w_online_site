@@ -201,8 +201,13 @@ const custoEmbalagem = ref(5)
 const outrosCustos  = ref(5)
 const margemLucro   = ref(40)
 const impostos      = ref(15)
+interface ResultadoPrecoProduto {
+  custoTotal: string; valorMargem: string; valorImpostos: string; valorComissao: string
+  precoVenda: string; lucroUnitario: string; margemRealPct: number; markup: number; precoAtacado: number; descontoMax: number
+}
+
 const comissaoVenda = ref(10)
-const resultado     = ref(null)
+const resultado     = ref<ResultadoPrecoProduto | null>(null)
 
 const calcular = () => {
   const custo = Number(custoProduto.value)

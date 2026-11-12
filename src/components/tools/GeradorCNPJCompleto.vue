@@ -144,8 +144,13 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 
+interface EmpresaItem {
+  razaoSocial: string; nomeFantasia: string; cnpj: string
+  dataAbertura: string; telefone: string; email: string; endereco: string
+}
+
 const quantidade = ref(5)
-const empresas   = ref([])
+const empresas   = ref<EmpresaItem[]>([])
 
 const nomesPrefixo = ['Tech', 'Digital', 'Smart', 'Global', 'Prime', 'Mega', 'Super', 'Ultra', 'Inova', 'Multi']
 const nomesSufixo  = ['Solutions', 'Systems', 'Services', 'Group', 'Corp', 'Ltda', 'Tecnologia', 'Comércio', 'Indústria', 'Distribuidora']
@@ -153,8 +158,8 @@ const ruas         = ['Rua das Flores', 'Av. Paulista', 'Rua Oscar Freire', 'Av.
 const cidades      = ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Curitiba', 'Porto Alegre', 'Brasília', 'Salvador', 'Fortaleza']
 const ddds         = ['11', '21', '31', '41', '51', '61', '71', '85']
 
-const rnd = (arr) => arr[Math.floor(Math.random() * arr.length)]
-const rndInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+const rnd = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)]
+const rndInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min
 
 const gerarCNPJ = () => {
   const n = Array.from({ length: 8 }, () => rndInt(0, 9))
@@ -196,7 +201,7 @@ const gerar = () => {
   })
 }
 
-const copiar = async (empresa) => {
+const copiar = async (empresa: EmpresaItem) => {
   const texto = `Razão Social: ${empresa.razaoSocial}\nNome Fantasia: ${empresa.nomeFantasia}\nCNPJ: ${empresa.cnpj}\nAbertura: ${empresa.dataAbertura}\nTelefone: ${empresa.telefone}\nEmail: ${empresa.email}\nEndereço: ${empresa.endereco}`
   try {
     await navigator.clipboard.writeText(texto)

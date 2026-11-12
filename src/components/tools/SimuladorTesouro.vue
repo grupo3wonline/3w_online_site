@@ -193,6 +193,11 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
 
+interface ResultadoTesouro {
+  valorBruto: string; valorLiquido: string; totalInvestido: string; rendimentoBruto: string
+  impostoRenda: string; aliquotaIR: string; rentabilidadeLiquida: string; taxaEfetiva: string
+}
+
 const tipoTitulo    = ref('selic')
 const valorInicial  = ref(1000)
 const aportesMensais = ref(500)
@@ -201,7 +206,7 @@ const taxaAnual     = ref(12)
 const taxaSelic     = ref(13.25)
 const taxaIPCA      = ref(4.5)
 const taxaJuros     = ref(6.0)
-const resultado     = ref(null)
+const resultado     = ref<ResultadoTesouro | null>(null)
 
 const tiposTitulo = [
   { value: 'selic',     label: 'Tesouro Selic', desc: '100% da Selic', icon: 'fa-percent' },

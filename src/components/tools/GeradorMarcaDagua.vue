@@ -183,16 +183,18 @@ const tamanhoFonte = ref(32)
 const opacidade    = ref(50)
 const diagonal     = ref(false)
 const resultadoSrc = ref('')
-const canvasRef    = ref(null)
+const canvasRef    = ref<HTMLCanvasElement | null>(null)
+const imagemOriginal = ref<HTMLImageElement | null>(null)
 
-const imagemOriginal = ref(null)
-
-const carregarImagem = (e) => {
-  const file = e.target.files[0]
+const carregarImagem = (e: Event) => {
+  const input = e.target as HTMLInputElement
+  const file = input?.files?.[0]
   if (!file) return
   nomeArquivo.value = file.name
   const reader = new FileReader()
-  reader.onload = (ev) => { imagemSrc.value = ev.target.result }
+  reader.onload = (ev) => {
+    imagemSrc.value = (ev.target as FileReader).result as string
+  }
   reader.readAsDataURL(file)
 }
 
@@ -200,11 +202,13 @@ const aplicarMarca = () => {
   if (!imagemSrc.value) return
 
   const canvas = canvasRef.value
+  if (!canvas) return
   const img    = new Image()
   img.onload = () => {
     canvas.width  = img.width
     canvas.height = img.height
     const ctx     = canvas.getContext('2d')
+    if (!ctx) return
 
     // Desenhar imagem original
     ctx.drawImage(img, 0, 0)

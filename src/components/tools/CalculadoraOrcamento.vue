@@ -236,13 +236,19 @@ const itens = ref([
   { descricao: 'Item 2', quantidade: 2, valorUnitario: 50 },
 ])
 
-const resultado = ref(null)
+interface ResultadoOrcamento {
+  subtotal: string; valorDesconto: string; valorMargem: string; valorImpostos: string
+  total: string; itensCount: number; quantidadeTotal: number; ticketMedio: string; margemReal: string
+  itensDetalhados: { descricao: string; quantidade: number; valorUnitario: string; subtotal: string }[]
+}
+
+const resultado = ref<ResultadoOrcamento | null>(null)
 
 const adicionarItem = () => {
   itens.value.push({ descricao: `Item ${itens.value.length + 1}`, quantidade: 1, valorUnitario: 0 })
 }
 
-const removerItem = (index) => {
+const removerItem = (index: number) => {
   if (itens.value.length > 1) {
     itens.value.splice(index, 1)
   } else {

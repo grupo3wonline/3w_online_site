@@ -193,8 +193,12 @@ const funcionalidades = ref<Record<string, boolean>>({
   areaMembro: false, pagamento: false, chat: false, api: false,
 })
 
-const resultado = ref(null)
+interface ResultadoSite {
+  valorTotal: string; prazoDesenvolvimento: number; horasEstimadas: number; valorHora: string
+  manutencaoMensal: string; complexidade: string; dica: string; breakdown: { label: string; valor: string }[]
+}
 
+const resultado = ref<ResultadoSite | null>(null)
 const valoresTipo    = { landing: 1500, institucional: 3000, portfolio: 2500, ecommerce: 8000, blog: 2000, webapp: 12000 }
 const valoresDesign  = { basico: 0, intermediario: 1000, avancado: 2500, personalizado: 5000 }
 const valoresFunc    = { formulario: 300, blog: 1500, galeria: 500, multiidioma: 2000, areaMembro: 3000, pagamento: 2500, chat: 800, api: 2000 }
@@ -202,12 +206,12 @@ const labelsDesign   = { basico: 'Básico', intermediario: 'Intermediário', ava
 const labelsTipo     = { landing: 'Landing Page', institucional: 'Site Institucional', portfolio: 'Portfólio', ecommerce: 'E-commerce', blog: 'Blog', webapp: 'Aplicação Web' }
 
 const calcular = () => {
-  const valorBase   = valoresTipo[tipoSite.value]
+  const valorBase   = valoresTipo[tipoSite.value as keyof typeof valoresTipo]
   const valorPaginas = Math.max(0, (Number(numeroPaginas.value) - 1)) * 300
-  const valorDesign = valoresDesign[complexidadeDesign.value]
+  const valorDesign = valoresDesign[complexidadeDesign.value as keyof typeof valoresDesign]
 
   let valorFunc = 0
-  Object.keys(funcionalidades.value).forEach(k => { if (funcionalidades.value[k]) valorFunc += valoresFunc[k] })
+  Object.keys(funcionalidades.value).forEach(k => { if (funcionalidades.value[k as keyof typeof funcionalidades.value]) valorFunc += valoresFunc[k as keyof typeof valoresFunc] })
 
   const multUrgencia = Number(prazo.value) < 15 ? 1.5 : Number(prazo.value) < 30 ? 1.2 : 1
   const subtotal     = valorBase + valorPaginas + valorFunc + valorDesign
@@ -235,10 +239,10 @@ const calcular = () => {
     complexidade: `${horasEstimadas}h de desenvolvimento estimadas`,
     dica,
     breakdown: [
-      { label: `Tipo (${labelsTipo[tipoSite.value]})`,       valor: valorBase.toLocaleString('pt-BR') },
+      { label: `Tipo (${labelsTipo[tipoSite.value as keyof typeof labelsTipo]})`,       valor: valorBase.toLocaleString('pt-BR') },
       { label: `Páginas (${numeroPaginas.value}pgs)`,        valor: valorPaginas.toLocaleString('pt-BR') },
       { label: `Funcionalidades (${funcCount})`,             valor: valorFunc.toLocaleString('pt-BR') },
-      { label: `Design (${labelsDesign[complexidadeDesign.value]})`, valor: valorDesign.toLocaleString('pt-BR') },
+      { label: `Design (${labelsDesign[complexidadeDesign.value as keyof typeof labelsDesign]})`, valor: valorDesign.toLocaleString('pt-BR') },
       { label: `Urgência (${prazo.value} dias)`,             valor: Math.round(valorUrgencia).toLocaleString('pt-BR') },
     ],
   }

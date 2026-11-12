@@ -215,7 +215,7 @@ const maxPalavras         = ref(50)
 const maxLinhas           = ref(10)
 const numeroParts         = ref(3)
 const manterPalavrasInteiras = ref(true)
-const partes              = ref([])
+const partes              = ref<string[]>([])
 
 const palavras = computed(() => textoEntrada.value.trim() ? textoEntrada.value.trim().split(/\s+/).length : 0)
 const linhas   = computed(() => textoEntrada.value ? textoEntrada.value.split('\n').length : 0)
@@ -289,7 +289,7 @@ const dividir = () => {
   }
 }
 
-const copiarParte = async (parte, index) => {
+const copiarParte = async (parte: string, index: number) => {
   try {
     await navigator.clipboard.writeText(parte)
     Swal.fire({ icon: 'success', title: `Parte ${index + 1} copiada`, timer: 1200, showConfirmButton: false })

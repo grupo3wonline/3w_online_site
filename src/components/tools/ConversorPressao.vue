@@ -110,7 +110,7 @@
 
         <div class="grid grid-cols-2 gap-3 mt-4">
           <div class="metric-glass ring-1 ring-teal-100 dark:ring-teal-900">
-            <div class="metric-glass-value text-teal-600 dark:text-teal-400">{{ valorEntrada ? (Number(valorEntrada) * unidades.find(u=>u.id===unidadeOrigem)?.paraPascal).toFixed(2) : '—' }}</div>
+            <div class="metric-glass-value text-teal-600 dark:text-teal-400">{{ valorEntrada ? (Number(valorEntrada) * (unidades.find(u=>u.id===unidadeOrigem)?.paraPascal ?? 0)).toFixed(2) : '—' }}</div>
             <div class="metric-glass-label">Em Pascal (Pa)</div>
           </div>
           <div class="metric-glass ring-1 ring-cyan-100 dark:ring-cyan-900">
@@ -148,7 +148,7 @@ const unidadeOrigem  = ref('atm')
 const unidadeDestino = ref('psi')
 const resultado      = ref(0)
 
-const converterPara = (unidadeId) => {
+const converterPara = (unidadeId: string) => {
   const origem  = unidades.find(u => u.id === unidadeOrigem.value)
   const destino = unidades.find(u => u.id === unidadeId)
   if (!origem || !destino) return 0

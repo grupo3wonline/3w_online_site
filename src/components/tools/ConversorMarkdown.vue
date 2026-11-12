@@ -161,7 +161,7 @@ const visualizacao  = ref('preview')
 
 const contarPalavras = () => markdown.value.trim().split(/\s+/).filter(w => w).length
 
-const markdownToHTML = (md) => {
+const markdownToHTML = (md: string) => {
   let r = md
   r = r.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
   r = r.replace(/^### (.*$)/gim, '<h3>$1</h3>')

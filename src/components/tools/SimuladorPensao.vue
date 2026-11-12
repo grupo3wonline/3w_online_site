@@ -193,10 +193,15 @@ import BaseInput from '@/components/tools/common/BaseInput.vue'
 const tipoCalculo  = ref('percentual')
 const rendaMensal  = ref(3000)
 const numeroFilhos = ref(1)
+interface ResultadoPensao {
+  valorMensal: string; valorAnual: string; valorPorFilho: string
+  percentualRenda: string; valor5Anos: string
+}
+
 const percentual   = ref(25)
 const salarioMinimo = ref(1412)
 const multiploSM   = ref(0.5)
-const resultado    = ref(null)
+const resultado    = ref<ResultadoPensao | null>(null)
 
 function calcular() {
   let valorMensal = 0, rendaBase = 0

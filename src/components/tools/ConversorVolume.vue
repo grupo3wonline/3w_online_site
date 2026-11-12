@@ -137,7 +137,8 @@ const unidadeOrigem  = ref('L')
 const unidadeDestino = ref('gal')
 const valorOrigem    = ref<number | ''>(1)
 const valorDestino   = ref('0')
-const conversoes     = ref([])
+interface ConversaoItem { unidade: string; nome: string; valor: string }
+const conversoes     = ref<ConversaoItem[]>([])
 
 const unidades = [
   { codigo: 'mL',   nome: 'Mililitro (mL)',         paraLitros: 0.001 },
@@ -158,9 +159,9 @@ const conversoesRapidas = [
   { de: 'm3', para: 'L' }, { de: 'pt', para: 'L' },
 ]
 
-const getNomeUnidade = (codigo) => unidades.find(u => u.codigo === codigo)?.nome || codigo
+const getNomeUnidade = (codigo: string) => unidades.find(u => u.codigo === codigo)?.nome || codigo
 
-const calcularValor = (valor, de, para) => {
+const calcularValor = (valor: number, de: string, para: string) => {
   const uDe   = unidades.find(u => u.codigo === de)
   const uPara = unidades.find(u => u.codigo === para)
   if (!uDe || !uPara) return '0'
@@ -170,7 +171,7 @@ const calcularValor = (valor, de, para) => {
   return resultado.toFixed(4).replace(/\.?0+$/, '') || '0'
 }
 
-const getFator = (de, para) => {
+const getFator = (de: string, para: string) => {
   const uDe   = unidades.find(u => u.codigo === de)
   const uPara = unidades.find(u => u.codigo === para)
   if (!uDe || !uPara) return 1
@@ -192,7 +193,7 @@ const inverter = () => {
   converter()
 }
 
-const usarConversao = (conv) => {
+const usarConversao = (conv: { de: string; para: string }) => {
   unidadeOrigem.value  = conv.de
   unidadeDestino.value = conv.para
   converter()

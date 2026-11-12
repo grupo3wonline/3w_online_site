@@ -81,7 +81,7 @@
             <label class="input-aurora-label !mb-0">Opções de transformação</label>
             <div class="grid grid-cols-2 gap-2 mt-2">
               <label v-for="opt in opcoesList" :key="opt.key" class="checkbox-aurora">
-                <input v-model="opcoes[opt.key]" @change="gerar" type="checkbox" />
+                <input v-model="opcoes[opt.key as keyof typeof opcoes]" @change="gerar" type="checkbox" />
                 <span>{{ opt.label }}</span>
               </label>
             </div>
@@ -196,7 +196,7 @@ const linhas = computed(() => {
   return items
 })
 
-const aplicarTemplate = (t) => { prefixo.value = t.prefixo; sufixo.value = t.sufixo; gerar() }
+const aplicarTemplate = (t: { prefixo: string; sufixo: string }) => { prefixo.value = t.prefixo; sufixo.value = t.sufixo; gerar() }
 
 const gerar = () => {
   if (!textoEntrada.value) { textoResultado.value = ''; return }

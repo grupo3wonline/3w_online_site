@@ -153,7 +153,7 @@ const input  = ref(`{
 const output = ref('')
 const erro   = ref('')
 
-const objectToYAML = (obj, indent = 0) => {
+const objectToYAML = (obj: unknown, indent = 0): string => {
   const sp = '  '.repeat(indent)
   let yaml = ''
   if (Array.isArray(obj)) {
@@ -170,16 +170,16 @@ const objectToYAML = (obj, indent = 0) => {
   return yaml
 }
 
-const jsonToYAML = (json) => {
+const jsonToYAML = (json: string) => {
   try {
     return objectToYAML(JSON.parse(json))
   } catch (e) {
-    throw new Error(`JSON inválido: ${e.message}`)
+    throw new Error(`JSON inválido: ${(e as Error).message}`)
   }
 }
 
-const parseYAML = (lines, startIndex) => {
-  const obj = {}
+const parseYAML = (lines: string[], startIndex: number): { value: Record<string, unknown>; index: number } => {
+  const obj: Record<string, unknown> = {}
   let i = startIndex
   const baseIndent = lines[i]?.search(/\S/) ?? 0
   while (i < lines.length) {
@@ -201,7 +201,7 @@ const parseYAML = (lines, startIndex) => {
           continue
         }
       } else {
-        obj[key] = isNaN(value) || value === '' ? value : Number(value)
+        obj[key] = isNaN(Number(value)) || value === '' ? value : Number(value)
       }
     }
     i++
@@ -209,12 +209,12 @@ const parseYAML = (lines, startIndex) => {
   return { value: obj, index: i }
 }
 
-const yamlToJSON = (yaml) => {
+const yamlToJSON = (yaml: string) => {
   try {
-    const lines = yaml.split('\n').filter(l => l.trim() && !l.trim().startsWith('#'))
+    const lines = yaml.split('\n').filter((l: string) => l.trim() && !l.trim().startsWith('#'))
     return JSON.stringify(parseYAML(lines, 0).value, null, 2)
   } catch (e) {
-    throw new Error(`YAML inválido: ${e.message}`)
+    throw new Error(`YAML inválido: ${(e as Error).message}`)
   }
 }
 
@@ -224,7 +224,7 @@ const converter = () => {
   try {
     output.value = modo.value === 'json-yaml' ? jsonToYAML(input.value) : yamlToJSON(input.value)
   } catch (e) {
-    erro.value = e.message
+    erro.value = (e as Error).message
     output.value = ''
   }
 }

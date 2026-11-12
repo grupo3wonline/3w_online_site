@@ -87,7 +87,7 @@
               <div class="flex items-center justify-between mb-3">
                 <h4 class="text-sm font-bold text-gray-700 dark:text-slate-200 flex items-center gap-2">
                   <i class="fas fa-swatchbook text-pink-500"></i>
-                  {{ nomesEsquemas[esquemaSelecionado] }}
+                  {{ nomesEsquemas[esquemaSelecionado as keyof typeof nomesEsquemas] }}
                   <span class="badge-aurora-purple">{{ cores.length }} cores</span>
                 </h4>
                 <button @click="exportarPalheta" class="copy-btn">
@@ -159,7 +159,7 @@ const corBase            = ref('#6366f1')
 const corBaseHex         = ref('#6366f1')
 const esquemaSelecionado = ref('complementar')
 const palhetaGerada      = ref(false)
-const cores              = ref([])
+const cores              = ref<{ hex: string; rgb: string; hsl: string }[]>([])
 
 const nomesEsquemas = {
   complementar:  'Complementar (2 cores)',
@@ -191,13 +191,13 @@ const atualizarCorBase = () => {
 }
 
 // ── Conversões ────────────────────────────────────────────────────
-const hexParaRgb = (hex) => ({
+const hexParaRgb = (hex: string) => ({
   r: parseInt(hex.slice(1, 3), 16),
   g: parseInt(hex.slice(3, 5), 16),
   b: parseInt(hex.slice(5, 7), 16),
 })
 
-const rgbParaHsl = (r, g, b) => {
+const rgbParaHsl = (r: number, g: number, b: number) => {
   r /= 255; g /= 255; b /= 255
   const max = Math.max(r, g, b); const min = Math.min(r, g, b)
   let h = 0; let s = 0; const l = (max + min) / 2
@@ -213,10 +213,10 @@ const rgbParaHsl = (r, g, b) => {
   return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) }
 }
 
-const hslParaRgb = (h, s, l) => {
+const hslParaRgb = (h: number, s: number, l: number) => {
   h /= 360; s /= 100; l /= 100
   if (s === 0) { const v = Math.round(l * 255); return { r: v, g: v, b: v } }
-  const hue2rgb = (p, q, t) => {
+  const hue2rgb = (p: number, q: number, t: number) => {
     if (t < 0) t += 1; if (t > 1) t -= 1
     if (t < 1/6) return p + (q - p) * 6 * t
     if (t < 1/2) return q
@@ -232,9 +232,9 @@ const hslParaRgb = (h, s, l) => {
   }
 }
 
-const rgbParaHex = (r, g, b) => '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
+const rgbParaHex = (r: number, g: number, b: number) => '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
 
-const gerarCor = (h, s, l) => {
+const gerarCor = (h: number, s: number, l: number) => {
   const rgb = hslParaRgb(h, s, l)
   const hex = rgbParaHex(rgb.r, rgb.g, rgb.b)
   return { hex, rgb: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`, hsl: `hsl(${h}, ${s}%, ${l}%)` }
@@ -285,7 +285,7 @@ const gerarPalheta = () => {
   palhetaGerada.value = true
 }
 
-const copiarCor = (hex) => {
+const copiarCor = (hex: string) => {
   navigator.clipboard.writeText(hex).then(() => {
     Swal.fire({ icon: 'success', title: `${hex} copiado!`, timer: 1200, showConfirmButton: false })
   })

@@ -158,8 +158,13 @@ import BaseInput from '@/components/tools/common/BaseInput.vue'
 
 const salarioBruto = ref(3000)
 const diasFerias   = ref(30)
+interface ResultadoFerias {
+  valorFerias: string; tercoFerias: string; abonoPecuniario: string
+  descontoINSS: string; valorBruto: string; valorTotal: string
+}
+
 const venderFerias = ref(false)
-const resultado    = ref(null)
+const resultado    = ref<ResultadoFerias | null>(null)
 
 function calcular() {
   const salario = Number(salarioBruto.value)

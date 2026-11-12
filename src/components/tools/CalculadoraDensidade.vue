@@ -185,12 +185,12 @@ const calcular = () => {
 
 const getTitulo = () => {
   const titulos = { densidade: 'Densidade', massa: 'Massa', volume: 'Volume' }
-  return titulos[modoCalculo.value]
+  return titulos[modoCalculo.value as keyof typeof titulos]
 }
 
 const getUnidade = () => {
   const unids = { densidade: 'g/cm³', massa: 'g', volume: 'cm³' }
-  return unids[modoCalculo.value]
+  return unids[modoCalculo.value as keyof typeof unids]
 }
 </script>
 

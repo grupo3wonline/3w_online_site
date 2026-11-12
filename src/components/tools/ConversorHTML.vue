@@ -158,12 +158,12 @@ const entidades = [
   { entidade: '&euro;', char: '€'   },
 ]
 
-const htmlEncode = (text) => {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }
-  return text.replace(/[&<>"']/g, m => map[m])
+const htmlEncode = (text: string) => {
+  const map: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }
+  return text.replace(/[&<>"']/g, (m: string) => map[m])
 }
 
-const htmlDecode = (text) => {
+const htmlDecode = (text: string) => {
   const textarea = document.createElement('textarea')
   textarea.innerHTML = text
   return textarea.value
@@ -173,7 +173,7 @@ const converter = () => {
   output.value = modo.value === 'encode' ? htmlEncode(input.value) : htmlDecode(input.value)
 }
 
-const inserirCaractere = (char) => {
+const inserirCaractere = (char: string) => {
   input.value += char
   converter()
 }

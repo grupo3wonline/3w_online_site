@@ -192,7 +192,7 @@ const tiposPaleta = [
 
 const tipoSelecionado = ref('complementar')
 const corBase         = ref('#3B82F6')
-const cores           = ref([])
+const cores           = ref<string[]>([])
 
 const tipoNomeSelecionado = computed(() => tiposPaleta.find(t => t.id === tipoSelecionado.value)?.nome || '')
 
@@ -205,7 +205,7 @@ const descricaoTipo = computed(() => ({
 }[tipoSelecionado.value] || ''))
 
 // ── Conversões de cor ──────────────────────────────────────────────
-const hexParaHSL = (hex) => {
+const hexParaHSL = (hex: string) => {
   const r = parseInt(hex.slice(1, 3), 16) / 255
   const g = parseInt(hex.slice(3, 5), 16) / 255
   const b = parseInt(hex.slice(5, 7), 16) / 255
@@ -223,7 +223,7 @@ const hexParaHSL = (hex) => {
   return { h: h * 360, s: s * 100, l: l * 100 }
 }
 
-const hslParaHex = (h, s, l) => {
+const hslParaHex = (h: number, s: number, l: number) => {
   s /= 100; l /= 100
   const c = (1 - Math.abs(2 * l - 1)) * s
   const x = c * (1 - Math.abs((h / 60) % 2 - 1))
@@ -235,11 +235,11 @@ const hslParaHex = (h, s, l) => {
   else if (h < 240) { r = 0; g = x; b = c }
   else if (h < 300) { r = x; g = 0; b = c }
   else              { r = c; g = 0; b = x }
-  const toHex = (v) => { const h = Math.round((v + m) * 255).toString(16); return h.length === 1 ? '0' + h : h }
+  const toHex = (v: number) => { const h = Math.round((v + m) * 255).toString(16); return h.length === 1 ? '0' + h : h }
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
-const hexParaRGB = (hex) => {
+const hexParaRGB = (hex: string) => {
   const r = parseInt(hex.slice(1, 3), 16)
   const g = parseInt(hex.slice(3, 5), 16)
   const b = parseInt(hex.slice(5, 7), 16)
@@ -279,7 +279,7 @@ const gerarPaleta = () => {
   cores.value = novaCores
 }
 
-const gerarVariacoes = (cor) => {
+const gerarVariacoes = (cor: string) => {
   const hsl = hexParaHSL(cor)
   return Array.from({ length: 10 }, (_, i) => {
     const fator = (i + 1) / 10
@@ -293,7 +293,7 @@ const gerarCorAleatoria = () => {
   gerarPaleta()
 }
 
-const copiarCor = async (cor) => {
+const copiarCor = async (cor: string) => {
   try {
     await navigator.clipboard.writeText(cor)
     Swal.fire({ icon: 'success', title: `${cor} copiado!`, timer: 1200, showConfirmButton: false })

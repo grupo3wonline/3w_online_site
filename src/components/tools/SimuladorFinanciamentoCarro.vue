@@ -178,12 +178,17 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
 
+interface ResultadoFinanciamentoCarro {
+  primeiraParcela: string; ultimaParcela: string; valorTotal: string
+  totalJuros: string; custoEfetivo: string; taxaEfetiva: string; reducao: string
+}
+
 const sistema      = ref('price')
 const valorVeiculo = ref(50000)
 const valorEntrada = ref(10000)
 const prazoMeses   = ref(48)
 const taxaJuros    = ref(1.99)
-const resultado    = ref(null)
+const resultado    = ref<ResultadoFinanciamentoCarro | null>(null)
 
 const valorFinanciado = computed(() => Number(valorVeiculo.value) - Number(valorEntrada.value))
 

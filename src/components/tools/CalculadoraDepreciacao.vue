@@ -56,7 +56,7 @@
 
     <!-- Resultado -->
     <Transition name="scale-in">
-      <div v-if="calculado" class="space-y-4 mt-4">
+      <div v-if="resultado" class="space-y-4 mt-4">
         <div class="tool-header text-center py-7">
           <p class="text-sm text-blue-200 mb-1">Depreciação Anual ({{ metodo === 'linear' ? 'Linear' : 'Acelerada' }})</p>
           <p class="text-5xl font-black text-white mb-2">{{ fmt(resultado.depreciacaoAnual) }}</p>
@@ -145,10 +145,14 @@ const metodo = ref('linear')
 const valorInicial = ref(50000)
 const valorResidual = ref(5000)
 const vidaUtil = ref(5)
+interface ResultadoDepreciacao {
+  depreciacaoAnual: number; depreciacaoMensal: number; taxaAnual: number
+  tabela: { ano: number; depreciacao: number; acumulada: number; valorContabil: number }[]
+}
 const calculado = ref(false)
-const resultado = ref({})
+const resultado = ref<ResultadoDepreciacao | null>(null)
 
-const fmt = (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
+const fmt = (v: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
 
 const calcular = () => {
   const valorDepreciavel = Number(valorInicial.value) - Number(valorResidual.value)

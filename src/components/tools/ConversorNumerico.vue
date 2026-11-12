@@ -130,14 +130,14 @@ const numeroEntrada = ref('')
 const tipoEntrada   = ref('decimal')
 const erro          = ref('')
 
-const validarBinario     = (n) => /^[01]+$/.test(n)
-const validarOctal       = (n) => /^[0-7]+$/.test(n)
-const validarDecimal     = (n) => /^\d+$/.test(n)
-const validarHexadecimal = (n) => /^[0-9A-Fa-f]+$/.test(n)
-const validarRomano      = (n) => /^[IVXLCDMivxlcdm]+$/.test(n)
+const validarBinario     = (n: string) => /^[01]+$/.test(n)
+const validarOctal       = (n: string) => /^[0-7]+$/.test(n)
+const validarDecimal     = (n: string) => /^\d+$/.test(n)
+const validarHexadecimal = (n: string) => /^[0-9A-Fa-f]+$/.test(n)
+const validarRomano      = (n: string) => /^[IVXLCDMivxlcdm]+$/.test(n)
 
-const romanoParaDecimal = (romano) => {
-  const vals = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 }
+const romanoParaDecimal = (romano: string) => {
+  const vals: Record<string, number> = { I:1, V:5, X:10, L:50, C:100, D:500, M:1000 }
   const r = romano.toUpperCase()
   let total = 0
   for (let i = 0; i < r.length; i++) {
@@ -147,9 +147,9 @@ const romanoParaDecimal = (romano) => {
   return total
 }
 
-const decimalParaRomano = (num) => {
+const decimalParaRomano = (num: number) => {
   if (num <= 0 || num > 3999) return 'Fora do intervalo (1–3999)'
-  const tbl = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]
+  const tbl: [number, string][] = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]
   let r = ''
   for (const [v, s] of tbl) while (num >= v) { r += s; num -= v }
   return r
@@ -207,7 +207,7 @@ const limpar = () => {
   erro.value = ''
 }
 
-const copiar = async (valor) => {
+const copiar = async (valor: string) => {
   try {
     await navigator.clipboard.writeText(valor)
     Swal.fire({ icon: 'success', title: 'Copiado!', timer: 1500, showConfirmButton: false })

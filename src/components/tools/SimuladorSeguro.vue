@@ -158,6 +158,11 @@ const valorVeiculo      = ref(50000)
 const idadeCondutor     = ref(30)
 const perfilUso         = ref('lazer')
 const franquia          = ref(2000)
+interface ResultadoSeguro {
+  premioAnual: string; premioMensal: string; parcelas: string
+  cobertura: string; percentual: string; custoCincoAnos: string; perfil: string
+}
+
 const valorImovel       = ref(300000)
 const valorConteudo     = ref(50000)
 const coberturaIncendio = ref(true)
@@ -165,7 +170,7 @@ const coberturaRoubo    = ref(true)
 const capitalSegurado   = ref(500000)
 const idadeContratante  = ref(35)
 const fumante           = ref(false)
-const resultado         = ref(null)
+const resultado         = ref<ResultadoSeguro | null>(null)
 
 const tiposSeguro = [
   { value: 'auto',        label: 'Automóvel',   icon: 'fa-car' },

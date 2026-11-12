@@ -150,7 +150,7 @@ const avgWordsPerPara = computed(() => {
 
 const analisar = () => {
   if (!texto.value) {
-    Object.keys(stats).forEach((key) => (stats[key] = 0))
+    Object.keys(stats).forEach((key) => ((stats as Record<string, number>)[key] = 0))
     return
   }
 

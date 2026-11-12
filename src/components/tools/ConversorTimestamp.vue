@@ -154,15 +154,19 @@ import BaseInput from '@/components/tools/common/BaseInput.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import Swal from 'sweetalert2'
 
+interface ResultadoTimestamp {
+  dataCompleta: string; data: string; hora: string; timestamp: number; timestampMs: number; iso: string
+}
+
 const modo            = ref('timestamp-data')
 const timestampAtual  = ref(Math.floor(Date.now() / 1000))
 const timestampInput  = ref('')
 const dataInput       = ref('')
-const resultado       = ref(null)
+const resultado       = ref<ResultadoTimestamp | null>(null)
 
-let intervalo = null
+let intervalo: ReturnType<typeof setInterval> | null = null
 
-const buildResultado = (data, ts) => ({
+const buildResultado = (data: Date, ts: number): ResultadoTimestamp => ({
   dataCompleta: data.toLocaleString('pt-BR'),
   data:         data.toLocaleDateString('pt-BR'),
   hora:         data.toLocaleTimeString('pt-BR'),
@@ -185,7 +189,7 @@ const converterDataParaTimestamp = () => {
   resultado.value = buildResultado(data, ts)
 }
 
-const copiar = async (texto) => {
+const copiar = async (texto: string) => {
   try {
     await navigator.clipboard.writeText(texto)
     Swal.fire({ icon: 'success', title: 'Copiado!', timer: 1000, showConfirmButton: false })

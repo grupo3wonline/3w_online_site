@@ -144,13 +144,15 @@ const bandeiras = [
   { id: 'elo',        nome: 'Elo',        icon: 'fas fa-credit-card',   prefixo: '636368', tam: 16 },
 ]
 
+interface CartaoItem { numero: string; numeroFormatado: string; validade: string; cvv: string }
+
 const bandeiraSelecionada = ref('visa')
 const quantidade          = ref(3)
-const cartoes             = ref([])
+const cartoes             = ref<CartaoItem[]>([])
 
 const getBandeiraAtual = () => bandeiras.find(b => b.id === bandeiraSelecionada.value) || bandeiras[0]
 
-const luhn = (num) => {
+const luhn = (num: string) => {
   let soma = 0; let dobrar = false
   for (let i = num.length - 1; i >= 0; i--) {
     let d = parseInt(num[i], 10)
@@ -169,7 +171,7 @@ const gerarNumero = () => {
   return num
 }
 
-const formatarNumero = (num) => {
+const formatarNumero = (num: string) => {
   if (num.length === 15) return num.replace(/(\d{4})(\d{6})(\d{5})/, '$1 $2 $3')
   return num.replace(/(\d{4})(\d{4})(\d{4})(\d{4})/, '$1 $2 $3 $4')
 }
@@ -185,7 +187,7 @@ const gerar = () => {
   })
 }
 
-const copiar = async (num) => {
+const copiar = async (num: string) => {
   try {
     await navigator.clipboard.writeText(num)
     Swal.fire({ icon: 'success', title: 'Copiado!', timer: 1000, showConfirmButton: false })

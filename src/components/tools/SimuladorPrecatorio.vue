@@ -198,12 +198,19 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
 
+interface ResultadoPrecatorio {
+  valorOriginal: string; valorAtualizado: string; jurosAcumulados: string
+  mesesDecorridos: number; anosDecorridos: string; multiplicador: string
+  impostoRenda?: string; honorarios?: string; valorLiquido?: string
+  aliquotaIR?: string; aliquotaHonorarios?: number
+}
+
 const tipoPrecatorio = ref('alimentar')
 const valorOriginal  = ref(50000)
 const dataInicial    = ref('2020-01-01')
 const dataFinal      = ref(new Date().toISOString().split('T')[0])
 const taxaJuros      = ref(6)
-const resultado      = ref(null)
+const resultado      = ref<ResultadoPrecatorio | null>(null)
 
 function calcular() {
   const valor      = Number(valorOriginal.value)
@@ -214,7 +221,7 @@ function calcular() {
   if (!valor) { Swal.fire({ icon: 'warning', title: 'Informe o valor original', confirmButtonColor: '#2563eb' }); return }
   if (dataFim <= dataInicio) { Swal.fire({ icon: 'warning', title: 'A data final deve ser após a data inicial', confirmButtonColor: '#2563eb' }); return }
 
-  const diffTime   = Math.abs(dataFim - dataInicio)
+  const diffTime   = Math.abs(dataFim.getTime() - dataInicio.getTime())
   const diffDays   = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
   const meses      = Math.floor(diffDays / 30)
   const anos       = (diffDays / 365).toFixed(1)
@@ -238,7 +245,7 @@ function calcularAuto() {
   if (valorOriginal.value && dataInicial.value && dataFinal.value && taxaJuros.value) calcular()
 }
 
-function calcularComDescontos(percentualHonorarios) {
+function calcularComDescontos(percentualHonorarios: number) {
   if (!resultado.value) return
   const valorAtual  = Number(resultado.value.valorAtualizado)
   const valorOrig   = Number(resultado.value.valorOriginal)
@@ -256,7 +263,7 @@ function calcularComDescontos(percentualHonorarios) {
   const valorLiquido = valorAtual - ir - honorarios
 
   resultado.value = {
-    ...resultado.value,
+    ...(resultado.value as ResultadoPrecatorio),
     impostoRenda:        ir.toFixed(2),
     honorarios:          honorarios.toFixed(2),
     valorLiquido:        valorLiquido.toFixed(2),

@@ -128,9 +128,15 @@ const conversoes = ref(50)
 const ticketMedio = ref(100)
 const impressoes = ref(50000)
 const cliques = ref(1000)
-const faturamento = ref(5000)
+interface ResultadoAnuncios {
+  titulo: string; valorPrincipal: string; subtitulo: string
+  metricas: { label: string; valor: string | number; cor: string }[]
+  detalhes: { label: string; valor: string | number }[]
+  performance: string; recomendacao: string; dicas?: string[]
+}
 
-const resultado = ref(null)
+const faturamento = ref(5000)
+const resultado   = ref<ResultadoAnuncios | null>(null)
 
 const calcular = () => {
   const invest = Number(investimento.value)

@@ -202,19 +202,23 @@ const unidades = {
 }
 
 const categoriaSelecionada = ref('comprimento')
-const valor = ref(1)
-const unidadeOrigem = ref('m')
-const unidadeDestino = ref('km')
-const resultado = ref(null)
+interface ResultadoConversao { valor: string; unidade: string | undefined }
 
-const unidadesDisponiveis = computed(() => unidades[categoriaSelecionada.value])
+const valor          = ref(1)
+const unidadeOrigem  = ref('m')
+const unidadeDestino = ref('km')
+const resultado      = ref<ResultadoConversao | null>(null)
+
+const unidadesDisponiveis = computed(() => unidades[categoriaSelecionada.value as keyof typeof unidades])
+
+type UnidadeItem = { id: string; nome: string; simbolo: string; fator?: number }
 
 const conversoesRapidas = computed(() => {
   if (!valor.value || !resultado.value) return []
-  return unidadesDisponiveis.value
-    .filter(u => u.id !== unidadeOrigem.value)
+  return (unidadesDisponiveis.value as UnidadeItem[])
+    .filter((u: UnidadeItem) => u.id !== unidadeOrigem.value)
     .slice(0, 6)
-    .map(unidade => ({
+    .map((unidade: UnidadeItem) => ({
       nome: unidade.simbolo,
       valor: converterValor(Number(valor.value), unidadeOrigem.value, unidade.id),
     }))
@@ -226,15 +230,16 @@ watch(categoriaSelecionada, () => {
   converter()
 })
 
-const converterValor = (val, origem, destino) => {
+const converterValor = (val: number, origem: string, destino: string) => {
   if (categoriaSelecionada.value === 'temperatura') return converterTemperatura(val, origem, destino)
-  const unidOrigem = unidadesDisponiveis.value.find(u => u.id === origem)
-  const unidDestino = unidadesDisponiveis.value.find(u => u.id === destino)
-  const valorBase = val * unidOrigem.fator
-  return (valorBase / unidDestino.fator).toLocaleString('pt-BR', { maximumFractionDigits: 6 })
+  const unidOrigem  = unidadesDisponiveis.value.find((u: { id: string }) => u.id === origem)
+  const unidDestino = unidadesDisponiveis.value.find((u: { id: string }) => u.id === destino)
+  if (!unidOrigem || !unidDestino || !('fator' in unidOrigem) || !('fator' in unidDestino)) return '0'
+  const valorBase = val * (unidOrigem as { fator: number }).fator
+  return (valorBase / (unidDestino as { fator: number }).fator).toLocaleString('pt-BR', { maximumFractionDigits: 6 })
 }
 
-const converterTemperatura = (val, origem, destino) => {
+const converterTemperatura = (val: number, origem: string, destino: string) => {
   let celsius = 0
   if (origem === 'c') celsius = val
   else if (origem === 'f') celsius = (val - 32) * 5 / 9
@@ -250,10 +255,10 @@ const converterTemperatura = (val, origem, destino) => {
 
 const converter = () => {
   if (!valor.value) { resultado.value = null; return }
-  const unidDestino = unidadesDisponiveis.value.find(u => u.id === unidadeDestino.value)
+  const unidDestino = unidadesDisponiveis.value.find((u: { id: string }) => u.id === unidadeDestino.value)
   resultado.value = {
     valor: converterValor(Number(valor.value), unidadeOrigem.value, unidadeDestino.value),
-    unidade: unidDestino.nome,
+    unidade: unidDestino?.nome,
   }
 }
 

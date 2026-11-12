@@ -194,7 +194,7 @@ const adicionarCor = () => {
   coresGradiente.value.push({ hex: `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0')}`, posicao: pos })
 }
 
-const removerCor = (i) => {
+const removerCor = (i: number) => {
   if (coresGradiente.value.length > 2) coresGradiente.value.splice(i, 1)
 }
 
@@ -226,12 +226,12 @@ const copiarCSS = async () => {
   }
 }
 
-const aplicarPreset = (preset) => {
+const aplicarPreset = (preset: { nome: string; css: string }) => {
   const regex = /(?:linear|radial|conic)-gradient\(([^,]+),\s*(.+)\)/
   const match = preset.css.match(regex)
   if (!match) return
-  const cores = match[2].split(',').map(c => c.trim())
-  coresGradiente.value = cores.map((cor, i) => ({
+  const cores = match[2].split(',').map((c: string) => c.trim())
+  coresGradiente.value = cores.map((cor: string, i: number) => ({
     hex: cor.match(/#[0-9a-fA-F]{6}/)?.[0] || '#000000',
     posicao: (100 / Math.max(cores.length - 1, 1)) * i,
   }))

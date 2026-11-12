@@ -11,9 +11,9 @@
     :examples="[{ title: 'Exemplo 1', desc: 'Descrição do exemplo', result: 'Resultado' }]"
     :quick-tips="['Client-Side', 'Gratuito']"
   >
-    <!-- slot padrão: conteúdo principal -->
-    <!-- slot name="header": cabeçalho personalizado abaixo do header padrão -->
-  </ToolShell>
+    [slot padrão: conteúdo principal]
+    [slot name="header": cabeçalho personalizado abaixo do header padrão]
+  /ToolShell
 -->
 <template>
   <article class="tool-shell animate-fade-in-up" :aria-label="title">
@@ -238,7 +238,8 @@ export interface TipItem {
 
 export interface ExampleItem {
   title?:  string
-  desc:    string
+  desc?:   string
+  text?:   string
   code?:   string
   result?: string
 }

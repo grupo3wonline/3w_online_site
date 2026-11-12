@@ -69,7 +69,7 @@
       <!-- Resultado -->
       <div>
         <Transition name="scale-in" appear>
-          <div v-if="calculado" class="space-y-4">
+          <div v-if="resultado" class="space-y-4">
             <div class="tool-header text-center py-7">
               <p class="text-sm text-blue-200 mb-2">
                 {{ num1 }}/{{ den1 }} {{ getOperacaoSimbolo() }} {{ num2 }}/{{ den2 }}
@@ -144,18 +144,22 @@ const num1 = ref(1)
 const den1 = ref(2)
 const num2 = ref(1)
 const den2 = ref(3)
+interface ResultadoFracao {
+  numerador: number; denominador: number; decimal: number; mmc: number; explicacao: string
+  simplificado: boolean; numSimplificado: number; denSimplificado: number
+}
 const calculado = ref(false)
-const resultado = ref({})
+const resultado = ref<ResultadoFracao | null>(null)
 
-const mdc = (a, b) => {
+const mdc = (a: number, b: number): number => {
   a = Math.abs(a); b = Math.abs(b)
   while (b) { const t = b; b = a % b; a = t }
   return a
 }
 
-const mmc = (a, b) => Math.abs(a * b) / mdc(a, b)
+const mmc = (a: number, b: number) => Math.abs(a * b) / mdc(a, b)
 
-const simplificar = (num, den) => {
+const simplificar = (num: number, den: number) => {
   const divisor = mdc(num, den)
   return { numerador: num / divisor, denominador: den / divisor }
 }
@@ -208,7 +212,7 @@ const calcular = () => {
 
 const getOperacaoSimbolo = () => {
   const simbolos = { soma: '+', subtracao: '−', multiplicacao: '×', divisao: '÷' }
-  return simbolos[operacao.value]
+  return simbolos[operacao.value as keyof typeof simbolos]
 }
 </script>
 

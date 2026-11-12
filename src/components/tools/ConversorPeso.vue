@@ -133,7 +133,8 @@ const unidadeOrigem  = ref('kg')
 const unidadeDestino = ref('lb')
 const valorOrigem    = ref(1)
 const valorDestino   = ref('0')
-const conversoes     = ref([])
+interface ConversaoItem { unidade: string; nome: string; valor: string }
+const conversoes     = ref<ConversaoItem[]>([])
 
 const unidades = [
   { codigo: 'mg',     nome: 'Miligrama (mg)',    paraGramas: 0.001     },
@@ -154,12 +155,12 @@ const conversoesRapidas = [
   { de: 't',  para: 'kg'  },
 ]
 
-const fmtValor = (v) => {
+const fmtValor = (v: number) => {
   if (Math.abs(v) >= 1e6 || (Math.abs(v) < 0.0001 && v !== 0)) return v.toExponential(4)
   return v.toPrecision(6).replace(/\.?0+$/, '')
 }
 
-const calcularValor = (valor, de, para) => {
+const calcularValor = (valor: number, de: string, para: string) => {
   const uDe   = unidades.find(u => u.codigo === de)
   const uPara = unidades.find(u => u.codigo === para)
   if (!uDe || !uPara) return '0'
@@ -181,7 +182,7 @@ const inverter = () => {
   converter()
 }
 
-const usarConversao = (c) => {
+const usarConversao = (c: { de: string; para: string }) => {
   unidadeOrigem.value  = c.de
   unidadeDestino.value = c.para
   converter()

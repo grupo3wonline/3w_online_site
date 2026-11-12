@@ -117,9 +117,11 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 const horaAtual    = ref('')
 const dataAtual    = ref('')
+interface FusoConversao { nome: string; fuso: string; hora: string; data: string; offset: string }
+
 const dataHoraInput = ref('')
 const fusoOrigem   = ref('America/Sao_Paulo')
-const conversoes   = ref([])
+const conversoes   = ref<FusoConversao[]>([])
 
 const fusos = [
   { nome: 'Brasil — São Paulo (UTC-3)',    value: 'America/Sao_Paulo'    },
@@ -136,7 +138,7 @@ const fusos = [
   { nome: 'UTC',                           value: 'UTC'                  },
 ]
 
-let intervalo = null
+let intervalo: ReturnType<typeof setInterval> | null = null
 
 const atualizarHoraAtual = () => {
   const agora = new Date()
@@ -144,7 +146,7 @@ const atualizarHoraAtual = () => {
   dataAtual.value = agora.toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 }
 
-const getOffset = (data, timeZone) => {
+const getOffset = (data: Date, timeZone: string) => {
   try {
     const formatter = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'short' })
     const parts = formatter.formatToParts(data)

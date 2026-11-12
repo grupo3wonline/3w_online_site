@@ -147,7 +147,7 @@ const exemplos = [
   { arabico: '444',  romano: 'CDXLIV'  },
 ]
 
-const arabicoParaRomano = (num) => {
+const arabicoParaRomano = (num: string) => {
   const n = parseInt(num)
   if (isNaN(n) || n < 1 || n > 3999) throw new Error('Digite um número entre 1 e 3.999')
   const tbl = [{v:1000,s:'M'},{v:900,s:'CM'},{v:500,s:'D'},{v:400,s:'CD'},{v:100,s:'C'},{v:90,s:'XC'},{v:50,s:'L'},{v:40,s:'XL'},{v:10,s:'X'},{v:9,s:'IX'},{v:5,s:'V'},{v:4,s:'IV'},{v:1,s:'I'}]
@@ -156,10 +156,10 @@ const arabicoParaRomano = (num) => {
   return r
 }
 
-const romanoParaArabico = (romano) => {
+const romanoParaArabico = (romano: string) => {
   const str = romano.toUpperCase().trim()
   if (!/^[MDCLXVI]+$/.test(str)) throw new Error('Use apenas algarismos romanos: M, D, C, L, X, V, I')
-  const vals = { M:1000, D:500, C:100, L:50, X:10, V:5, I:1 }
+  const vals: Record<string, number> = { M:1000, D:500, C:100, L:50, X:10, V:5, I:1 }
   let total = 0, prev = 0
   for (let i = str.length - 1; i >= 0; i--) {
     const cur = vals[str[i]]
@@ -177,13 +177,13 @@ const converter = () => {
       : romanoParaArabico(input.value)
   } catch (e) {
     output.value = ''
-    Swal.fire({ title: 'Erro', text: e.message, icon: 'error', confirmButtonColor: '#2563eb' })
+    Swal.fire({ title: 'Erro', text: (e as Error).message, icon: 'error', confirmButtonColor: '#2563eb' })
   }
 }
 
-const usarExemplo = (ex) => {
-  if (modo.value === 'arabico-romano') input.value = ex.arabico
-  else input.value = ex.romano
+const usarExemplo = (ex: { arabico?: string; romano?: string }) => {
+  if (modo.value === 'arabico-romano') input.value = ex.arabico ?? ''
+  else input.value = ex.romano ?? ''
   converter()
 }
 

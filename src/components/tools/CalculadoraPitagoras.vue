@@ -167,7 +167,7 @@ const modoSelecionado = ref('hipotenusa')
 const catetoA    = ref(3)
 const catetoB    = ref(4)
 const hipotenusa = ref(5)
-const resultado  = ref(null)
+const resultado  = ref<number | null>(null)
 const explicacao = ref('')
 const angulos    = reactive({ alpha: 0, beta: 0 })
 

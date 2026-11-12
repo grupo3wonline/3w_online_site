@@ -148,10 +148,12 @@ import BaseInput from '@/components/tools/common/BaseInput.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 
 const valorInicial = ref(10000)
+interface ResultadoInvestimento { montanteFinal: string; totalInvestido: string; totalJuros: string; rentabilidade: string }
+
 const aporteMensal = ref(500)
-const taxaJuros = ref(10)
-const prazoMeses = ref(60)
-const resultado = ref(null)
+const taxaJuros    = ref(10)
+const prazoMeses   = ref(60)
+const resultado    = ref<ResultadoInvestimento | null>(null)
 
 const calcular = () => {
   const inicial = Number(valorInicial.value)

@@ -161,12 +161,16 @@ import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
 
+interface ResultadoRescisao {
+  verbas: { nome: string; descricao: string; valor: string }[]; totalLiquido: string
+}
+
 const salarioBruto       = ref(3000)
 const mesesTrabalhados   = ref(12)
 const diasAviso          = ref(30)
 const diasFeriasVencidas = ref(0)
 const tipoRescisao       = ref('semJustaCausa')
-const resultado          = ref(null)
+const resultado          = ref<ResultadoRescisao | null>(null)
 
 const tiposRescisao = [
   { value: 'semJustaCausa', label: 'Demissão sem Justa Causa', desc: 'Empresa demite — FGTS + multa 40% + seguro-desemprego', icon: 'fa-building-circle-xmark' },
@@ -180,7 +184,7 @@ function getNomeRescisao() {
 
 function getDicasRescisao() {
   const m = { semJustaCausa: 'Demissão sem Justa Causa:', pedido: 'Pedido de Demissão:', acordo: 'Acordo Trabalhista:' }
-  return m[tipoRescisao.value]
+  return m[tipoRescisao.value as keyof typeof m]
 }
 
 function getDicas() {
@@ -189,7 +193,7 @@ function getDicas() {
     pedido:        ['Sem direito ao saque do FGTS', 'Sem multa de 40% do FGTS', 'Sem direito ao Seguro-Desemprego', 'Pode descontar aviso prévio não cumprido'],
     acordo:        ['Saque de 80% do saldo do FGTS', 'Multa de 20% do FGTS (metade)', 'Sem direito ao Seguro-Desemprego', 'Modalidade criada pela Reforma Trabalhista 2017'],
   }
-  return d[tipoRescisao.value]
+  return d[tipoRescisao.value as keyof typeof d]
 }
 
 function calcular() {

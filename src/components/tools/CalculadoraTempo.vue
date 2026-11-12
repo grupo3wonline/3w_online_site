@@ -166,12 +166,18 @@ const anosAdd   = ref(0)
 const mesesAdd  = ref(1)
 const diasAdd   = ref(0)
 const horasAdd  = ref(0)
+interface ResultadoTempo {
+  titulo: string; principal: string | number; subtitulo: string
+  metricas: { label: string; valor: string | number }[]
+  detalhes: { label: string; valor: string | number | null }[]
+}
+
 const operacao  = ref('adicionar')
-const resultado = ref(null)
+const resultado = ref<ResultadoTempo | null>(null)
 
-const fmtData = (d) => d.toLocaleDateString('pt-BR')
+const fmtData = (d: Date) => d.toLocaleDateString('pt-BR')
 
-const calcularDiasUteis = (inicio, fim) => {
+const calcularDiasUteis = (inicio: Date, fim: Date) => {
   let count = 0
   const cur = new Date(inicio)
   while (cur <= fim) { const d = cur.getDay(); if (d !== 0 && d !== 6) count++; cur.setDate(cur.getDate() + 1) }
@@ -185,7 +191,7 @@ const calcular = () => {
     const fim    = new Date(dataFim.value    + 'T00:00:00')
     if (fim < inicio) { Swal.fire({ icon: 'error', title: 'Data final deve ser posterior', confirmButtonColor: '#2563eb' }); return }
 
-    const ms       = fim - inicio
+const ms       = fim.getTime() - inicio.getTime()
     const dias     = Math.floor(ms / 864e5)
     const horas    = Math.floor(ms / 36e5)
     const minutos  = Math.floor(ms / 6e4)
@@ -222,7 +228,7 @@ const calcular = () => {
     nova.setDate(nova.getDate()         + Number(diasAdd.value)  * mult)
     nova.setHours(nova.getHours()       + Number(horasAdd.value) * mult)
 
-    const dias = Math.floor(Math.abs(nova - base) / 864e5)
+    const dias = Math.floor(Math.abs(nova.getTime() - base.getTime()) / 864e5)
     const diasDaSemana = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado']
 
     resultado.value = {

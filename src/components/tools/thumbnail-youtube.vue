@@ -125,6 +125,7 @@ const steps = [
 
     <!-- Input -->
 
+      <div class="flex gap-2">
         <input v-model="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off"
           @keyup.enter="buscar"
           class="flex-1 input-aurora rounded-xl" />

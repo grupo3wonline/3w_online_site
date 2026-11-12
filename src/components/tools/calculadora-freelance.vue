@@ -13,7 +13,10 @@ const activeTab = ref<TabKey>('hourly')
 // Valor/hora
 const hourly = reactive({ monthlyGoal: 8000, dailyHours: 8, workDays: 5, vacationDays: 30, profitMargin: 20, taxRate: 6, platformFee: 10 })
 const hourlyRate = ref(0)
-const hourlyDetails = ref(null)
+interface HourlyDetails { baseRate: number; billableHours: number; monthlyProjected: number; yearlyProjected: number }
+interface DeadlineResult { workDays: number; deliveryDate: string }
+
+const hourlyDetails  = ref<HourlyDetails | null>(null)
 
 function calcHourly() {
   const { monthlyGoal, dailyHours, workDays, vacationDays, profitMargin, taxRate, platformFee } = hourly
@@ -44,7 +47,7 @@ const installmentValue = computed(() => project.installments > 1 && projectResul
 
 // Prazo
 const deadline = reactive({ totalHours: 40, dailyAvailability: 4, includeWeekends: false })
-const deadlineResult = ref(null)
+const deadlineResult = ref<DeadlineResult | null>(null)
 
 function calcDeadline() {
   if (deadline.totalHours <= 0 || deadline.dailyAvailability <= 0) { Swal.fire({ icon: 'warning', title: 'Preencha as horas corretamente', confirmButtonColor: '#6366f1' }); return }
@@ -83,7 +86,7 @@ function fmt(v: number) { return v.toLocaleString('pt-BR', { style: 'currency', 
         { key: 'hourly',   label: 'Valor/Hora', icon: 'fa-clock'          },
         { key: 'project',  label: 'Projeto',    icon: 'fa-folder-open'    },
         { key: 'deadline', label: 'Prazo',      icon: 'fa-calendar-check' },
-      ]" :key="tab.key" @click="activeTab = tab.key"
+      ]" :key="tab.key" @click="activeTab = tab.key as TabKey"
         :class="['flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-semibold transition-all', activeTab === tab.key ? 'bg-white dark:bg-slate-700 text-purple-700 dark:text-purple-300 shadow-sm' : 'text-gray-500 dark:text-slate-400 hover:text-gray-700']">
         <i :class="['fas', tab.icon, 'text-xs']"></i>{{ tab.label }}
       </button>

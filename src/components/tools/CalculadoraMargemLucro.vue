@@ -161,7 +161,7 @@ const resultado = ref({
   markup: 0,
 })
 
-const formatarMoeda = (valor) =>
+const formatarMoeda = (valor: number) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor)
 
 const calcular = () => {

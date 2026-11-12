@@ -154,7 +154,8 @@ const getUnidade = () => ({ velocidade: 'km/h (quilômetros por hora)', distanci
 
 const resultadoFmt = computed(() => {
   const v = { velocidade: Number(velocidade.value), distancia: Number(distancia.value), tempo: Number(tempo.value) }[calculo.value]
-  return v.toFixed(2) + ' ' + ({ velocidade: 'km/h', distancia: 'km', tempo: 'h' }[calculo.value])
+  if (v === undefined) return ''
+  return v.toFixed(2) + ' ' + ({ velocidade: 'km/h', distancia: 'km', tempo: 'h' }[calculo.value] ?? '')
 })
 
 const tempoFormatado = computed(() => {

@@ -154,37 +154,38 @@ const output = ref('')
 const erro   = ref('')
 
 // ── XML → JSON ────────────────────────────────────────────────────
-const parseXMLNode = (node) => {
-  const obj = {}
+const parseXMLNode = (node: Element): Record<string, unknown> => {
+  const obj: Record<string, unknown> = {}
   if (node.attributes?.length) {
-    obj['@attributes'] = {}
+    const attrs: Record<string, string> = {}
     for (let i = 0; i < node.attributes.length; i++) {
       const a = node.attributes[i]
-      obj['@attributes'][a.name] = a.value
+      attrs[a.name] = a.value
     }
+    obj['@attributes'] = attrs
   }
   if (node.hasChildNodes()) {
     for (let i = 0; i < node.childNodes.length; i++) {
       const child = node.childNodes[i]
       if (child.nodeType === 3) {
-        const text = child.nodeValue.trim()
+        const text = (child.nodeValue ?? '').trim()
         if (text) obj['#text'] = text
       } else if (child.nodeType === 1) {
-        const childObj = parseXMLNode(child)
+        const childObj = parseXMLNode(child as Element)
         if (obj[child.nodeName]) {
           if (!Array.isArray(obj[child.nodeName])) obj[child.nodeName] = [obj[child.nodeName]]
-          obj[child.nodeName].push(childObj)
+          ;(obj[child.nodeName] as unknown[]).push(childObj)
         } else {
           obj[child.nodeName] = childObj
         }
       }
     }
   }
-  if (Object.keys(obj).length === 1 && obj['#text']) return obj['#text']
+  if (Object.keys(obj).length === 1 && obj['#text']) return obj['#text'] as Record<string, unknown>
   return obj
 }
 
-const xmlToJSON = (xml) => {
+const xmlToJSON = (xml: string) => {
   const parser = new DOMParser()
   const xmlDoc = parser.parseFromString(xml, 'text/xml')
   if (xmlDoc.getElementsByTagName('parsererror').length > 0) throw new Error('XML inválido')
@@ -192,7 +193,7 @@ const xmlToJSON = (xml) => {
 }
 
 // ── JSON → XML ────────────────────────────────────────────────────
-const objectToXML = (obj, tagName, indent = 0) => {
+const objectToXML = (obj: unknown, tagName: string, indent = 0): string => {
   const spaces = '  '.repeat(indent)
   if (typeof obj !== 'object' || obj === null) return `${spaces}<${tagName}>${obj}</${tagName}>\n`
   if (Array.isArray(obj)) return obj.map(item => objectToXML(item, 'item', indent)).join('')
@@ -205,7 +206,7 @@ const objectToXML = (obj, tagName, indent = 0) => {
   return xml
 }
 
-const jsonToXML = (json) => {
+const jsonToXML = (json: string) => {
   const obj = JSON.parse(json)
   return '<?xml version="1.0" encoding="UTF-8"?>\n' + objectToXML(obj, 'root', 0)
 }
@@ -217,7 +218,7 @@ const converter = () => {
   try {
     output.value = modo.value === 'xml-json' ? xmlToJSON(input.value) : jsonToXML(input.value)
   } catch (e) {
-    erro.value = e.message
+    erro.value = (e as Error).message
     output.value = ''
   }
 }
