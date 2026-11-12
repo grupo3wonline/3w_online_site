@@ -51,10 +51,12 @@ import AppFooter from '@/components/layout/AppFooter.vue'
 import WhatsAppFloat from '@/components/ui/WhatsAppFloat.vue'
 import CookieBanner from '@/components/ui/CookieBanner.vue'
 import { useUtm } from '@/composables/useUtm'
+import { useRecaptcha } from '@/composables/useRecaptcha'
 
 const router = useRouter()
 const isLoading = ref(false)
 const { captureUtmFromUrl } = useUtm()
+const { execute: rcExecute } = useRecaptcha()
 
 // Loading global durante navegação de rota
 router.beforeEach(() => {
@@ -70,6 +72,9 @@ router.afterEach(() => {
 onMounted(() => {
   isLoading.value = false
   captureUtmFromUrl()
+  // Pré-carrega o script do reCAPTCHA v3 para exibir o badge (canto inferior direito).
+  // Não bloqueia — falha silenciosamente se a chave não estiver configurada.
+  rcExecute('page_view').catch(() => {})
 })
 </script>
 

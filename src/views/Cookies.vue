@@ -36,7 +36,7 @@
     <!-- Content Section -->
     <section class="section-padding bg-slate-50/50">
       <div class="container">
-        <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl border border-gray-100 shadow-sm space-y-10 text-xs sm:text-sm text-gray-700 leading-relaxed">
+        <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-6 sm:p-10 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm space-y-10 text-xs sm:text-sm text-gray-700 dark:text-slate-300 leading-relaxed">
 
           <!-- Ação Rápida de Preferências -->
           <div class="p-5 bg-slate-900 rounded-xl text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -59,7 +59,7 @@
 
           <!-- 1. O que são cookies -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:cookie-outline" class="w-5 h-5 text-primary-600" />
               1. O que são Cookies?
             </h2>
@@ -73,49 +73,49 @@
 
           <!-- 2. Tipos de Cookies -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:format-list-bulleted-type" class="w-5 h-5 text-primary-600" />
               2. Tipos de Cookies que Utilizamos
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
               <!-- Essenciais -->
-              <div class="p-4 rounded-xl border-2 border-emerald-200 bg-emerald-50">
-                <div class="font-bold text-gray-900 text-xs sm:text-sm mb-2 flex items-center gap-1.5">
+              <div class="p-4 rounded-xl border-2 border-emerald-200 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20">
+                <div class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm mb-2 flex items-center gap-1.5">
                   <Icon icon="mdi:shield-check" class="w-4 h-4 text-emerald-600" />
                   Essenciais
                 </div>
-                <p class="text-xs text-gray-600 mb-3">
+                <p class="text-xs text-gray-600 dark:text-slate-300 mb-3">
                   Necessários para o funcionamento básico do site. Não podem ser desativados. Incluem preferências de tema (claro/escuro), consentimento de cookies e tokens de segurança.
                 </p>
-                <span class="inline-flex items-center px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-semibold rounded-full">
+                <span class="inline-flex items-center px-2 py-0.5 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-[10px] font-semibold rounded-full">
                   Sempre ativos
                 </span>
               </div>
 
               <!-- Analíticos -->
-              <div class="p-4 rounded-xl border border-blue-200 bg-blue-50">
-                <div class="font-bold text-gray-900 text-xs sm:text-sm mb-2 flex items-center gap-1.5">
+              <div class="p-4 rounded-xl border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20">
+                <div class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm mb-2 flex items-center gap-1.5">
                   <Icon icon="mdi:chart-bar" class="w-4 h-4 text-blue-600" />
                   Analíticos
                 </div>
-                <p class="text-xs text-gray-600 mb-3">
+                <p class="text-xs text-gray-600 dark:text-slate-300 mb-3">
                   Nos ajudam a entender como os visitantes interagem com o site — páginas visitadas, tempo de permanência e origem do tráfego. Dados anonimizados via Google Analytics 4.
                 </p>
-                <span class="inline-flex items-center px-2 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-semibold rounded-full">
+                <span class="inline-flex items-center px-2 py-0.5 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-[10px] font-semibold rounded-full">
                   Requer consentimento
                 </span>
               </div>
 
               <!-- Marketing -->
-              <div class="p-4 rounded-xl border border-purple-200 bg-purple-50">
-                <div class="font-bold text-gray-900 text-xs sm:text-sm mb-2 flex items-center gap-1.5">
+              <div class="p-4 rounded-xl border border-purple-200 dark:border-purple-700 bg-purple-50 dark:bg-purple-900/20">
+                <div class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm mb-2 flex items-center gap-1.5">
                   <Icon icon="mdi:bullseye-arrow" class="w-4 h-4 text-purple-600" />
                   Marketing
                 </div>
-                <p class="text-xs text-gray-600 mb-3">
+                <p class="text-xs text-gray-600 dark:text-slate-300 mb-3">
                   Utilizados para rastrear visitantes em sites e exibir anúncios relevantes. Podem ser definidos por parceiros como Google Ads e Meta Ads mediante seu consentimento.
                 </p>
-                <span class="inline-flex items-center px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-semibold rounded-full">
+                <span class="inline-flex items-center px-2 py-0.5 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 text-[10px] font-semibold rounded-full">
                   Requer consentimento
                 </span>
               </div>
@@ -124,7 +124,7 @@
 
           <!-- 3. Lista de Cookies do Site -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:table-of-contents" class="w-5 h-5 text-primary-600" />
               3. Lista de Cookies Utilizados
             </h2>
@@ -182,7 +182,7 @@
 
           <!-- 4. Como Desativar Cookies -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:cookie-off-outline" class="w-5 h-5 text-primary-600" />
               4. Como Desativar ou Gerenciar Cookies
             </h2>
@@ -226,7 +226,7 @@
 
           <!-- 5. Bases Legais -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:gavel" class="w-5 h-5 text-primary-600" />
               5. Bases Legais para o Uso de Cookies
             </h2>
@@ -242,7 +242,7 @@
 
           <!-- 6. Atualizações desta Política -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:update" class="w-5 h-5 text-primary-600" />
               6. Atualizações desta Política
             </h2>

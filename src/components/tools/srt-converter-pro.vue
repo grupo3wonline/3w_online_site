@@ -126,7 +126,7 @@ const previewBlocks = computed(() => result.value?.blocks.slice(0, 5) || [])
         </div>
         <textarea v-model="scriptText" rows="12" spellcheck="false"
           placeholder="Cole o texto do seu vídeo aqui. Cada linha ou parágrafo será uma legenda.&#10;&#10;Exemplo:&#10;Olá a todos! Bem-vindos ao nosso canal.&#10;Hoje vamos falar sobre desenvolvimento web.&#10;Vamos começar com os conceitos básicos..."
-          class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-violet-500/50 leading-relaxed" />
+          class="w-full input-aurora font-mono resize-none leading-relaxed" />
         <div class="flex items-center justify-between text-xs text-blue-300/50">
           <span>{{ charCount }} caracteres</span>
           <button v-if="scriptText" @click="clear" class="text-red-400 hover:text-red-300 flex items-center gap-1">
@@ -143,22 +143,22 @@ const previewBlocks = computed(() => result.value?.blocks.slice(0, 5) || [])
             <div>
               <label class="text-blue-200 text-xs font-medium block mb-1">Máx. caracteres por bloco</label>
               <input v-model.number="maxChars" type="number" min="100" max="2000" step="50"
-                class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50" />
+                class="w-full input-aurora" />
             </div>
             <div>
               <label class="text-blue-200 text-xs font-medium block mb-1">Duração por bloco (s)</label>
               <input v-model.number="blockDuration" type="number" min="1" max="300" step="1"
-                class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50" />
+                class="w-full input-aurora" />
             </div>
             <div>
               <label class="text-blue-200 text-xs font-medium block mb-1">Intervalo entre blocos (s)</label>
               <input v-model.number="intervalBetweenBlocks" type="number" min="0" max="30" step="0.5"
-                class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50" />
+                class="w-full input-aurora" />
             </div>
             <div>
               <label class="text-blue-200 text-xs font-medium block mb-1">Nome do arquivo</label>
               <input v-model="outputFilename" type="text" placeholder="legendas" autocomplete="off"
-                class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/50" />
+                class="w-full input-aurora" />
             </div>
           </div>
           <button @click="convert" :disabled="!scriptText.trim() || isLoading"

@@ -123,11 +123,11 @@ const steps = [
       <p class="text-blue-200 text-sm">Baixe thumbnails do YouTube em alta qualidade — grátis, sem cadastro, ilimitado</p>
     </div>
 
-    <!-- Input -->
-      <div class="flex gap-3">
+    <!-- Input -->
+
         <input v-model="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off"
           @keyup.enter="buscar"
-          class="flex-1 bg-[#0a1628] text-white border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50" />
+          class="flex-1 input-aurora rounded-xl" />
         <button @click="buscar" :disabled="!youtubeUrl.trim() || isLoading"
           :class="['px-6 py-3 rounded-xl text-sm font-bold flex items-center gap-2 transition-all shadow', !youtubeUrl.trim() ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-500 text-white hover:scale-105']">
           <Icon :icon="isLoading ? 'mdi:loading' : 'mdi:magnify'" :class="['w-5 h-5', isLoading ? 'animate-spin' : '']" />

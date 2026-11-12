@@ -190,7 +190,7 @@ function fmt(key: keyof TextAnalysis, val: number): string {
           @input="side === 'A' ? (textA = ($event.target as HTMLTextAreaElement).value) : (textB = ($event.target as HTMLTextAreaElement).value)"
           rows="7"
           placeholder="Digite, cole ou importe um arquivo .txt..."
-          class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+          class="w-full input-aurora font-mono resize-y"
         ></textarea>
 
         <div class="flex flex-wrap gap-3 text-xs text-blue-200">
@@ -230,19 +230,20 @@ function fmt(key: keyof TextAnalysis, val: number): string {
       </div>
     </div>
 
-    <!-- Busca fuzzy -->
+    <!-- Busca fuzzy -->
+
       <h3 class="text-white font-semibold flex items-center gap-2">
         <Icon icon="mdi:magnify" class="text-blue-400 w-5 h-5" />
         Busca de Termos
       </h3>
       <div class="flex flex-col sm:flex-row gap-3">
         <select v-model="searchTarget"
-          class="bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+          class="input-aurora">
           <option value="A">Texto A</option>
           <option value="B">Texto B</option>
         </select>
         <input v-model="searchQuery" type="search" placeholder="Buscar palavra ou trecho..."
-          class="flex-1 bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+          class="flex-1 input-aurora" />
       </div>
       <div v-if="searchQuery.trim()">
         <p v-if="searchResults.length === 0" class="text-blue-300 text-sm">Nenhum resultado encontrado.</p>

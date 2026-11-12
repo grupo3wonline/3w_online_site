@@ -186,7 +186,7 @@ const currentTool = computed(() => tools.find(t => t.id === activeTab.value))
         <div class="flex items-center gap-2">
           <label class="text-blue-200 text-sm">Quantidade:</label>
           <input v-model.number="quantidade" type="number" min="1" max="50" autocomplete="off"
-            class="w-20 bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+            class="w-20 input-aurora" />
         </div>
         <button @click="gerar"
           class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">

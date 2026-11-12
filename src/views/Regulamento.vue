@@ -35,8 +35,8 @@
           </div>
 
           <!-- Índice de Navegação -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 mb-8 shadow-sm">
-            <h2 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 mb-8 shadow-sm">
+            <h2 class="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:format-list-numbered" class="w-4 h-4 text-primary-600" />
               Índice de Tópicos
             </h2>
@@ -51,10 +51,10 @@
           </div>
 
           <!-- Conteúdo Principal -->
-          <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-10 shadow-sm space-y-8 text-xs sm:text-sm text-gray-700 leading-relaxed">
+          <div class="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 sm:p-10 shadow-sm space-y-8 text-xs sm:text-sm text-gray-700 dark:text-slate-300 leading-relaxed">
             <!-- 1. Fluxo de Trabalho -->
             <section id="fluxo-trabalho" class="pt-2">
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Icon icon="mdi:sitemap-outline" class="w-5 h-5 text-primary-600" />
                 1. Fluxo de Trabalho e Metodologia
               </h2>
@@ -93,7 +93,7 @@
 
             <!-- 2. Prazos e Validação -->
             <section id="prazos-aprovacoes">
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Icon icon="mdi:clock-check-outline" class="w-5 h-5 text-primary-600" />
                 2. Prazos e Validação de Entregas
               </h2>
@@ -112,7 +112,7 @@
 
             <!-- 3. Condições de Pagamento -->
             <section id="condicoes-pagamento">
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Icon icon="mdi:cash-multiple" class="w-5 h-5 text-primary-600" />
                 3. Condições de Pagamento & Faturamento
               </h2>
@@ -126,7 +126,7 @@
 
             <!-- 4. Garantia e Suporte -->
             <section id="garantia-suporte">
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Icon icon="mdi:shield-check" class="w-5 h-5 text-primary-600" />
                 4. Garantia e Suporte Pós-Entrega
               </h2>
@@ -137,7 +137,7 @@
 
             <!-- 5. Cancelamento -->
             <section id="cancelamento-reembolso">
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Icon icon="mdi:close-circle-outline" class="w-5 h-5 text-primary-600" />
                 5. Política de Cancelamento e Rescisão
               </h2>
@@ -148,7 +148,7 @@
 
             <!-- 6. Canais Oficiais -->
             <section id="canais-atendimento" class="pt-4 border-t border-gray-100">
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                 <Icon icon="mdi:headset" class="w-5 h-5 text-primary-600" />
                 6. Canais de Atendimento e Suporte
               </h2>
@@ -172,9 +172,9 @@
           Fale com nossa equipe técnica para tirar qualquer dúvida sobre nossos processos de trabalho.
         </p>
         <div class="flex flex-col sm:flex-row gap-3.5 justify-center">
-          <RouterLink to="/contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
+          <a href="/#contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
             Falar Conosco
-          </RouterLink>
+          </a>
           <a
             href="https://wa.me/5541996924829?text=Olá! Gostaria de esclarecer dúvidas sobre o regulamento de serviços."
             target="_blank"

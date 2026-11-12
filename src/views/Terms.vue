@@ -24,18 +24,18 @@
     <!-- Content Section -->
     <section class="section-padding bg-slate-50/50">
       <div class="container">
-        <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl border border-gray-100 shadow-sm">
-          <div class="bg-primary-50 border border-primary-100 rounded-xl p-4 mb-8 flex items-start gap-3">
-            <Icon icon="mdi:information-outline" class="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
-            <div class="text-xs text-primary-900 leading-relaxed">
+        <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-6 sm:p-10 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
+          <div class="bg-primary-50 dark:bg-primary-900/30 border border-primary-100 dark:border-primary-700/50 rounded-xl p-4 mb-8 flex items-start gap-3">
+            <Icon icon="mdi:information-outline" class="w-5 h-5 text-primary-600 dark:text-primary-400 shrink-0 mt-0.5" />
+            <div class="text-xs text-primary-900 dark:text-primary-200 leading-relaxed">
               <strong>Vigência:</strong> Atualizado em Agosto de 2024.<br />
               Ao navegar neste portal ou contratar quaisquer serviços da <strong>3W Online Soluções Digitais</strong>, você declara ter lido e concordado com as condições descritas abaixo.
             </div>
           </div>
 
-          <div class="space-y-8 text-xs sm:text-sm text-gray-700 leading-relaxed">
+          <div class="space-y-8 text-xs sm:text-sm text-gray-700 dark:text-slate-300 leading-relaxed">
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <Icon icon="mdi:check-decagram-outline" class="w-5 h-5 text-primary-600" />
                 1. Aceitação e Objeto
               </h2>
@@ -45,7 +45,7 @@
             </div>
 
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <Icon icon="mdi:briefcase-outline" class="w-5 h-5 text-primary-600" />
                 2. Contratação e Prestação de Serviços
               </h2>
@@ -58,14 +58,14 @@
             </div>
 
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <Icon icon="mdi:account-check-outline" class="w-5 h-5 text-primary-600" />
                 3. Responsabilidades das Partes
               </h2>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
                 <div class="p-4 bg-slate-50 rounded-xl border border-gray-100">
-                  <p class="font-bold text-gray-900 mb-2 text-xs">Compromissos da 3W Online:</p>
-                  <ul class="list-disc list-inside space-y-1 text-gray-600 text-xs">
+                  <p class="font-bold text-gray-900 dark:text-white mb-2 text-xs">Compromissos da 3W Online:</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-600 dark:text-slate-300 text-xs">
                     <li>Executar os serviços com alto padrão técnico e código limpo;</li>
                     <li>Manter sigilo e proteção de dados (LGPD);</li>
                     <li>Cumprir os prazos acordados no escopo;</li>
@@ -73,8 +73,8 @@
                   </ul>
                 </div>
                 <div class="p-4 bg-slate-50 rounded-xl border border-gray-100">
-                  <p class="font-bold text-gray-900 mb-2 text-xs">Compromissos do Cliente:</p>
-                  <ul class="list-disc list-inside space-y-1 text-gray-600 text-xs">
+                  <p class="font-bold text-gray-900 dark:text-white mb-2 text-xs">Compromissos do Cliente:</p>
+                  <ul class="list-disc list-inside space-y-1 text-gray-600 dark:text-slate-300 text-xs">
                     <li>Fornecer briefing, acessos e textos necessários;</li>
                     <li>Validar e aprovar entregas dentro dos prazos;</li>
                     <li>Honrar as datas de pagamento acordadas;</li>
@@ -85,7 +85,7 @@
             </div>
 
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <Icon icon="mdi:copyright" class="w-5 h-5 text-primary-600" />
                 4. Propriedade Intelectual e Código-Fonte
               </h2>
@@ -95,7 +95,7 @@
             </div>
 
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <Icon icon="mdi:tools" class="w-5 h-5 text-primary-600" />
                 5. Suíte de Ferramentas Gratuitas Client-Side
               </h2>
@@ -105,7 +105,7 @@
             </div>
 
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <Icon icon="mdi:shield-lock-outline" class="w-5 h-5 text-primary-600" />
                 6. Privacidade e Proteção Global de Dados
               </h2>
@@ -115,7 +115,7 @@
             </div>
 
             <div>
-              <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-2 flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                 <Icon icon="mdi:scale-balance" class="w-5 h-5 text-primary-600" />
                 7. Foro de Eleição
               </h2>

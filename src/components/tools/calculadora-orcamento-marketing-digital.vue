@@ -73,14 +73,14 @@ function fmtN(v: number) { return v.toLocaleString('pt-BR') }
         Calculadora de Orçamento de Marketing Digital
       </h1>
       <p class="text-blue-200 text-sm">Estime o investimento em campanhas com influenciadores e ads</p>
-    </div>
+    </div>
+
       <div>
         <label class="text-blue-200 text-sm font-medium block mb-2 flex items-center gap-2">
           <Icon icon="mdi:account-multiple-outline" class="w-4 h-4 text-indigo-400" />
           Número de Seguidores / Audiência
-        </label>
         <input v-model="followers" type="text" inputmode="numeric" autocomplete="off" placeholder="Ex: 50000"
-          class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          class="w-full input-aurora" />
         <p class="text-blue-300/60 text-xs mt-1">Número total de seguidores/visitantes atingidos</p>
       </div>
 
@@ -90,7 +90,7 @@ function fmtN(v: number) { return v.toLocaleString('pt-BR') }
           Taxa por Seguidor (R$)
         </label>
         <input v-model="ratePerFollower" type="text" inputmode="decimal" autocomplete="off" placeholder="Ex: 0.05"
-          class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          class="w-full input-aurora" />
         <p class="text-blue-300/60 text-xs mt-1">Valor cobrado por seguidor por dia (ex.: R$ 0,05)</p>
       </div>
 
@@ -100,7 +100,7 @@ function fmtN(v: number) { return v.toLocaleString('pt-BR') }
           Duração da Campanha (dias)
         </label>
         <input v-model="durationDays" type="text" inputmode="numeric" autocomplete="off" placeholder="Ex: 30"
-          class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+          class="w-full input-aurora" />
         <p class="text-blue-300/60 text-xs mt-1">Duração total da campanha em dias</p>
       </div>
 

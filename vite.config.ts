@@ -128,6 +128,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   return {
+    // base: define o caminho raiz dos assets no build.
+    // '/' para deploy na raiz; '/subdir/' se hospedar em subdiretório.
+    base: env.VITE_BASE || '/',
+
     plugins: [vue(), apiProxyDevPlugin(env)],
     resolve: {
       alias: {
@@ -140,11 +144,21 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: 'es2020',
+      // Alerta para chunks acima de 500KB
+      chunkSizeWarningLimit: 500,
       rollupOptions: {
         output: {
           manualChunks: {
-            vendor: ['vue', 'vue-router', 'pinia'],
-            ui: ['sweetalert2', '@iconify/vue'],
+            // Core Vue
+            'vendor-vue': ['vue', 'vue-router', 'pinia'],
+            // UI e ícones
+            'vendor-ui': ['sweetalert2', '@iconify/vue'],
+            // Utilitários
+            'vendor-utils': ['dompurify', 'fuse.js', 'date-fns', 'maska', 'zod'],
+            // OCR (pesado — separado por razões de performance)
+            'vendor-ocr': ['tesseract.js'],
+            // QR Code
+            'vendor-qr': ['qrcode'],
           },
         },
       },

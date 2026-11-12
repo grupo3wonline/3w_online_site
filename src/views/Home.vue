@@ -245,14 +245,14 @@
           <div
             v-for="item in timeline"
             :key="item.year"
-            class="flex items-start gap-4 sm:gap-6 bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all"
+            class="flex items-start gap-4 sm:gap-6 bg-white dark:bg-slate-800 p-5 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all"
           >
             <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 text-white flex items-center justify-center shrink-0 font-black text-sm shadow-md shadow-primary-600/20">
               {{ item.year }}
             </div>
             <div class="flex-1">
-              <h3 class="text-sm sm:text-base font-bold text-gray-900 mb-1">{{ item.title }}</h3>
-              <p class="text-xs text-gray-600 leading-relaxed">{{ item.description }}</p>
+              <h3 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white mb-1">{{ item.title }}</h3>
+              <p class="text-xs text-gray-600 dark:text-slate-300 leading-relaxed">{{ item.description }}</p>
             </div>
           </div>
         </div>
@@ -270,12 +270,12 @@
           <h2 class="section-title">Certificações & Padrões Técnicos</h2>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto mb-16">
-          <div v-for="cert in certifications" :key="cert.title" class="p-6 rounded-xl border border-gray-100 bg-slate-50 text-center hover:shadow-md transition-all">
+          <div v-for="cert in certifications" :key="cert.title" class="p-6 rounded-xl border border-gray-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-center hover:shadow-md transition-all">
             <div class="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" :class="cert.bgColor">
               <Icon :icon="cert.icon" class="w-6 h-6 text-white" />
             </div>
-            <h4 class="font-bold text-gray-900 text-sm mb-1">{{ cert.title }}</h4>
-            <p class="text-xs text-gray-500 leading-relaxed">{{ cert.desc }}</p>
+            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1">{{ cert.title }}</h4>
+            <p class="text-xs text-gray-500 dark:text-slate-400 leading-relaxed">{{ cert.desc }}</p>
           </div>
         </div>
 
@@ -288,32 +288,32 @@
           </p>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          <div class="card p-6 sm:p-8 bg-slate-50 border border-gray-200">
-            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+          <div class="card p-6 sm:p-8 bg-slate-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 dark:border-slate-700">
               <div class="w-10 h-10 rounded-lg bg-primary-600 text-white flex items-center justify-center shrink-0">
                 <Icon icon="mdi:domain" class="w-6 h-6" />
               </div>
               <div>
-                <h3 class="font-bold text-gray-900 text-base">Identificação da Empresa</h3>
-                <p class="text-xs text-gray-500">Dados cadastrais oficiais da Receita Federal</p>
+                <h3 class="font-bold text-gray-900 dark:text-white text-base">Identificação da Empresa</h3>
+                <p class="text-xs text-gray-500 dark:text-slate-400">Dados cadastrais oficiais da Receita Federal</p>
               </div>
             </div>
             <dl class="space-y-3.5 text-xs">
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">Razão Social:</dt>
-                <dd class="text-gray-900 font-bold text-right">3W Online Soluções Digitais</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">Razão Social:</dt>
+                <dd class="text-gray-900 dark:text-white font-bold text-right">3W Online Soluções Digitais</dd>
               </div>
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">Nome Fantasia:</dt>
-                <dd class="text-gray-900 font-bold text-right">Grupo 3W Online</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">Nome Fantasia:</dt>
+                <dd class="text-gray-900 dark:text-white font-bold text-right">Grupo 3W Online</dd>
               </div>
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">Sede / Município:</dt>
-                <dd class="text-gray-900 font-medium text-right">Curitiba, Paraná — Brasil</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">Sede / Município:</dt>
+                <dd class="text-gray-900 dark:text-white font-medium text-right">Curitiba, Paraná — Brasil</dd>
               </div>
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">Ano de Fundação:</dt>
-                <dd class="text-gray-900 font-medium text-right">2019</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">Ano de Fundação:</dt>
+                <dd class="text-gray-900 dark:text-white font-medium text-right">2019</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-gray-500 font-medium">Enquadramento Tributário:</dt>
@@ -322,32 +322,32 @@
             </dl>
           </div>
 
-          <div class="card p-6 sm:p-8 bg-slate-50 border border-gray-200">
-            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200">
+          <div class="card p-6 sm:p-8 bg-slate-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 dark:border-slate-700">
               <div class="w-10 h-10 rounded-lg bg-green-600 text-white flex items-center justify-center shrink-0">
                 <Icon icon="mdi:shield-check" class="w-6 h-6" />
               </div>
               <div>
-                <h3 class="font-bold text-gray-900 text-base">Canais Oficiais & Compliance</h3>
-                <p class="text-xs text-gray-500">Atendimento direto e segurança jurídica</p>
+                <h3 class="font-bold text-gray-900 dark:text-white text-base">Canais Oficiais & Compliance</h3>
+                <p class="text-xs text-gray-500 dark:text-slate-400">Atendimento direto e segurança jurídica</p>
               </div>
             </div>
             <dl class="space-y-3.5 text-xs">
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">Telefone / WhatsApp:</dt>
-                <dd class="text-gray-900 font-bold text-right">(41) 99692-4829</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">Telefone / WhatsApp:</dt>
+                <dd class="text-gray-900 dark:text-white font-bold text-right">(41) 99692-4829</dd>
               </div>
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">E-mail Corporativo:</dt>
-                <dd class="text-primary-600 font-medium text-right">contato@3wonline.com.br</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">E-mail Corporativo:</dt>
+                <dd class="text-primary-600 dark:text-primary-400 font-medium text-right">contato@3wonline.com.br</dd>
               </div>
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">Proteção de Dados:</dt>
-                <dd class="text-green-700 font-bold text-right">100% Conforme LGPD</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">Proteção de Dados:</dt>
+                <dd class="text-green-700 dark:text-green-400 font-bold text-right">100% Conforme LGPD</dd>
               </div>
-              <div class="flex justify-between border-b border-gray-200/60 pb-2">
-                <dt class="text-gray-500 font-medium">Horário de Funcionamento:</dt>
-                <dd class="text-gray-900 font-medium text-right">Seg–Sex: 8h às 18h</dd>
+              <div class="flex justify-between border-b border-gray-200/60 dark:border-slate-700/60 pb-2">
+                <dt class="text-gray-500 dark:text-slate-400 font-medium">Horário de Funcionamento:</dt>
+                <dd class="text-gray-900 dark:text-white font-medium text-right">Seg–Sex: 8h às 18h</dd>
               </div>
               <div class="flex justify-between">
                 <dt class="text-gray-500 font-medium">Área de Atendimento:</dt>

@@ -91,8 +91,8 @@ const fields = [
               <span class="text-blue-400/60" :title="f.help">ⓘ</span>
             </label>
             <input v-model.number="form[f.key]" type="number" :step="f.key === 'numeroPontos' ? '1' : '0.01'" min="0" autocomplete="off"
-              :class="['w-full bg-[#0a1628] text-white border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50',
-                erros.includes(f.key) ? 'border-red-500/50' : 'border-white/10']" />
+              :class="['w-full input-aurora',
+                erros.includes(f.key) ? '!border-red-500/50' : '']" />
             <p v-if="erros.includes(f.key)" class="text-red-400 text-xs mt-0.5">Campo obrigatório (valor &gt; 0)</p>
           </div>
         </div>

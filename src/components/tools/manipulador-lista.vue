@@ -199,14 +199,14 @@ const sepOptions: { value: SepType; label: string }[] = [
           <div class="space-y-1">
             <label class="text-xs text-blue-200">Separador de Entrada</label>
             <select v-model="inputSep"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+              class="w-full input-aurora">
               <option v-for="o in sepOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
             </select>
           </div>
           <div v-if="inputSep === 'custom'" class="space-y-1">
             <label class="text-xs text-blue-200">Separador customizado</label>
             <input v-model="customInputSep" placeholder="Ex: |"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none" />
+              class="w-full input-aurora" />
           </div>
         </div>
 
@@ -214,7 +214,7 @@ const sepOptions: { value: SepType; label: string }[] = [
           v-model="inputText"
           rows="8"
           placeholder="Cole ou digite sua lista aqui..."
-          class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+          class="w-full input-aurora font-mono resize-y"
         ></textarea>
 
         <div class="flex justify-between items-center text-xs text-blue-300">
@@ -237,14 +237,14 @@ const sepOptions: { value: SepType; label: string }[] = [
           <div class="space-y-1">
             <label class="text-xs text-blue-200">Separador de Saída</label>
             <select v-model="outputSep"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+              class="w-full input-aurora">
               <option v-for="o in sepOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
             </select>
           </div>
           <div v-if="outputSep === 'custom'" class="space-y-1">
             <label class="text-xs text-blue-200">Separador customizado</label>
             <input v-model="customOutputSep" placeholder="Ex: |"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none" />
+              class="w-full input-aurora" />
           </div>
         </div>
 
@@ -253,7 +253,7 @@ const sepOptions: { value: SepType; label: string }[] = [
           readonly
           rows="8"
           placeholder="O resultado aparecerá aqui..."
-          class="w-full bg-[#0a1628]/60 text-blue-200 placeholder-blue-300/40 border border-white/10 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none"
+          class="w-full input-aurora font-mono resize-y opacity-80"
         ></textarea>
 
         <div class="flex justify-between items-center">

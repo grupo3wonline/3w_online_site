@@ -8,13 +8,20 @@
 #    Configure aqui as chaves SECRETAS do proxy PHP (api.php).
 #    Estas variáveis são lidas por api-config.php via getenv().
 #
-#    ⚠️  INSTRUÇÕES:
-#    1. Descomente as linhas SetEnv abaixo
+#    ⚠️  INSTRUÇÕES DE CONFIGURAÇÃO EM PRODUÇÃO:
+#    1. Descomente as linhas SetEnv abaixo (remova o "#" no início)
 #    2. Substitua os valores pelos seus segredos reais
 #    3. NUNCA commite este arquivo com os valores preenchidos!
+#    4. Faça upload apenas via FTP/cPanel File Manager — nunca via git
 #
 #    Para gerar o HMAC_SECRET:
 #      php -r "echo bin2hex(random_bytes(32));"
+#
+#    Chaves disponíveis:
+#      API_RECAPTCHA_SECRET  → Chave secreta do Google reCAPTCHA v3
+#                              Painel: https://www.google.com/recaptcha/admin
+#      API_TURNSTILE_SECRET  → Chave secreta do Cloudflare Turnstile
+#                              Painel: https://dash.cloudflare.com → Turnstile
 # ------------------------------------------------------------------------------
 # SetEnv API_HMAC_SECRET     cole_aqui_string_hexadecimal_de_64_chars
 # SetEnv API_RECAPTCHA_SECRET cole_aqui_chave_secreta_do_google_recaptcha
@@ -126,9 +133,11 @@ ErrorDocument 500 /500.html
 # 7. Cabeçalhos de Segurança HTTP (Security Headers)
 # ------------------------------------------------------------------------------
 <IfModule mod_headers.c>
-  # Content Security Policy — restringe fontes de scripts, estilos e conexões
-  # connect-src 'self' garante que todos os fetch() vão apenas para o nosso domínio (via proxy)
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://*.tile.openstreetmap.org https://nominatim.openstreetmap.org; frame-src 'self' https://www.openstreetmap.org https://challenges.cloudflare.com; connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://www.googletagmanager.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self';"
+  # Nota: o Content-Security-Policy está definido via <meta> em index.html
+  # (onde é mais fácil manter junto com os outros meta tags de segurança).
+  # NÃO adicione um Header CSP aqui — dois CSPs simultâneos causam conflito:
+  # o browser aplica a intersecção mais restritiva e bloqueia ícones, fontes
+  # e imagens externas (Iconify API, Google Fonts, etc.).
 
   # Previne ataque MIME-sniffing
   Header always set X-Content-Type-Options "nosniff"

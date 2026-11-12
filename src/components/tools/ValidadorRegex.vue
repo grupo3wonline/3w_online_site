@@ -153,7 +153,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-nocheck
 import { ref, computed } from 'vue'
 import DOMPurify from 'dompurify'
 import ToolShell from '@/components/tools/common/ToolShell.vue'

@@ -176,9 +176,9 @@ function printInvoice() {
             <Icon icon="mdi:account-outline" class="text-blue-400 w-4 h-4" />
             Faturar Para (Bill To)
           </h3>
-          <input v-model="billTo.name" placeholder="Nome / Empresa" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <input v-model="billTo.address" placeholder="Endereço" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <input v-model="billTo.phone" placeholder="Telefone" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+          <input v-model="billTo.name" placeholder="Nome / Empresa" autocomplete="off" class="w-full input-aurora" />
+          <input v-model="billTo.address" placeholder="Endereço" autocomplete="off" class="w-full input-aurora" />
+          <input v-model="billTo.phone" placeholder="Telefone" autocomplete="off" class="w-full input-aurora" />
         </div>
 
         <!-- Ship To -->
@@ -187,9 +187,9 @@ function printInvoice() {
             <Icon icon="mdi:truck-delivery-outline" class="text-blue-400 w-4 h-4" />
             Enviar Para (Ship To)
           </h3>
-          <input v-model="shipTo.name" placeholder="Nome / Empresa" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <input v-model="shipTo.address" placeholder="Endereço" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <input v-model="shipTo.phone" placeholder="Telefone" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+          <input v-model="shipTo.name" placeholder="Nome / Empresa" autocomplete="off" class="w-full input-aurora" />
+          <input v-model="shipTo.address" placeholder="Endereço" autocomplete="off" class="w-full input-aurora" />
+          <input v-model="shipTo.phone" placeholder="Telefone" autocomplete="off" class="w-full input-aurora" />
         </div>
 
         <!-- Invoice info -->
@@ -201,15 +201,15 @@ function printInvoice() {
           <div class="grid grid-cols-3 gap-3">
             <div class="space-y-1">
               <label class="text-xs text-blue-200">Número</label>
-              <input v-model="invoice.number" class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+              <input v-model="invoice.number" autocomplete="off" class="w-full input-aurora" />
             </div>
             <div class="space-y-1">
               <label class="text-xs text-blue-200">Data</label>
-              <input type="date" v-model="invoice.date" class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+              <input type="date" v-model="invoice.date" class="w-full input-aurora" />
             </div>
             <div class="space-y-1">
               <label class="text-xs text-blue-200">Vencimento</label>
-              <input type="date" v-model="invoice.paymentDate" class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+              <input type="date" v-model="invoice.paymentDate" class="w-full input-aurora" />
             </div>
           </div>
         </div>
@@ -220,9 +220,9 @@ function printInvoice() {
             <Icon icon="mdi:office-building-outline" class="text-blue-400 w-4 h-4" />
             Sua Empresa
           </h3>
-          <input v-model="yourCompany.name" placeholder="Nome da Empresa" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <input v-model="yourCompany.address" placeholder="Endereço Completo" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
-          <input v-model="yourCompany.phone" placeholder="Telefone" class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+          <input v-model="yourCompany.name" placeholder="Nome da Empresa" autocomplete="off" class="w-full input-aurora" />
+          <input v-model="yourCompany.address" placeholder="Endereço Completo" autocomplete="off" class="w-full input-aurora" />
+          <input v-model="yourCompany.phone" placeholder="Telefone" autocomplete="off" class="w-full input-aurora" />
         </div>
       </div>
 
@@ -304,7 +304,7 @@ function printInvoice() {
             Observações
           </h3>
           <textarea v-model="notes" rows="3" placeholder="Observações da fatura..."
-            class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+            class="w-full input-aurora resize-none" />
         </div>
       </div>
     </div>

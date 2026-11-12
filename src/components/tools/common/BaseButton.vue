@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-type Variant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'outline' | 'ghost' | 'glass'
+type Variant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'purple' | 'indigo' | 'teal' | 'outline' | 'ghost' | 'glass'
 type Size    = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
 const props = withDefaults(defineProps<{
@@ -83,6 +83,21 @@ const variantMap: Record<Variant, string> = {
     'bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 ' +
     'text-white shadow-sm active:scale-[0.98] ' +
     'focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2',
+
+  purple:
+    'bg-gradient-to-r from-violet-600 to-purple-700 hover:from-violet-700 hover:to-purple-800 ' +
+    'text-white shadow-sm hover:shadow-glow-purple active:scale-[0.98] ' +
+    'focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-offset-2',
+
+  indigo:
+    'bg-gradient-to-r from-indigo-600 to-blue-700 hover:from-indigo-700 hover:to-blue-800 ' +
+    'text-white shadow-sm active:scale-[0.98] ' +
+    'focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2',
+
+  teal:
+    'bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 ' +
+    'text-white shadow-sm active:scale-[0.98] ' +
+    'focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:ring-offset-2',
 
   outline:
     'border-2 border-primary-500/40 dark:border-primary-500/50 ' +

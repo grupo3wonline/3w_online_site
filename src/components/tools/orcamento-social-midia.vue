@@ -147,9 +147,9 @@ function toast(msg: string) { notification.value = msg; setTimeout(() => { notif
           <h2 class="text-white font-semibold flex items-center gap-2"><Icon icon="mdi:account-tie" class="text-purple-400 w-5 h-5" /> Dados do Prestador</h2>
           <div class="grid sm:grid-cols-2 gap-3">
             <input v-model="client.providerName" type="text" placeholder="Seu nome / empresa" autocomplete="off"
-              class="bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50" />
+              class="input-aurora" />
             <input v-model="client.providerContact" type="text" placeholder="Contato (tel / e-mail)" autocomplete="off"
-              class="bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50" />
+              class="input-aurora" />
           </div>
         </div>
 
@@ -157,9 +157,9 @@ function toast(msg: string) { notification.value = msg; setTimeout(() => { notif
           <h2 class="text-white font-semibold flex items-center gap-2"><Icon icon="mdi:file-account" class="text-purple-400 w-5 h-5" /> Dados do Cliente</h2>
           <div class="grid sm:grid-cols-2 gap-3">
             <input v-model="client.clientName" type="text" placeholder="Nome do cliente" autocomplete="off"
-              class="bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50" />
+              class="input-aurora" />
             <input v-model="client.clientEmail" type="email" placeholder="E-mail" autocomplete="off"
-              class="bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50" />
+              class="input-aurora" />
           </div>
           <textarea v-model="client.observations" rows="2" placeholder="Observações sobre o projeto..."
             class="w-full input-aurora" />

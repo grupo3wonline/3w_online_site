@@ -145,7 +145,7 @@ const familyCards = computed(() => family.value ? [
           type="text"
           inputmode="numeric"
           placeholder="R$ 0,00"
-          class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-3 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+          class="w-full input-aurora text-lg"
         />
       </div>
       <button @click="calculate" :disabled="!salaryInput"

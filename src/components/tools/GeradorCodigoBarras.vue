@@ -130,7 +130,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-nocheck
 import { ref, onMounted } from 'vue'
 import Swal from 'sweetalert2'
 import ToolShell from '@/components/tools/common/ToolShell.vue'

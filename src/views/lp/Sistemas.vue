@@ -1,5 +1,21 @@
 <template>
   <div class="sistemas-page">
+
+    <LpUrgencyBanner
+      :total-slots="5"
+      :taken-slots="3"
+      cta-label="Garantir Consultoria Grátis"
+      cta-url="https://wa.me/5541996924829?text=Olá! Gostaria de uma consultoria gratuita sobre sistemas web sob medida."
+      storage-key="lp_sistemas_urgency"
+    />
+    <LpSocialProof />
+    <LpStickyBar
+      title="Sistemas Web Sob Medida — Sem Mensalidade por Usuário"
+      subtitle="Automatize processos e ganhe 40h/semana"
+      slots-text="3 vagas restantes"
+      cta-label="Solicitar Consultoria Grátis"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero uma consultoria gratuita para sistema sob medida."
+    />
     <!-- Hero / Primeira Dobra — Dark Navy com Escassez & Confiança -->
     <section class="page-hero relative overflow-hidden py-16 md:py-24">
       <div class="container relative z-10">
@@ -265,6 +281,19 @@
     </section>
 
     <!-- Oferta Irresistível + Bônus Inclusos -->
+    <LpComparison
+      cta-label="Escolher a 3W Online para Meu Sistema"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero contratar desenvolvimento de sistema sob medida."
+      :rows="[
+        { criterion: 'Usuários ilimitados sem taxa extra',         us: true,       agency: false,          diy: false     },
+        { criterion: 'Código-fonte proprietário do cliente',       us: true,       agency: 'Raramente',    diy: true      },
+        { criterion: 'Integração com APIs externas inclusa',       us: true,       agency: 'Cobrado extra', diy: false    },
+        { criterion: 'Dashboard e relatórios em tempo real',       us: true,       agency: 'Parcial',      diy: false     },
+        { criterion: 'Suporte e manutenção pós-entrega',           us: true,       agency: 'Ticket',       diy: false     },
+        { criterion: 'Migração de dados de planilhas',             us: 'Gratuito', agency: 'Cobrado',      diy: false     },
+        { criterion: 'Garantia de 30 dias sem burocracia',         us: true,       agency: false,          diy: false     },
+      ]"
+    />
     <section class="section-padding bg-gradient-to-b from-slate-900 to-[#0a1628] text-white">
       <div class="container max-w-4xl">
         <div class="text-center mb-10">
@@ -336,6 +365,17 @@
     </section>
 
     <!-- Simulador de Preço Integrado -->
+    <LpGuarantee
+      cta-label="Iniciar Meu Sistema com Garantia"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero iniciar meu sistema sob medida com garantia de 30 dias."
+      :items="[
+        'Cancelamento sem multa se não aprovar a prototipagem em até 7 dias',
+        'Código-fonte entregue integralmente ao cliente após quitação',
+        'Suporte técnico incluso por 30 dias após a publicação',
+        'Migração gratuita dos dados das suas planilhas atuais',
+        'Treinamento em vídeo e sessão ao vivo para toda a equipe',
+      ]"
+    />
     <section id="simulador" class="testimonial-section section-padding">
       <div class="container">
         <div class="text-center mb-10 max-w-2xl mx-auto">
@@ -384,9 +424,9 @@
             <Icon icon="mdi:whatsapp" class="w-5 h-5" />
             Agendar Consultoria no WhatsApp
           </a>
-          <RouterLink to="/contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+          <a href="/#contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
             Solicitar Proposta por E-mail
-          </RouterLink>
+          </a>
         </div>
       </div>
     </section>
@@ -398,6 +438,11 @@ import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import LpUrgencyBanner from '@/components/lp/LpUrgencyBanner.vue'
+import LpStickyBar from '@/components/lp/LpStickyBar.vue'
+import LpComparison from '@/components/lp/LpComparison.vue'
+import LpGuarantee from '@/components/lp/LpGuarantee.vue'
+import LpSocialProof from '@/components/lp/LpSocialProof.vue'
 import { useSeo } from '@/composables/useSeo'
 
 const { applySeo } = useSeo()

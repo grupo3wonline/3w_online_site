@@ -1,5 +1,22 @@
 <template>
   <div class="service-hotsite">
+
+    <LpUrgencyBanner
+      :total-slots="5"
+      :taken-slots="3"
+      cta-label="Planejar Minha Campanha"
+      cta-url="https://wa.me/5541996924829?text=Olá! Gostaria de planejar uma campanha publicitária personalizada."
+      storage-key="svc_campaign_urgency"
+    />
+    <LpSocialProof />
+    <LpStickyBar
+      title="Planejamento de Campanhas — Black Friday, Lançamentos & Sazonais"
+      subtitle="Estratégia multicanal com alto impacto"
+      slots-text="2 vagas restantes"
+      cta-label="Planejar Minha Campanha"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero planejar uma campanha publicitária."
+    />
+
     <!-- 1. Primeira Dobra — Promessa + Ação + Escassez -->
     <section class="page-hero relative overflow-hidden py-16 md:py-24">
       <div class="container relative z-10">
@@ -407,6 +424,11 @@
       </div>
     </section>
 
+    <LpGuarantee
+      cta-label="Planejar Campanha com Garantia Total"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero planejar uma campanha com garantia."
+    />
+
     <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
@@ -440,9 +462,9 @@
             <Icon icon="mdi:whatsapp" class="w-5 h-5" />
             Agendar Reunião no WhatsApp
           </a>
-          <RouterLink to="/contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+          <a href="/#contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
             Enviar Formulário de Contato
-          </RouterLink>
+          </a>
         </div>
         <div class="mt-6 text-xs text-blue-300">
           Sem compromisso • Resposta em minutos • 30 dias de garantia
@@ -458,6 +480,10 @@ import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import LpUrgencyBanner from '@/components/lp/LpUrgencyBanner.vue'
+import LpStickyBar from '@/components/lp/LpStickyBar.vue'
+import LpGuarantee from '@/components/lp/LpGuarantee.vue'
+import LpSocialProof from '@/components/lp/LpSocialProof.vue'
 import { useSeo } from '@/composables/useSeo'
 
 const { applySeo, injectJsonLd, faqSchema } = useSeo()

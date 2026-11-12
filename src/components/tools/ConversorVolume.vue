@@ -128,7 +128,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-nocheck
 import { ref } from 'vue'
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'

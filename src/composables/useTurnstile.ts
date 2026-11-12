@@ -56,6 +56,12 @@ function loadScript(): Promise<void> {
   })
 }
 
+/** Retorna o token Turnstile cacheado sem esperar (não-bloqueante).
+ *  Retorna '' se não há cache válido. */
+export function getTurnstileCache(): string {
+  return (_cachedToken && Date.now() < _cacheExpiry) ? _cachedToken : ''
+}
+
 export function useTurnstile() {
   /**
    * Executa o Turnstile e retorna o token gerado.

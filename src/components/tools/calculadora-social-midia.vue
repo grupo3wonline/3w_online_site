@@ -113,7 +113,7 @@ const addons = [
               <Icon :icon="f.icon" class="w-3 h-3" /> {{ f.label }}
             </label>
             <input v-model.number="data[f.key]" type="number" min="0" :step="(f as any).step ?? '1'" :max="(f as any).max" autocomplete="off"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-500/50" />
+              class="w-full input-aurora" />
           </div>
         </div>
 

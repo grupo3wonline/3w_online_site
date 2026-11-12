@@ -203,7 +203,7 @@ function exportJSON() {
               <input type="color" v-model="baseColor"
                 class="w-12 h-10 rounded-lg border-2 border-white/10 cursor-pointer bg-transparent" />
               <input type="text" v-model="baseColor"
-                class="flex-1 bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+                class="flex-1 input-aurora font-mono" />
             </div>
           </div>
           <div class="space-y-2">

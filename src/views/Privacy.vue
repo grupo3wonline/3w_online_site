@@ -39,7 +39,7 @@
     <!-- Content Section -->
     <section class="section-padding bg-slate-50/50">
       <div class="container">
-        <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl border border-gray-100 shadow-sm space-y-10 text-xs sm:text-sm text-gray-700 leading-relaxed">
+        <div class="max-w-4xl mx-auto bg-white dark:bg-slate-800 p-6 sm:p-10 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm space-y-10 text-xs sm:text-sm text-gray-700 dark:text-slate-300 leading-relaxed">
           
           <!-- Card de Ação Rápida de Preferências -->
           <div class="p-5 bg-slate-900 rounded-xl text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -62,7 +62,7 @@
 
           <!-- 1. Introdução e Controlador -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:domain" class="w-5 h-5 text-primary-600" />
               1. Identificação do Controlador & Compromisso Global
             </h2>
@@ -76,37 +76,37 @@
 
           <!-- 2. Matriz de Leis e Normas Aplicáveis -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:gavel" class="w-5 h-5 text-primary-600" />
               2. Marcos Regulatórios e Leis Atendidas
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-              <div class="p-4 rounded-xl border border-gray-200 bg-slate-50">
-                <div class="font-bold text-gray-900 text-xs sm:text-sm mb-1 flex items-center gap-1.5">
+              <div class="p-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700">
+                <div class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm mb-1 flex items-center gap-1.5">
                   <Icon icon="mdi:flag-variant" class="w-4 h-4 text-emerald-600" /> LGPD (Brasil — Lei 13.709/2018)
                 </div>
-                <p class="text-xs text-gray-600">Garantia integral dos direitos previstos no art. 18: confirmação, acesso, correção, anonimização, portabilidade, eliminação e revogação do consentimento.</p>
+                <p class="text-xs text-gray-600 dark:text-slate-300">Garantia integral dos direitos previstos no art. 18: confirmação, acesso, correção, anonimização, portabilidade, eliminação e revogação do consentimento.</p>
               </div>
 
-              <div class="p-4 rounded-xl border border-gray-200 bg-slate-50">
-                <div class="font-bold text-gray-900 text-xs sm:text-sm mb-1 flex items-center gap-1.5">
+              <div class="p-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700">
+                <div class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm mb-1 flex items-center gap-1.5">
                   <Icon icon="mdi:flag-variant" class="w-4 h-4 text-blue-600" /> GDPR (União Europeia & UK)
                 </div>
-                <p class="text-xs text-gray-600">Conformidade com o Regulamento Geral de Proteção de Dados (Reg. UE 2016/679): bases legais lícitas, direito ao esquecimento e cláusulas contratuais padrão para transferências.</p>
+                <p class="text-xs text-gray-600 dark:text-slate-300">Conformidade com o Regulamento Geral de Proteção de Dados (Reg. UE 2016/679): bases legais lícitas, direito ao esquecimento e cláusulas contratuais padrão para transferências.</p>
               </div>
 
-              <div class="p-4 rounded-xl border border-gray-200 bg-slate-50">
-                <div class="font-bold text-gray-900 text-xs sm:text-sm mb-1 flex items-center gap-1.5">
+              <div class="p-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700">
+                <div class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm mb-1 flex items-center gap-1.5">
                   <Icon icon="mdi:flag-variant" class="w-4 h-4 text-purple-600" /> CCPA / CPRA (Califórnia / EUA)
                 </div>
-                <p class="text-xs text-gray-600">Direito de saber quais dados são coletados, direito de exclusão, correção e declaração expressa: <strong>a 3W Online NUNCA vende ou compartilha dados pessoais para terceiros com fins monetários</strong> (<em>Do Not Sell My Info</em>).</p>
+                <p class="text-xs text-gray-600 dark:text-slate-300">Direito de saber quais dados são coletados, direito de exclusão, correção e declaração expressa: <strong>a 3W Online NUNCA vende ou compartilha dados pessoais para terceiros com fins monetários</strong> (<em>Do Not Sell My Info</em>).</p>
               </div>
 
-              <div class="p-4 rounded-xl border border-gray-200 bg-slate-50">
-                <div class="font-bold text-gray-900 text-xs sm:text-sm mb-1 flex items-center gap-1.5">
+              <div class="p-4 rounded-xl border border-gray-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700">
+                <div class="font-bold text-gray-900 dark:text-white text-xs sm:text-sm mb-1 flex items-center gap-1.5">
                   <Icon icon="mdi:flag-variant" class="w-4 h-4 text-amber-600" /> POPIA (África do Sul — Act 4 of 2013)
                 </div>
-                <p class="text-xs text-gray-600">Processamento lícito e proporcional de informações de pessoas físicas e jurídicas, respeitando o princípio de minimização e segurança da informação.</p>
+                <p class="text-xs text-gray-600 dark:text-slate-300">Processamento lícito e proporcional de informações de pessoas físicas e jurídicas, respeitando o princípio de minimização e segurança da informação.</p>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@
 
           <!-- 4. Dados Pessoais Coletados e Finalidade -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:database-outline" class="w-5 h-5 text-primary-600" />
               4. Dados Pessoais Coletados & Finalidades Específicas
             </h2>
@@ -142,7 +142,7 @@
 
           <!-- 5. Direitos dos Titulares e Procedimentos de Solicitação -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:account-key" class="w-5 h-5 text-primary-600" />
               5. Como Exercer Seus Direitos de Privacidade
             </h2>
@@ -255,7 +255,7 @@
 
           <!-- 6. Segurança e Transferência Internacional -->
           <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
               <Icon icon="mdi:lock-check" class="w-5 h-5 text-primary-600" />
               6. Segurança da Informação & Transferência Internacional
             </h2>
@@ -292,6 +292,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { Icon } from '@iconify/vue'
+import Swal from 'sweetalert2'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import AppTurnstile from '@/components/ui/AppTurnstile.vue'
 import { usePrivacyConsent } from '@/composables/usePrivacyConsent'
@@ -373,7 +374,12 @@ function submitPrivacyRequest(): void {
   if (!dsrForm.name || !dsrForm.email || !dsrForm.type || !dsrForm.confirm) return
   if (isBotPrivacy.value) return  // Bloqueia bot (honeypot)
   if (wasSubmittedRecently()) {
-    alert('Sua solicitação já foi enviada. Aguarde nossa resposta.')
+    Swal.fire({
+      icon: 'info',
+      title: 'Solicitação já enviada',
+      text: 'Sua solicitação de privacidade já foi registrada. Aguarde nossa resposta em até 5 dias úteis.',
+      confirmButtonColor: '#2563eb',
+    })
     return
   }
 

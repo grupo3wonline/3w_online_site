@@ -133,7 +133,7 @@ const tools: { id: Tool; label: string; icon: string }[] = [
     <!-- Base64 -->
     <div v-if="activeTool === 'base64'" class="bg-[#0f1e3c] border border-white/10 rounded-xl p-5 space-y-4">
       <h2 class="text-white font-semibold flex items-center gap-2"><Icon icon="mdi:code-json" class="text-blue-400 w-5 h-5" /> Base64 Converter</h2>
-      <textarea v-model="b64Input" rows="4" placeholder="Texto ou Base64 aqui..." class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+      <textarea v-model="b64Input" rows="4" placeholder="Texto ou Base64 aqui..." class="w-full input-aurora font-mono resize-none" />
       <div class="flex gap-3">
         <button @click="b64Encode" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">Codificar</button>
         <button @click="b64Decode" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">Decodificar</button>
@@ -147,7 +147,7 @@ const tools: { id: Tool; label: string; icon: string }[] = [
       <h2 class="text-white font-semibold flex items-center gap-2"><Icon icon="mdi:identifier" class="text-blue-400 w-5 h-5" /> UUID v4 Generator</h2>
       <div class="flex items-center gap-4">
         <label class="text-blue-200 text-sm">Quantidade:</label>
-        <input v-model.number="uuidCount" type="number" min="1" max="20" class="w-20 bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+        <input v-model.number="uuidCount" type="number" min="1" max="20" class="w-20 input-aurora" />
         <button @click="genUUID" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
           <Icon icon="mdi:cog" class="w-4 h-4" /> Gerar
         </button>
@@ -164,7 +164,7 @@ const tools: { id: Tool; label: string; icon: string }[] = [
     <!-- JSON -->
     <div v-if="activeTool === 'json'" class="bg-[#0f1e3c] border border-white/10 rounded-xl p-5 space-y-4">
       <h2 class="text-white font-semibold flex items-center gap-2"><Icon icon="mdi:code-braces" class="text-blue-400 w-5 h-5" /> JSON Formatter</h2>
-      <textarea v-model="jsonInput" rows="6" placeholder="Cole seu JSON aqui..." class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+      <textarea v-model="jsonInput" rows="6" placeholder="Cole seu JSON aqui..." class="w-full input-aurora font-mono resize-none" />
       <div class="flex gap-3">
         <button @click="formatJSON" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">Formatar</button>
         <button @click="minifyJSON" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">Minificar</button>
@@ -180,7 +180,7 @@ const tools: { id: Tool; label: string; icon: string }[] = [
       <div class="flex flex-wrap gap-4 items-center">
         <div class="flex items-center gap-2">
           <label class="text-blue-200 text-sm">Comprimento:</label>
-          <input v-model.number="pwdLength" type="number" min="6" max="64" class="w-20 bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+          <input v-model.number="pwdLength" type="number" min="6" max="64" class="w-20 input-aurora" />
         </div>
         <label v-for="[k, l] in [['upper','Maiúsculas'],['lower','Minúsculas'],['digits','Números'],['symbols','Símbolos']] as const" :key="k" class="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" v-model="(pwdOptions as any)[k]" class="rounded accent-blue-500" />
@@ -199,7 +199,7 @@ const tools: { id: Tool; label: string; icon: string }[] = [
     <!-- String -->
     <div v-if="activeTool === 'string'" class="bg-[#0f1e3c] border border-white/10 rounded-xl p-5 space-y-4">
       <h2 class="text-white font-semibold flex items-center gap-2"><Icon icon="mdi:format-text" class="text-blue-400 w-5 h-5" /> String Formatter</h2>
-      <textarea v-model="strInput" rows="3" class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+      <textarea v-model="strInput" rows="3" class="w-full input-aurora resize-none" />
       <div class="flex flex-wrap gap-2">
         <button v-for="[op, lbl] in [['upper','MAIÚSCULAS'],['lower','minúsculas'],['slug','slug-url'],['camel','camelCase'],['snake','snake_case'],['reverse','reverso'],['words','palavras'],['chars','caracteres']] as const" :key="op"
           @click="transformStr(op)" class="bg-white/10 hover:bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">{{ lbl }}</button>
@@ -213,7 +213,7 @@ const tools: { id: Tool; label: string; icon: string }[] = [
     <!-- JWT -->
     <div v-if="activeTool === 'jwt'" class="bg-[#0f1e3c] border border-white/10 rounded-xl p-5 space-y-4">
       <h2 class="text-white font-semibold flex items-center gap-2"><Icon icon="mdi:shield-key" class="text-blue-400 w-5 h-5" /> JWT Decoder</h2>
-      <textarea v-model="jwtInput" rows="4" placeholder="Cole o token JWT aqui..." class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+      <textarea v-model="jwtInput" rows="4" placeholder="Cole o token JWT aqui..." class="w-full input-aurora font-mono resize-none" />
       <button @click="decodeJWT" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors">Decodificar</button>
       <div v-if="jwtError" class="bg-red-900/30 border border-red-500/50 rounded-lg p-3 text-red-300 text-sm">{{ jwtError }}</div>
       <div v-if="jwtResult" class="space-y-3">

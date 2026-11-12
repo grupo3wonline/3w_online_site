@@ -36,6 +36,24 @@
           Limpar
         </BaseButton>
       </div>
+
+      <!-- Verificação de segurança -->
+      <div class="mt-3 space-y-1.5">
+        <AppTurnstile
+          ref="tsRef"
+          size="compact"
+          theme="dark"
+          action="cep_query"
+          @success="t => tsToken = t"
+          @expired="tsToken = ''"
+          @error="tsToken = ''"
+        />
+        <p class="text-[10px] text-blue-400/70 leading-tight">
+          Protegido por reCAPTCHA —
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="underline hover:text-blue-300">Privacidade</a>
+          e <a href="https://policies.google.com/terms" target="_blank" rel="noopener" class="underline hover:text-blue-300">Termos</a> do Google.
+        </p>
+      </div>
     </div>
 
     <!-- Resultado -->
@@ -233,6 +251,7 @@ import Swal from 'sweetalert2'
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import BaseButton from '@/components/tools/common/BaseButton.vue'
 import BaseInput from '@/components/tools/common/BaseInput.vue'
+import AppTurnstile from '@/components/ui/AppTurnstile.vue'
 import { useApiProxy }     from '@/composables/useApiProxy'
 import { useHoneypot }     from '@/composables/useHoneypot'
 import { useRequestGuard } from '@/composables/useRequestGuard'
@@ -241,6 +260,10 @@ import { debounce }        from '@/composables/useDebounce'
 const proxy = useApiProxy()
 const { hpField, isBot } = useHoneypot()
 const guard              = useRequestGuard()
+
+// Turnstile — token do widget visível no formulário
+const tsRef   = ref<InstanceType<typeof AppTurnstile> | null>(null)
+const tsToken = ref('')
 
 const cepTips = [
   { text: 'CEP tem exatamente 8 dígitos numéricos. A pontuação (hífen) é opcional.' },
@@ -354,14 +377,14 @@ async function consultarCep() {
       // 1. BrasilAPI v2 — tem coordenadas GPS
       let brasil: any = null
       try {
-        const r = await proxy.secureFetch(proxy.cepUrl(n), { signal: AbortSignal.timeout(8000) })
+        const r = await proxy.secureFetch(proxy.cepUrl(n), { signal: AbortSignal.timeout(8000) }, tsToken.value || undefined)
         if (r.ok) brasil = await r.json()
       } catch {}
 
       // 2. ViaCEP — dados complementares (ibge, ddd, siafi, regiao, estado)
       let via: any = null
       try {
-        const r = await proxy.secureFetch(proxy.viaCepUrl(n), { signal: AbortSignal.timeout(8000) })
+        const r = await proxy.secureFetch(proxy.viaCepUrl(n), { signal: AbortSignal.timeout(8000) }, tsToken.value || undefined)
         if (r.ok) {
           const d = await r.json()
           if (!d.erro) via = d
@@ -394,6 +417,8 @@ async function consultarCep() {
     }
 
     mensagem.value = `Endereço encontrado! ${dadosCep.value.latitude ? '📍 Coordenadas GPS disponíveis.' : ''}`
+    // Reseta o widget para gerar novo token na próxima consulta
+    tsRef.value?.reset(); tsToken.value = ''
 
   } catch {
     Swal.fire({ icon: 'warning', title: 'Sem conexão', text: 'Não foi possível consultar as APIs. Verifique sua conexão.', confirmButtonColor: '#2563eb' })

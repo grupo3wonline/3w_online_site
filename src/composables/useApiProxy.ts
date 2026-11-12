@@ -26,9 +26,9 @@
  *   8 → ViaCEP        (viacep.com.br)
  *   9 → CNPJ          (brasilapi.com.br/api/cnpj/v1)
  */
-import { useCSRFToken }  from './useCSRFToken'
-import { useRecaptcha }  from './useRecaptcha'
-import { useTurnstile }  from './useTurnstile'
+import { useCSRFToken }       from './useCSRFToken'
+import { useRecaptcha }       from './useRecaptcha'
+import { useTurnstile, getTurnstileCache } from './useTurnstile'
 
 /* ── Constantes ─────────────────────────────────────────────────────────── */
 const BASE = import.meta.env.VITE_API_PROXY || '/api.php'
@@ -80,26 +80,47 @@ export function useApiProxy() {
   if (!_turnstile) _turnstile = useTurnstile()
 
   /* ── secureFetch — wrapper seguro para todas as chamadas ao proxy ──────── */
-  async function secureFetch(url: string, options?: RequestInit): Promise<Response> {
+  async function secureFetch(
+    url: string,
+    options?: RequestInit,
+    /** Token Turnstile já obtido pelo widget visível no formulário.
+     *  Quando fornecido, o secureFetch usa-o diretamente em vez de
+     *  chamar useTurnstile.execute() em background. */
+    widgetTsToken?: string
+  ): Promise<Response> {
     const headers = new Headers(options?.headers)
 
     // Headers obrigatórios
     headers.set('X-Requested-With', 'XMLHttpRequest')
     headers.set('X-3W-CSRF', _csrf!.getToken())
 
-    // Tokens assíncronos em paralelo (falha graciosamente)
-    const [hmacRes, rcRes, tsRes] = await Promise.allSettled([
-      fetchHmacToken(),
+    // HMAC token (nosso servidor — rápido)
+    // reCAPTCHA com timeout curto (1.5s) para não bloquear chamadas automáticas de mount
+    const rcRace = Promise.race([
       _recaptcha!.execute('proxy_query'),
-      _turnstile!.execute('proxy_query'),
+      new Promise<string>(resolve => setTimeout(() => resolve(''), 1_500)),
+    ])
+
+    const [hmacRes, rcRes] = await Promise.allSettled([
+      fetchHmacToken(),
+      rcRace,
     ])
 
     if (hmacRes.status === 'fulfilled' && hmacRes.value)
       headers.set('X-3W-Token', hmacRes.value)
     if (rcRes.status === 'fulfilled' && rcRes.value)
       headers.set('X-3W-RC', rcRes.value)
-    if (tsRes.status === 'fulfilled' && tsRes.value)
-      headers.set('X-3W-TS', tsRes.value)
+
+    // Turnstile — NUNCA bloqueia o secureFetch:
+    //  1. usa token do widget visível (melhor — verificação real do usuário)
+    //  2. usa token cacheado de verificação anterior (rápido)
+    //  3. não envia (a chamada prossegue sem Turnstile; PHP aceita token vazio)
+    // NÃO chama _turnstile!.execute() aqui — evita timeout de 15s que bloqueava
+    // chamadas automáticas (mount) e quebrava AbortSignal
+    const tsToken = widgetTsToken !== undefined
+      ? widgetTsToken
+      : getTurnstileCache()
+    if (tsToken) headers.set('X-3W-TS', tsToken)
 
     return fetch(url, { ...options, headers })
   }

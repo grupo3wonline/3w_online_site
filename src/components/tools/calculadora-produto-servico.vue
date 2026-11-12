@@ -112,7 +112,7 @@ function fmt(v: number) { return v.toLocaleString('pt-BR', { style: 'currency', 
           ]" :key="f.key">
             <label class="input-aurora-label">{{ f.label }}</label>
             <input v-model.number="(produto as any)[f.key]" type="number" min="0" step="0.01" autocomplete="off"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+              class="w-full input-aurora" />
           </div>
         </div>
         <button @click="calcularProduto" class="btn-aurora btn-aurora-purple w-full">
@@ -155,14 +155,14 @@ function fmt(v: number) { return v.toLocaleString('pt-BR', { style: 'currency', 
           ]" :key="f.key">
             <label class="input-aurora-label">{{ f.label }}</label>
             <input v-model.number="(servico as any)[f.key]" type="number" min="0" step="0.01" autocomplete="off"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50" />
+              class="w-full input-aurora" />
           </div>
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="input-aurora-label">Complexidade</label>
             <select v-model="servico.complexidade" autocomplete="off"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
+              class="w-full input-aurora">
               <option value="simples">Simples (1×)</option>
               <option value="medio">Médio (1.3×)</option>
               <option value="avancado">Avançado (1.6×)</option>
@@ -171,7 +171,7 @@ function fmt(v: number) { return v.toLocaleString('pt-BR', { style: 'currency', 
           <div>
             <label class="input-aurora-label">Urgência</label>
             <select v-model="servico.urgencia" autocomplete="off"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
+              class="w-full input-aurora">
               <option value="normal">Normal (1×)</option>
               <option value="urgente">Urgente (1.25×)</option>
               <option value="express">Express (1.5×)</option>

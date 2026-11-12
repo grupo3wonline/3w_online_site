@@ -50,7 +50,7 @@
 - URLs: https://www.3wonline.com.br/servicos/design-grafico, https://www.3wonline.com.br/servicos/publicidade-propaganda e https://www.3wonline.com.br/servicos/relacoes-publicas
 
 ## Ferramentas Gratuitas
-A 3W Online disponibiliza mais de 120 utilitários gratuitos para desenvolvedores, empresários e estudantes (geradores de código, calculadoras de ROI, geradores de QR Code, validadores de CEP/documentos, conversores de formatos), com processamento 100% no navegador (Client-Side) com zero transmissão para servidores externos.
+A 3W Online disponibiliza mais de 280 utilitários gratuitos para desenvolvedores, empresários e estudantes (calculadoras financeiras, geradores de código, gerador de QR Code, validadores de CPF/CNPJ/CEP/documentos, conversores de formatos, geradores de documentos jurídicos, simuladores de crédito, aplicações web completas), com processamento 100% no navegador (Client-Side) com zero transmissão para servidores externos.
 - URL: https://www.3wonline.com.br/ferramentas
 
 ## Privacidade e Governança

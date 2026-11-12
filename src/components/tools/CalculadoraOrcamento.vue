@@ -219,7 +219,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-nocheck
 import { ref } from 'vue'
 import Swal from 'sweetalert2'
 import ToolShell from '@/components/tools/common/ToolShell.vue'

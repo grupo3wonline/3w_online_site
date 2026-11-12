@@ -1,5 +1,22 @@
 <template>
   <div class="service-hotsite">
+
+    <LpUrgencyBanner
+      :total-slots="4"
+      :taken-slots="2"
+      cta-label="Garantir Orçamento de Site"
+      cta-url="https://wa.me/5541996924829?text=Olá! Gostaria de um orçamento para criação de site profissional."
+      storage-key="svc_web_urgency"
+    />
+    <LpSocialProof />
+    <LpStickyBar
+      title="Sites Ultrarrápidos que Convertem — Vue 3 + SEO Nativo"
+      subtitle="2 novos projetos por semana — 30 dias de garantia"
+      slots-text="2 vagas semanais"
+      cta-label="Solicitar Orçamento Grátis"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero um orçamento para criação de site profissional."
+    />
+
     <!-- 1. Primeira Dobra — Promessa + Ação + Escassez -->
     <section class="page-hero relative overflow-hidden py-16 md:py-24">
       <div class="container relative z-10">
@@ -437,6 +454,18 @@
       </div>
     </section>
 
+    <LpGuarantee
+      cta-label="Começar com Garantia de 30 Dias"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero iniciar meu projeto de site com a garantia de 30 dias."
+      :items="[
+        'Se não aprovar o layout na primeira entrega, refazemos sem custo extra',
+        '30 dias de suporte técnico gratuito após a publicação',
+        'Certificado SSL, SEO técnico e performance inclusos no preço final',
+        'Cancelamento sem multa se não iniciarmos em 48h úteis',
+        'Código-fonte entregue ao cliente após quitação integral',
+      ]"
+    />
+
     <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-10">
@@ -470,9 +499,9 @@
             <Icon icon="mdi:whatsapp" class="w-5 h-5" />
             Quero Criar Meu Site Agora
           </a>
-          <RouterLink to="/contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+          <a href="/#contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
             Solicitar Proposta Formal
-          </RouterLink>
+          </a>
         </div>
         <div class="mt-6 text-xs text-blue-300">
           Sem compromisso • Resposta em minutos • 30 dias de garantia
@@ -488,6 +517,10 @@ import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import LpUrgencyBanner from '@/components/lp/LpUrgencyBanner.vue'
+import LpStickyBar from '@/components/lp/LpStickyBar.vue'
+import LpGuarantee from '@/components/lp/LpGuarantee.vue'
+import LpSocialProof from '@/components/lp/LpSocialProof.vue'
 import { useSeo } from '@/composables/useSeo'
 
 const { applySeo, injectJsonLd, faqSchema } = useSeo()

@@ -130,6 +130,7 @@ describe('AppNavbar', () => {
 
   it('botão do menu hamburger tem aria-label de acessibilidade', () => {
     const wrapper = mount(AppNavbar, globalOptions)
+    // O aria-label do hamburger é dinâmico: "Abrir menu de navegação" ou "Fechar menu"
     const hamburger = wrapper.find('button[aria-label="Abrir menu de navegação"]')
     expect(hamburger.exists()).toBe(true)
   })
@@ -144,6 +145,7 @@ describe('AppNavbar', () => {
   it('toggling mobile menu abre e fecha o drawer', async () => {
     const wrapper = mount(AppNavbar, globalOptions)
     // Usa aria-label para identificar o botão hamburger com precisão
+    // No estado inicial (fechado), o aria-label é "Abrir menu de navegação"
     const hamburger = wrapper.find('button[aria-label="Abrir menu de navegação"]')
     expect(hamburger.exists()).toBe(true)
 

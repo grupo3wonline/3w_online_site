@@ -377,7 +377,7 @@ router.beforeEach((to) => {
 
 /** Constrói o array de breadcrumbs a partir do path atual */
 function buildBreadcrumbs(path: string, currentTitle: string) {
-  const BASE_URL = 'https://www.3wonline.com.br'
+  const BASE_URL = import.meta.env.VITE_SITE_URL || 'https://www.3wonline.com.br'
   const crumbs: { name: string; url: string }[] = [
     { name: 'Início', url: BASE_URL + '/' },
   ]

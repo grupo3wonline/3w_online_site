@@ -118,7 +118,15 @@
               © {{ currentYear }} Grupo 3W Online. Todos os direitos reservados.
             </p>
             <p class="text-gray-500 text-[10px] text-center md:text-left mt-1">
-              Sistema desenvolvido por <span class="text-gray-400 font-medium">HOTWYL</span> <span class="text-gray-600">|</span> <span class="text-gray-400 font-medium">WILLFROMBRASIL</span>
+              Sistema desenvolvido por <span class="text-primary-400 font-semibold">HOTWYL</span>
+              <span class="text-gray-700 mx-1">|</span>
+              <a
+                href="https://github.com/willfrombrasil"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-primary-400 font-semibold hover:text-primary-300 transition-colors"
+                aria-label="GitHub do desenvolvedor WILLFROMBRASIL"
+              >WILLFROMBRASIL</a>
             </p>
           </div>
           <div class="flex flex-wrap justify-center items-center gap-4 text-xs">

@@ -179,7 +179,7 @@ async function copyText() {
               v-model="inputText"
               type="text"
               placeholder="Digite seu texto, URL ou dados aqui..."
-              class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg px-3 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+              class="w-full input-aurora font-mono"
             />
             <button v-if="inputText" @click="copyText"
               class="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-blue-300 hover:text-white transition-colors">

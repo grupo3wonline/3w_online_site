@@ -123,7 +123,7 @@ const statusClasses = { good: 'bg-green-900/20 border-green-500/30 text-green-40
           <div v-for="f in fields" :key="f.key">
             <label class="text-blue-200 text-xs font-medium block mb-0.5">{{ f.label }}</label>
             <input v-model.number="form[f.key]" type="number" autocomplete="off" placeholder="0,00"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500/50" />
+              class="w-full input-aurora" />
           </div>
         </div>
         <div class="flex gap-3 pt-1">

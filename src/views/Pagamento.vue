@@ -37,7 +37,7 @@
     </section>
 
     <!-- Formas de Pagamento Disponíveis -->
-    <section class="section-padding bg-slate-50/50">
+    <section class="section-padding bg-slate-50/50 dark:bg-slate-800/50">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Opções Disponíveis</span>
@@ -50,8 +50,8 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
           <!-- Opção 1: PIX -->
           <div
-            class="card p-6 text-center cursor-pointer border-2 transition-all bg-white hover:shadow-lg"
-            :class="selectedMethod === 'pix' ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-md' : 'border-gray-200'"
+            class="card p-6 text-center cursor-pointer border-2 transition-all bg-white dark:bg-slate-800 hover:shadow-lg"
+            :class="selectedMethod === 'pix' ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-md' : 'border-gray-200 dark:border-slate-700'"
             @click="selectedMethod = 'pix'"
           >
             <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
@@ -73,8 +73,8 @@
 
           <!-- Opção 2: Cartão de Crédito -->
           <div
-            class="card p-6 text-center cursor-pointer border-2 transition-all bg-white hover:shadow-lg"
-            :class="selectedMethod === 'card' ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-md' : 'border-gray-200'"
+            class="card p-6 text-center cursor-pointer border-2 transition-all bg-white dark:bg-slate-800 hover:shadow-lg"
+            :class="selectedMethod === 'card' ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-md' : 'border-gray-200 dark:border-slate-700'"
             @click="selectedMethod = 'card'"
           >
             <div class="w-14 h-14 bg-blue-50 text-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
@@ -96,8 +96,8 @@
 
           <!-- Opção 3: Boleto Bancário / Faturamento PJ -->
           <div
-            class="card p-6 text-center cursor-pointer border-2 transition-all bg-white hover:shadow-lg"
-            :class="selectedMethod === 'boleto' ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-md' : 'border-gray-200'"
+            class="card p-6 text-center cursor-pointer border-2 transition-all bg-white dark:bg-slate-800 hover:shadow-lg"
+            :class="selectedMethod === 'boleto' ? 'border-primary-500 ring-2 ring-primary-500/20 shadow-md' : 'border-gray-200 dark:border-slate-700'"
             @click="selectedMethod = 'boleto'"
           >
             <div class="w-14 h-14 bg-slate-100 text-slate-700 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
@@ -119,7 +119,7 @@
         </div>
 
         <!-- Detalhes do Método Selecionado -->
-        <div class="max-w-2xl mx-auto bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm">
+        <div class="max-w-2xl mx-auto bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 p-6 sm:p-8 shadow-sm">
           <!-- Painel PIX -->
           <div v-if="selectedMethod === 'pix'" class="space-y-4 text-center">
             <h4 class="text-sm font-bold text-gray-900">Dados para Pagamento via PIX</h4>
@@ -183,26 +183,13 @@
     </section>
 
     <!-- FAQ Rápido de Pagamento -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white dark:bg-slate-900">
       <div class="container max-w-3xl mx-auto">
         <div class="text-center mb-8">
           <span class="section-label">Dúvidas Frequentes</span>
           <h2 class="section-title">Perguntas sobre Pagamento & Faturamento</h2>
         </div>
-        <div class="space-y-3 text-xs sm:text-sm">
-          <div class="p-4 rounded-xl border border-gray-200 bg-slate-50">
-            <h4 class="font-bold text-gray-900 mb-1">A 3W Online emite Nota Fiscal Eletrônica?</h4>
-            <p class="text-gray-600">Sim! Emitimos NF-e de prestação de serviços para 100% dos projetos e mensalidades, tanto para empresas (PJ) quanto para pessoas físicas (PF).</p>
-          </div>
-          <div class="p-4 rounded-xl border border-gray-200 bg-slate-50">
-            <h4 class="font-bold text-gray-900 mb-1">Como funciona o parcelamento no cartão?</h4>
-            <p class="text-gray-600">Enviamos um link de checkout seguro onde você pode escolher a quantidade de parcelas (de 1x até 12x) de acordo com a sua preferência.</p>
-          </div>
-          <div class="p-4 rounded-xl border border-gray-200 bg-slate-50">
-            <h4 class="font-bold text-gray-900 mb-1">Qual o prazo para início dos trabalhos após o pagamento?</h4>
-            <p class="text-gray-600">Pagamentos via PIX e Cartão de Crédito são identificados instantaneamente e o projeto é encaminhado de imediato para a etapa de briefing.</p>
-          </div>
-        </div>
+        <FaqAccordion :items="paymentFaqs" />
       </div>
     </section>
   </div>
@@ -212,15 +199,43 @@
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
+import FaqAccordion from '@/components/ui/FaqAccordion.vue'
 import { useSeo } from '@/composables/useSeo'
 
-const { applySeo } = useSeo()
+const { applySeo, injectJsonLd, faqSchema } = useSeo()
+
+const paymentFaqs = [
+  {
+    question: 'A 3W Online emite Nota Fiscal Eletrônica?',
+    answer: 'Sim! Emitimos NF-e de prestação de serviços para 100% dos projetos e mensalidades, tanto para empresas (PJ) quanto para pessoas físicas (PF). Operamos sob o regime do Simples Nacional com CNPJ regularmente cadastrado.',
+  },
+  {
+    question: 'Como funciona o parcelamento no cartão de crédito?',
+    answer: 'Enviamos um link de checkout seguro (gateway homologado com antifraude e criptografia PCI-DSS) onde você pode escolher de 1x até 12x de acordo com a sua preferência. Bandeiras aceitas: Visa, Mastercard, Elo, Hipercard, American Express.',
+  },
+  {
+    question: 'Qual o prazo para início dos trabalhos após o pagamento?',
+    answer: 'Pagamentos via PIX e Cartão de Crédito são confirmados instantaneamente e o projeto é encaminhado imediatamente para a etapa de briefing. Boletos têm prazo de compensação de 1 a 2 dias úteis.',
+  },
+  {
+    question: 'Existe desconto para pagamento à vista via PIX?',
+    answer: 'Sim! Concedemos 5% de desconto para pagamentos à vista via PIX. Após a transferência, envie o comprovante para nosso WhatsApp para confirmação imediata.',
+  },
+  {
+    question: 'Como funciona o faturamento corporativo (Boleto PJ)?',
+    answer: 'Para empresas, emitimos boleto bancário com condição padrão de 50% na entrada e 50% na entrega, ou parcelamento mensal recorrente para contratos de serviços continuados (redes sociais, gestão de anúncios). A NF-e é emitida junto a cada pagamento.',
+  },
+]
+
 applySeo({
   title: 'Pagamento Seguro | 3W Online - PIX, Cartão e Boleto PJ',
   description: 'Realize seu pagamento com total segurança na 3W Online. Aceitamos PIX com 5% de desconto, cartão em até 12x e boleto bancário com emissão de NF-e.',
   path: '/pagamento',
   keywords: 'pagamento seguro 3w online, pix desconto site, parcelamento criação de sites',
+  faqs: paymentFaqs,
 })
+
+injectJsonLd(faqSchema(paymentFaqs), 'schema-faq-pagamento')
 
 const selectedMethod = ref<'pix' | 'card' | 'boleto'>('pix')
 </script>

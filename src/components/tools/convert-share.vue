@@ -141,7 +141,7 @@ function reset() {
         <div v-if="selectedFile" class="space-y-3">
           <label class="text-sm text-blue-200">Formato de Saída</label>
           <select v-model="outputFormat"
-            class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+            class="w-full input-aurora">
             <option value="" disabled>Selecione o formato desejado</option>
             <option v-for="f in supportedFormats" :key="f.value" :value="f.value">{{ f.label }} — {{ f.desc }}</option>
           </select>

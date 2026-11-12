@@ -1,5 +1,21 @@
 <template>
   <div class="landing-prd-page">
+
+    <LpUrgencyBanner
+      :total-slots="5"
+      :taken-slots="3"
+      cta-label="Falar com Engenheiro Agora"
+      cta-url="https://wa.me/5541996924829?text=Olá! Gostaria de conversar sobre uma solução digital sob medida."
+      storage-key="lp_prd_urgency"
+    />
+    <LpSocialProof />
+    <LpStickyBar
+      title="Engenharia de Software de Alta Performance"
+      subtitle="Soluções escaláveis para empresas"
+      slots-text="3 slots disponíveis"
+      cta-label="Falar com Engenheiro"
+      cta-url="https://wa.me/5541996924829?text=Olá! Gostaria de falar sobre engenharia de software."
+    />
     <!-- Hero / Primeira Dobra — Dark Navy com Escassez & Confiança -->
     <section class="page-hero relative overflow-hidden py-16 md:py-24">
       <div class="container relative z-10">
@@ -263,6 +279,19 @@
     </section>
 
     <!-- Oferta Irresistível + Bônus Inclusos -->
+    <LpComparison
+      cta-label="Contratar Engenharia 3W Online"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero contratar desenvolvimento de software sob medida."
+      :rows="[
+        { criterion: 'Código-fonte proprietário do cliente',      us: true,       agency: 'Raramente',    diy: true      },
+        { criterion: 'SLA de 99.9% uptime garantido',             us: true,       agency: 'Variável',     diy: false     },
+        { criterion: 'LGPD e segurança de dados completa',        us: true,       agency: 'Parcial',      diy: false     },
+        { criterion: 'Integração com APIs e legado',              us: true,       agency: 'Cobrado extra', diy: false    },
+        { criterion: 'Suporte sênior direto via WhatsApp',        us: true,       agency: 'Ticket',       diy: false     },
+        { criterion: 'Time de engenharia dedicado',               us: true,       agency: 'Compartilhado', diy: false    },
+        { criterion: 'Entrega em sprints ágeis com validação',    us: true,       agency: 'Variável',     diy: false     },
+      ]"
+    />
     <section class="section-padding bg-gradient-to-b from-slate-900 to-[#0a1628] text-white">
       <div class="container max-w-4xl">
         <div class="text-center mb-10">
@@ -334,6 +363,11 @@
     </section>
 
     <!-- Simulador de Preço Integrado -->
+    <LpGuarantee
+      description="Desenvolvemos com sprints semanais com sua validação. Se após 30 dias de projeto não estiver satisfeito com a qualidade técnica, rescindimos sem custo ou burocracia."
+      cta-label="Iniciar Projeto com Garantia Total"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero iniciar meu projeto de software com a garantia de 30 dias."
+    />
     <section id="simulador" class="testimonial-section section-padding">
       <div class="container">
         <div class="text-center mb-10 max-w-2xl mx-auto">
@@ -382,9 +416,9 @@
             <Icon icon="mdi:whatsapp" class="w-5 h-5" />
             Agendar Reunião no WhatsApp
           </a>
-          <RouterLink to="/contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+          <a href="/#contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
             Solicitar Proposta Formal
-          </RouterLink>
+          </a>
         </div>
       </div>
     </section>
@@ -396,6 +430,11 @@ import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import LpUrgencyBanner from '@/components/lp/LpUrgencyBanner.vue'
+import LpStickyBar from '@/components/lp/LpStickyBar.vue'
+import LpComparison from '@/components/lp/LpComparison.vue'
+import LpGuarantee from '@/components/lp/LpGuarantee.vue'
+import LpSocialProof from '@/components/lp/LpSocialProof.vue'
 import { useSeo } from '@/composables/useSeo'
 
 const { applySeo } = useSeo()

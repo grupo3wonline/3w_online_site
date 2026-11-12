@@ -172,7 +172,7 @@ function fillExample() {
         :maxlength="100000"
         rows="6"
         placeholder="Cole aqui até 100.000 caracteres..."
-        class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+        class="w-full input-aurora font-mono resize-y"
       ></textarea>
 
       <!-- Options -->
@@ -180,7 +180,7 @@ function fillExample() {
         <div class="space-y-1">
           <label class="text-xs text-blue-200">Tipo</label>
           <select v-model="mode"
-            class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+            class="w-full input-aurora">
             <option value="email">E-mail</option>
             <option value="cpf">CPF</option>
             <option value="cnpj">CNPJ</option>
@@ -190,7 +190,7 @@ function fillExample() {
         <div v-if="mode !== 'email'" class="space-y-1">
           <label class="text-xs text-blue-200">Formato</label>
           <select v-model="docFormat"
-            class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+            class="w-full input-aurora">
             <option value="formatted">Com pontuação</option>
             <option value="raw">Sem pontuação</option>
           </select>
@@ -199,7 +199,7 @@ function fillExample() {
         <div class="space-y-1">
           <label class="text-xs text-blue-200">Separador</label>
           <select v-model="separator"
-            class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+            class="w-full input-aurora">
             <option value="comma">Vírgula (,)</option>
             <option value="semicolon">Ponto e vírgula (;)</option>
             <option value="newline">Quebra de linha</option>
@@ -209,7 +209,7 @@ function fillExample() {
         <div class="space-y-1">
           <label class="text-xs text-blue-200">Ordenar</label>
           <select v-model="sortOrder"
-            class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+            class="w-full input-aurora">
             <option value="none">Sem ordenação</option>
             <option value="asc">A-Z (crescente)</option>
             <option value="desc">Z-A (decrescente)</option>
@@ -225,7 +225,7 @@ function fillExample() {
         <div class="space-y-1">
           <label class="text-xs text-blue-200">Agrupar em blocos</label>
           <input v-model.number="groupSize" type="number" min="0" placeholder="0 = sem agrupamento"
-            class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+            class="w-full input-aurora" />
         </div>
       </div>
 

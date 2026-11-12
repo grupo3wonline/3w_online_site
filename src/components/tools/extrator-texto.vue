@@ -145,7 +145,7 @@ const sections: { key: keyof Extracted; label: string; icon: string; color: stri
         v-model="inputText"
         rows="8"
         placeholder="Cole aqui o texto para extrair informações..."
-        class="w-full bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg p-3 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+        class="w-full input-aurora font-mono resize-y"
       ></textarea>
 
       <div class="flex flex-wrap gap-3 items-center justify-between">

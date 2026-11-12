@@ -38,7 +38,7 @@
     </section>
 
     <!-- Barra de Autoridade -->
-    <div class="bg-primary-50 border-b border-primary-100 py-3 text-xs text-primary-800">
+    <div class="bg-primary-50 dark:bg-primary-950/50 border-b border-primary-100 dark:border-primary-900/50 py-3 text-xs text-primary-800 dark:text-primary-200">
       <div class="container flex flex-wrap items-center justify-center gap-4 text-center font-medium">
         <span class="flex items-center gap-1"><Icon icon="mdi:shield-check" class="w-4 h-4 text-green-600" /> 150+ Projetos Entregues</span>
         <span class="text-primary-300 hidden sm:inline">•</span>
@@ -49,7 +49,7 @@
     </div>
 
     <!-- Catálogo Completo de Serviços -->
-    <section id="catalogo" class="section-padding bg-slate-50/50">
+    <section id="catalogo" class="section-padding bg-slate-50/50 dark:bg-slate-800/50">
       <div class="container">
         <div class="text-center mb-12">
           <span class="section-label">Portfólio de Soluções</span>
@@ -83,15 +83,15 @@
               </p>
             </div>
 
-            <div class="pt-4 border-t border-gray-100 mt-2">
+            <div class="pt-4 border-t border-gray-100 dark:border-slate-700/60 mt-2">
               <div class="flex items-center justify-between mb-3">
-                <span class="text-[11px] text-gray-400 font-medium">Investimento</span>
-                <span class="text-xs font-bold text-primary-600">{{ service.price }}</span>
+                <span class="text-[11px] text-gray-400 dark:text-slate-500 font-medium">Investimento</span>
+                <span class="text-xs font-bold text-primary-600 dark:text-primary-400">{{ service.price }}</span>
               </div>
 
               <RouterLink
                 :to="service.link"
-                class="w-full text-center bg-slate-100 hover:bg-primary-600 hover:text-white text-gray-800 text-xs font-semibold py-2.5 rounded-lg transition-all flex items-center justify-center gap-1 group-hover:bg-primary-600 group-hover:text-white"
+                class="w-full text-center bg-slate-100 dark:bg-slate-700 hover:bg-primary-600 hover:text-white dark:hover:bg-primary-600 text-gray-800 dark:text-slate-200 text-xs font-semibold py-2.5 rounded-lg transition-all flex items-center justify-center gap-1 group-hover:bg-primary-600 group-hover:text-white"
               >
                 <span>Conhecer Detalhes</span>
                 <Icon icon="mdi:arrow-right" class="w-3.5 h-3.5" />
@@ -168,9 +168,9 @@
           Nossa equipe de engenharia e marketing está pronta para desenhar o escopo perfeito para sua empresa.
         </p>
         <div class="flex flex-col sm:flex-row gap-3.5 justify-center">
-          <RouterLink to="/contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
+          <a href="/#contato" class="btn-primary !bg-white !text-primary-700 hover:!bg-gray-100 text-xs sm:text-sm font-bold shadow-lg">
             Falar com Consultor Técnico
-          </RouterLink>
+          </a>
           <a
             href="https://wa.me/5541996924829?text=Olá! Gostaria de conversar sobre um projeto sob medida."
             target="_blank"

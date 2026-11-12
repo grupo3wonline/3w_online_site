@@ -33,6 +33,24 @@
           {{ ex }}
         </button>
       </div>
+
+      <!-- Verificação de segurança -->
+      <div class="mt-3 space-y-1.5">
+        <AppTurnstile
+          ref="tsRef"
+          size="compact"
+          theme="dark"
+          action="domain_query"
+          @success="t => tsToken = t"
+          @expired="tsToken = ''"
+          @error="tsToken = ''"
+        />
+        <p class="text-[10px] text-blue-400/70 leading-tight">
+          Protegido por reCAPTCHA —
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="underline hover:text-blue-300">Privacidade</a>
+          e <a href="https://policies.google.com/terms" target="_blank" rel="noopener" class="underline hover:text-blue-300">Termos</a> do Google.
+        </p>
+      </div>
     </div>
 
     <!-- Tabs -->
@@ -205,6 +223,7 @@ import { ref, computed, watch } from 'vue'
 import { Icon } from '@iconify/vue'
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import Swal from 'sweetalert2'
+import AppTurnstile from '@/components/ui/AppTurnstile.vue'
 import { useApiProxy }     from '@/composables/useApiProxy'
 import { useHoneypot }     from '@/composables/useHoneypot'
 import { useRequestGuard } from '@/composables/useRequestGuard'
@@ -213,6 +232,10 @@ import { debounce }        from '@/composables/useDebounce'
 const proxy = useApiProxy()
 const { hpField, isBot } = useHoneypot()
 const guard              = useRequestGuard()
+
+// Turnstile
+const tsRef   = ref<InstanceType<typeof AppTurnstile> | null>(null)
+const tsToken = ref('')
 
 const dominioTips = [
   { title: 'RDAP vs WHOIS', text: 'RDAP (Registration Data Access Protocol) é o padrão moderno para consulta de registros de domínio, substituto do WHOIS clássico.', type: 'info' as const },
@@ -291,6 +314,8 @@ async function consultar() {
   ])
 
   consultando.value = false
+  // Reseta o widget para gerar novo token
+  tsRef.value?.reset(); tsToken.value = ''
   }) // guard.run
 }
 
@@ -301,7 +326,7 @@ async function buscarRDAP(d: string) {
     // Try rdap.org (universal RDAP client, redirects to right registry)
     const r = await proxy.secureFetch(proxy.rdapUrl(d), {
       signal: AbortSignal.timeout(12000),
-    })
+    }, tsToken.value || undefined)
 
     if (!r.ok) {
       if (r.status === 404) { rdapData.value = { ldhName: d, status: ['unregistered'], events: [], nameservers: [], entities: [], dnssec: false }; return }

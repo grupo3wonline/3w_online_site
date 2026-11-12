@@ -150,7 +150,6 @@
 </template>
 
 <script setup lang="ts">
-// @ts-nocheck
 import { ref, reactive } from 'vue'
 import Swal from 'sweetalert2'
 import DOMPurify from 'dompurify'

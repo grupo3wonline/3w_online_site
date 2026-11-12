@@ -154,6 +154,24 @@
             {{ ex.label }}
           </button>
         </div>
+
+        <!-- Verificação de segurança -->
+        <div class="pt-1 space-y-1.5">
+          <AppTurnstile
+            ref="tsRef"
+            size="compact"
+            theme="dark"
+            action="ip_query"
+            @success="t => tsToken = t"
+            @expired="tsToken = ''"
+            @error="tsToken = ''"
+          />
+          <p class="text-[10px] text-blue-400/70 leading-tight">
+            Protegido por reCAPTCHA —
+            <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" class="underline hover:text-blue-300">Privacidade</a>
+            e <a href="https://policies.google.com/terms" target="_blank" rel="noopener" class="underline hover:text-blue-300">Termos</a> do Google.
+          </p>
+        </div>
       </div>
 
       <!-- Erro de consulta -->
@@ -204,6 +222,7 @@ import { ref, computed, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import Swal from 'sweetalert2'
+import AppTurnstile from '@/components/ui/AppTurnstile.vue'
 import { useApiProxy }     from '@/composables/useApiProxy'
 import { useHoneypot }     from '@/composables/useHoneypot'
 import { useRequestGuard } from '@/composables/useRequestGuard'
@@ -212,6 +231,10 @@ import { debounce }        from '@/composables/useDebounce'
 const proxy = useApiProxy()
 const { hpField, isBot } = useHoneypot()
 const guardIP            = useRequestGuard()
+
+// Turnstile — aba "Consultar IP"
+const tsRef   = ref<InstanceType<typeof AppTurnstile> | null>(null)
+const tsToken = ref('')
 
 const ipTips = [
   { title: 'Privacidade', text: 'Nenhum dado é armazenado. As consultas são feitas diretamente do seu navegador para APIs públicas gratuitas.', type: 'info' as const },
@@ -421,7 +444,7 @@ async function consultarIP() {
   await guardIP.run(async () => {
   consultandoIP.value = true; erroConsulta.value = ''; resultConsulta.value = null
   try {
-    const r = await proxy.secureFetch(proxy.geoipUrl(ip), { signal: AbortSignal.timeout(8000) })
+    const r = await proxy.secureFetch(proxy.geoipUrl(ip), { signal: AbortSignal.timeout(8000) }, tsToken.value || undefined)
     const d = await r.json()
     if (!d.success) throw new Error(d.message || 'IP inválido ou não encontrado.')
 
@@ -452,6 +475,7 @@ async function consultarIP() {
     erroConsulta.value = e.message || 'Erro ao consultar IP.'
   } finally {
     consultandoIP.value = false
+    tsRef.value?.reset(); tsToken.value = ''
   }
   }) // guardIP.run
 }

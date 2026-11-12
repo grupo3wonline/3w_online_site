@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import ToolShell from '@/components/tools/common/ToolShell.vue'
 import { ref, reactive, computed } from 'vue'
-import { Icon } from '@iconify/vue'
 import Swal from 'sweetalert2'
 
 type Sexo = 'male' | 'female'
@@ -127,19 +126,11 @@ const imcGauge = computed(() => {
 
   >
 
-    <div class="text-center">
-      <h1 class="text-2xl font-bold text-white mb-1 flex items-center justify-center gap-2">
-        <Icon icon="mdi:heart-pulse" class="text-emerald-400 w-7 h-7" />
-        Calculadora de IMC
-      </h1>
-      <p class="text-blue-200 text-sm">Calcule seu IMC, peso ideal, calorias, hidratação e macronutrientes</p>
-    </div>
-
     <div class="grid lg:grid-cols-5 gap-6">
       <!-- Formulário -->
-      <div class="lg:col-span-2 bg-[#0f1e3c] border border-white/10 rounded-xl p-5 space-y-4">
-        <h2 class="text-white font-semibold flex items-center gap-2">
-          <Icon icon="mdi:account-outline" class="text-emerald-400 w-5 h-5" />
+      <div class="lg:col-span-2 glass-panel p-5 space-y-4">
+        <h2 class="text-white font-semibold text-sm flex items-center gap-2">
+          <i class="fas fa-user-circle text-emerald-400" aria-hidden="true"></i>
           Seus Dados
         </h2>
         <div class="space-y-3">
@@ -179,11 +170,11 @@ const imcGauge = computed(() => {
         </div>
         <div class="flex gap-3">
           <button @click="calcular"
-            class="btn-aurora btn-aurora-success flex-1">
-            <Icon icon="mdi:calculator" class="w-4 h-4" /> Calcular IMC
+            class="btn-aurora btn-aurora-success flex-1 flex items-center justify-center gap-2">
+            <i class="fas fa-calculator w-4 h-4" aria-hidden="true"></i> Calcular IMC
           </button>
-          <button @click="limpar" class="bg-white/10 hover:bg-white/20 text-white py-2.5 px-3 rounded-lg transition-colors text-sm">
-            <Icon icon="mdi:refresh" class="w-4 h-4" />
+          <button @click="limpar" class="bg-white/10 hover:bg-white/20 text-white py-2.5 px-3 rounded-lg transition-colors text-sm" title="Limpar campos" aria-label="Limpar campos">
+            <i class="fas fa-rotate-left w-4 h-4" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -237,7 +228,7 @@ const imcGauge = computed(() => {
 
         <div v-else class="glass-panel flex items-center justify-center p-12">
           <div class="text-center">
-            <Icon icon="mdi:heart-pulse" class="w-16 h-16 text-emerald-400/20 mx-auto mb-3" />
+            <i class="fas fa-heart-pulse text-5xl text-emerald-400/20 mb-4 block" aria-hidden="true"></i>
             <p class="text-blue-200 text-sm">Preencha seus dados e calcule o IMC</p>
           </div>
         </div>
@@ -245,7 +236,7 @@ const imcGauge = computed(() => {
         <!-- Histórico -->
         <div v-if="historico.length" class="glass-panel p-4">
           <h3 class="text-white text-sm font-semibold mb-2 flex items-center gap-2">
-            <Icon icon="mdi:history" class="w-4 h-4 text-blue-400" /> Histórico
+            <i class="fas fa-clock-rotate-left w-4 h-4 text-blue-400" aria-hidden="true"></i> Histórico
           </h3>
           <div class="space-y-1">
             <div v-for="(h, i) in historico" :key="i" class="flex justify-between text-xs">

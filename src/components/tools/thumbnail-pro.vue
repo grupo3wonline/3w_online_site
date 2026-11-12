@@ -125,7 +125,7 @@ const examples = [
         <div class="flex gap-3">
           <input v-model="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off"
             @keyup.enter="extract"
-            class="flex-1 bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500/50" />
+            class="flex-1 input-aurora" />
           <button @click="extract" :disabled="!youtubeUrl.trim() || isLoading"
             :class="['px-5 py-2.5 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors', !youtubeUrl.trim() ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-red-600 hover:bg-red-500 text-white']">
             <Icon :icon="isLoading ? 'mdi:loading' : 'mdi:magnify'" :class="['w-4 h-4', isLoading ? 'animate-spin' : '']" />

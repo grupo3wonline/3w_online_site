@@ -1,11 +1,11 @@
 <template>
   <div class="price-simulator">
     <div class="flex items-center gap-2 mb-2">
-      <Icon icon="mdi:calculator" class="w-6 h-6 text-primary-600" />
+      <i class="fas fa-calculator w-6 h-6 text-primary-600 text-lg" aria-hidden="true"></i>
       <h3 class="text-lg font-bold text-gray-900">Simulador de Orçamento</h3>
     </div>
     <p class="text-sm text-gray-600 mb-6">
-      <Icon icon="mdi:information-outline" class="w-4 h-4 inline mr-1" />
+      <i class="fas fa-info-circle w-4 h-4 inline mr-1 text-primary-500" aria-hidden="true"></i>
       Configure suas necessidades e receba uma prévia de orçamento personalizado.
     </p>
 
@@ -410,18 +410,18 @@
         </div>
       </div>
       <p class="text-[11px] text-gray-500 mt-3 border-t border-primary-100 pt-3">
-        <Icon icon="mdi:alert-circle-outline" class="w-3 h-3 inline mr-0.5" />
+        <i class="fas fa-circle-info w-3 h-3 inline mr-0.5 text-primary-500" aria-hidden="true"></i>
         Esta é uma estimativa prévia. O valor final será definido após análise detalhada do projeto.
       </p>
     </div>
 
     <div class="mt-4 flex flex-col sm:flex-row gap-3">
       <button @click="requestQuote" class="btn-primary flex-1 text-sm">
-        <Icon icon="mdi:file-document-edit" class="w-4 h-4 mr-2" />
+        <i class="fas fa-file-contract w-4 h-4 mr-2" aria-hidden="true"></i>
         Solicitar Orçamento Detalhado
       </button>
       <button @click="contactWhatsApp" class="btn-outline flex-1 text-sm !border-green-500 !text-green-600 hover:!bg-green-500 hover:!text-white">
-        <Icon icon="mdi:whatsapp" class="w-4 h-4 mr-2" />
+        <i class="fas fa-whatsapp w-4 h-4 mr-2 fab" aria-hidden="true" style="font-family:'Font Awesome 6 Brands'"></i>
         Falar no WhatsApp
       </button>
     </div>
@@ -430,7 +430,6 @@
 
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-import { Icon } from '@iconify/vue'
 
 interface Props {
   serviceType: string

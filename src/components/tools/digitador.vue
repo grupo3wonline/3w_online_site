@@ -223,7 +223,7 @@ function wpmLabel(w: number) {
         @input="handleInput"
         :disabled="isComplete"
         placeholder="Comece a digitar para iniciar o teste..."
-        class="w-full h-28 bg-[#0a1628] text-white placeholder-blue-300/40 border border-white/10 rounded-lg p-3 text-sm font-mono resize-none focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-60"
+        class="w-full h-28 input-aurora font-mono resize-none disabled:opacity-60"
       ></textarea>
     </div>
 

@@ -1,5 +1,21 @@
 <template>
   <div class="landing-marketing-page">
+
+    <LpUrgencyBanner
+      :total-slots="5"
+      :taken-slots="4"
+      cta-label="Garantir Vaga em Marketing 360°"
+      cta-url="https://wa.me/5541996924829?text=Olá! Vi que ainda há vagas para o Marketing Digital 360° e gostaria de garantir a minha."
+      storage-key="lp_marketing_urgency"
+    />
+    <LpSocialProof />
+    <LpStickyBar
+      title="Marketing Digital 360° — Redes + Anúncios + Relatórios"
+      subtitle="Apenas 4 vagas disponíveis este mês"
+      slots-text="4 vagas restantes"
+      cta-label="Agendar Consultoria Grátis"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero agendar minha consultoria gratuita de marketing."
+    />
     <!-- Hero / Primeira Dobra — Dark Navy com Escassez & Confiança -->
     <section class="page-hero relative overflow-hidden py-16 md:py-24">
       <div class="container relative z-10">
@@ -262,6 +278,11 @@
       </div>
     </section>
 
+    <LpComparison
+      cta-label="Escolher a 3W Online Agora"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero contratar o Marketing Digital 360°."
+    />
+
     <!-- Oferta Irresistível + Bônus Inclusos -->
     <section class="section-padding bg-gradient-to-b from-slate-900 to-[#0a1628] text-white">
       <div class="container max-w-4xl">
@@ -333,6 +354,11 @@
       </div>
     </section>
 
+    <LpGuarantee
+      cta-label="Iniciar Plano 360° com Garantia"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero iniciar o Marketing Digital 360° com garantia."
+    />
+
     <!-- Simulador de Preço Integrado -->
     <section id="simulador" class="testimonial-section section-padding">
       <div class="container">
@@ -382,9 +408,9 @@
             <Icon icon="mdi:whatsapp" class="w-5 h-5" />
             Agendar Diagnóstico no WhatsApp
           </a>
-          <RouterLink to="/contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+          <a href="/#contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
             Enviar Formulário de Contato
-          </RouterLink>
+          </a>
         </div>
       </div>
     </section>
@@ -396,6 +422,11 @@ import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import LpUrgencyBanner from '@/components/lp/LpUrgencyBanner.vue'
+import LpStickyBar from '@/components/lp/LpStickyBar.vue'
+import LpComparison from '@/components/lp/LpComparison.vue'
+import LpGuarantee from '@/components/lp/LpGuarantee.vue'
+import LpSocialProof from '@/components/lp/LpSocialProof.vue'
 import { useSeo } from '@/composables/useSeo'
 
 const { applySeo } = useSeo()

@@ -126,7 +126,7 @@ const tabs = [
           <div v-for="f in [{ k: 'meta', l: 'Meta mensal (R$)' }, { k: 'horas', l: 'Horas/dia' }, { k: 'dias', l: 'Dias/semana' }, { k: 'ferias', l: 'Férias/ano' }, { k: 'margem', l: 'Margem (%)' }, { k: 'impostos', l: 'Impostos (%)' }]" :key="f.k">
             <label class="input-aurora-label">{{ f.l }}</label>
             <input v-model.number="(hora as any)[f.k]" type="number" min="0" autocomplete="off"
-              class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+              class="w-full input-aurora" />
           </div>
         </div>
         <button @click="calcHora" class="btn-aurora w-full">Calcular</button>

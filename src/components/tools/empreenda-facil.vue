@@ -210,11 +210,11 @@ function toast(msg: string) {
         <div class="space-y-2">
           <div v-for="(item, i) in orcItems" :key="i" class="grid grid-cols-12 gap-2 items-center">
             <input v-model="item.desc" placeholder="Descrição do item" autocomplete="off"
-              class="col-span-6 bg-[#0a1628] text-white border border-white/10 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50" />
+              class="col-span-6 input-aurora" />
             <input v-model.number="item.qty" type="number" min="1" placeholder="Qtd"
-              class="col-span-2 bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-500/50" />
+              class="col-span-2 input-aurora text-center" />
             <input v-model.number="item.price" type="number" min="0" step="0.01" placeholder="Valor"
-              class="col-span-3 bg-[#0a1628] text-white border border-white/10 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50" />
+              class="col-span-3 input-aurora" />
             <button @click="removeItem(i)" class="col-span-1 text-red-400 hover:text-red-300 flex justify-center">
               <Icon icon="mdi:trash-can" class="w-4 h-4" />
             </button>

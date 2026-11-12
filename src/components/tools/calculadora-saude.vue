@@ -1,237 +1,424 @@
 <script setup lang="ts">
 import ToolShell from '@/components/tools/common/ToolShell.vue'
+import BaseButton from '@/components/tools/common/BaseButton.vue'
 import { ref, reactive } from 'vue'
-import { Icon } from '@iconify/vue'
 import Swal from 'sweetalert2'
 
-type Gender = 'male' | 'female'
+type Gender        = 'male' | 'female'
 type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'very-active'
-type Goal = 'lose' | 'maintain' | 'gain'
+type Goal          = 'lose' | 'maintain' | 'gain'
 
 interface HealthMetrics {
-  bmi: number; bmiCategory: string; bmr: number; tdee: number
-  targetCalories: number; protein: number; carbs: number; fat: number
-  water: number; idealWeightMin: number; idealWeightMax: number
+  bmi:            number
+  bmiCategory:    string
+  bmr:            number
+  tdee:           number
+  targetCalories: number
+  protein:        number
+  carbs:          number
+  fat:            number
+  water:          number
+  idealWeightMin: number
+  idealWeightMax: number
 }
 
 const activityMultipliers: Record<ActivityLevel, number> = {
-  sedentary: 1.2, light: 1.375, moderate: 1.55, active: 1.725, 'very-active': 1.9
+  sedentary:    1.2,
+  light:        1.375,
+  moderate:     1.55,
+  active:       1.725,
+  'very-active':1.9,
 }
+
 const activityOptions = [
-  { value: 'sedentary', label: 'Sedentário (pouco ou nenhum exercício)' },
-  { value: 'light', label: 'Leve (exercício leve 1-3 dias/semana)' },
-  { value: 'moderate', label: 'Moderado (exercício 3-5 dias/semana)' },
-  { value: 'active', label: 'Ativo (exercício 6-7 dias/semana)' },
-  { value: 'very-active', label: 'Muito Ativo (exercício intenso, 2x/dia)' },
+  { value: 'sedentary',    label: 'Sedentário (pouco ou nenhum exercício)' },
+  { value: 'light',        label: 'Leve (exercício 1–3 dias/semana)' },
+  { value: 'moderate',     label: 'Moderado (exercício 3–5 dias/semana)' },
+  { value: 'active',       label: 'Ativo (exercício 6–7 dias/semana)' },
+  { value: 'very-active',  label: 'Muito Ativo (exercício intenso, 2×/dia)' },
 ]
+
 const goalOptions = [
-  { value: 'lose', label: 'Perder peso', icon: 'mdi:trending-down', adj: -500 },
-  { value: 'maintain', label: 'Manter peso', icon: 'mdi:equal', adj: 0 },
-  { value: 'gain', label: 'Ganhar massa', icon: 'mdi:trending-up', adj: 300 },
+  { value: 'lose',     label: 'Perder peso',   icon: 'fa-arrow-trend-down', adj: -500 },
+  { value: 'maintain', label: 'Manter peso',   icon: 'fa-equals',           adj:    0 },
+  { value: 'gain',     label: 'Ganhar massa',  icon: 'fa-arrow-trend-up',   adj:  300 },
 ]
 
-const form = reactive({ height: 0, weight: 0, age: 0, gender: '' as Gender | '', activityLevel: '' as ActivityLevel | '', goal: '' as Goal | '' })
-const resultado = ref<HealthMetrics | null>(null)
+const form = reactive({
+  height:        '' as number | '',
+  weight:        '' as number | '',
+  age:           '' as number | '',
+  gender:        '' as Gender | '',
+  activityLevel: '' as ActivityLevel | '',
+  goal:          '' as Goal | '',
+})
 
+const resultado  = ref<HealthMetrics | null>(null)
+const isLoading  = ref(false)
+
+// ─── Categorias IMC ───────────────────────────────────────────────
 function bmiCategory(bmi: number): string {
   if (bmi < 18.5) return 'Abaixo do peso'
-  if (bmi < 25) return 'Peso normal'
-  if (bmi < 30) return 'Sobrepeso'
-  if (bmi < 35) return 'Obesidade I'
+  if (bmi < 25)   return 'Peso normal'
+  if (bmi < 30)   return 'Sobrepeso'
+  if (bmi < 35)   return 'Obesidade I'
   return 'Obesidade II+'
 }
 
+function bmiColorClass(cat: string): string {
+  if (cat === 'Peso normal')      return 'text-emerald-400'
+  if (cat === 'Abaixo do peso')   return 'text-blue-400'
+  if (cat === 'Sobrepeso')        return 'text-amber-400'
+  return 'text-red-400'
+}
+
+function bmiBarClass(cat: string): string {
+  if (cat === 'Peso normal')      return 'bg-emerald-500'
+  if (cat === 'Abaixo do peso')   return 'bg-blue-500'
+  if (cat === 'Sobrepeso')        return 'bg-amber-500'
+  return 'bg-red-500'
+}
+
+function bmiBarWidth(bmi: number): string {
+  return `${Math.min(100, Math.max(5, (bmi / 40) * 100))}%`
+}
+
+// ─── Cálculo ──────────────────────────────────────────────────────
 function calcular() {
   const { height, weight, age, gender, activityLevel, goal } = form
+
   if (!height || !weight || !age || !gender || !activityLevel || !goal) {
-    Swal.fire({ icon: 'warning', title: 'Preencha todos os campos', confirmButtonColor: '#059669' }); return
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos incompletos',
+      text: 'Preencha todos os campos para calcular seu plano de saúde.',
+      confirmButtonColor: '#059669',
+    })
+    return
   }
-  const h = height / 100 // cm → m
-  const bmi = weight / (h * h)
-  // BMR Harris-Benedict
+
+  if (Number(height) < 100 || Number(height) > 250) {
+    Swal.fire({ icon: 'warning', title: 'Altura inválida', text: 'Informe a altura em centímetros (100–250 cm).', confirmButtonColor: '#059669' })
+    return
+  }
+  if (Number(weight) < 20 || Number(weight) > 500) {
+    Swal.fire({ icon: 'warning', title: 'Peso inválido', text: 'Informe o peso em quilogramas (20–500 kg).', confirmButtonColor: '#059669' })
+    return
+  }
+
+  isLoading.value = true
+
+  const h   = Number(height) / 100   // cm → m
+  const w   = Number(weight)
+  const a   = Number(age)
+  const bmi = w / (h * h)
+
+  // TMB Harris-Benedict
   const bmr = gender === 'male'
-    ? 66 + 13.75 * weight + 5 * height - 6.75 * age
-    : 655 + 9.56 * weight + 1.85 * height - 4.68 * age
-  const tdee = bmr * activityMultipliers[activityLevel]
+    ? 66 + 13.75 * w + 5 * Number(height) - 6.75 * a
+    : 655 + 9.56 * w + 1.85 * Number(height) - 4.68 * a
+
+  const tdee    = bmr * activityMultipliers[activityLevel as ActivityLevel]
   const goalAdj = goalOptions.find(g => g.value === goal)?.adj ?? 0
   const targetCalories = Math.round(tdee + goalAdj)
-  const protein = Math.round(weight * 1.6)
-  const fat = Math.round(targetCalories * 0.25 / 9)
-  const carbs = Math.round((targetCalories - protein * 4 - fat * 9) / 4)
-  const water = Math.round(weight * 35 / 1000 * 10) / 10
+
+  const protein = Math.round(w * 1.6)
+  const fat     = Math.round(targetCalories * 0.25 / 9)
+  const carbs   = Math.round((targetCalories - protein * 4 - fat * 9) / 4)
+  const water   = Math.round(w * 35 / 1000 * 10) / 10
+
   const idealWeightMin = Math.round(18.5 * h * h)
   const idealWeightMax = Math.round(24.9 * h * h)
 
   resultado.value = {
-    bmi: Math.round(bmi * 100) / 100, bmiCategory: bmiCategory(bmi),
-    bmr: Math.round(bmr), tdee: Math.round(tdee), targetCalories,
-    protein, carbs, fat, water, idealWeightMin, idealWeightMax,
+    bmi:            Math.round(bmi * 100) / 100,
+    bmiCategory:    bmiCategory(bmi),
+    bmr:            Math.round(bmr),
+    tdee:           Math.round(tdee),
+    targetCalories,
+    protein,
+    carbs,
+    fat,
+    water,
+    idealWeightMin,
+    idealWeightMax,
   }
+
+  isLoading.value = false
+
   Swal.fire({
-    icon: 'success',
-    title: 'Plano calculado!',
-    text: `IMC: ${resultado.value.bmi} — ${resultado.value.bmiCategory}`,
-    confirmButtonColor: '#059669',
-    timer: 2000, showConfirmButton: false,
+    icon:              'success',
+    title:             'Plano de saúde calculado!',
+    html:              `IMC: <strong>${resultado.value.bmi}</strong> — <strong>${resultado.value.bmiCategory}</strong>`,
+    confirmButtonColor:'#059669',
+    timer:             2000,
+    showConfirmButton: false,
   })
 }
 
 function limpar() {
-  form.height = 0; form.weight = 0; form.age = 0; form.gender = ''; form.activityLevel = ''; form.goal = ''
-  resultado.value = null
-}
-
-function bmiColor(cat: string): string {
-  if (cat === 'Peso normal') return 'text-green-400'
-  if (cat === 'Abaixo do peso') return 'text-blue-400'
-  if (cat === 'Sobrepeso') return 'text-yellow-400'
-  return 'text-red-400'
+  form.height        = ''
+  form.weight        = ''
+  form.age           = ''
+  form.gender        = ''
+  form.activityLevel = ''
+  form.goal          = ''
+  resultado.value    = null
 }
 </script>
 
 <template>
   <ToolShell
-
     title="Calculadora de Saúde"
-
-    description="TMB, GET, calorias por objetivo, macros e hidratação diária recomendada."
-
+    description="Calcule IMC, TMB, GET, calorias por objetivo, macronutrientes e hidratação diária recomendada."
     icon="fa-stethoscope"
-
     icon-gradient="from-green-500 to-teal-700"
-
     orb-color="emerald"
-
-    :quick-tips="['Resultados instantâneos', 'Sem cadastro', '100% client-side']"
-
-    :tips="[{ title: 'Uso recomendado', text: 'Preencha todos os campos e veja o resultado em tempo real.' }]"
-
+    :quick-tips="['Resultados instantâneos', 'Sem cadastro', '100% client-side', 'Harris-Benedict 2024']"
+    :tips="[
+      { title: 'TMB (Taxa Metabólica Basal)', text: 'Quantidade de calorias que seu corpo precisa em repouso total. Calculada pela fórmula de Harris-Benedict.' },
+      { title: 'GET (Gasto Energético Total)', text: 'TMB multiplicada pelo fator de atividade física. É a quantidade real de calorias que você gasta por dia.', type: 'info' },
+      { title: 'Objetivo de peso', text: 'Perda de peso = déficit de 500 kcal/dia. Ganho de massa = superávit de 300 kcal/dia. Manter = GET atual.', type: 'info' },
+      { title: 'Hidratação', text: 'A recomendação de 35ml/kg/dia é um guia geral. Ajuste conforme temperatura, atividade e condições de saúde.', type: 'warning' },
+    ]"
+    :examples="[
+      { title: 'Homem 30 anos, 70kg, 175cm', desc: 'Atividade moderada | Objetivo: manter peso', result: 'IMC 22,9 | 2.730 kcal/dia | 2,45L água' },
+      { title: 'Mulher 25 anos, 60kg, 165cm', desc: 'Atividade leve | Objetivo: perder peso', result: 'IMC 22,0 | 1.650 kcal/dia | 2,10L água' },
+      { title: 'Atleta 35 anos, 85kg, 180cm', desc: 'Muito ativo | Objetivo: ganhar massa', result: 'IMC 26,2 | 3.650 kcal/dia | 2,98L água' },
+    ]"
   >
 
-    <div class="text-center">
-      <h1 class="text-2xl font-bold text-white mb-1 flex items-center justify-center gap-2">
-        <Icon icon="mdi:heart-pulse" class="text-green-400 w-7 h-7" />
-        Calculadora de Saúde
-      </h1>
-      <p class="text-blue-200 text-sm">Calcule IMC, calorias, macros, hidratação e seu plano de saúde personalizado</p>
-    </div>
-
     <div class="grid lg:grid-cols-5 gap-6">
-      <!-- Formulário -->
-      <div class="lg:col-span-2 bg-[#0f1e3c] border border-white/10 rounded-xl p-5 space-y-3">
-        <h2 class="text-white font-semibold flex items-center gap-2">
-          <Icon icon="mdi:account-outline" class="text-green-400 w-5 h-5" />
+      <!-- ── Formulário ─────────────────────────────────────── -->
+      <div class="lg:col-span-2 glass-panel p-5 space-y-4">
+        <h2 class="text-white font-semibold text-sm flex items-center gap-2">
+          <i class="fas fa-user-circle text-emerald-400" aria-hidden="true"></i>
           Seus Dados
         </h2>
-        <div class="space-y-3">
-          <div class="grid grid-cols-3 gap-2">
-            <div>
-              <label class="input-aurora-label">Altura (cm)</label>
-              <input v-model.number="form.height" type="number" min="100" max="250" autocomplete="off" placeholder="175"
-                class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50" />
-            </div>
-            <div>
-              <label class="input-aurora-label">Peso (kg)</label>
-              <input v-model.number="form.weight" type="number" min="1" autocomplete="off" placeholder="70"
-                class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50" />
-            </div>
-            <div>
-              <label class="input-aurora-label">Idade</label>
-              <input v-model.number="form.age" type="number" min="1" max="120" autocomplete="off" placeholder="30"
-                class="w-full bg-[#0a1628] text-white border border-white/10 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500/50" />
-            </div>
+
+        <!-- Altura / Peso / Idade -->
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label for="health-height" class="input-aurora-label">Altura (cm)</label>
+            <input
+              id="health-height"
+              v-model.number="form.height"
+              type="number"
+              min="100"
+              max="250"
+              autocomplete="off"
+              placeholder="175"
+              class="w-full input-aurora"
+            />
           </div>
           <div>
-            <label class="input-aurora-label">Sexo</label>
-            <div class="grid grid-cols-2 gap-2">
-              <button v-for="s in [{ v: 'male', l: 'Masculino' }, { v: 'female', l: 'Feminino' }]" :key="s.v"
-                type="button" @click="form.gender = s.v as Gender"
-                :class="['border rounded-lg py-2 text-sm transition-all', form.gender === s.v ? 'border-green-500 bg-green-500/20 text-green-300' : 'border-white/10 text-blue-200 hover:bg-white/5']">
-                {{ s.l }}
-              </button>
-            </div>
+            <label for="health-weight" class="input-aurora-label">Peso (kg)</label>
+            <input
+              id="health-weight"
+              v-model.number="form.weight"
+              type="number"
+              min="20"
+              max="500"
+              autocomplete="off"
+              placeholder="70"
+              class="w-full input-aurora"
+            />
           </div>
           <div>
-            <label class="input-aurora-label">Nível de Atividade</label>
-            <select v-model="form.activityLevel" autocomplete="off"
-              class="w-full input-aurora">
-              <option value="" disabled>Selecione</option>
-              <option v-for="a in activityOptions" :key="a.value" :value="a.value">{{ a.label }}</option>
-            </select>
-          </div>
-          <div>
-            <label class="input-aurora-label">Objetivo</label>
-            <div class="grid grid-cols-3 gap-2">
-              <button v-for="g in goalOptions" :key="g.value" type="button" @click="form.goal = g.value as Goal"
-                :class="['border rounded-lg py-2 text-xs font-medium transition-all flex items-center justify-center gap-1', form.goal === g.value ? 'border-green-500 bg-green-500/20 text-green-300' : 'border-white/10 text-blue-200 hover:bg-white/5']">
-                <Icon :icon="g.icon" class="w-3.5 h-3.5" /> {{ g.label }}
-              </button>
-            </div>
+            <label for="health-age" class="input-aurora-label">Idade</label>
+            <input
+              id="health-age"
+              v-model.number="form.age"
+              type="number"
+              min="1"
+              max="120"
+              autocomplete="off"
+              placeholder="30"
+              class="w-full input-aurora"
+            />
           </div>
         </div>
-        <div class="flex gap-3">
-          <button @click="calcular"
-            class="flex-1 bg-green-700 hover:bg-green-600 text-white font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm">
-            <Icon icon="mdi:calculator" class="w-4 h-4" /> Calcular
-          </button>
-          <button @click="limpar" class="bg-white/10 hover:bg-white/20 text-white py-2.5 px-3 rounded-lg transition-colors text-sm">
-            <Icon icon="mdi:refresh" class="w-4 h-4" />
-          </button>
+
+        <!-- Sexo -->
+        <div>
+          <label class="input-aurora-label" id="health-gender-label">Sexo Biológico</label>
+          <div class="grid grid-cols-2 gap-2" role="group" aria-labelledby="health-gender-label">
+            <button
+              v-for="s in [{ v: 'male', l: 'Masculino', icon: 'fa-mars' }, { v: 'female', l: 'Feminino', icon: 'fa-venus' }]"
+              :key="s.v"
+              type="button"
+              :aria-pressed="form.gender === s.v"
+              :class="[
+                'border rounded-lg py-2.5 text-sm transition-all flex items-center justify-center gap-1.5 font-medium',
+                form.gender === s.v
+                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300'
+                  : 'border-white/10 text-blue-200 hover:bg-white/5',
+              ]"
+              @click="form.gender = s.v as Gender"
+            >
+              <i :class="['fas', s.icon]" aria-hidden="true"></i>
+              {{ s.l }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Nível de atividade -->
+        <div>
+          <label for="health-activity" class="input-aurora-label">Nível de Atividade</label>
+          <select
+            id="health-activity"
+            v-model="form.activityLevel"
+            autocomplete="off"
+            class="w-full input-aurora"
+          >
+            <option value="" disabled>Selecione...</option>
+            <option v-for="a in activityOptions" :key="a.value" :value="a.value">{{ a.label }}</option>
+          </select>
+        </div>
+
+        <!-- Objetivo -->
+        <div>
+          <label class="input-aurora-label" id="health-goal-label">Objetivo</label>
+          <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="health-goal-label">
+            <button
+              v-for="g in goalOptions"
+              :key="g.value"
+              type="button"
+              :aria-pressed="form.goal === g.value"
+              :class="[
+                'border rounded-lg py-2.5 text-xs font-medium transition-all flex flex-col items-center gap-1',
+                form.goal === g.value
+                  ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300'
+                  : 'border-white/10 text-blue-200 hover:bg-white/5',
+              ]"
+              @click="form.goal = g.value as Goal"
+            >
+              <i :class="['fas', g.icon]" aria-hidden="true"></i>
+              <span>{{ g.label }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="flex gap-3 pt-1">
+          <BaseButton
+            variant="success"
+            icon="fa-calculator"
+            :loading="isLoading"
+            class="flex-1"
+            @click="calcular"
+          >
+            Calcular
+          </BaseButton>
+          <BaseButton
+            variant="ghost"
+            icon="fa-rotate-left"
+            tooltip="Limpar todos os campos"
+            @click="limpar"
+          />
         </div>
       </div>
 
-      <!-- Resultados -->
+      <!-- ── Resultados ─────────────────────────────────────── -->
       <div class="lg:col-span-3 space-y-4">
-        <template v-if="resultado">
-          <div class="grid grid-cols-2 gap-3">
-            <div class="glass-panel p-4 col-span-2">
-              <div class="flex items-center justify-between">
+        <Transition name="slide-up">
+          <div v-if="resultado" class="space-y-4 animate-fade-in-up">
+
+            <!-- IMC em destaque -->
+            <div class="glass-panel p-5">
+              <div class="flex items-center justify-between mb-3">
                 <div>
-                  <div class="text-blue-200 text-xs">IMC</div>
-                  <div class="text-4xl font-black text-white">{{ resultado.bmi }}</div>
+                  <div class="text-blue-300 text-xs font-medium mb-0.5">Índice de Massa Corporal (IMC)</div>
+                  <div class="text-5xl font-black text-white">{{ resultado.bmi }}</div>
                 </div>
                 <div class="text-right">
-                  <span :class="['text-sm font-bold', bmiColor(resultado.bmiCategory)]">{{ resultado.bmiCategory }}</span>
-                  <div class="text-blue-200 text-xs mt-1">Peso ideal: {{ resultado.idealWeightMin }}–{{ resultado.idealWeightMax }} kg</div>
+                  <span :class="['text-base font-black', bmiColorClass(resultado.bmiCategory)]">
+                    {{ resultado.bmiCategory }}
+                  </span>
+                  <div class="text-blue-200 text-xs mt-1">
+                    Peso ideal: {{ resultado.idealWeightMin }}–{{ resultado.idealWeightMax }} kg
+                  </div>
+                </div>
+              </div>
+              <!-- Barra de IMC -->
+              <div class="strength-track" role="progressbar" :aria-valuenow="resultado.bmi" aria-valuemin="0" aria-valuemax="40">
+                <div
+                  :class="['strength-bar', bmiBarClass(resultado.bmiCategory)]"
+                  :style="{ width: bmiBarWidth(resultado.bmi) }"
+                ></div>
+              </div>
+              <div class="flex justify-between text-[10px] text-blue-300/50 mt-1">
+                <span>Abaixo do peso &lt;18,5</span>
+                <span>Normal 18,5–24,9</span>
+                <span>Sobrepeso &gt;25</span>
+              </div>
+            </div>
+
+            <!-- Calorias + Água -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="metric-glass">
+                <div class="metric-glass-value text-amber-400">{{ resultado.targetCalories.toLocaleString('pt-BR') }}</div>
+                <div class="metric-glass-label">Calorias/dia</div>
+                <div class="text-[10px] text-blue-300/60 mt-0.5">GET: {{ resultado.tdee }} | TMB: {{ resultado.bmr }}</div>
+              </div>
+              <div class="metric-glass">
+                <div class="metric-glass-value text-cyan-400">{{ resultado.water }}L</div>
+                <div class="metric-glass-label">Água/dia</div>
+                <div class="text-[10px] text-blue-300/60 mt-0.5">≈ {{ Math.ceil(resultado.water / 0.25) }} copos 250ml</div>
+              </div>
+            </div>
+
+            <!-- Macronutrientes -->
+            <div class="glass-panel p-5">
+              <h3 class="text-white font-semibold text-sm mb-4 flex items-center gap-2">
+                <i class="fas fa-pie-chart text-primary-400" aria-hidden="true"></i>
+                Macronutrientes Diários
+              </h3>
+              <div class="grid grid-cols-3 gap-3 text-center">
+                <div
+                  v-for="macro in [
+                    { label: 'Proteína',     value: resultado.protein, unit: 'g', color: 'bg-blue-500',   badge: 'badge-aurora-blue',   kcal: resultado.protein * 4   },
+                    { label: 'Carboidratos', value: resultado.carbs,   unit: 'g', color: 'bg-yellow-400', badge: 'badge-aurora-orange',  kcal: resultado.carbs * 4     },
+                    { label: 'Gorduras',     value: resultado.fat,     unit: 'g', color: 'bg-red-400',    badge: 'badge-aurora bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300', kcal: resultado.fat * 9 },
+                  ]"
+                  :key="macro.label"
+                  class="bg-black/20 rounded-xl p-3"
+                >
+                  <div :class="['w-3 h-3 rounded-full mx-auto mb-2', macro.color]" aria-hidden="true"></div>
+                  <div class="text-2xl font-black text-white">{{ macro.value }}<span class="text-sm font-medium text-blue-300">{{ macro.unit }}</span></div>
+                  <div class="text-blue-200 text-xs mt-1">{{ macro.label }}</div>
+                  <div class="text-[10px] text-blue-300/50 mt-0.5">{{ macro.kcal }} kcal</div>
                 </div>
               </div>
             </div>
-            <div class="glass-panel p-4">
-              <div class="text-blue-300 text-xs mb-1">Calorias/dia</div>
-              <div class="text-2xl font-bold text-white">{{ resultado.targetCalories.toLocaleString('pt-BR') }}</div>
-              <div class="text-blue-200 text-xs mt-1">TDEE: {{ resultado.tdee }} | BMR: {{ resultado.bmr }}</div>
-            </div>
-            <div class="glass-panel p-4">
-              <div class="text-blue-300 text-xs mb-1">Água/dia</div>
-              <div class="text-2xl font-bold text-white">{{ resultado.water }}L</div>
-              <div class="text-blue-200 text-xs mt-1">{{ Math.ceil(resultado.water / 0.25) }} copos de 250ml</div>
-            </div>
+
           </div>
-          <!-- Macros -->
-          <div class="glass-panel p-5">
-            <h3 class="text-white font-semibold text-sm mb-3">Macronutrientes Diários</h3>
-            <div class="grid grid-cols-3 gap-3 text-center">
-              <div v-for="macro in [
-                { label: 'Proteína', value: resultado.protein, unit: 'g', color: 'bg-blue-500' },
-                { label: 'Carboidratos', value: resultado.carbs, unit: 'g', color: 'bg-yellow-500' },
-                { label: 'Gorduras', value: resultado.fat, unit: 'g', color: 'bg-red-500' },
-              ]" :key="macro.label" class="bg-black/20 rounded-lg p-3">
-                <div :class="['w-2 h-2 rounded-full mx-auto mb-1', macro.color]"></div>
-                <div class="text-xl font-bold text-white">{{ macro.value }}{{ macro.unit }}</div>
-                <div class="text-blue-200 text-xs">{{ macro.label }}</div>
-              </div>
+
+          <!-- Estado vazio -->
+          <div v-else class="glass-panel flex items-center justify-center p-14">
+            <div class="text-center">
+              <i class="fas fa-heart-pulse text-5xl text-emerald-400/20 mb-4 block" aria-hidden="true"></i>
+              <p class="text-blue-200 text-sm font-medium">Preencha seus dados ao lado</p>
+              <p class="text-blue-300/50 text-xs mt-1">O resultado aparecerá aqui em tempo real</p>
             </div>
           </div>
-        </template>
-        <div v-else class="glass-panel flex items-center justify-center p-12">
-          <div class="text-center">
-            <Icon icon="mdi:heart-pulse" class="w-16 h-16 text-green-400/20 mx-auto mb-3" />
-            <p class="text-blue-200 text-sm">Preencha seus dados para calcular seu plano de saúde</p>
-          </div>
-        </div>
+        </Transition>
       </div>
     </div>
-  
 
+  </ToolShell>
+</template>
 
-  </ToolShell></template>
+<style scoped>
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.35s ease;
+}
+.slide-up-enter-from {
+  transform: translateY(12px);
+  opacity: 0;
+}
+.slide-up-leave-to {
+  opacity: 0;
+}
+</style>

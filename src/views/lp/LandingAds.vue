@@ -1,5 +1,26 @@
 <template>
   <div class="landing-ads-page">
+
+    <!-- ═══ BARRA DE URGÊNCIA ══════════════════════════════════════ -->
+    <LpUrgencyBanner
+      :total-slots="5"
+      :taken-slots="3"
+      cta-label="Garantir Vaga no WhatsApp"
+      cta-url="https://wa.me/5541996924829?text=Olá! Vi que ainda há vagas disponíveis para gestão de tráfego e gostaria de garantir a minha."
+      storage-key="lp_ads_urgency"
+    />
+
+    <!-- ═══ PROVA SOCIAL FLUTUANTE (bottom-left) ═══════════════════ -->
+    <LpSocialProof />
+
+    <!-- ═══ STICKY BAR (bottom, aparece ao rolar) ═════════════════ -->
+    <LpStickyBar
+      title="Gestão de Tráfego Pago — Google Ads & Meta Ads"
+      subtitle="Diagnóstico gratuito para novos clientes"
+      slots-text="3 vagas restantes este mês"
+      cta-label="Garantir Diagnóstico Grátis"
+      cta-url="https://wa.me/5541996924829?text=Olá! Gostaria de agendar meu diagnóstico gratuito de anúncios."
+    />
     <!-- Hero / Primeira Dobra — Dark Navy com Gatilho de Escassez -->
     <section class="page-hero relative overflow-hidden py-16 md:py-24">
       <div class="container relative z-10">
@@ -149,6 +170,19 @@
     </section>
 
     <!-- Como Funciona em 4 Passos Simples -->
+    <!-- ═══ MID-PAGE CTA (Após dor/solução) ═══════════════════════ -->
+    <LpMidCta
+      headline="Chega de queimar dinheiro em anúncios sem retorno"
+      subline="Agende agora seu diagnóstico gratuito de 30 minutos. Veja exatamente onde está o problema e o potencial real de crescimento do seu negócio."
+      cta-label="Agendar Diagnóstico Grátis no WhatsApp"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero agendar meu diagnóstico gratuito de anúncios."
+      :slots-left="2"
+      theme="rose"
+      :show-fomo="true"
+      fomo-text="🟢 2 empresários solicitaram diagnóstico nas últimas 2 horas"
+    />
+
+    <!-- Como Funciona em 4 Passos Simples -->
     <section class="section-padding bg-slate-50 border-y border-gray-200/60">
       <div class="container">
         <div class="text-center mb-12">
@@ -268,6 +302,23 @@
     </section>
 
     <!-- Oferta Irresistível + Bônus Exclusivos -->
+    <!-- ═══ COMPARAÇÃO 3W ONLINE VS CONCORRENTES ══════════════════ -->
+    <LpComparison
+      cta-label="Escolher a 3W Online Agora"
+      cta-url="https://wa.me/5541996924829?text=Olá! Gostaria de contratar a gestão de tráfego pago."
+      :rows="[
+        { criterion: 'Gestão Google Ads + Meta Ads simultânea',  us: true,            agency: 'Parcial',      diy: false },
+        { criterion: 'Rastreamento CAPI + GA4 avançado',         us: true,            agency: 'Raramente',    diy: false },
+        { criterion: 'Criativos e copywriting inclusos',         us: true,            agency: false,          diy: false },
+        { criterion: 'Relatório semanal transparente',           us: true,            agency: 'Mensal',       diy: false },
+        { criterion: 'Sem fidelidade ou multa rescisória',       us: true,            agency: false,          diy: true  },
+        { criterion: 'Otimização diária de lances',              us: true,            agency: 'Semanal',      diy: false },
+        { criterion: 'Suporte direto via WhatsApp',              us: true,            agency: 'E-mail/Ticket',diy: false },
+        { criterion: 'Verba a partir de R$ 600/mês',            us: 'Flexível',      agency: 'R$ 3k+',       diy: 'Variável' },
+      ]"
+    />
+
+    <!-- Oferta Irresistível + Bônus Exclusivos -->
     <section class="section-padding bg-gradient-to-b from-slate-900 to-[#0a1628] text-white">
       <div class="container max-w-4xl">
         <div class="text-center mb-10">
@@ -343,6 +394,22 @@
     </section>
 
     <!-- Simulador de Preço Integrado -->
+    <!-- ═══ GARANTIA E RISCO REVERSAL ════════════════════════════ -->
+    <LpGuarantee
+      :days="30"
+      description="Contratou e não ficou satisfeito em 30 dias? Cancele sem burocracia, sem multa e sem precisar dar qualquer justificativa. Queremos clientes felizes, não presos em contratos."
+      cta-label="Começar com Garantia de 30 Dias"
+      cta-url="https://wa.me/5541996924829?text=Olá! Quero iniciar minha gestão de tráfego com a garantia de 30 dias."
+      :items="[
+        'Cancele a qualquer momento — sem multa rescisória',
+        'Primeira semana de setup gratuita inclusa',
+        'Relatórios completos de desempenho a qualquer hora',
+        'Suporte direto com gestor sênior via WhatsApp',
+        'Reembolso integral se não ativarmos em 48h úteis',
+      ]"
+    />
+
+    <!-- Simulador de Preço Integrado -->
     <section id="simulador" class="testimonial-section section-padding">
       <div class="container">
         <div class="text-center mb-10 max-w-2xl mx-auto">
@@ -391,9 +458,9 @@
             <Icon icon="mdi:whatsapp" class="w-5 h-5" />
             Agendar Diagnóstico Grátis no WhatsApp
           </a>
-          <RouterLink to="/contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
+          <a href="/#contato" class="btn-outline !border-white/30 !text-white hover:!bg-white/10 text-xs sm:text-sm font-semibold !py-4 !px-6">
             Enviar Formulário de Contato
-          </RouterLink>
+          </a>
         </div>
       </div>
     </section>
@@ -405,6 +472,12 @@ import { Icon } from '@iconify/vue'
 import AppBreadcrumb from '@/components/ui/AppBreadcrumb.vue'
 import PriceSimulator from '@/components/PriceSimulator.vue'
 import FaqAccordion from '@/components/ui/FaqAccordion.vue'
+import LpUrgencyBanner from '@/components/lp/LpUrgencyBanner.vue'
+import LpStickyBar from '@/components/lp/LpStickyBar.vue'
+import LpMidCta from '@/components/lp/LpMidCta.vue'
+import LpComparison from '@/components/lp/LpComparison.vue'
+import LpGuarantee from '@/components/lp/LpGuarantee.vue'
+import LpSocialProof from '@/components/lp/LpSocialProof.vue'
 import { useSeo } from '@/composables/useSeo'
 
 const { applySeo } = useSeo()
