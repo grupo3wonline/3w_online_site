@@ -300,18 +300,47 @@ Arquivos de teste:
 | `security/vulnerability.test.ts` | XSS, SQL Injection, Template Injection, Path Traversal, CSRF, Honeypot, Duplicate-Submit |
 | `security/useFormSecurity.test.ts` | Sanitização, detecção de injeção, cooldown de formulário |
 | `security/forms.test.ts` | Integração das proteções (honeypot + debounce + CSRF) |
+| `security/csp-headers.test.ts` | XSS avançado, Open Redirect, CSRF properties, Rate Limiting, Replay |
 | `composables/useDebounce.test.ts` | Debounce (delay, múltiplas chamadas) |
 | `composables/useCSRFToken.test.ts` | Geração UUID, persistência, validação |
 | `composables/useHoneypot.test.ts` | Detecção bot, reset |
+| `composables/useAlert.test.ts` | SweetAlert2: success/error/warning/info/confirm/toast/loading, textos pt-BR |
 | `composables/useDarkMode.test.ts` | Tema, persistência, prefers-color-scheme |
 | `composables/useRequestGuard.test.ts` | Concorrência, bloqueio, reset, AbortError |
 | `composables/usePrivacyConsent.test.ts` | LGPD/GDPR consentimento, persistência, evento |
 | `router/router.test.ts` | Resolução de 50+ rotas, redirects, 404, links navbar/footer |
+| `router/hash-navigation.test.ts` | Redirecionamentos para âncoras (#sobre, #contato, #institucional), scrollBehavior |
 | `router/seo-meta.test.ts` | Title/description de todas as rotas (comprimento, branding, geo) |
 | `components/AppNavbar.test.ts` | Renderização, links, acessibilidade, dark mode |
 | `components/AppFooter.test.ts` | Renderização, links, compliance |
 | `components/AppBreadcrumb.test.ts` | Schema BreadcrumbList, renderização |
 | `components/CookieBanner.test.ts` | Exibição, aceitar/rejeitar, modal |
+
+---
+
+## Changelog & Melhorias Recentes
+
+### Auditoria e Refatoração (2025)
+
+#### 🐛 Correções
+- **Router `scrollBehavior`**: Corrigido para processar hash anchors (`#sobre`, `#contato`, `#institucional`). Anteriormente ignorava o hash e rolava sempre para `top: 0`. Agora usa `{ el: to.hash, behavior: 'smooth', top: 72 }` com offset de 72px para compensar a navbar sticky.
+- **Animação `shimmer`**: Corrigida de `ease` (padrão irregular) para `linear` no `tailwind.config.js`. Shimmer agora é suave e consistente.
+- **Router — `serviceType` encoding**: Corrigidos campos `serviceType` corrompidos nas rotas `/servicos/gestao-anuncios`, `/servicos/planejamento-campanhas` e `/servicos/relacoes-publicas`. Schemas JSON-LD de Service agora emitem strings UTF-8 corretas.
+- **CSS `animate-gradient-x`**: Adicionada utility `.animate-gradient-x { background-size: 200% 200% }` que faltava para o keyframe `gradientX` funcionar corretamente.
+
+#### ✨ Melhorias
+- **Diretiva `v-tooltip`**: Reescrita de `title` nativo para tooltip CSS real com suporte a:
+  - Posicionamento (`v-tooltip.top`, `.bottom`, `.left`, `.right`)
+  - Tema escuro/claro (`v-tooltip.dark`)
+  - Clamp automático dentro da viewport
+  - Acessibilidade (`role="tooltip"`, `aria-label`)
+  - `prefers-reduced-motion` respeitado
+- **Formulário de Contato**: Todos os inputs individuais (name, email, phone, company) passaram de autocomplete específico (`name`, `email`, `tel`, `organization`) para `autocomplete="off"` conforme requisito de segurança.
+
+#### 🧪 Novos Testes
+- `router/hash-navigation.test.ts`: Testes de redirecionamento para âncoras, lógica de `scrollBehavior` e todas as âncoras esperadas na Home unificada.
+- `security/csp-headers.test.ts`: XSS avançado (null bytes, unicode, base64, data URIs, event handlers), Open Redirect, CSRF properties, Rate Limiting avançado, Replay com cooldown.
+- `composables/useAlert.test.ts`: Cobertura completa do SweetAlert2 composable (`showSuccess`, `showError`, `showWarning`, `showInfo`, `showConfirm`, `showToast`, `showLoading`), incluindo verificação de textos em pt-BR.
 
 ---
 

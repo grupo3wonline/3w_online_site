@@ -183,7 +183,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Gestão de Google Ads e Meta Ads em Curitiba | Tráfego Pago | 3W Online',
       description: 'Gestão profissional de anúncios Google Ads e Meta Ads em Curitiba. Campanhas otimizadas para gerar leads e vendas com ROI comprovado. Relatórios detalhados.',
-      serviceType: 'Gest�o de An�ncios Google Ads e Meta Ads',
+      serviceType: 'Gestão de Anúncios Google Ads e Meta Ads',
       keywords: 'google ads curitiba, meta ads, facebook ads, instagram ads, gestão anúncios, tráfego pago, campanhas ads',
     },
   },
@@ -226,7 +226,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Planejamento de Campanhas Publicitárias em Curitiba | 3W Online',
       description: 'Planejamento estratégico de campanhas publicitárias em Curitiba. Campanhas digitais, integradas e sazonais com foco em ROI e resultados mensuráveis.',
-      serviceType: 'Planejamento de Campanhas Publicit�rias',
+      serviceType: 'Planejamento de Campanhas Publicitárias',
       keywords: 'planejamento campanhas curitiba, campanha publicitária, mídia digital, estratégia campanha',
     },
   },
@@ -268,7 +268,7 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Assessoria de Imprensa e Relações Públicas em Curitiba | 3W Online',
       description: 'Assessoria de imprensa e relações públicas em Curitiba. Gestão de crise, relacionamento com mídia, comunicação corporativa e eventos.',
-      serviceType: 'Assessoria de Imprensa e Rela��es P�blicas',
+      serviceType: 'Assessoria de Imprensa e Relações Públicas',
       keywords: 'assessoria imprensa curitiba, relações públicas, gestão crise, comunicação corporativa, pr',
     },
   },
@@ -279,7 +279,8 @@ const routes: RouteRecordRaw[] = [
     meta: {
       title: 'Pacote Marketing Digital Completo R$ 500/mês em Curitiba | 3W Online',
       description: 'Pacote completo de marketing digital por R$ 500/mês em Curitiba. Gestão de redes sociais, produção de conteúdo, anúncios e relatórios. Sem fidelidade.',
-      serviceType: 'Marketing Digital Completo', servicePrice: '500',
+      serviceType: 'Marketing Digital Completo',
+      servicePrice: '500',
       keywords: 'pacote marketing digital curitiba, marketing digital barato, gestão redes sociais, anúncios, r$ 500',
     },
   },
@@ -332,23 +333,32 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(_to, _from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) return savedPosition
+    // Hash anchor (ex: /sobre → /#sobre, links internos tipo href="#contato")
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+        // Offset para compensar a navbar sticky (~64px) + margem
+        top: 72,
+      }
+    }
     return { top: 0, behavior: 'smooth' }
   },
 })
 
 // Guard global para SEO (title, description, OG, Twitter, GEO, canonical, schemas)
 router.beforeEach((to) => {
-  const { applySeo, injectJsonLd, serviceSchema, breadcrumbSchema, websiteSchema, BASE_URL } = useSeo()
+  const { applySeo, injectJsonLd, breadcrumbSchema, websiteSchema } = useSeo()
   const { trackPageView } = useAnalytics()
 
-  const title       = (to.meta.title       as string)  || '3W Online | Marketing Digital e Desenvolvimento'
-  const description = (to.meta.description as string)  || 'Agência de marketing digital em Curitiba. Sites, sistemas, apps e automação com IA.'
-  const keywords    = to.meta.keywords  as string | undefined
-  const noindex     = to.meta.noindex   as boolean | undefined
-  const serviceType = to.meta.serviceType as string | undefined
-  const servicePrice= to.meta.servicePrice as string | undefined
+  const title        = (to.meta.title        as string)  || '3W Online | Marketing Digital e Desenvolvimento'
+  const description  = (to.meta.description  as string)  || 'Agência de marketing digital em Curitiba. Sites, sistemas, apps e automação com IA.'
+  const keywords     = to.meta.keywords   as string | undefined
+  const noindex      = to.meta.noindex    as boolean | undefined
+  const serviceType  = to.meta.serviceType as string | undefined
+  const servicePrice = to.meta.servicePrice as string | undefined
 
   applySeo({
     title,

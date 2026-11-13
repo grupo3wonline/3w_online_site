@@ -677,26 +677,26 @@
 
               <div>
                 <label for="name" class="form-label text-xs">Nome Completo <span class="text-red-500">*</span></label>
-                <input id="name" v-model="form.name" type="text" autocomplete="name" class="form-input" :class="{ '!border-red-500': errors.name }" placeholder="Ex: Carlos Silva" @focus="trackFormStart('home-contact')" />
+                <input id="name" v-model="form.name" type="text" autocomplete="off" class="form-input" :class="{ '!border-red-500': errors.name }" placeholder="Ex: Carlos Silva" @focus="trackFormStart('home-contact')" />
                 <p v-if="errors.name" class="form-error">{{ errors.name }}</p>
               </div>
 
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label for="email" class="form-label text-xs">E-mail <span class="text-red-500">*</span></label>
-                  <input id="email" v-model="form.email" type="email" autocomplete="email" class="form-input" :class="{ '!border-red-500': errors.email }" placeholder="carlos@empresa.com.br" />
+                  <input id="email" v-model="form.email" type="email" autocomplete="off" class="form-input" :class="{ '!border-red-500': errors.email }" placeholder="carlos@empresa.com.br" />
                   <p v-if="errors.email" class="form-error">{{ errors.email }}</p>
                 </div>
                 <div>
                   <label for="phone" class="form-label text-xs">WhatsApp / Telefone <span class="text-red-500">*</span></label>
-                  <input id="phone" v-model="form.phone" v-maska data-maska="(##) #####-####" type="tel" autocomplete="tel" class="form-input" :class="{ '!border-red-500': errors.phone }" placeholder="(41) 99999-9999" />
+                  <input id="phone" v-model="form.phone" v-maska data-maska="(##) #####-####" type="tel" autocomplete="off" class="form-input" :class="{ '!border-red-500': errors.phone }" placeholder="(41) 99999-9999" />
                   <p v-if="errors.phone" class="form-error">{{ errors.phone }}</p>
                 </div>
               </div>
 
               <div>
                 <label for="company" class="form-label text-xs">Nome da Empresa ou Link do Site (Opcional)</label>
-                <input id="company" v-model="form.company" type="text" autocomplete="organization" class="form-input" placeholder="Ex: Minha Empresa LTDA ou www.minhaempresa.com.br" />
+                <input id="company" v-model="form.company" type="text" autocomplete="off" class="form-input" placeholder="Ex: Minha Empresa LTDA ou www.minhaempresa.com.br" />
               </div>
 
               <div>

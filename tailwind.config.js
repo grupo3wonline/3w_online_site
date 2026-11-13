@@ -79,7 +79,7 @@ export default {
         'gradient-x':    'gradientX 4s ease infinite',
         'spin-slow':     'spin 3s linear infinite',
         'scale-in':      'scaleIn 0.2s ease-out',
-        'shimmer':       'shimmer 1.5s infinite',
+        'shimmer':       'shimmer 1.5s linear infinite',
       },
       keyframes: {
         fadeIn:        { '0%': { opacity: '0' },                                    '100%': { opacity: '1' } },

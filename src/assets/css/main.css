@@ -363,6 +363,11 @@ html.dark {
 
 /* ===== UTILITY STYLES ===== */
 @layer utilities {
+  /* Gradient animation helper — precisa de background-size: 200% para funcionar */
+  .animate-gradient-x {
+    background-size: 200% 200%;
+  }
+
   .text-gradient {
     @apply bg-gradient-to-r from-primary-400 to-blue-400 bg-clip-text text-transparent;
   }
